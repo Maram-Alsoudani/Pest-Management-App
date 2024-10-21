@@ -21,7 +21,7 @@ class MyApp extends StatelessWidget {
       builder: (_ , child) {
         return  MaterialApp(
           debugShowCheckedModeBanner: false,
-          initialRoute: RoutesManger.routeNameRegister,
+          initialRoute: RoutesManger.routeNameCategoryScreen,
           routes: RoutesManger.route,
           theme: MyTheme.theme,
 

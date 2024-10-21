@@ -37,7 +37,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
             child: Column(
               children: [
                 SizedBox(
-                  height: 80.h,
+                  height: 65.h,
                 ),
                 PickImageWidget(),
                 SizedBox(
@@ -90,7 +90,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
                 GestureDetector(
             onTap: () {
-      Navigator.pushNamed(context, RoutesManger.routeNameLogin);
+      Navigator.pushNamedAndRemoveUntil(context, RoutesManger.routeNameLogin, (route) => false,);
       },
                   child: Text(
                     StringManager.already_have_an_account,

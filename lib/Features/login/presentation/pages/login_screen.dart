@@ -32,14 +32,14 @@ class _LoginScreenState extends State<LoginScreen> {
               children: [
                 Column(
                   children: [
-                    SizedBox(height: 65.h),
+                    SizedBox(height: 80.h),
                     Image.asset(
                       ImageManager.logoTeam,
                       height: 220.h,
                       width: 400.w,
                       fit: BoxFit.fill,
                     ),
-                    SizedBox(height: 20.h),
+                    SizedBox(height: 50.h),
                     CustomTextFormField(
                         hint: "Email",
                         validator: (val) => AppValidators.validateEmail(val),

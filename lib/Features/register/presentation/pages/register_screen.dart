@@ -85,12 +85,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 SizedBox(
                   height: 30.h,
                 ),
-                onTap: () {
-                  Navigator.pushNamed(context, RoutesManger.routeNameLogin);
-                },
-              )
-            ],
+
+
+
                 GestureDetector(
+            onTap: () {
+      Navigator.pushNamed(context, RoutesManger.routeNameLogin);
+      },
                   child: Text(
                     StringManager.already_have_an_account,
                     style: Theme.of(context).textTheme.titleSmall,

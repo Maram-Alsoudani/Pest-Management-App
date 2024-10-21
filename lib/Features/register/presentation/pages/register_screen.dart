@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:pesticides/Config/routes/routes_manger.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:pesticides/Core/component/button_custom.dart';
 import 'package:pesticides/Core/utils/colors.dart';
@@ -84,6 +85,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 SizedBox(
                   height: 30.h,
                 ),
+                onTap: () {
+                  Navigator.pushNamed(context, RoutesManger.routeNameLogin);
+                },
+              )
+            ],
                 GestureDetector(
                   child: Text(
                     StringManager.already_have_an_account,

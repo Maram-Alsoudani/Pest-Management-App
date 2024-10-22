@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:pesticides/Features/category/presentation/pages/category_screen.dart';
 import 'package:pesticides/Features/register/presentation/pages/register_screen.dart';
+import 'package:pesticides/Features/site_report/presentation/pages/site_report_screen.dart';
 
+import '../../Features/conditions/presentation/pages/conditions_screen.dart';
 import '../../Features/eng_owner_screen/presentation/pages/eng_owner_screen.dart';
 import '../../Features/login/presentation/pages/login_screen.dart';
+import '../../Features/notes/presentation/pages/notes_screen.dart';
 
 class RoutesManger{
 static Map<String,Widget Function(BuildContext)>route={
@@ -11,16 +14,20 @@ static Map<String,Widget Function(BuildContext)>route={
   routeNameEngOwnerScreen:(context)=> EngOwnerScreen(),
   routeNameLogin:(context)=> LoginScreen(),
   routeNameCategoryScreen:(context)=> CategoryScreen(),
-};
+    routeNameSiteReportScreen: (context) => SiteReportScreen(),
+    routeNameNotesScreen: (context) => NotesScreen(),
+    routeNameConditionsScreen: (context) => ConditionsScreen(),
+  };
 
-static const String routeNameEngOwnerScreen="EngOwnerScreen";
+  static const String routeNameEngOwnerScreen="EngOwnerScreen";
 
 
 static const String routeNameRegister="register";
 static const String routeNameCategoryScreen="category";
 static const String routeNameLogin = "login";
-
-
+static const String routeNameSiteReportScreen = "site_report";
+  static const String routeNameNotesScreen = "notes";
+  static const String routeNameConditionsScreen = "conditions";
 }
 
 

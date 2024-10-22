@@ -6,15 +6,18 @@ import '../../../../Core/utils/font_manager.dart';
 class CustomButton extends StatelessWidget {
   final String name;
   final String image;
+  final String routeName;
 
 
-  CustomButton({required this.name , required this.image});
+  CustomButton({required this.name , required this.image , required this.routeName});
 
   @override
   Widget build(BuildContext context) {
     // on tap navigate to another screen
     return GestureDetector(
-      onTap: (){},
+      onTap: (){
+        Navigator.pushReplacementNamed(context, routeName);
+      },
 
     // the UI of the Screen
       child: Container(

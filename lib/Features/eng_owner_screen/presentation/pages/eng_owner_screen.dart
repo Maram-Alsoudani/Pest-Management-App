@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:pesticides/Config/routes/routes_manger.dart';
 
 import '../../../../Core/utils/images.dart';
 import '../widget/custom_button.dart';
@@ -19,9 +20,9 @@ class EngOwnerScreen extends StatelessWidget {
             fit: BoxFit.fill,
           ),
           SizedBox(height: 30.h,),
-          CustomButton(name: 'Engineer ',image: ImageManager.engIcon,),
+          CustomButton(name: 'Engineer ',image: ImageManager.engIcon,routeName: RoutesManger.routeNameLogin,),
           SizedBox(height: 30.h,),
-          CustomButton(name: 'Administrator',image: ImageManager.ownerIcon,),
+          CustomButton(name: 'Administrator',image: ImageManager.ownerIcon,routeName: RoutesManger.routeNameLogin),
         ],
       ),
 

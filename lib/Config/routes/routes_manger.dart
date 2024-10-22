@@ -8,16 +8,13 @@ import '../../Features/login/presentation/pages/login_screen.dart';
 class RoutesManger{
 static Map<String,Widget Function(BuildContext)>route={
   routeNameRegister:(context)=> RegisterScreen(),
-
   routeNameEngOwnerScreen:(context)=> EngOwnerScreen(),
+  routeNameLogin:(context)=> LoginScreen(),
+  routeNameCategoryScreen:(context)=> CategoryScreen(),
 };
 
-static const String routeNameRegister="register";
 static const String routeNameEngOwnerScreen="EngOwnerScreen";
-    routeNameLogin: (context) => LoginScreen(),
-    routeNameCategoryScreen:(context)=> CategoryScreen(),
 
-};
 
 static const String routeNameRegister="register";
 static const String routeNameCategoryScreen="category";

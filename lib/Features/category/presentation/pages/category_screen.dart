@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:pesticides/Config/routes/routes_manger.dart';
 import 'package:pesticides/Features/category/data/models/category_model.dart';
 
+import '../../../../Core/component/dialog_model.dart';
 import '../../../../Core/component/image_profile.dart';
+import '../../../../Core/utils/colors.dart';
 import '../../../../Core/utils/font_manager.dart';
 import '../widgets/category_item.dart';
 
@@ -14,12 +17,11 @@ class CategoryScreen extends StatelessWidget {
     return SafeArea(
       child: Scaffold(
         body: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 25,horizontal: 10),
+          padding: const EdgeInsets.symmetric(vertical: 25, horizontal: 10),
           child: Column(
             children: [
               Row(
                 children: [
-
                   ImageProfile(
                     radius: 40.r,
                   ),
@@ -41,32 +43,62 @@ class CategoryScreen extends StatelessWidget {
                     ],
                   ),
                   Spacer(),
-                  IconButton(onPressed: () {}, icon: Icon(Icons.more_vert,size: 38.r ,))
+                  PopupMenuButton<String>(
+                    icon: Icon(Icons.more_vert,size: 38.r,),
+                    onSelected: (String choice) {
+                      if (choice == 'Profile') {
+                        Navigator.pushNamed(context, RoutesManger.routeNameProfile);
+                      } else if (choice == 'Log Out') {
+                        // Log out logic here
+                        DialogUtils.showMessage(
+                            context: context,
+                            color: ColorManager.backgroundColor,
+                            content: "Are You Sure?",
+                            title: "LogOut",
+                            button1Name: "No",
+                            button2Name: "Yes",
+                          button2Function: (){
+                              Navigator.pushNamedAndRemoveUntil(context, RoutesManger.routeNameLogin, (route) => false,);
+                          }
+                        );
+
+                      }
+                    },
+                    itemBuilder: (BuildContext context) {
+                      return ['Profile', 'Log Out'].map((String choice) {
+                        return PopupMenuItem<String>(
+                          value: choice,
+                          child: Text(choice),
+                        );
+                      }).toList();
+                    },
+                  ),
                 ],
               ),
               SizedBox(
                 height: 130.h,
               ),
-              Expanded(child:
-              GridView.builder(
+              Expanded(
+                  child: GridView.builder(
                 itemCount: CategoryModel.images.length,
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 2,
                     mainAxisSpacing: 15.h,
-                    crossAxisSpacing: 10.w
-
-                  ),
-                  itemBuilder: (context, index) {
-                    return InkWell(
-                      onTap: (){
-
-                      },
-                      child: CategoryItem(
-                        categoryModel: CategoryModel.images[index],
-                      ),
-                    );
-                  },)
-              )
+                    crossAxisSpacing: 10.w),
+                itemBuilder: (context, index) {
+                  return InkWell(
+                    onTap: () {
+                      if (index == 0) {
+                        Navigator.pushNamed(
+                            context, RoutesManger.routeNameSites);
+                      }
+                    },
+                    child: CategoryItem(
+                      categoryModel: CategoryModel.images[index],
+                    ),
+                  );
+                },
+              ))
             ],
           ),
         ),

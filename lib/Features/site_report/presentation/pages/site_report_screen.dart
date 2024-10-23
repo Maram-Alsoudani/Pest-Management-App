@@ -26,11 +26,13 @@ class SiteReportScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Carrefour"),
+        title: Text("Carrefour",  style: Theme.of(context)
+            .textTheme
+            .titleSmall!
+            .copyWith(fontSize: 25.sp)),
         actions: [
           Icon(
             Icons.location_on,
-            size: 15,
             color: ColorManager.primaryColor,
           ),
           Padding(

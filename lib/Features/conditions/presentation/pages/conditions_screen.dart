@@ -19,7 +19,10 @@ class _ConditionsScreenState extends State<ConditionsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Carrefour"),
+        title: Text("Carrefour",  style: Theme.of(context)
+            .textTheme
+            .titleSmall!
+            .copyWith(fontSize: 25.sp)),
         actions: [
           Padding(
             padding: EdgeInsets.only(right: 15.w),

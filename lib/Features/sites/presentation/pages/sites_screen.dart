@@ -21,7 +21,7 @@ class SitesScreen extends StatelessWidget {
               style: Theme.of(context)
                   .textTheme
                   .titleSmall!
-                  .copyWith(fontSize: 30.sp)),
+                  .copyWith(fontSize: 25.sp)),
           actions: [
             Padding(
               padding:  EdgeInsets.all(15.r),

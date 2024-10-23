@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pesticides/Features/sites/presentation/widgets/list_tile_custom.dart';
 
+import '../../../../../Config/routes/routes_manger.dart';
 import '../../widgets/expansion_tile_custom.dart';
 import '../../../../../Core/utils/colors.dart';
 
@@ -17,7 +18,7 @@ class SitesDetailes extends StatelessWidget {
               style: Theme.of(context)
                   .textTheme
                   .titleSmall!
-                  .copyWith(fontSize: 30.sp)),
+                  .copyWith(fontSize: 25.sp)),
           actions: [
             Padding(
               padding: EdgeInsets.all(15.r),
@@ -58,6 +59,8 @@ class SitesDetailes extends StatelessWidget {
                       ],
                     ),
                     onTap: () {
+                      Navigator.pushReplacementNamed(context, RoutesManger.routeNameSiteReportScreen);
+
                     },
                   )
                 ],

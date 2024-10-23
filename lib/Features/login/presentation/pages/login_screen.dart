@@ -70,6 +70,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         if (formKey.currentState!.validate()) {
                           //TODO Handle Logic
                         }
+                        Navigator.pushReplacementNamed(context, RoutesManger.routeNameCategoryScreen);
                       },
                     ),
                   ],

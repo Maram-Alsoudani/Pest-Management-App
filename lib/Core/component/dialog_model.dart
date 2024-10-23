@@ -29,7 +29,7 @@ class DialogUtils {
               child: Text(
                 button1Name,
                 style: Theme.of(context).textTheme.titleSmall!.copyWith(
-                    fontSize: 25.sp
+                    fontSize: 20.sp
                 ),
               )));
         }
@@ -42,7 +42,7 @@ class DialogUtils {
               child: Text(
                 button2Name,
                 style: Theme.of(context).textTheme.titleSmall!.copyWith(
-                    fontSize: 25.sp
+                    fontSize: 20.sp
                 ),
               )));
         }

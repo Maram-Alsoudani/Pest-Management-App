@@ -20,7 +20,7 @@ class EngOwnerScreen extends StatelessWidget {
             fit: BoxFit.fill,
           ),
           SizedBox(height: 30.h,),
-          CustomButton(name: 'Engineer ',image: ImageManager.engIcon,routeName: RoutesManger.routeNameLogin,),
+          CustomButton(name: 'Engineer ',image: ImageManager.engIcon,routeName: RoutesManger.routeNameRegister,),
           SizedBox(height: 30.h,),
           CustomButton(name: 'Administrator',image: ImageManager.ownerIcon,routeName: RoutesManger.routeNameLogin),
         ],

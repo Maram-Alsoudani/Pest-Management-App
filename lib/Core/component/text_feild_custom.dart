@@ -8,6 +8,7 @@ class CustomTextFormField extends StatefulWidget {
   final String? Function(String?) validator;
   final TextInputType keyboardType;
   final bool? isSecured;
+  final Widget? suffixIcon;
 
   CustomTextFormField({
     required this.hint,
@@ -15,6 +16,7 @@ class CustomTextFormField extends StatefulWidget {
     required this.controller,
     this.keyboardType = TextInputType.text,
     this.isSecured = false,
+    this.suffixIcon ,
   });
 
   @override
@@ -56,7 +58,7 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
                     color: ColorManager.greyShade1,
                   ),
                 )
-              : null,
+              : widget.suffixIcon,
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(8),
             borderSide: BorderSide(width: 1, color: ColorManager.whiteColor),

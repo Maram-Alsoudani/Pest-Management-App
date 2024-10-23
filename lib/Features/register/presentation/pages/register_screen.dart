@@ -39,7 +39,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 SizedBox(
                   height: 65.h,
                 ),
-                PickImageWidget(),
+                PickImageWidget(
+                  icon: Icons.add_a_photo,
+                ),
                 SizedBox(
                   height: 35.h,
                 ),

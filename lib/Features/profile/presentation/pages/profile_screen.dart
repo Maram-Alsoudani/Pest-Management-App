@@ -56,7 +56,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 SizedBox(
                   height: 65.h,
                 ),
-                const PickImageWidget(
+                 PickImageWidget(
                   icon: Icons.edit,
                 ),
                 SizedBox(

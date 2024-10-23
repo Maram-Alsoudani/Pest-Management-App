@@ -9,7 +9,8 @@ import '../../../../Core/component/image_profile.dart';
 import '../../../../Core/utils/colors.dart';
 
 class PickImageWidget extends StatefulWidget {
-  const PickImageWidget({super.key});
+ final  IconData icon;
+  const PickImageWidget({super.key, required this.icon});
 
   @override
   State<PickImageWidget> createState() => _PickImageWidgetState();
@@ -78,7 +79,7 @@ class _PickImageWidgetState extends State<PickImageWidget> {
                 // uploadImage2Screen();
                 showmodel();
               },
-              icon: const Icon(Icons.add_a_photo),
+              icon:  Icon(widget.icon),
               color: const Color.fromARGB(255, 94, 115, 128),
             ),
           ),

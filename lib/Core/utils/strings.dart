@@ -16,4 +16,6 @@ class StringManager{
   static const String photos = "PHOTOS";
   static const String signatures = "SIGNATURES";
   static const String devices = "DEVICES";
+  static const String submit = "Submit";
+  static const String sites = "Sites";
 }

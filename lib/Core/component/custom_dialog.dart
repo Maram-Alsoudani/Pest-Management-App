@@ -185,8 +185,8 @@ class DialogUtils {
       actionsWithSeparators.add(actions[i]);
       if (i < actions.length - 1) {
         actionsWithSeparators.add(
-          Divider(
-            color: Colors.grey.shade400, // Color of the divider
+          const Divider(
+            color: ColorManager.greyShade4,
             thickness: 0.6,
           ),
         );

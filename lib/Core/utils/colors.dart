@@ -13,4 +13,7 @@ class ColorManager {
   static const Color blackColor = Color(0xff000000);
   static const Color redColor = Color(0xffFF0000);
   static const Color blueColor = Color(0xFF007BFF);
+  static const Color dialogBlueColor = Color(0xFF5F9BEB);
+  static const Color dialogRedColor = Color(0xFFE74C3C);
+  static const Color dialogGreenColor = Color(0xFF2ECC71);
 }

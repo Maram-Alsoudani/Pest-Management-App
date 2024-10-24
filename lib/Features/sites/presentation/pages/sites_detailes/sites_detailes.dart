@@ -65,78 +65,7 @@ class SitesDetailes extends StatelessWidget {
                   )
                 ],
               ),
-              ExpansionTileCustom(
-                title: "Maddi",
-                children: [
-                  ListTileCustom(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
 
-                      children: [
-                        Text('Maadi',
-                            style: Theme.of(context)
-                                .textTheme
-                                .titleSmall!
-                                .copyWith(color: ColorManager.primaryColor)),
-                        Icon(
-                          Icons.location_on,
-                          color: ColorManager.primaryColor,
-                        )
-                      ],
-                    ),
-                    onTap: () {
-                    },
-                  )
-                ],
-              ),
-              ExpansionTileCustom(
-                title: "Maddi",
-                children: [
-                  ListTileCustom(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-
-                      children: [
-                        Text('Maadi',
-                            style: Theme.of(context)
-                                .textTheme
-                                .titleSmall!
-                                .copyWith(color: ColorManager.primaryColor)),
-                        Icon(
-                          Icons.location_on,
-                          color: ColorManager.primaryColor,
-                        )
-                      ],
-                    ),
-                    onTap: () {
-                    },
-                  )
-                ],
-              ),
-              ExpansionTileCustom(
-                title: "Maddi",
-                children: [
-                  ListTileCustom(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-
-                      children: [
-                        Text('Maadi',
-                            style: Theme.of(context)
-                                .textTheme
-                                .titleSmall!
-                                .copyWith(color: ColorManager.primaryColor)),
-                        Icon(
-                          Icons.location_on,
-                          color: ColorManager.primaryColor,
-                        )
-                      ],
-                    ),
-                    onTap: () {
-                    },
-                  )
-                ],
-              ),
 
             ],
           ),

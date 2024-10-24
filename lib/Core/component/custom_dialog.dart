@@ -234,7 +234,9 @@ class DialogUtils {
             ),
             content: Text(
               message ?? '',
-              style: Theme.of(context).textTheme.bodyMedium,
+              style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                color: ColorManager.whiteColor
+              ),
             ),
             actions: actions,
           );

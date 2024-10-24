@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:pesticides/Core/component/button_custom.dart';
 import '../../../../Core/utils/colors.dart';
 import '../../../../Core/utils/strings.dart';
 import '../widgets/custome_date_table.dart';
@@ -16,23 +17,8 @@ class DeviceScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            GestureDetector(
-              onTap: () {},
-              child: Container(
-                padding: EdgeInsets.all(10.r),
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(25.r),
-                    color: ColorManager.whiteColor),
-                child: Text(
-                  StringManager.deviceNewScan,
-                  textAlign: TextAlign.center,
-                  style: Theme.of(context).textTheme.titleSmall!.copyWith(
-                      color: ColorManager.backgroundColor,
-                      fontSize: 20.sp,
-                      fontWeight: FontWeight.bold),
-                ),
-              ),
-            ),
+            ButtonCustom(buttonName: StringManager.deviceNewScan, onTap: (){}),
+
             SizedBox(
               height: 20.h,
             ),

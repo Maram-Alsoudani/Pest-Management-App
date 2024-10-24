@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pesticides/Core/utils/colors.dart';
 
 class RecommendationsCustome extends StatefulWidget {
   final String text;
@@ -21,15 +22,15 @@ class _RecommendationsCustomeState extends State<RecommendationsCustome> {
           widget.text,
           style: Theme.of(context).textTheme.titleSmall,
         ),
-        IconButton(
-            onPressed: () {
-              setState(() {
-                onClick = !onClick;
-              });
-            },
-            icon: onClick
-                ? Icon(Icons.check_box_outline_blank)
-                : Icon(Icons.check_box))
+        Checkbox(
+          activeColor: ColorManager.primaryColor, // Color when checked
+          checkColor: Colors.white,
+          value: onClick, onChanged: (value) {
+          setState(() {
+            onClick = value!;
+          });
+        },),
+
       ],
     );
   }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pesticides/Config/routes/routes_manger.dart';
 import 'package:pesticides/Config/theme/theming.dart';
+import 'package:pesticides/Core/utils/images.dart';
 import 'package:pesticides/Features/sites/presentation/pages/sites_detailes/sites_detailes.dart';
 import 'package:pesticides/Features/sites/presentation/widgets/list_tile_custom.dart';
 import 'package:pesticides/Core/utils/colors.dart';
@@ -24,18 +25,29 @@ class SitesScreen extends StatelessWidget {
                   .copyWith(fontSize: 25.sp)),
           actions: [
             Padding(
-              padding:  EdgeInsets.all(15.r),
-              child: Icon(Icons.maps_home_work_rounded,color: ColorManager.primaryColor,),
+              padding: EdgeInsets.all(15.r),
+              child: Icon(
+                Icons.maps_home_work_rounded,
+                color: ColorManager.primaryColor,
+              ),
             )
           ],
         ),
         body: Container(
+
           width: 500.w,
           margin: EdgeInsets.all(15.r),
           padding: EdgeInsets.all(12.r),
           decoration: BoxDecoration(
               color: ColorManager.whiteColor,
-              borderRadius: BorderRadius.circular(15.r)),
+              borderRadius: BorderRadius.circular(15.r),
+            image: DecorationImage(
+              opacity: 0.5,
+              image: AssetImage(ImageManager.location,
+              )
+            )
+          
+          ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -45,7 +57,6 @@ class SitesScreen extends StatelessWidget {
                   ListTileCustom(
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-
                       children: [
                         Text('Maadi',
                             style: Theme.of(context)
@@ -59,7 +70,8 @@ class SitesScreen extends StatelessWidget {
                       ],
                     ),
                     onTap: () {
-                      Navigator.pushNamed(context, RoutesManger.routeNameSitesDetailes);
+                      Navigator.pushNamed(
+                          context, RoutesManger.routeNameSitesDetailes);
                     },
                   )
                 ],
@@ -70,7 +82,6 @@ class SitesScreen extends StatelessWidget {
                   ListTileCustom(
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-
                       children: [
                         Text('Maadi',
                             style: Theme.of(context)
@@ -83,7 +94,10 @@ class SitesScreen extends StatelessWidget {
                         )
                       ],
                     ),
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.pushNamed(
+                          context, RoutesManger.routeNameSitesDetailes);
+                    },
                   )
                 ],
               ),
@@ -93,7 +107,6 @@ class SitesScreen extends StatelessWidget {
                   ListTileCustom(
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-
                       children: [
                         Text('Maadi',
                             style: Theme.of(context)
@@ -106,7 +119,10 @@ class SitesScreen extends StatelessWidget {
                         )
                       ],
                     ),
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.pushNamed(
+                          context, RoutesManger.routeNameSitesDetailes);
+                    },
                   )
                 ],
               ),
@@ -116,7 +132,6 @@ class SitesScreen extends StatelessWidget {
                   ListTileCustom(
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-
                       children: [
                         Text('Maadi',
                             style: Theme.of(context)
@@ -129,7 +144,10 @@ class SitesScreen extends StatelessWidget {
                         )
                       ],
                     ),
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.pushNamed(
+                          context, RoutesManger.routeNameSitesDetailes);
+                    },
                   )
                 ],
               ),

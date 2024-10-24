@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pesticides/Core/utils/strings.dart';
-
 import '../../../../Core/utils/colors.dart';
 
 class ConditionsScreen extends StatefulWidget {
@@ -11,18 +10,52 @@ class ConditionsScreen extends StatefulWidget {
   State<ConditionsScreen> createState() => _ConditionsScreenState();
 }
 
-class _ConditionsScreenState extends State<ConditionsScreen> {
+class _ConditionsScreenState extends State<ConditionsScreen>
+    with SingleTickerProviderStateMixin {
   final int maxCharacters = 500;
   String inputText = '';
+
+  late AnimationController _animationController;
+  late Animation<Offset> _slideAnimation;
+  @override
+  void initState() {
+    super.initState();
+
+    _animationController =
+        AnimationController(vsync: this, duration: const Duration(seconds: 1));
+
+    _slideAnimation =
+        Tween<Offset>(begin:  Offset(0, 2.h), end: const Offset(0, 0)).animate(
+          CurvedAnimation(
+            parent: _animationController,
+            curve: Curves.easeInOut,
+          ),
+        );
+
+    // Trigger the slide animation after the page loads
+    Future.delayed(const Duration(milliseconds: 300), () {
+
+
+
+      _animationController.forward();
+    });
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose(); // Clean up the controller when done
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Carrefour",  style: Theme.of(context)
-            .textTheme
-            .titleSmall!
-            .copyWith(fontSize: 25.sp)),
+        title: Text("Carrefour",
+            style: Theme.of(context)
+                .textTheme
+                .titleSmall!
+                .copyWith(fontSize: 25.sp)),
         actions: [
           Padding(
             padding: EdgeInsets.only(right: 15.w),
@@ -39,15 +72,18 @@ class _ConditionsScreenState extends State<ConditionsScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            TextField(
-              maxLength: maxCharacters,
-              onChanged: (text) {
-                setState(() {
-                  inputText = text;
-                });
-              },
-              cursorColor: ColorManager.primaryColor,
-              decoration: InputDecoration(
+            // Add SlideTransition for the TextField
+            SlideTransition(
+              position: _slideAnimation,
+              child: TextField(
+                maxLength: maxCharacters,
+                onChanged: (text) {
+                  setState(() {
+                    inputText = text;
+                  });
+                },
+                cursorColor: ColorManager.primaryColor,
+                decoration: InputDecoration(
                   filled: true,
                   fillColor: ColorManager.whiteColor,
                   hintText: StringManager.enter_conditions,
@@ -58,8 +94,10 @@ class _ConditionsScreenState extends State<ConditionsScreen> {
                   counterStyle: Theme.of(context)
                       .textTheme
                       .titleSmall!
-                      .copyWith(color: ColorManager.greyShade4)),
-              maxLines: 15,
+                      .copyWith(color: ColorManager.greyShade4),
+                ),
+                maxLines: 15,
+              ),
             ),
           ],
         ),

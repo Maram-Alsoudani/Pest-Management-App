@@ -18,6 +18,13 @@ class StringManager{
   static const String devices = "DEVICES";
   static const String submit = "Submit";
   static const String sites = "Sites";
+  static const String device = "Device";
+  static const String deviceID = "DeviceID";
+  static const String deviceLastScanTime = "Time";
+  static const String deviceLastScanDate = "Date";
+  static const String deviceNewScan = "New Scan";
+  static const String deviceLastScan = "Last Scan";
+  static const String recommendationsScreenName = "Recommendations";
   static const String forgotPass = "Forgot password";
   static const String enterEmailForResetPass =
       "Enter your email and we will send you a password reset link";

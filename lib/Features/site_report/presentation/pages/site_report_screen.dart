@@ -16,7 +16,10 @@ class SiteReportScreen extends StatelessWidget {
       "title": StringManager.conditions,
       "screen": RoutesManger.routeNameNotesScreen
     },
-    {"title": StringManager.material_usages, "screen": ""},
+    {
+      "title": StringManager.materialUsages,
+      "screen": RoutesManger.routeNameMaterialUsageScreen
+    },
     {"title": StringManager.photos, "screen": ""},
     {"title": StringManager.devices, "screen": ""},
     {"title": StringManager.signatures, "screen": ""},
@@ -26,10 +29,11 @@ class SiteReportScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Carrefour",  style: Theme.of(context)
-            .textTheme
-            .titleSmall!
-            .copyWith(fontSize: 25.sp)),
+        title: Text("Carrefour",
+            style: Theme.of(context)
+                .textTheme
+                .titleSmall!
+                .copyWith(fontSize: 25.sp)),
         actions: [
           Icon(
             Icons.location_on,

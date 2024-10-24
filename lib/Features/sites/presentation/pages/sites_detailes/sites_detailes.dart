@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pesticides/Features/sites/presentation/widgets/list_tile_custom.dart';
 
 import '../../../../../Config/routes/routes_manger.dart';
+import '../../../../../Core/utils/images.dart';
 import '../../widgets/expansion_tile_custom.dart';
 import '../../../../../Core/utils/colors.dart';
 
@@ -35,7 +36,14 @@ class SitesDetailes extends StatelessWidget {
           padding: EdgeInsets.all(12.r),
           decoration: BoxDecoration(
               color: ColorManager.whiteColor,
-              borderRadius: BorderRadius.circular(15.r)),
+              borderRadius: BorderRadius.circular(15.r),
+
+            image: DecorationImage(
+            opacity: 0.5,
+            image: AssetImage(ImageManager.location,
+          )
+        )
+          ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -45,7 +53,6 @@ class SitesDetailes extends StatelessWidget {
                   ListTileCustom(
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-
                       children: [
                         Text('Maadi',
                             style: Theme.of(context)
@@ -59,13 +66,78 @@ class SitesDetailes extends StatelessWidget {
                       ],
                     ),
                     onTap: () {
-                      Navigator.pushReplacementNamed(context, RoutesManger.routeNameSiteReportScreen);
-
+                      Navigator.pushReplacementNamed(
+                          context, RoutesManger.routeNameSiteReportScreen);
                     },
                   )
                 ],
               ),
-
+              ExpansionTileCustom(
+                title: "Maddi",
+                children: [
+                  ListTileCustom(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text('Maadi',
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleSmall!
+                                .copyWith(color: ColorManager.primaryColor)),
+                        Icon(
+                          Icons.location_on,
+                          color: ColorManager.primaryColor,
+                        )
+                      ],
+                    ),
+                    onTap: () {},
+                  )
+                ],
+              ),
+              ExpansionTileCustom(
+                title: "Maddi",
+                children: [
+                  ListTileCustom(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text('Maadi',
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleSmall!
+                                .copyWith(color: ColorManager.primaryColor)),
+                        Icon(
+                          Icons.location_on,
+                          color: ColorManager.primaryColor,
+                        )
+                      ],
+                    ),
+                    onTap: () {},
+                  )
+                ],
+              ),
+              ExpansionTileCustom(
+                title: "Maddi",
+                children: [
+                  ListTileCustom(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text('Maadi',
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleSmall!
+                                .copyWith(color: ColorManager.primaryColor)),
+                        Icon(
+                          Icons.location_on,
+                          color: ColorManager.primaryColor,
+                        )
+                      ],
+                    ),
+                    onTap: () {},
+                  )
+                ],
+              ),
 
             ],
           ),

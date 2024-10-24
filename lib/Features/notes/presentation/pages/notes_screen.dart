@@ -11,9 +11,38 @@ class NotesScreen extends StatefulWidget {
   State<NotesScreen> createState() => _NotesScreenState();
 }
 
-class _NotesScreenState extends State<NotesScreen> {
+class _NotesScreenState extends State<NotesScreen> with SingleTickerProviderStateMixin {
   final int maxCharacters = 500;
   String inputText = '';
+
+  late AnimationController _animationController;
+  late Animation<Offset> _slideAnimation;
+  @override
+  void initState() {
+    super.initState();
+
+    _animationController =
+        AnimationController(vsync: this, duration: const Duration(seconds: 1));
+
+    _slideAnimation =
+        Tween<Offset>(begin:  Offset(0, 2.h), end: const Offset(0, 0)).animate(
+          CurvedAnimation(
+            parent: _animationController,
+            curve: Curves.easeInOut,
+          ),
+        );
+
+    // Trigger the slide animation after the page loads
+    Future.delayed(const Duration(milliseconds: 300), () {
+      _animationController.forward();
+    });
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose(); // Clean up the controller when done
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -39,29 +68,32 @@ class _NotesScreenState extends State<NotesScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            TextField(
-              maxLength: maxCharacters,
-              onChanged: (text) {
-                setState(() {
-                  inputText = text;
-                });
-              },
-              cursorColor: ColorManager.primaryColor,
-              decoration: InputDecoration(
-                focusColor: ColorManager.greyShade5,
-                filled: true,
-                fillColor: ColorManager.whiteColor,
-                hintText: StringManager.enter_notes,
-                hintStyle: Theme.of(context)
-                    .textTheme
-                    .titleMedium!
-                    .copyWith(color: ColorManager.greyShade4),
-                counterStyle: Theme.of(context)
-                    .textTheme
-                    .titleSmall!
-                    .copyWith(color: ColorManager.greyShade4),
+            SlideTransition(
+              position: _slideAnimation,
+              child: TextField(
+                maxLength: maxCharacters,
+                onChanged: (text) {
+                  setState(() {
+                    inputText = text;
+                  });
+                },
+                cursorColor: ColorManager.primaryColor,
+                decoration: InputDecoration(
+                  focusColor: ColorManager.greyShade5,
+                  filled: true,
+                  fillColor: ColorManager.whiteColor,
+                  hintText: StringManager.enter_notes,
+                  hintStyle: Theme.of(context)
+                      .textTheme
+                      .titleMedium!
+                      .copyWith(color: ColorManager.greyShade4),
+                  counterStyle: Theme.of(context)
+                      .textTheme
+                      .titleSmall!
+                      .copyWith(color: ColorManager.greyShade4),
+                ),
+                maxLines: 15,
               ),
-              maxLines: 15,
             ),
           ],
         ),

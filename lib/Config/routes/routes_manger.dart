@@ -27,10 +27,6 @@ class RoutesManger {
     routeNameSites: (context) => SitesScreen(),
     routeNameProfile: (context) => ProfileScreen(),
     routeNameMaterialUsageScreen: (context) => MaterialUsageScreen(),
-    routeNameConditionsScreen: (context) => ConditionsScreen(),
-    routeNameSitesDetailes: (context) => SitesDetailes(),
-    routeNameSites: (context) => SitesScreen(),
-    routeNameProfile: (context) => ProfileScreen(),
     routeNameDevice: (context) => DeviceScreen(),
     routeNameRecommendations: (context) => RecommendationsScreen(),
     routeNameForgotPassScreen: (context) => ForgotPassScreen(),
@@ -47,12 +43,7 @@ class RoutesManger {
   static const String routeNameSitesDetailes = "sites_detailes";
   static const String routeNameSites = "sites";
   static const String routeNameProfile = "profile";
-  static const String routeNameConditionsScreen = "conditions";
-  static const String routeNameSitesDetailes = "sites_detailes";
-  static const String routeNameSites = "sites";
-  static const String routeNameProfile = "profile";
   static const String routeNameDevice = "device";
   static const String routeNameRecommendations = "recommendations";
   static const String routeNameForgotPassScreen = "forgot password";
-
 }

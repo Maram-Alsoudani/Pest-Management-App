@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pesticides/Config/routes/routes_manger.dart';
+import 'package:pesticides/Core/component/custom_dialog.dart';
 import 'package:pesticides/Features/category/data/models/category_model.dart';
 
-import '../../../../Core/component/dialog_model.dart';
 import '../../../../Core/component/image_profile.dart';
-import '../../../../Core/utils/colors.dart';
 import '../../../../Core/utils/font_manager.dart';
 import '../widgets/category_item.dart';
 
@@ -103,39 +102,43 @@ class _CategoryScreenState extends State<CategoryScreen>
                         Icons.more_vert,
                         size: 38.r,
                       ),
-                      onSelected: (String choice) {
-                        if (choice == 'Profile') {
-                          Navigator.pushNamed(context, RoutesManger.routeNameProfile);
-                        } else if (choice == 'Log Out') {
-                          // Log out logic here
-                          DialogUtils.showMessage(
-                            context: context,
-                            color: ColorManager.backgroundColor,
-                            content: "Are You Sure?",
-                            title: "LogOut",
-                            button1Name: "No",
-                            button2Name: "Yes",
-                            button2Function: () {
-                              Navigator.pushNamedAndRemoveUntil(
-                                context,
-                                RoutesManger.routeNameLogin,
-                                    (route) => false,
-                              );
-                            },
-                          );
-                        }
-                      },
-                      itemBuilder: (BuildContext context) {
-                        return ['Profile', 'Log Out'].map((String choice) {
-                          return PopupMenuItem<String>(
-                            value: choice,
-                            child: Text(choice),
-                          );
-                        }).toList();
-                      },
-                    ),
-                  ],
-                ),
+
+                      Text("Site Engineer",
+                          style: Theme.of(context).textTheme.titleSmall),
+                    ],
+                  ),
+                  Spacer(),
+                  PopupMenuButton<String>(
+                    icon: Icon(Icons.more_vert,size: 38.r,),
+                    onSelected: (String choice) {
+                      if (choice == 'Profile') {
+                        Navigator.pushNamed(context, RoutesManger.routeNameProfile);
+                      } else if (choice == 'Log Out') {
+                        // Log out logic here
+                       DialogUtils.showAlertDialog(context: context,
+                         title: "Logout",
+                         message:  "Are You Sure?",
+                         posActionTitle: "Yes",
+                         negActionTitle: "No",
+                         posAction: (){
+                           Navigator.pushNamedAndRemoveUntil(context, RoutesManger.routeNameLogin, (route) => false,);
+                         }
+
+                       );
+
+
+                      }
+                    },
+                    itemBuilder: (BuildContext context) {
+                      return ['Profile', 'Log Out'].map((String choice) {
+                        return PopupMenuItem<String>(
+                          value: choice,
+                          child: Text(choice),
+                        );
+                      }).toList();
+                    },
+                  ),
+                ],
               ),
               SizedBox(
                 height: 130.h,

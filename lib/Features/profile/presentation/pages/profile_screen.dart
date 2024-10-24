@@ -8,7 +8,7 @@ import 'package:pesticides/Core/utils/colors.dart';
 import 'package:pesticides/Core/utils/strings.dart';
 import 'package:pesticides/Features/register/presentation/widgets/pick_image_widget.dart';
 
-import '../../../../Core/component/dialog_model.dart';
+import '../../../../Core/component/custom_dialog.dart';
 import '../../../../Core/component/text_feild_custom.dart';
 import '../../../../Core/component/validators.dart';
 
@@ -70,21 +70,23 @@ class _ProfileScreenState extends State<ProfileScreen>
         appBar: AppBar(
           actions: [
             IconButton(
-              onPressed: () {
-                DialogUtils.showMessage(
-                  context: context,
-                  color: ColorManager.backgroundColor,
-                  content: "Are You Sure?",
-                  title: "LogOut",
-                  button1Name: "No",
-                  button2Name: "Yes",
-                );
-              },
-              icon: Icon(
-                Icons.logout,
-                color: ColorManager.primaryColor,
-              ),
-            ),
+
+                onPressed: () {
+                  DialogUtils.showAlertDialog(context: context,
+                      title: "Logout",
+                      message:  "Are You Sure?",
+                      posActionTitle: "Yes",
+                      negActionTitle: "No",
+                      posAction: (){
+                        Navigator.pushNamedAndRemoveUntil(context, RoutesManger.routeNameLogin, (route) => false,);
+                      }
+
+                  );
+                },
+                icon: Icon(
+                  Icons.logout,
+                  color: ColorManager.primaryColor,
+                ))
           ],
         ),
         body: Stack(

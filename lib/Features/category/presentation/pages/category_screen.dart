@@ -41,7 +41,7 @@ class _CategoryScreenState extends State<CategoryScreen>
 
     // Define the slide animation for Row
     _rowAnimation = Tween<Offset>(
-      begin: Offset(-1, 0), // Start slightly below the visible area
+      begin: Offset(-1, 0), // Start slightly to the left
       end: Offset(0, 0), // End at the original position
     ).animate(
       CurvedAnimation(
@@ -70,7 +70,7 @@ class _CategoryScreenState extends State<CategoryScreen>
           padding: const EdgeInsets.symmetric(vertical: 25, horizontal: 10),
           child: Column(
             children: [
-              SlideTransition( // SlideTransition for Row
+              SlideTransition(
                 position: _rowAnimation,
                 child: Row(
                   children: [
@@ -97,78 +97,76 @@ class _CategoryScreenState extends State<CategoryScreen>
                       ],
                     ),
                     Spacer(),
-
-                  PopupMenuButton<String>(
-                    icon: Icon(Icons.more_vert,size: 38.r,),
-                    onSelected: (String choice) {
-                      if (choice == 'Profile') {
-                        Navigator.pushNamed(context, RoutesManger.routeNameProfile);
-                      } else if (choice == 'Log Out') {
-                        // Log out logic here
-                       DialogUtils.showAlertDialog(context: context,
-                         title: "Logout",
-                         message:  "Are You Sure?",
-                         posActionTitle: "Yes",
-                         negActionTitle: "No",
-                         posAction: (){
-                           Navigator.pushNamedAndRemoveUntil(context, RoutesManger.routeNameLogin, (route) => false,);
-                         }
-
-                       );
-
-
-                      }
-                    },
-                    itemBuilder: (BuildContext context) {
-                      return ['Profile', 'Log Out'].map((String choice) {
-                        return PopupMenuItem<String>(
-                          value: choice,
-                          child: Text(choice),
-                        );
-                      }).toList();
-                    },
-                  ),
-                    SizedBox(
-                      height: 130.h,
-                    ),
-                    Expanded(
-                      child: GridView.builder(
-                        itemCount: CategoryModel.images.length,
-                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2,
-                          mainAxisSpacing: 15.h,
-                          crossAxisSpacing: 10.w,
-                        ),
-                        itemBuilder: (context, index) {
-                          return ScaleTransition(
-                            scale: Tween<double>(begin: 0.0, end: 1.0).animate(
-                              CurvedAnimation(
-                                parent: _animationController,
-                                curve: Interval(
-                                  index / CategoryModel.images.length, // Start based on the index
-                                  1.0,
-                                  curve: Curves.easeInOut,
-                                ),
-                              ),
-                            ),
-                            child: InkWell(
-                              onTap: () {
-                                if (index == 0) {
-                                  Navigator.pushNamed(context, RoutesManger.routeNameSites);
-                                }
-                              },
-                              child: CategoryItem(
-                                categoryModel: CategoryModel.images[index],
-                              ),
-                            ),
+                    PopupMenuButton<String>(
+                      icon: Icon(Icons.more_vert, size: 38.r),
+                      onSelected: (String choice) {
+                        if (choice == 'Profile') {
+                          Navigator.pushNamed(context, RoutesManger.routeNameProfile);
+                        } else if (choice == 'Log Out') {
+                          DialogUtils.showAlertDialog(
+                            context: context,
+                            title: "Logout",
+                            message: "Are You Sure?",
+                            posActionTitle: "Yes",
+                            negActionTitle: "No",
+                            posAction: () {
+                              Navigator.pushNamedAndRemoveUntil(
+                                context,
+                                RoutesManger.routeNameLogin,
+                                    (route) => false,
+                              );
+                            },
                           );
-                        },
-                      ),
+                        }
+                      },
+                      itemBuilder: (BuildContext context) {
+                        return ['Profile', 'Log Out'].map((String choice) {
+                          return PopupMenuItem<String>(
+                            value: choice,
+                            child: Text(choice),
+                          );
+                        }).toList();
+                      },
                     ),
-                ],
+                  ],
+                ),
               ),
-
-              )],
+              SizedBox(height: 120.h),
+              Expanded(
+                child: GridView.builder(
+                  itemCount: CategoryModel.images.length,
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    mainAxisSpacing: 15.h,
+                    crossAxisSpacing: 10.w,
+                  ),
+                  itemBuilder: (context, index) {
+                    return ScaleTransition(
+                      scale: Tween<double>(begin: 0.0, end: 1.0).animate(
+                        CurvedAnimation(
+                          parent: _animationController,
+                          curve: Interval(
+                            index / CategoryModel.images.length, // Start based on index
+                            1.0,
+                            curve: Curves.easeInOut,
+                          ),
+                        ),
+                      ),
+                      child: InkWell(
+                        onTap: () {
+                          if (index == 0) {
+                            Navigator.pushNamed(context, RoutesManger.routeNameSites);
+                          }
+                        },
+                        child: CategoryItem(
+                          categoryModel: CategoryModel.images[index],
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ],
           ),
         ),
       ),

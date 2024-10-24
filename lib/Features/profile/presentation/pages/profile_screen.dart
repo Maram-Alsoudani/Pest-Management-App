@@ -59,7 +59,7 @@ class _ProfileScreenState extends State<ProfileScreen>
 
   @override
   void dispose() {
-    _animationController.dispose(); // Clean up the controller when done
+    _animationController.dispose();
     super.dispose();
   }
 

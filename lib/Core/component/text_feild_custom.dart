@@ -9,6 +9,7 @@ class CustomTextFormField extends StatefulWidget {
   final TextInputType keyboardType;
   final bool? isSecured;
   final Widget? suffixIcon;
+  final BorderRadius? borderRadius;
 
   CustomTextFormField({
     required this.hint,
@@ -16,7 +17,8 @@ class CustomTextFormField extends StatefulWidget {
     required this.controller,
     this.keyboardType = TextInputType.text,
     this.isSecured = false,
-    this.suffixIcon ,
+    this.suffixIcon,
+    this.borderRadius,
   });
 
   @override
@@ -41,8 +43,8 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
         keyboardType: widget.keyboardType,
         validator: widget.validator,
         obscureText: _isSecured,
-        style: TextStyle(color: ColorManager.whiteColor), // Input text color
-
+        cursorColor: ColorManager.blueColor,
+        style: TextStyle(color: ColorManager.whiteColor),
         decoration: InputDecoration(
           hintText: widget.hint,
           hintStyle: Theme.of(context).textTheme.titleSmall,
@@ -60,19 +62,19 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
                 )
               : widget.suffixIcon,
           enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(8),
+            borderRadius: widget.borderRadius ?? BorderRadius.circular(8.r),
             borderSide: BorderSide(width: 1, color: ColorManager.whiteColor),
           ),
           focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(8),
+            borderRadius: widget.borderRadius ?? BorderRadius.circular(8.r),
             borderSide: BorderSide(width: 1, color: ColorManager.whiteColor),
           ),
           errorBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(8),
+            borderRadius: widget.borderRadius ?? BorderRadius.circular(8.r),
             borderSide: BorderSide(width: 1, color: ColorManager.primaryColor),
           ),
           focusedErrorBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(8),
+            borderRadius: widget.borderRadius ?? BorderRadius.circular(8.r),
             borderSide: BorderSide(width: 1, color: ColorManager.primaryColor),
           ),
         ),

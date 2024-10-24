@@ -25,4 +25,8 @@ class StringManager{
   static const String deviceNewScan = "New Scan";
   static const String deviceLastScan = "Last Scan";
   static const String recommendationsScreenName = "Recommendations";
+  static const String forgotPass = "Forgot password";
+  static const String enterEmailForResetPass =
+      "Enter your email and we will send you a password reset link";
+  static const String send = "Send";
 }

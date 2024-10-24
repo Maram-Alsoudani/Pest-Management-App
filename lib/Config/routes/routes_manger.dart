@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pesticides/Features/category/presentation/pages/category_screen.dart';
+import 'package:pesticides/Features/forgotPassword/presentation/pages/forgot_pass_screen.dart';
 import 'package:pesticides/Features/profile/presentation/pages/profile_screen.dart';
 import 'package:pesticides/Features/recommendations/presentation/pages/recommendations_screen.dart';
 import 'package:pesticides/Features/register/presentation/pages/register_screen.dart';
@@ -27,6 +28,7 @@ static Map<String,Widget Function(BuildContext)>route={
   routeNameProfile: (context) => ProfileScreen(),
   routeNameDevice: (context) => DeviceScreen(),
   routeNameRecommendations: (context) => RecommendationsScreen(),
+    routeNameForgotPassScreen: (context) => ForgotPassScreen(),
   };
 
   static const String routeNameEngOwnerScreen="EngOwnerScreen";
@@ -43,6 +45,8 @@ static const String routeNameSites = "sites";
 static const String routeNameProfile = "profile";
 static const String routeNameDevice = "device";
 static const String routeNameRecommendations = "recommendations";
+static const String routeNameForgotPassScreen = "forgot password";
+
 }
 
 

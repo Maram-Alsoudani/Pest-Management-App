@@ -21,4 +21,15 @@ class StringManager {
   static const String addMaterial = "Add Material";
   static const String searchMaterial = "Search Material";
   static const String searchHint = "Search";
+  static const String device = "Device";
+  static const String deviceID = "DeviceID";
+  static const String deviceLastScanTime = "Time";
+  static const String deviceLastScanDate = "Date";
+  static const String deviceNewScan = "New Scan";
+  static const String deviceLastScan = "Last Scan";
+  static const String recommendationsScreenName = "Recommendations";
+  static const String forgotPass = "Forgot password";
+  static const String enterEmailForResetPass =
+      "Enter your email and we will send you a password reset link";
+  static const String send = "Send";
 }

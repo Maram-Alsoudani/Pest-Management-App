@@ -11,7 +11,7 @@ class SiteReportScreen extends StatelessWidget {
   //TODO: Add other screens route names
   List<Map<String, dynamic>> sections = [
     {"title": StringManager.notes, "screen": RoutesManger.routeNameNotesScreen},
-    {"title": StringManager.recommendations, "screen": ""},
+    {"title": StringManager.recommendations, "screen": RoutesManger.routeNameRecommendations},
     {
       "title": StringManager.conditions,
       "screen": RoutesManger.routeNameNotesScreen
@@ -21,7 +21,7 @@ class SiteReportScreen extends StatelessWidget {
       "screen": RoutesManger.routeNameMaterialUsageScreen
     },
     {"title": StringManager.photos, "screen": ""},
-    {"title": StringManager.devices, "screen": ""},
+    {"title": StringManager.devices, "screen": RoutesManger.routeNameDevice},
     {"title": StringManager.signatures, "screen": ""},
   ];
 

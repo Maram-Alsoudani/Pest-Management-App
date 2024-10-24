@@ -97,17 +97,7 @@ class _CategoryScreenState extends State<CategoryScreen>
                       ],
                     ),
                     Spacer(),
-                    PopupMenuButton<String>(
-                      icon: Icon(
-                        Icons.more_vert,
-                        size: 38.r,
-                      ),
 
-                      Text("Site Engineer",
-                          style: Theme.of(context).textTheme.titleSmall),
-                    ],
-                  ),
-                  Spacer(),
                   PopupMenuButton<String>(
                     icon: Icon(Icons.more_vert,size: 38.r,),
                     onSelected: (String choice) {
@@ -138,46 +128,47 @@ class _CategoryScreenState extends State<CategoryScreen>
                       }).toList();
                     },
                   ),
+                    SizedBox(
+                      height: 130.h,
+                    ),
+                    Expanded(
+                      child: GridView.builder(
+                        itemCount: CategoryModel.images.length,
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                          mainAxisSpacing: 15.h,
+                          crossAxisSpacing: 10.w,
+                        ),
+                        itemBuilder: (context, index) {
+                          return ScaleTransition(
+                            scale: Tween<double>(begin: 0.0, end: 1.0).animate(
+                              CurvedAnimation(
+                                parent: _animationController,
+                                curve: Interval(
+                                  index / CategoryModel.images.length, // Start based on the index
+                                  1.0,
+                                  curve: Curves.easeInOut,
+                                ),
+                              ),
+                            ),
+                            child: InkWell(
+                              onTap: () {
+                                if (index == 0) {
+                                  Navigator.pushNamed(context, RoutesManger.routeNameSites);
+                                }
+                              },
+                              child: CategoryItem(
+                                categoryModel: CategoryModel.images[index],
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                    ),
                 ],
               ),
-              SizedBox(
-                height: 130.h,
-              ),
-              Expanded(
-                child: GridView.builder(
-                  itemCount: CategoryModel.images.length,
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    mainAxisSpacing: 15.h,
-                    crossAxisSpacing: 10.w,
-                  ),
-                  itemBuilder: (context, index) {
-                    return ScaleTransition(
-                      scale: Tween<double>(begin: 0.0, end: 1.0).animate(
-                        CurvedAnimation(
-                          parent: _animationController,
-                          curve: Interval(
-                            index / CategoryModel.images.length, // Start based on the index
-                            1.0,
-                            curve: Curves.easeInOut,
-                          ),
-                        ),
-                      ),
-                      child: InkWell(
-                        onTap: () {
-                          if (index == 0) {
-                            Navigator.pushNamed(context, RoutesManger.routeNameSites);
-                          }
-                        },
-                        child: CategoryItem(
-                          categoryModel: CategoryModel.images[index],
-                        ),
-                      ),
-                    );
-                  },
-                ),
-              ),
-            ],
+
+              )],
           ),
         ),
       ),

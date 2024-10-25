@@ -13,8 +13,13 @@ class MaterialUsageScreen extends StatefulWidget {
   _MaterialUsageScreenState createState() => _MaterialUsageScreenState();
 }
 
-class _MaterialUsageScreenState extends State<MaterialUsageScreen> {
-  List<String> materials = [];
+class _MaterialUsageScreenState extends State<MaterialUsageScreen> with SingleTickerProviderStateMixin {
+  List<String> materials = [
+
+  ];
+  double _opacity = 0.0;
+  late AnimationController _animationController;
+  late Animation<Offset> _slideAnimation;
 
   void addItem(String item) {
     setState(() {
@@ -27,6 +32,39 @@ class _MaterialUsageScreenState extends State<MaterialUsageScreen> {
       materials.remove(item);
     });
   }
+
+
+
+  @override
+  void initState() {
+    super.initState();
+
+    _animationController =
+        AnimationController(vsync: this, duration: Duration(seconds: 1));
+
+    _slideAnimation =
+        Tween<Offset>(begin: Offset(-1.w, 0), end: Offset(0, 0)).animate(
+          CurvedAnimation(
+            parent: _animationController,
+            curve: Curves.easeInOut,
+          ),
+        );
+
+    Future.delayed(Duration(milliseconds: 300), () {
+      setState(() {
+        _opacity = 1.0;
+      });
+      _animationController.forward();
+    });
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
+  }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -44,69 +82,75 @@ class _MaterialUsageScreenState extends State<MaterialUsageScreen> {
         child: Column(
           children: [
             Expanded(
-              child: ListView.builder(
-                itemCount: materials.length,
-                itemBuilder: (context, index) {
-                  return Padding(
-                    padding: EdgeInsets.symmetric(vertical: 8.0.r),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(16.0.r),
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: ColorManager.whiteColor,
-                          borderRadius: BorderRadius.circular(16.0.r),
-                        ),
-                        child: Slidable(
-                          dragStartBehavior: DragStartBehavior.down,
-                          key: ValueKey(materials[index]),
-                          endActionPane: ActionPane(
-                            dragDismissible: false,
-                            motion: const BehindMotion(),
-                            extentRatio: 0.25,
-                            children: [
-                              SlidableAction(
-                                onPressed: (context) {
-                                  removeItem(materials[index]);
-                                },
-                                backgroundColor: ColorManager.redColor,
-                                foregroundColor: ColorManager.whiteColor,
-                                icon: CupertinoIcons.delete,
-                                label: StringManager.delete,
-                              ),
-                            ],
+              child: SlideTransition(
+                position: _slideAnimation,
+                child: ListView.builder(
+                  itemCount: materials.length,
+                  itemBuilder: (context, index) {
+                    return Padding(
+                      padding: EdgeInsets.symmetric(vertical: 8.0.r),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(16.0.r),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: ColorManager.whiteColor,
+                            borderRadius: BorderRadius.circular(16.0.r),
                           ),
-                          child: ListTile(
-                            leading: const Icon(CupertinoIcons.drop_triangle,
-                                color: ColorManager.primaryColor),
-                            title: Text(materials[index]),
+                          child: Slidable(
+                            dragStartBehavior: DragStartBehavior.down,
+                            key: ValueKey(materials[index]),
+                            endActionPane: ActionPane(
+                              dragDismissible: false,
+                              motion: const BehindMotion(),
+                              extentRatio: 0.25,
+                              children: [
+                                SlidableAction(
+                                  onPressed: (context) {
+                                    removeItem(materials[index]);
+                                  },
+                                  backgroundColor: ColorManager.redColor,
+                                  foregroundColor: ColorManager.whiteColor,
+                                  icon: CupertinoIcons.delete,
+                                  label: StringManager.delete,
+                                ),
+                              ],
+                            ),
+                            child: ListTile(
+                              leading: const Icon(CupertinoIcons.drop_triangle,
+                                  color: ColorManager.primaryColor),
+                              title: Text(materials[index]),
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                  );
-                },
+                    );
+                  },
+                ),
               ),
             ),
             SizedBox(height: 16.0.h),
             Center(
-              child: SizedBox(
-                width: 200.w,
-                child: ButtonCustom(
-                  buttonName: StringManager.addMaterial,
-                  textStyle: Theme.of(context).textTheme.titleSmall!.copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
-                  onTap: () async {
-                    final newItem = await Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => SearchMaterialScreen(),
-                      ),
-                    );
-                    if (newItem != null) {
-                      addItem(newItem);
-                    }
-                  },
+              child: SlideTransition(
+                position: _slideAnimation,
+                child: SizedBox(
+                  width: 200.w,
+                  child: ButtonCustom(
+                    buttonName: StringManager.addMaterial,
+                    textStyle: Theme.of(context).textTheme.titleSmall!.copyWith(
+                          fontWeight: FontWeight.bold,
+                        ),
+                    onTap: () async {
+                      final newItem = await Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => SearchMaterialScreen(),
+                        ),
+                      );
+                      if (newItem != null) {
+                        addItem(newItem);
+                      }
+                    },
+                  ),
                 ),
               ),
             ),

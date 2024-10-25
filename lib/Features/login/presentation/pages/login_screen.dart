@@ -58,19 +58,17 @@ class _LoginScreenState extends State<LoginScreen>
       child: Scaffold(
         body: Stack(
           children: [
-            // Background image
             Container(
               width: double.infinity,
               height: double.infinity,
               decoration: BoxDecoration(
                 image: DecorationImage(
                   image: AssetImage(
-                      ImageManager.background), // Replace with your image path
-                  fit: BoxFit.cover, // Cover the entire screen
+                      ImageManager.background),
+                  fit: BoxFit.cover,
                 ),
               ),
             ),
-            // Overlay content
             SingleChildScrollView(
               child: SizedBox(
                 height: MediaQuery.of(context).size.height,
@@ -123,7 +121,7 @@ class _LoginScreenState extends State<LoginScreen>
                               children: [
                                 TextButton(
                                   onPressed: () {
-                                    // Add your logic for "Forgot Password?"
+                                    Navigator.pushNamed(context, RoutesManger.routeNameForgotPassScreen);
                                   },
                                   child: Text(
                                     "Forgot Password?",

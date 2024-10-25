@@ -8,12 +8,10 @@ class CustomeDateTable extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: SingleChildScrollView(
-        child: DataTable(
-          columns: createColumns(),
-          rows: createRow(),
-        ),
+    return SingleChildScrollView(
+      child: DataTable(
+        columns: createColumns(),
+        rows: createRow(),
       ),
     );
   }

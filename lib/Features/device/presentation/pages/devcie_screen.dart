@@ -5,7 +5,46 @@ import '../../../../Core/utils/colors.dart';
 import '../../../../Core/utils/strings.dart';
 import '../widgets/custome_date_table.dart';
 
-class DeviceScreen extends StatelessWidget {
+class DeviceScreen extends StatefulWidget {
+  @override
+  State<DeviceScreen> createState() => _DeviceScreenState();
+}
+
+class _DeviceScreenState extends State<DeviceScreen>
+    with SingleTickerProviderStateMixin {
+  double _opacity = 0.0;
+  late AnimationController _animationController;
+  late Animation<Offset> _slideAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _animationController =
+        AnimationController(vsync: this, duration: Duration(seconds: 1));
+
+    _slideAnimation =
+        Tween<Offset>(begin: Offset(-1.w, 0), end: Offset(0, 0)).animate(
+          CurvedAnimation(
+            parent: _animationController,
+            curve: Curves.easeInOut,
+          ),
+        );
+
+    Future.delayed(Duration(milliseconds: 300), () {
+      setState(() {
+        _opacity = 1.0;
+      });
+      _animationController.forward();
+    });
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -17,23 +56,31 @@ class DeviceScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            ButtonCustom(buttonName: StringManager.deviceNewScan, onTap: (){}),
-
-            SizedBox(
-              height: 20.h,
+            SlideTransition(
+                position: _slideAnimation,
+                child: ButtonCustom(
+                    buttonName: StringManager.deviceNewScan, onTap: () {})),
+            SizedBox(height: 20.h),
+            AnimatedOpacity(
+              opacity: _opacity,
+              duration: Duration(seconds: 2),
+              curve: Curves.easeIn,
+              child: Text(
+                StringManager.deviceLastScan,
+                style: Theme.of(context)
+                    .textTheme
+                    .titleSmall!
+                    .copyWith(fontSize: 25.sp, fontWeight: FontWeight.bold),
+              ),
             ),
-            Text(
-              StringManager.deviceLastScan,
-              style: Theme.of(context)
-                  .textTheme
-                  .titleSmall!
-                  .copyWith(fontSize: 25.sp, fontWeight: FontWeight.bold),
+            Divider(color: ColorManager.primaryColor),
+            // Data Table
+            Expanded(
+              child: SlideTransition(
+                position: _slideAnimation,
+                child: CustomeDateTable(),
+              ),
             ),
-            Divider(
-              color: ColorManager.primaryColor,
-            ),
-            //Data TAble
-            CustomeDateTable(),
           ],
         ),
       ),

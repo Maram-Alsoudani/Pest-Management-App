@@ -47,5 +47,14 @@
 		<true/>
 		<key>UIStatusBarHidden</key>
 		<false/>
+
+		<!-- Permissions -->
+		<key>NSCameraUsageDescription</key>
+		<string>We need access to your camera for taking photos.</string>
+		<key>NSPhotoLibraryUsageDescription</key>
+		<string>We need access to your photo library to choose photos.</string>
+		<key>NSLocationWhenInUseUsageDescription</key>
+		<string>We need access to your location while using the app to show relevant features.</string>
+
 	</dict>
 </plist>

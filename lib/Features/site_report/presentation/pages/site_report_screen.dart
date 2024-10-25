@@ -16,7 +16,10 @@ class _SiteReportScreenState extends State<SiteReportScreen>
     with SingleTickerProviderStateMixin {
   List<Map<String, dynamic>> sections = [
     {"title": StringManager.notes, "screen": RoutesManger.routeNameNotesScreen},
-    {"title": StringManager.recommendations, "screen": RoutesManger.routeNameRecommendations},
+    {
+      "title": StringManager.recommendations,
+      "screen": RoutesManger.routeNameRecommendations
+    },
     {
       "title": StringManager.conditions,
       "screen": RoutesManger.routeNameConditionsScreen
@@ -25,7 +28,10 @@ class _SiteReportScreenState extends State<SiteReportScreen>
       "title": StringManager.materialUsages,
       "screen": RoutesManger.routeNameMaterialUsageScreen
     },
-    {"title": StringManager.photos, "screen": ""},
+    {
+      "title": StringManager.photos,
+      "screen": RoutesManger.routeNameAddPhotosScreen
+    },
     {"title": StringManager.devices, "screen": RoutesManger.routeNameDevice},
     {"title": StringManager.signatures, "screen": ""},
   ];

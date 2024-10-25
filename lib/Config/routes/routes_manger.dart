@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:pesticides/Features/category/presentation/pages/category_screen.dart';
 import 'package:pesticides/Features/material_usage/presentation/pages/material_usage_screen.dart';
 import 'package:pesticides/Features/forgotPassword/presentation/pages/forgot_pass_screen.dart';
+import 'package:pesticides/Features/photos/presentation/pages/add_photos_screen.dart';
 import 'package:pesticides/Features/profile/presentation/pages/profile_screen.dart';
 import 'package:pesticides/Features/recommendations/presentation/pages/recommendations_screen.dart';
 import 'package:pesticides/Features/register/presentation/pages/register_screen.dart';
@@ -30,6 +31,7 @@ class RoutesManger {
     routeNameDevice: (context) => DeviceScreen(),
     routeNameRecommendations: (context) => RecommendationsScreen(),
     routeNameForgotPassScreen: (context) => ForgotPassScreen(),
+    routeNameAddPhotosScreen: (context) => AddPhotosScreen(),
   };
 
   static const String routeNameEngOwnerScreen = "EngOwnerScreen";
@@ -46,4 +48,5 @@ class RoutesManger {
   static const String routeNameDevice = "device";
   static const String routeNameRecommendations = "recommendations";
   static const String routeNameForgotPassScreen = "forgot password";
+  static const String routeNameAddPhotosScreen = "add photos";
 }

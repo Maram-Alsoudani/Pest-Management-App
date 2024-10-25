@@ -32,4 +32,8 @@ class StringManager {
   static const String enterEmailForResetPass =
       "Enter your email and we will send you a password reset link";
   static const String send = "Send";
+  static const String addPhotos = "Add Photos";
+  static const String takePhoto = "Take a Photo";
+  static const String chooseFromGallery = "Choose from Gallery";
+  static const String close = "Close";
 }

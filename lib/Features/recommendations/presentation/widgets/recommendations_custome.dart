@@ -23,14 +23,16 @@ class _RecommendationsCustomeState extends State<RecommendationsCustome> {
           style: Theme.of(context).textTheme.titleSmall,
         ),
         Checkbox(
-          activeColor: ColorManager.primaryColor, // Color when checked
+          activeColor: ColorManager.primaryColor,
           checkColor: Colors.white,
-          value: onClick, onChanged: (value) {
-          setState(() {
-            onClick = value!;
-          });
-        },),
-
+          value: onClick,
+          onChanged: (value) {
+            print(widget.text);
+            setState(() {
+              onClick = value!;
+            });
+          },
+        ),
       ],
     );
   }

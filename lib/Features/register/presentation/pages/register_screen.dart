@@ -22,7 +22,7 @@ class RegisterScreen extends StatefulWidget {
 }
 
 class _RegisterScreenState extends State<RegisterScreen>
-    with SingleTickerProviderStateMixin {
+    with SingleTickerProviderStateMixin  {
   TextEditingController userNameController = TextEditingController();
   TextEditingController phoneController = TextEditingController();
   TextEditingController emailController = TextEditingController();
@@ -37,11 +37,9 @@ class _RegisterScreenState extends State<RegisterScreen>
   void initState() {
     super.initState();
 
-    // Initialize the AnimationController
     _animationController =
         AnimationController(vsync: this, duration: const Duration(seconds: 1));
 
-    // Define the slide animation from the left to its original position
     _slideAnimation =
         Tween<Offset>(begin:  Offset(-1.w, 0), end: const Offset(0, 0)).animate(
           CurvedAnimation(
@@ -57,13 +55,13 @@ class _RegisterScreenState extends State<RegisterScreen>
       });
 
 
-      _animationController.forward(); // Start the slide animation
+      _animationController.forward();
     });
   }
 
   @override
   void dispose() {
-    _animationController.dispose(); // Clean up the controller when done
+    _animationController.dispose();
     super.dispose();
   }
 

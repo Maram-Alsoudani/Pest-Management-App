@@ -13,6 +13,10 @@ class MyTheme {
     iconTheme: IconThemeData(
       color: ColorManager.whiteColor,
     ),
+    dividerTheme: DividerThemeData(
+      color: ColorManager.primaryColor,
+      thickness: 3
+    ),
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
         backgroundColor: Color(0xFFA11B1B),
@@ -23,6 +27,16 @@ class MyTheme {
       titleSmall: GoogleFonts.poppins(
         fontSize: 15.sp,
         color: ColorManager.whiteColor,
+      ),
+
+      bodyLarge:  GoogleFonts.poppins(
+        fontSize: 21.sp,
+        fontWeight: FontWeight.w700,
+        color: ColorManager.blackColor,
+      ),
+      bodyMedium:  GoogleFonts.poppins(
+        fontSize: 14.sp,
+        color: ColorManager.blackColor,
       ),
     ),
     textSelectionTheme: TextSelectionThemeData(

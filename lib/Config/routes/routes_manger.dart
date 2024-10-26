@@ -3,6 +3,7 @@ import 'package:pesticides/Features/category/presentation/pages/category_screen.
 import 'package:pesticides/Features/material_usage/presentation/pages/material_usage_screen.dart';
 import 'package:pesticides/Features/forgotPassword/presentation/pages/forgot_pass_screen.dart';
 import 'package:pesticides/Features/photos/presentation/pages/add_photos_screen.dart';
+import 'package:pesticides/Features/preview_report/presentation/pages/preview_report_screen.dart';
 import 'package:pesticides/Features/profile/presentation/pages/profile_screen.dart';
 import 'package:pesticides/Features/recommendations/presentation/pages/recommendations_screen.dart';
 import 'package:pesticides/Features/register/presentation/pages/register_screen.dart';
@@ -32,10 +33,11 @@ class RoutesManger {
     routeNameRecommendations: (context) => RecommendationsScreen(),
     routeNameForgotPassScreen: (context) => ForgotPassScreen(),
     routeNameAddPhotosScreen: (context) => AddPhotosScreen(),
+    routeNamePreviewReport: (context) => PreviewReportScreen(),
   };
 
   static const String routeNameEngOwnerScreen = "EngOwnerScreen";
-  static const String routeNameMaterialUsageScreen = "MateriaScreen";
+  static const String routeNameMaterialUsageScreen = "MaterialScreen";
   static const String routeNameRegister = "register";
   static const String routeNameCategoryScreen = "category";
   static const String routeNameLogin = "login";
@@ -49,4 +51,5 @@ class RoutesManger {
   static const String routeNameRecommendations = "recommendations";
   static const String routeNameForgotPassScreen = "forgot password";
   static const String routeNameAddPhotosScreen = "add photos";
+  static const String routeNamePreviewReport = "previewReport";
 }

@@ -10,6 +10,7 @@ class CustomTextFormField extends StatefulWidget {
   final bool? isSecured;
   final Widget? suffixIcon;
   final BorderRadius? borderRadius;
+  final bool enable;
 
   CustomTextFormField({
     required this.hint,
@@ -19,6 +20,7 @@ class CustomTextFormField extends StatefulWidget {
     this.isSecured = false,
     this.suffixIcon,
     this.borderRadius,
+    this.enable=true
   });
 
   @override
@@ -39,6 +41,7 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
     return Padding(
       padding: EdgeInsets.all(8.0.r),
       child: TextFormField(
+        enabled: widget.enable,
         controller: widget.controller,
         keyboardType: widget.keyboardType,
         validator: widget.validator,
@@ -64,6 +67,11 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
           enabledBorder: OutlineInputBorder(
             borderRadius: widget.borderRadius ?? BorderRadius.circular(8.r),
             borderSide: BorderSide(width: 1, color: ColorManager.whiteColor),
+          ),
+
+          disabledBorder: OutlineInputBorder(
+            borderRadius: widget.borderRadius ?? BorderRadius.circular(8.r),
+            borderSide: BorderSide(width: 1, color: ColorManager.greyShade6),
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: widget.borderRadius ?? BorderRadius.circular(8.r),

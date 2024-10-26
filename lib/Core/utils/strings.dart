@@ -36,4 +36,5 @@ class StringManager {
   static const String takePhoto = "Take a Photo";
   static const String chooseFromGallery = "Choose from Gallery";
   static const String close = "Close";
+  static const String previewReport = "Preview Report";
 }

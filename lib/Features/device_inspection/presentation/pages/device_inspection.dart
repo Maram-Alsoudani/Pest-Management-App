@@ -3,8 +3,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pesticides/Core/utils/colors.dart';
 import 'package:pesticides/Core/utils/strings.dart';
 import 'package:pesticides/Features/device_inspection/presentation/widgets/custom_text.dart';
+import '../../../../Core/component/drop_down_menu_widget.dart';
 import '../widgets/add_material.dart';
-import '../widgets/custom_drop_down_menu.dart';
 
 class DeviceInspection extends StatefulWidget {
   @override
@@ -37,6 +37,8 @@ class _DeviceInspectionState extends State<DeviceInspection> {
     'fly',
     'cockroach',
   ];
+  List<String> conditions = ['Good', 'Ok', 'Bad'];
+  String? selectedItem = 'Good';
   @override
   Widget build(BuildContext context) {
     var args = ModalRoute.of(context)!.settings.arguments as String;
@@ -71,17 +73,37 @@ class _DeviceInspectionState extends State<DeviceInspection> {
             SizedBox(
               height: 10.h,
             ),
-            CustomDropDownMenu(),
+            DropDownMenuWidget(
+              list:conditions ,
+              selectedValue:selectedItem ,
+              onChange: (String? value){
+                selectedItem =value;
+                setState(() {
+
+                });
+              },
+            ),
             Divider(
               color: ColorManager.whiteColor,
             ),
             CustomText(
               title: StringManager.deviceInspectionBaitCondition,
             ),
+
+            DropDownMenuWidget(
+              list:conditions ,
+              selectedValue:selectedItem ,
+              onChange: (String? value){
+                selectedItem =value;
+                setState(() {
+
+                });
+              },
+            ),
+
             SizedBox(
               height: 10.h,
             ),
-            CustomDropDownMenu(),
             Divider(
               color: ColorManager.whiteColor,
             ),

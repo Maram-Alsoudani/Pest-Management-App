@@ -11,6 +11,7 @@ import 'package:pesticides/Core/utils/strings.dart';
 
 import '../../../../Core/component/text_feild_custom.dart';
 import '../../../../Core/component/validators.dart';
+import '../widgets/drop_down_menu_widget.dart';
 import '../widgets/pick_image_widget.dart';
 import '../widgets/show_model_picker_image.dart';
 
@@ -28,7 +29,9 @@ class _RegisterScreenState extends State<RegisterScreen>
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   TextEditingController confirmPasswordController = TextEditingController();
+  List<String> list = ["admin", "user"];
 
+  String? selectedValue;
   var fromKey = GlobalKey<FormState>();
   late AnimationController _animationController;
   late Animation<Offset> _slideAnimation;
@@ -36,7 +39,7 @@ class _RegisterScreenState extends State<RegisterScreen>
   @override
   void initState() {
     super.initState();
-
+    selectedValue = list[0];
     _animationController =
         AnimationController(vsync: this, duration: const Duration(seconds: 1));
 
@@ -82,14 +85,14 @@ class _RegisterScreenState extends State<RegisterScreen>
                 ),
               ),
             ),
-            // Overlay content
+
             SingleChildScrollView(
               child: Form(
                 key: fromKey,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    SizedBox(height: 65.h),
+                    SizedBox(height: 30.h),
                     AnimatedOpacity(
                       duration: const Duration(seconds: 2),
                       opacity: _opacity,
@@ -97,6 +100,14 @@ class _RegisterScreenState extends State<RegisterScreen>
                       child: const PickImageWidget(
                         icon: Icons.add_a_photo,
                       ),
+                    ),
+                    DropDownMenuWidget(
+                      list: list,
+                      selectedValue: selectedValue,
+                      onChange: (String? value) {
+                        selectedValue = value;
+                        setState(() {});
+                      },
                     ),
                     SizedBox(height: 10.h),
                     SlideTransition(
@@ -107,7 +118,7 @@ class _RegisterScreenState extends State<RegisterScreen>
                         controller: userNameController,
                       ),
                     ),
-                    SizedBox(height: 20.h),
+                    SizedBox(height: 30.h),
                     SlideTransition(
                       position: _slideAnimation,
                       child: CustomTextFormField(
@@ -149,7 +160,7 @@ class _RegisterScreenState extends State<RegisterScreen>
                         isSecured: true,
                       ),
                     ),
-                    SizedBox(height: 30.h),
+                    SizedBox(height: 15.h),
                     SlideTransition(
                       position: _slideAnimation,
                       child: ButtonCustom(

@@ -89,13 +89,15 @@ class _AddPhotosScreenState extends State<AddPhotosScreen> {
           children: [
             Expanded(
               child: GridView.builder(
-                itemCount: images.length + 1,
+                itemCount: images.length+1 ,
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 3,
                   crossAxisSpacing: 10.w,
                   mainAxisSpacing: 10.h,
                 ),
                 itemBuilder: (context, index) {
+                  print("index: $index");
+                  print("images.length: ${images.length}");
                   if (index == images.length) {
                     return GestureDetector(
                       onTap: _showImagePickerDialog,

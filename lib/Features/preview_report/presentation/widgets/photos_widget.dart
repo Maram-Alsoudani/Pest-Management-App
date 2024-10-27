@@ -31,8 +31,10 @@ class PhotosWidget extends StatelessWidget {
               itemCount: 10,
               itemBuilder: (context, index) {
                 return Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Image.asset("assets/images/ins_logo.png"),
+                  padding: const EdgeInsets.all(3.0),
+                  child: ClipRRect(
+                      borderRadius: BorderRadius.circular(12.r),
+                      child: Image.asset("assets/images/ins_logo.png")),
                 );
               },
             ),

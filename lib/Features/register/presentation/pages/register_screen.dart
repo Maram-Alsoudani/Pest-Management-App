@@ -22,7 +22,7 @@ class RegisterScreen extends StatefulWidget {
 }
 
 class _RegisterScreenState extends State<RegisterScreen>
-    with SingleTickerProviderStateMixin  {
+    with SingleTickerProviderStateMixin {
   TextEditingController userNameController = TextEditingController();
   TextEditingController phoneController = TextEditingController();
   TextEditingController emailController = TextEditingController();
@@ -41,19 +41,18 @@ class _RegisterScreenState extends State<RegisterScreen>
         AnimationController(vsync: this, duration: const Duration(seconds: 1));
 
     _slideAnimation =
-        Tween<Offset>(begin:  Offset(-1.w, 0), end: const Offset(0, 0)).animate(
-          CurvedAnimation(
-            parent: _animationController,
-            curve: Curves.easeInOut,
-          ),
-        );
+        Tween<Offset>(begin: Offset(-1.w, 0), end: const Offset(0, 0)).animate(
+      CurvedAnimation(
+        parent: _animationController,
+        curve: Curves.easeInOut,
+      ),
+    );
 
     // Trigger the slide animation after the page loads
     Future.delayed(const Duration(milliseconds: 300), () {
       setState(() {
         _opacity = 1.0;
       });
-
 
       _animationController.forward();
     });
@@ -77,7 +76,8 @@ class _RegisterScreenState extends State<RegisterScreen>
               height: double.infinity,
               decoration: const BoxDecoration(
                 image: DecorationImage(
-                  image: AssetImage(ImageManager.background), // Replace with your image path
+                  image: AssetImage(
+                      ImageManager.background), // Replace with your image path
                   fit: BoxFit.cover, // Cover the entire screen
                 ),
               ),
@@ -87,6 +87,7 @@ class _RegisterScreenState extends State<RegisterScreen>
               child: Form(
                 key: fromKey,
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     SizedBox(height: 65.h),
                     AnimatedOpacity(
@@ -97,7 +98,7 @@ class _RegisterScreenState extends State<RegisterScreen>
                         icon: Icons.add_a_photo,
                       ),
                     ),
-                    SizedBox(height: 35.h),
+                    SizedBox(height: 10.h),
                     SlideTransition(
                       position: _slideAnimation,
                       child: CustomTextFormField(
@@ -111,7 +112,8 @@ class _RegisterScreenState extends State<RegisterScreen>
                       position: _slideAnimation,
                       child: CustomTextFormField(
                         hint: StringManager.phone,
-                        validator: (val) => AppValidators.validatePhoneNumber(val),
+                        validator: (val) =>
+                            AppValidators.validatePhoneNumber(val),
                         controller: phoneController,
                       ),
                     ),
@@ -159,22 +161,27 @@ class _RegisterScreenState extends State<RegisterScreen>
                         },
                       ),
                     ),
-                    SizedBox(height: 30.h),
+                    SizedBox(height: 15.h),
                     GestureDetector(
                       onTap: () {
                         Navigator.pushNamedAndRemoveUntil(
                           context,
                           RoutesManger.routeNameLogin,
-                              (route) => false,
+                          (route) => false,
                         );
                       },
                       child: AnimatedOpacity(
                         duration: const Duration(seconds: 2),
                         opacity: _opacity,
                         curve: Curves.easeIn,
-                        child: Text(
-                          StringManager.already_have_an_account,
-                          style: Theme.of(context).textTheme.titleSmall,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              StringManager.already_have_an_account,
+                              style: Theme.of(context).textTheme.titleSmall,
+                            ),
+                          ],
                         ),
                       ),
                     ),

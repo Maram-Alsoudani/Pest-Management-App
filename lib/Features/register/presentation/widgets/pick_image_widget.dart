@@ -58,6 +58,7 @@ class _PickImageWidgetState extends State<PickImageWidget> {
         color: Color.fromARGB(125, 78, 91, 110),
       ),
       child: Stack(
+        alignment:AlignmentDirectional.center ,
         children: [
           imgPath == null
               ?  ImageProfile(
@@ -66,14 +67,14 @@ class _PickImageWidgetState extends State<PickImageWidget> {
               : ClipOval(
             child: Image.file(
               imgPath!,
-              width: 145,
-              height: 145,
+              width: 145.w,
+              height: 145.h,
               fit: BoxFit.cover,
             ),
           ),
           Positioned(
-            left: 99,
-            bottom: -1,
+            left: 230.w,
+            bottom: -10.h,
             child: IconButton(
               onPressed: () {
                 // uploadImage2Screen();

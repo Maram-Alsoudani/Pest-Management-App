@@ -94,11 +94,7 @@ class _PreviewReportScreenState extends State<PreviewReportScreen> with SingleTi
           decoration: BoxDecoration(
               color: ColorManager.whiteColor,
               borderRadius: BorderRadius.circular(15.r),
-              image: const DecorationImage(
-                  opacity: 0.5,
-                  image: AssetImage(
-                    ImageManager.report,
-                  ))),
+              ),
           child: SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -111,32 +107,35 @@ class _PreviewReportScreenState extends State<PreviewReportScreen> with SingleTi
                     location: "Carrefour , Maddi",
                   ),
                 ),
-                const Divider(),
+                const Divider(color:ColorManager.primaryColor),
                 MaterialUsagesAndRecommendtions(
                   position: _slideAnimation,
                   opacity: _opacity,
                   text: rec,
                   tilte: StringManager.recommendations,
                 ),
-                const Divider(),
+                const Divider(color:ColorManager.primaryColor),
+
                 MaterialUsagesAndRecommendtions(
                   position: _slideAnimation,
                   opacity: _opacity,
                   text: mat,
                   tilte: StringManager.materialUsages,
                 ),
-                const Divider(),
+                const Divider(color:ColorManager.primaryColor),
                 PhotosWidget(
                   opacity: _opacity,
                   position: _slideAnimation,
                 ),
-                const Divider(),
+                SizedBox(height: 15.h,),
+                const Divider(color:ColorManager.primaryColor),
                 DeviceWidget(
                   opacity: _opacity,
                   position: _slideAnimation,
 
                 ),
-                const Divider(),
+                SizedBox(height: 20.h,),
+                const Divider(color:ColorManager.primaryColor),
                 AnimatedOpacity(
                   duration: const Duration(seconds: 2),
                   opacity: _opacity,
@@ -149,8 +148,8 @@ class _PreviewReportScreenState extends State<PreviewReportScreen> with SingleTi
                   child: Text("Noting Come Easy/////////////////////////////////////////",
                       style: Theme.of(context).textTheme.bodyMedium),
                 ),
-                SizedBox(height: 40.h,),
-                const Divider(),
+                SizedBox(height: 20.h,),
+                const Divider(color:ColorManager.primaryColor),
                 AnimatedOpacity(
                   duration: const Duration(seconds: 2),
                   opacity: _opacity,
@@ -163,8 +162,8 @@ class _PreviewReportScreenState extends State<PreviewReportScreen> with SingleTi
                   child: Text("Noting Come Easy/////////////////////////////////////////",
                       style: Theme.of(context).textTheme.bodyMedium),
                 ),
-                SizedBox(height: 40.h,),
-                const Divider(),
+                SizedBox(height: 20.h,),
+                const Divider(color:ColorManager.primaryColor),
                 AnimatedOpacity(
                   duration: const Duration(seconds: 2),
                   opacity: _opacity,

@@ -32,15 +32,9 @@ class MaterialUsagesAndRecommendtions extends StatelessWidget {
                 padding: EdgeInsets.zero,
                 itemCount: text.length,
                 itemBuilder: (context, index) {
-                  return ListTile(
-
-                    leading: Text(
-                      '${index+1}-', // Black dot symbol
-                      style: Theme.of(context).textTheme.bodyMedium,
-                    ),
-                    title: Text(text[index],
+                  return  Text("${index+1}- ${text[index]}",
                         style: Theme.of(context).textTheme.bodyMedium
-                    ),
+
                   );
                 },
               ),

@@ -77,9 +77,11 @@ class _LoginScreenState extends State<LoginScreen>
                 child: Form(
                   key: formKey,
                   child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
                           SizedBox(height: 80.h),
                           AnimatedOpacity(
@@ -106,7 +108,7 @@ class _LoginScreenState extends State<LoginScreen>
                                       context, RoutesManger.routeNameEngOwnerScreen);
                                 },
                                 child: Text(
-                                  "Type: ${type??"Select Type Please"} ? Change From Here",
+                                  "Type: ${type??"Select Type Please "} ? Change From Here",
                                   style: type == null ?
                                   Theme.of(context).textTheme.titleSmall!.copyWith(
                                       color: ColorManager.yellowColor

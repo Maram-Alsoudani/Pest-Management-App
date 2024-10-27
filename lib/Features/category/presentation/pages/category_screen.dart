@@ -131,15 +131,11 @@ class _CategoryScreenState extends State<CategoryScreen>
                   ],
                 ),
               ),
-              SizedBox(height: 120.h),
+              SizedBox(height: 70.h),
               Expanded(
-                child: GridView.builder(
+                child: ListView.builder(
                   itemCount: CategoryModel.images.length,
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    mainAxisSpacing: 15.h,
-                    crossAxisSpacing: 10.w,
-                  ),
+
                   itemBuilder: (context, index) {
                     return ScaleTransition(
                       scale: Tween<double>(begin: 0.0, end: 1.0).animate(
@@ -156,6 +152,9 @@ class _CategoryScreenState extends State<CategoryScreen>
                         onTap: () {
                           if (index == 0) {
                             Navigator.pushNamed(context, RoutesManger.routeNameSites);
+                          }
+                          if (index == 1) {
+                            Navigator.pushNamed(context, RoutesManger.routeNamePreviewReport);
                           }
                         },
                         child: CategoryItem(

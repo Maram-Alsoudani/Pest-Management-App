@@ -13,10 +13,6 @@ class MyTheme {
     iconTheme: IconThemeData(
       color: ColorManager.whiteColor,
     ),
-    dividerTheme: DividerThemeData(
-      color: ColorManager.primaryColor,
-      thickness: 3
-    ),
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
         backgroundColor: Color(0xFFA11B1B),

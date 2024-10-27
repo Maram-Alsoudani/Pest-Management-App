@@ -112,44 +112,41 @@ class _SearchMaterialScreenState extends State<SearchMaterialScreen> with Single
             ),
           ),
           Expanded(
-            child: SlideTransition(
-              position: _slideAnimation,
-              child: ListView.separated(
-                itemCount: filteredMaterials.length,
-                itemBuilder: (context, index) {
-                  return Padding(
-                    padding:
-                        EdgeInsets.symmetric(horizontal: 16.0.r, vertical: 4.0.r),
-                    child: Card(
-                      shape: RoundedRectangleBorder(
+            child: ListView.separated(
+              itemCount: filteredMaterials.length,
+              itemBuilder: (context, index) {
+                return Padding(
+                  padding:
+                      EdgeInsets.symmetric(horizontal: 16.0.r, vertical: 4.0.r),
+                  child: Card(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(16.0.r),
+                    ),
+                    elevation: 2,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(16.0.r),
+                      child: InkWell(
                         borderRadius: BorderRadius.circular(16.0.r),
-                      ),
-                      elevation: 2,
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(16.0.r),
-                        child: InkWell(
-                          borderRadius: BorderRadius.circular(16.0.r),
-                          splashColor: Colors.transparent,
-                          highlightColor: Colors.transparent,
-                          onTap: () {
-                            Navigator.pop(context, filteredMaterials[index]);
-                          },
-                          child: ListTile(
-                            leading: const Icon(CupertinoIcons.drop_triangle,
-                                color: ColorManager.primaryColor),
-                            title: Text(filteredMaterials[index]),
-                            trailing: const Icon(Icons.add_circle_outline_rounded,
-                                color: ColorManager.primaryColor),
-                          ),
+                        splashColor: Colors.transparent,
+                        highlightColor: Colors.transparent,
+                        onTap: () {
+                          Navigator.pop(context, filteredMaterials[index]);
+                        },
+                        child: ListTile(
+                          leading: const Icon(CupertinoIcons.drop_triangle,
+                              color: ColorManager.primaryColor),
+                          title: Text(filteredMaterials[index]),
+                          trailing: const Icon(Icons.add_circle_outline_rounded,
+                              color: ColorManager.primaryColor),
                         ),
                       ),
                     ),
-                  );
-                },
-                separatorBuilder: (context, index) {
-                  return SizedBox(height: 8.0.h);
-                },
-              ),
+                  ),
+                );
+              },
+              separatorBuilder: (context, index) {
+                return SizedBox(height: 8.0.h);
+              },
             ),
           ),
         ],

@@ -101,6 +101,8 @@ class _RegisterScreenState extends State<RegisterScreen>
                         icon: Icons.add_a_photo,
                       ),
                     ),
+                    SizedBox(height: 18.h),
+
                     DropDownMenuWidget(
                       list: list,
                       selectedValue: selectedValue,
@@ -109,7 +111,7 @@ class _RegisterScreenState extends State<RegisterScreen>
                         setState(() {});
                       },
                     ),
-                    SizedBox(height: 10.h),
+                    SizedBox(height: 8.h),
                     SlideTransition(
                       position: _slideAnimation,
                       child: CustomTextFormField(
@@ -118,7 +120,7 @@ class _RegisterScreenState extends State<RegisterScreen>
                         controller: userNameController,
                       ),
                     ),
-                    SizedBox(height: 30.h),
+                    SizedBox(height: 8.h),
                     SlideTransition(
                       position: _slideAnimation,
                       child: CustomTextFormField(
@@ -128,7 +130,7 @@ class _RegisterScreenState extends State<RegisterScreen>
                         controller: phoneController,
                       ),
                     ),
-                    SizedBox(height: 20.h),
+                    SizedBox(height:8.h),
                     SlideTransition(
                       position: _slideAnimation,
                       child: CustomTextFormField(
@@ -137,7 +139,7 @@ class _RegisterScreenState extends State<RegisterScreen>
                         controller: emailController,
                       ),
                     ),
-                    SizedBox(height: 20.h),
+                    SizedBox(height:8.h),
                     SlideTransition(
                       position: _slideAnimation,
                       child: CustomTextFormField(
@@ -147,7 +149,7 @@ class _RegisterScreenState extends State<RegisterScreen>
                         isSecured: true,
                       ),
                     ),
-                    SizedBox(height: 20.h),
+                    SizedBox(height:8.h),
                     SlideTransition(
                       position: _slideAnimation,
                       child: CustomTextFormField(

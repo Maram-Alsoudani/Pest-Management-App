@@ -9,7 +9,9 @@ class CustomeDateTable extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
+
       child: DataTable(
+
         columns: createColumns(),
         rows: createRow(),
       ),
@@ -26,6 +28,7 @@ class CustomeDateTable extends StatelessWidget {
   List<DataRow> createRow() {
     return data.map((e) {
       return DataRow(
+
         cells: [
           DataCell(Text(e.id.toString(),style: TextStyle(color: ColorManager.whiteColor),),),
           DataCell(Text(e.date.toString(),style: TextStyle(color: ColorManager.whiteColor),),),

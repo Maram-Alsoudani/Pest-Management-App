@@ -79,7 +79,8 @@ class _EngOwnerScreenState extends State<EngOwnerScreen> with SingleTickerProvid
                   child: CustomButton(
                     name: 'Engineer',
                     image: ImageManager.engIcon,
-                    routeName: RoutesManger.routeNameRegister,
+                    routeName: RoutesManger.routeNameLogin,
+                    type: "user",
                   ),
                 ),
                 SizedBox(
@@ -92,6 +93,7 @@ class _EngOwnerScreenState extends State<EngOwnerScreen> with SingleTickerProvid
                     name: 'Administrator',
                     image: ImageManager.ownerIcon,
                     routeName: RoutesManger.routeNameLogin,
+                    type: "admin",
                   ),
                 ),
               ],

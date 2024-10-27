@@ -11,6 +11,7 @@ import 'package:pesticides/Core/utils/strings.dart';
 
 import '../../../../Core/component/text_feild_custom.dart';
 import '../../../../Core/component/validators.dart';
+import '../../../../Core/component/drop_down_menu_widget.dart';
 import '../widgets/pick_image_widget.dart';
 import '../widgets/show_model_picker_image.dart';
 
@@ -28,7 +29,9 @@ class _RegisterScreenState extends State<RegisterScreen>
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   TextEditingController confirmPasswordController = TextEditingController();
+  List<String> list = ["admin", "user"];
 
+  String? selectedValue;
   var fromKey = GlobalKey<FormState>();
   late AnimationController _animationController;
   late Animation<Offset> _slideAnimation;
@@ -36,19 +39,17 @@ class _RegisterScreenState extends State<RegisterScreen>
   @override
   void initState() {
     super.initState();
-
-    // Initialize the AnimationController
+    selectedValue = list[0];
     _animationController =
         AnimationController(vsync: this, duration: const Duration(seconds: 1));
 
-    // Define the slide animation from the left to its original position
     _slideAnimation =
-        Tween<Offset>(begin:  Offset(-1.w, 0), end: const Offset(0, 0)).animate(
-          CurvedAnimation(
-            parent: _animationController,
-            curve: Curves.easeInOut,
-          ),
-        );
+        Tween<Offset>(begin: Offset(-1.w, 0), end: const Offset(0, 0)).animate(
+      CurvedAnimation(
+        parent: _animationController,
+        curve: Curves.easeInOut,
+      ),
+    );
 
     // Trigger the slide animation after the page loads
     Future.delayed(const Duration(milliseconds: 300), () {
@@ -56,14 +57,13 @@ class _RegisterScreenState extends State<RegisterScreen>
         _opacity = 1.0;
       });
 
-
-      _animationController.forward(); // Start the slide animation
+      _animationController.forward();
     });
   }
 
   @override
   void dispose() {
-    _animationController.dispose(); // Clean up the controller when done
+    _animationController.dispose();
     super.dispose();
   }
 
@@ -79,18 +79,20 @@ class _RegisterScreenState extends State<RegisterScreen>
               height: double.infinity,
               decoration: const BoxDecoration(
                 image: DecorationImage(
-                  image: AssetImage(ImageManager.background), // Replace with your image path
+                  image: AssetImage(
+                      ImageManager.background), // Replace with your image path
                   fit: BoxFit.cover, // Cover the entire screen
                 ),
               ),
             ),
-            // Overlay content
+
             SingleChildScrollView(
               child: Form(
                 key: fromKey,
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    SizedBox(height: 65.h),
+                    SizedBox(height: 30.h),
                     AnimatedOpacity(
                       duration: const Duration(seconds: 2),
                       opacity: _opacity,
@@ -99,7 +101,21 @@ class _RegisterScreenState extends State<RegisterScreen>
                         icon: Icons.add_a_photo,
                       ),
                     ),
-                    SizedBox(height: 35.h),
+                    SizedBox(height: 18.h),
+
+                    SlideTransition(
+                      position: _slideAnimation,
+
+                      child: DropDownMenuWidget(
+                        list: list,
+                        selectedValue: selectedValue,
+                        onChange: (String? value) {
+                          selectedValue = value;
+                          setState(() {});
+                        },
+                      ),
+                    ),
+                    SizedBox(height: 8.h),
                     SlideTransition(
                       position: _slideAnimation,
                       child: CustomTextFormField(
@@ -108,16 +124,17 @@ class _RegisterScreenState extends State<RegisterScreen>
                         controller: userNameController,
                       ),
                     ),
-                    SizedBox(height: 20.h),
+                    SizedBox(height: 8.h),
                     SlideTransition(
                       position: _slideAnimation,
                       child: CustomTextFormField(
                         hint: StringManager.phone,
-                        validator: (val) => AppValidators.validatePhoneNumber(val),
+                        validator: (val) =>
+                            AppValidators.validatePhoneNumber(val),
                         controller: phoneController,
                       ),
                     ),
-                    SizedBox(height: 20.h),
+                    SizedBox(height:8.h),
                     SlideTransition(
                       position: _slideAnimation,
                       child: CustomTextFormField(
@@ -126,7 +143,7 @@ class _RegisterScreenState extends State<RegisterScreen>
                         controller: emailController,
                       ),
                     ),
-                    SizedBox(height: 20.h),
+                    SizedBox(height:8.h),
                     SlideTransition(
                       position: _slideAnimation,
                       child: CustomTextFormField(
@@ -136,7 +153,7 @@ class _RegisterScreenState extends State<RegisterScreen>
                         isSecured: true,
                       ),
                     ),
-                    SizedBox(height: 20.h),
+                    SizedBox(height:8.h),
                     SlideTransition(
                       position: _slideAnimation,
                       child: CustomTextFormField(
@@ -149,7 +166,7 @@ class _RegisterScreenState extends State<RegisterScreen>
                         isSecured: true,
                       ),
                     ),
-                    SizedBox(height: 30.h),
+                    SizedBox(height: 15.h),
                     SlideTransition(
                       position: _slideAnimation,
                       child: ButtonCustom(
@@ -161,22 +178,27 @@ class _RegisterScreenState extends State<RegisterScreen>
                         },
                       ),
                     ),
-                    SizedBox(height: 30.h),
+                    SizedBox(height: 15.h),
                     GestureDetector(
                       onTap: () {
                         Navigator.pushNamedAndRemoveUntil(
                           context,
                           RoutesManger.routeNameLogin,
-                              (route) => false,
+                          (route) => false,
                         );
                       },
                       child: AnimatedOpacity(
                         duration: const Duration(seconds: 2),
                         opacity: _opacity,
                         curve: Curves.easeIn,
-                        child: Text(
-                          StringManager.already_have_an_account,
-                          style: Theme.of(context).textTheme.titleSmall,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              StringManager.already_have_an_account,
+                              style: Theme.of(context).textTheme.titleSmall,
+                            ),
+                          ],
                         ),
                       ),
                     ),

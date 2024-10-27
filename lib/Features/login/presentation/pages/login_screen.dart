@@ -5,6 +5,7 @@ import 'package:pesticides/Core/component/button_custom.dart';
 import 'package:pesticides/Core/component/text_feild_custom.dart';
 import 'package:pesticides/Core/component/validators.dart';
 
+import '../../../../Core/utils/colors.dart';
 import '../../../../Core/utils/images.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -54,6 +55,7 @@ class _LoginScreenState extends State<LoginScreen>
 
   @override
   Widget build(BuildContext context) {
+    String? type=ModalRoute.of(context)?.settings.arguments as String?;
     return SafeArea(
       child: Scaffold(
         body: Stack(
@@ -75,9 +77,11 @@ class _LoginScreenState extends State<LoginScreen>
                 child: Form(
                   key: formKey,
                   child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
                           SizedBox(height: 80.h),
                           AnimatedOpacity(
@@ -91,10 +95,33 @@ class _LoginScreenState extends State<LoginScreen>
                               fit: BoxFit.fill,
                             ),
                           ),
-                          SizedBox(height: 50.h),
+                          SizedBox(height: 10.h),
+                          AnimatedOpacity(
+                            duration: Duration(seconds: 2),
+                            opacity: _opacity,
+                            curve: Curves.easeIn,
+                            child: Padding(
+                              padding: EdgeInsets.only(bottom: 20.h),
+                              child: TextButton(
+                                onPressed: () {
+                                  Navigator.pushNamed(
+                                      context, RoutesManger.routeNameEngOwnerScreen);
+                                },
+                                child: Text(
+                                  "Type: ${type??"Select Type Please "} ? Change From Here",
+                                  style: type == null ?
+                                  Theme.of(context).textTheme.titleSmall!.copyWith(
+                                      color: ColorManager.yellowColor
+                                  ):  Theme.of(context).textTheme.titleSmall
+                                ),
+
+                              ),
+                            ),
+                          ),
                           SlideTransition(
                             position: _slideAnimation,
                             child: CustomTextFormField(
+                              enable: type == null?false:true,
                               hint: "Email",
                               validator: (val) =>
                                   AppValidators.validateEmail(val),
@@ -105,6 +132,7 @@ class _LoginScreenState extends State<LoginScreen>
                           SlideTransition(
                             position: _slideAnimation,
                             child: CustomTextFormField(
+                              enable: type == null?false:true,
                               hint: "Password",
                               validator: (val) =>
                                   AppValidators.validatePassword(val),
@@ -137,7 +165,10 @@ class _LoginScreenState extends State<LoginScreen>
                             position: _slideAnimation,
                             child: ButtonCustom(
                               buttonName: "Login",
-                              onTap: () {
+                              enable: type == null?false:true,
+                              onTap:
+
+                                  () {
                                 if (formKey.currentState!.validate()) {
                                   //TODO: Handle Logic
                                 }
@@ -161,7 +192,9 @@ class _LoginScreenState extends State<LoginScreen>
                             },
                             child: Text(
                               "Don't have an account? Sign Up Here",
-                              style: Theme.of(context).textTheme.titleSmall,
+                              style:
+
+                              Theme.of(context).textTheme.titleSmall,
                             ),
 
                           ),

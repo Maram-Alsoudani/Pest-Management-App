@@ -24,6 +24,16 @@ class MyTheme {
         fontSize: 15.sp,
         color: ColorManager.whiteColor,
       ),
+
+      bodyLarge:  GoogleFonts.poppins(
+        fontSize: 21.sp,
+        fontWeight: FontWeight.w700,
+        color: ColorManager.blackColor,
+      ),
+      bodyMedium:  GoogleFonts.poppins(
+        fontSize: 14.sp,
+        color: ColorManager.blackColor,
+      ),
     ),
     textSelectionTheme: TextSelectionThemeData(
       cursorColor: ColorManager.blueColor,

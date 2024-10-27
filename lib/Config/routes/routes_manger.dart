@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pesticides/Features/category/presentation/pages/category_screen.dart';
+import 'package:pesticides/Features/device_inspection/presentation/pages/device_inspection.dart';
 import 'package:pesticides/Features/material_usage/presentation/pages/material_usage_screen.dart';
 import 'package:pesticides/Features/forgotPassword/presentation/pages/forgot_pass_screen.dart';
 import 'package:pesticides/Features/photos/presentation/pages/add_photos_screen.dart';
@@ -32,6 +33,7 @@ class RoutesManger {
     routeNameForgotPassScreen: (context) => ForgotPassScreen(),
     routeNameAddPhotosScreen: (context) => AddPhotosScreen(),
     routeNamePreviewReport: (context) => PreviewReportScreen(),
+    routeNameDeviceInspectionScreen: (context) => DeviceInspection(),
   };
 
   static const String routeNameEngOwnerScreen = "EngOwnerScreen";
@@ -49,4 +51,5 @@ class RoutesManger {
   static const String routeNameForgotPassScreen = "forgot password";
   static const String routeNameAddPhotosScreen = "add photos";
   static const String routeNamePreviewReport = "previewReport";
+  static const String routeNameDeviceInspectionScreen = "device inespection";
 }

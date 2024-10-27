@@ -37,4 +37,12 @@ class StringManager {
   static const String chooseFromGallery = "Choose from Gallery";
   static const String close = "Close";
   static const String previewReport = "Preview Report";
+  static const String deviceInspection = "Device Inspection";
+  static const String deviceInspectionID = "ID";
+  static const String deviceInspectionLastScanned = "Last Scanned";
+  static const String deviceInspectionDeviceCondition = "Device Condition";
+  static const String deviceInspectionBaitCondition = "Bait Condition";
+  static const String deviceInspectionRemoved = "Removed";
+  static const String deviceInspectionAddMaterial = "Add Material";
+  static const String deviceInspectionAddPest = "Add Pest";
 }

@@ -2,7 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import '../../../../Core/utils/colors.dart';
+import '../utils/colors.dart';
 
 class DropDownMenuWidget extends StatelessWidget {
   final List<String > list;
@@ -31,21 +31,21 @@ class DropDownMenuWidget extends StatelessWidget {
         decoration: InputDecoration(
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(8.r),
-            borderSide: BorderSide(
+            borderSide: const BorderSide(
               color: ColorManager.whiteColor,
               width: 1,
             ),
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(8.r),
-            borderSide: BorderSide(
+            borderSide: const BorderSide(
               color: ColorManager.whiteColor,
               width: 1,
             ),
           ),
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(8.r),
-            borderSide: BorderSide(
+            borderSide: const BorderSide(
               color: ColorManager.whiteColor,
               width: 1,
             ),

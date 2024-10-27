@@ -11,7 +11,7 @@ import 'package:pesticides/Core/utils/strings.dart';
 
 import '../../../../Core/component/text_feild_custom.dart';
 import '../../../../Core/component/validators.dart';
-import '../widgets/drop_down_menu_widget.dart';
+import '../../../../Core/component/drop_down_menu_widget.dart';
 import '../widgets/pick_image_widget.dart';
 import '../widgets/show_model_picker_image.dart';
 
@@ -103,13 +103,17 @@ class _RegisterScreenState extends State<RegisterScreen>
                     ),
                     SizedBox(height: 18.h),
 
-                    DropDownMenuWidget(
-                      list: list,
-                      selectedValue: selectedValue,
-                      onChange: (String? value) {
-                        selectedValue = value;
-                        setState(() {});
-                      },
+                    SlideTransition(
+                      position: _slideAnimation,
+
+                      child: DropDownMenuWidget(
+                        list: list,
+                        selectedValue: selectedValue,
+                        onChange: (String? value) {
+                          selectedValue = value;
+                          setState(() {});
+                        },
+                      ),
                     ),
                     SizedBox(height: 8.h),
                     SlideTransition(

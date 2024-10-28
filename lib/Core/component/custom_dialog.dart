@@ -2,6 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'dart:io' show Platform;
 
+import 'package:pesticides/core/utils/colors.dart';
+
 class DialogUtils {
   static void hideLoadingDialog(BuildContext context) {
     Navigator.pop(context);
@@ -22,10 +24,11 @@ class DialogUtils {
           return CupertinoTheme(
             data: CupertinoThemeData(
               brightness: isDarkMode ? Brightness.dark : Brightness.light,
-              primaryColor: isDarkMode ? Colors.white : Colors.blue,
+              primaryColor:
+                  isDarkMode ? ColorManager.whiteColor : ColorManager.blueColor,
               scaffoldBackgroundColor: isDarkMode
-                  ? Colors.black.withOpacity(0.8)
-                  : Colors.white.withOpacity(0.8),
+                  ? ColorManager.blackColor.withOpacity(0.8)
+                  : ColorManager.whiteColor.withOpacity(0.8),
             ),
             child: CupertinoAlertDialog(
               title: const CupertinoActivityIndicator(),
@@ -37,7 +40,9 @@ class DialogUtils {
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w600,
-                    color: isDarkMode ? Colors.white : Colors.black,
+                    color: isDarkMode
+                        ? ColorManager.whiteColor
+                        : ColorManager.blackColor,
                   ),
                 ),
               ),
@@ -52,8 +57,9 @@ class DialogUtils {
         barrierDismissible: false,
         builder: (BuildContext context) {
           return AlertDialog(
-            backgroundColor:
-                Theme.of(context).scaffoldBackgroundColor.withOpacity(0.9),
+            backgroundColor: isDarkMode
+                ? ColorManager.blackColor.withOpacity(0.8)
+                : ColorManager.whiteColor.withOpacity(0.9),
             contentPadding: const EdgeInsets.symmetric(vertical: 20),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(12),
@@ -67,7 +73,9 @@ class DialogUtils {
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w600,
-                  color: isDarkMode ? Colors.white : Colors.black,
+                  color: isDarkMode
+                      ? ColorManager.whiteColor
+                      : ColorManager.blackColor,
                 ),
               ),
             ),
@@ -87,9 +95,9 @@ class DialogUtils {
     Function? posAction,
     Function? negAction,
     Function? thirdAction,
-    Color posColor = const Color(0xFF5F9BEB),
-    Color negColor = const Color(0xFFEB4B4B),
-    Color thirdColor = const Color(0xFF5F9BEB),
+    Color posColor = ColorManager.dialogBlueColor,
+    Color negColor = ColorManager.dialogRedColor,
+    Color thirdColor = ColorManager.dialogBlueColor,
   }) {
     final isDarkMode =
         MediaQuery.of(context).platformBrightness == Brightness.dark;
@@ -160,7 +168,8 @@ class DialogUtils {
       if (i < actions.length - 1) {
         actionsWithSeparators.add(
           Divider(
-            color: isDarkMode ? Colors.grey.shade700 : Colors.grey.shade400,
+            color:
+                isDarkMode ? ColorManager.greyShade6 : ColorManager.greyShade4,
             thickness: 0.6,
           ),
         );
@@ -175,10 +184,11 @@ class DialogUtils {
           return CupertinoTheme(
             data: CupertinoThemeData(
               brightness: isDarkMode ? Brightness.dark : Brightness.light,
-              primaryColor: isDarkMode ? Colors.white : Colors.blue,
+              primaryColor:
+                  isDarkMode ? ColorManager.whiteColor : ColorManager.blueColor,
               scaffoldBackgroundColor: isDarkMode
-                  ? Colors.black.withOpacity(0.8)
-                  : Colors.white.withOpacity(0.8),
+                  ? ColorManager.blackColor.withOpacity(0.8)
+                  : ColorManager.whiteColor.withOpacity(0.8),
             ),
             child: CupertinoAlertDialog(
               title: Padding(
@@ -189,7 +199,9 @@ class DialogUtils {
                     style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.w600,
-                      color: isDarkMode ? Colors.white : Colors.black,
+                      color: isDarkMode
+                          ? ColorManager.whiteColor
+                          : ColorManager.blackColor,
                     ),
                   ),
                 ),
@@ -200,7 +212,9 @@ class DialogUtils {
                   message ?? '',
                   style: TextStyle(
                     fontSize: 16,
-                    color: isDarkMode ? Colors.white70 : Colors.black87,
+                    color: isDarkMode
+                        ? ColorManager.whiteColor.withOpacity(0.7)
+                        : ColorManager.blackColor.withOpacity(0.87),
                   ),
                 ),
               ),
@@ -220,21 +234,26 @@ class DialogUtils {
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            backgroundColor:
-                Theme.of(context).scaffoldBackgroundColor.withOpacity(0.9),
+            backgroundColor: isDarkMode
+                ? ColorManager.blackColor.withOpacity(0.8)
+                : ColorManager.whiteColor.withOpacity(0.9),
             title: Text(
               title ?? '',
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.w600,
-                color: isDarkMode ? Colors.white : Colors.black,
+                color: isDarkMode
+                    ? ColorManager.whiteColor
+                    : ColorManager.blackColor,
               ),
             ),
             content: Text(
               message ?? '',
               style: TextStyle(
                 fontSize: 16,
-                color: isDarkMode ? Colors.white70 : Colors.black87,
+                color: isDarkMode
+                    ? ColorManager.whiteColor.withOpacity(0.7)
+                    : ColorManager.blackColor.withOpacity(0.87),
               ),
             ),
             actions: actions,

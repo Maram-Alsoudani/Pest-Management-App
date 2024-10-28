@@ -156,6 +156,9 @@ class _CategoryScreenState extends State<CategoryScreen>
                           if (index == 1) {
                             Navigator.pushNamed(context, RoutesManger.routeNamePreviewReport);
                           }
+                          if (index == 2) {
+                            Navigator.pushNamed(context, RoutesManger.routeNameInventory);
+                          }
                         },
                         child: CategoryItem(
                           categoryModel: CategoryModel.images[index],

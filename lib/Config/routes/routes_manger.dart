@@ -15,6 +15,7 @@ import '../../Features/device/presentation/pages/devcie_screen.dart';
 import '../../Features/eng_owner_screen/presentation/pages/eng_owner_screen.dart';
 import '../../Features/login/presentation/pages/login_screen.dart';
 import '../../Features/notes/presentation/pages/notes_screen.dart';
+import '../../Features/inventory/presentation/pages/inventory_screen.dart';
 
 class RoutesManger {
   static Map<String, Widget Function(BuildContext)> route = {
@@ -34,6 +35,7 @@ class RoutesManger {
     routeNameAddPhotosScreen: (context) => AddPhotosScreen(),
     routeNamePreviewReport: (context) => PreviewReportScreen(),
     routeNameDeviceInspectionScreen: (context) => DeviceInspection(),
+    routeNameInventory: (context) => InventoryScreen(),
   };
 
   static const String routeNameEngOwnerScreen = "EngOwnerScreen";
@@ -52,4 +54,5 @@ class RoutesManger {
   static const String routeNameAddPhotosScreen = "add photos";
   static const String routeNamePreviewReport = "previewReport";
   static const String routeNameDeviceInspectionScreen = "device inespection";
+  static const String routeNameInventory = "inventory";
 }

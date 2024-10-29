@@ -50,11 +50,10 @@ class _RegisterScreenState extends State<RegisterScreen>
                 posActionTitle: StringManager.ok);
           } else if (state is RegisterViewModelError) {
             DialogUtils.showAlertDialog(
-                context: context,
-                title: StringManager.failed,
-                message: state.failure.errorMessage,
-                posActionTitle: StringManager.ok,
-
+              context: context,
+              title: StringManager.failed,
+              message: state.failure.errorMessage,
+              posActionTitle: StringManager.ok,
             );
           }
         },

@@ -45,6 +45,10 @@ class RegisterViewModelCubit extends Cubit<RegisterViewModelState> {
       image = File(pickedFile.path);
       emit(RegisterViewModelChangeImage());
 
+    }else{
+      image=null;
+      emit(RegisterViewModelChangeImage());
+
     }
   }
   //===============Animation Handle=======================

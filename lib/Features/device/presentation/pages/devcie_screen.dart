@@ -34,6 +34,7 @@ class _DeviceScreenState extends State<DeviceScreen>
       ),
     );
 
+
     Future.delayed(Duration(milliseconds: 300), () {
       setState(() {
         _opacity = 1.0;

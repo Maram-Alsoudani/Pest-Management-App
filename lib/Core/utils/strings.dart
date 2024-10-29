@@ -46,4 +46,8 @@ class StringManager {
   static const String deviceInspectionAddMaterial = "Add Material";
   static const String deviceInspectionAddPest = "Add Pest";
   static const String inventory = "Inventory";
+  static const String success = "Success";
+  static const String ok = "Ok";
+  static const String registerSuccessfully = "Register Successfully.";
+  static const String failed = "Failed";
 }

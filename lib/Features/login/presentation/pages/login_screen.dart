@@ -187,7 +187,7 @@ class _LoginScreenState extends State<LoginScreen>
                           padding: EdgeInsets.only(bottom: 20.h),
                           child: TextButton(
                             onPressed: () {
-                              Navigator.pushNamed(
+                              Navigator.pushReplacementNamed(
                                   context, RoutesManger.routeNameRegister);
                             },
                             child: Text(

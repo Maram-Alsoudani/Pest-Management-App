@@ -40,7 +40,7 @@ class _LoginScreenState extends State<LoginScreen>
 
   @override
   Widget build(BuildContext context) {
-    String? type=ModalRoute.of(context)?.settings.arguments as String?;
+    String? type = ModalRoute.of(context)?.settings.arguments as String?;
     return SafeArea(
       child: BlocConsumer<LoginScreenViewModel, LoginStates>(
         listener: (context, state) {
@@ -182,7 +182,9 @@ class _LoginScreenState extends State<LoginScreen>
                                         },
                                         child: Text(
                                           "Forgot Password?",
-                                          style: Theme.of(context).textTheme.titleSmall,
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .titleSmall,
                                         ),
                                       ),
                                     ],
@@ -217,10 +219,7 @@ class _LoginScreenState extends State<LoginScreen>
                                   child: Text(
                                     "Don't have an account? Sign Up Here",
                                     style:
-                                        Theme
-                                        .of(context)
-                                        .textTheme
-                                        .titleSmall,
+                                        Theme.of(context).textTheme.titleSmall,
                                   ),
                                 ),
                               ),

@@ -18,7 +18,7 @@ class LoginScreenViewModel extends Cubit<LoginStates> {
   // Hold Data
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
-  var formKey = GlobalKey<FormState>();
+  final GlobalKey<FormState> _loginFormKey = GlobalKey<FormState>();
   LoginUseCase loginUseCase;
   late String? userType;
   bool isLoaded = false;
@@ -47,8 +47,7 @@ class LoginScreenViewModel extends Cubit<LoginStates> {
 
   // Handle login logic
   void login(String? type) async {
-    if (formKey.currentState?.validate() == true) {
-      isLoaded = true;
+    isLoaded = true;
       userType = type;
       emit(LoginLoadingState());
 
@@ -82,7 +81,6 @@ class LoginScreenViewModel extends Cubit<LoginStates> {
         isLoaded = false;
         emit(LoginErrorState(errorMsg: e.toString()));
       }
-    }
 
     @override
     Future<void> close() {

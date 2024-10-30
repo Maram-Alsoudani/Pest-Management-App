@@ -24,6 +24,7 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen>
     with SingleTickerProviderStateMixin {
   late LoginScreenViewModel viewModel;
+  final GlobalKey<FormState> _loginFormKey = GlobalKey<FormState>();
   @override
   void initState() {
     super.initState();
@@ -89,7 +90,7 @@ class _LoginScreenState extends State<LoginScreen>
                     child: SizedBox(
                       height: MediaQuery.of(context).size.height,
                       child: Form(
-                        key: viewModel.formKey,
+                        key: _loginFormKey,
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -189,7 +190,12 @@ class _LoginScreenState extends State<LoginScreen>
                                     buttonName: "Login",
                                     enable: type == null ? false : true,
                                     onTap: () {
-                                      viewModel.login(type);
+                                      if (_loginFormKey.currentState!
+                                              .validate() ==
+                                          true) {
+                                        viewModel.login(type);
+                                      }
+
                                       // Navigator.pushReplacementNamed(context,
                                       //     RoutesManger.routeNameCategoryScreen);
                                     },

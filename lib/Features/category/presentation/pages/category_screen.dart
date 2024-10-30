@@ -1,7 +1,10 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pesticides/Config/routes/routes_manger.dart';
 import 'package:pesticides/Core/component/custom_dialog.dart';
+import 'package:pesticides/Core/utils/SharedPrefsLocal.dart';
 import 'package:pesticides/Features/category/data/models/category_model.dart';
 
 import '../../../../Core/component/image_profile.dart';
@@ -115,6 +118,8 @@ class _CategoryScreenState extends State<CategoryScreen>
                                 RoutesManger.routeNameLogin,
                                     (route) => false,
                               );
+                              FirebaseAuth.instance.signOut();
+                              SharedPrefsLocal.prefs.clear();
                             },
                           );
                         }

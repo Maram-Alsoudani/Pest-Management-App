@@ -50,6 +50,7 @@ class StringManager {
   static const String ok = "Ok";
   static const String registerSuccessfully = "Register Successfully.";
   static const String failed = "Failed";
+  static const String keyUserAdmin = "user_admin";
   static const String passwordRestSuccessfully = "Password Rest Successfully, Check your E-mail";
   static const String error = "Error";
   static const String errorOccurred = "An Error Occurred";

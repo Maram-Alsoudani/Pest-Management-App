@@ -1,32 +1,22 @@
 import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:injectable/injectable.dart';
-
 import 'package:pesticides/Core/errors/failures.dart';
+import 'package:pesticides/Core/utils/firebase_utils.dart';
 import 'package:pesticides/Features/register/data/models/user_model_dto.dart';
-import 'package:pesticides/Features/register/domain/entities/user_model_entity.dart';
 
 import 'data/register_data_source.dart';
 
 @Injectable(as: RegisterDataSource)
 class RegisterDataSourceImpl implements RegisterDataSource {
-  CollectionReference<UserAndAdminModelDto> getUserCollection(String type) {
-    return FirebaseFirestore.instance
-        .collection(type)
-        .withConverter<UserAndAdminModelDto>(
-      fromFirestore: (snapshot, options) =>
-          UserAndAdminModelDto.fromFireStore(snapshot.data()!),
-      toFirestore: (user, options) => user.toFireStore(),
-    );
-  }
-
   Future<Either<Failure, void>> addUserFireStore(UserAndAdminModelDto user) async {
     try {
-      var userCollection = getUserCollection(user.type ?? "");
+      var userCollection = FirebaseUtils.getUserCollection(user.type ?? "");
       DocumentReference<UserAndAdminModelDto> userDoc = userCollection.doc();
       user.id = userDoc.id;
       await userDoc.set(user);

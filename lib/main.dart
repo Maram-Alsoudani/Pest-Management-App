@@ -4,8 +4,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pesticides/Config/routes/routes_manger.dart';
 import 'package:pesticides/Core/utils/strings.dart';
+import 'package:pesticides/Core/component/error_widget.dart';
 import 'package:pesticides/di/di.dart';
-
 import 'Config/theme/theming.dart';
 import 'Core/utils/SharedPrefsLocal.dart';
 import 'Features/register/presentation/manager/register_view_model_cubit.dart';
@@ -39,6 +39,7 @@ String autoLogin() {
     route = RoutesManger.routeNameEngOwnerScreen;
   }
   return route;
+
 }
 
 class MyApp extends StatelessWidget {

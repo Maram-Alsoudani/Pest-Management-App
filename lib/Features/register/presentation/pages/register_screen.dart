@@ -1,23 +1,19 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:pesticides/Config/routes/routes_manger.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:pesticides/Core/component/button_custom.dart';
 import 'package:pesticides/Core/component/custom_dialog.dart';
 import 'package:pesticides/Core/utils/colors.dart';
 import 'package:pesticides/Core/utils/images.dart';
 import 'package:pesticides/Core/utils/strings.dart';
 
+import '../../../../Core/component/drop_down_menu_widget.dart';
 import '../../../../Core/component/text_feild_custom.dart';
 import '../../../../Core/component/validators.dart';
-import '../../../../Core/component/drop_down_menu_widget.dart';
 import '../manager/register_view_model_cubit.dart';
 import '../widgets/pick_image_widget.dart';
-import '../widgets/show_model_picker_image.dart';
 
 class RegisterScreen extends StatefulWidget {
   RegisterScreen({super.key});
@@ -47,7 +43,8 @@ class _RegisterScreenState extends State<RegisterScreen>
                 context: context,
                 title: StringManager.success,
                 message: StringManager.registerSuccessfully,
-                posActionTitle: StringManager.ok);
+              posActionTitle: StringManager.ok,
+            );
           } else if (state is RegisterViewModelError) {
             DialogUtils.showAlertDialog(
               context: context,

@@ -11,6 +11,15 @@
 import 'package:get_it/get_it.dart' as _i174;
 import 'package:injectable/injectable.dart' as _i526;
 
+import '../Features/login/data/data_sources/login_data_source.dart' as _i121;
+import '../Features/login/data/data_sources/login_data_source_impl.dart'
+    as _i535;
+import '../Features/login/data/repositories/login_repository_impl.dart'
+    as _i313;
+import '../Features/login/domain/repositories/login_repository.dart' as _i558;
+import '../Features/login/domain/use_cases/login_use_case.dart' as _i203;
+import '../Features/login/presentation/manager/cubit/login_screen_view_model.dart'
+    as _i1073;
 import '../Features/forgotPassword/data/data_sources/forget_password_data_source.dart'
     as _i134;
 import '../Features/forgotPassword/data/data_sources/forget_password_data_source_impl.dart'
@@ -45,6 +54,7 @@ extension GetItInjectableX on _i174.GetIt {
       environment,
       environmentFilter,
     );
+    gh.factory<_i121.LoginDataSource>(() => _i535.LoginDataSourceImpl());
     gh.factory<_i134.ForgetPasswordDataSource>(
         () => _i290.ForgetPasswordDataSourceImpl());
     gh.factory<_i969.RegisterDataSource>(() => _i1056.RegisterDataSourceImpl());
@@ -53,6 +63,8 @@ extension GetItInjectableX on _i174.GetIt {
             forgetPasswordDataSource: gh<_i134.ForgetPasswordDataSource>()));
     gh.factory<_i20.RegisterRepo>(() => _i391.RegisterRepoImpl(
         registerDataSource: gh<_i969.RegisterDataSource>()));
+    gh.factory<_i558.LoginRepository>(() => _i313.LoginRepositoryImpl(
+        loginDataSource: gh<_i121.LoginDataSource>()));
     gh.factory<_i513.ForgetPasswordUserCase>(() => _i513.ForgetPasswordUserCase(
         forgetPasswordRepository: gh<_i58.ForgetPasswordRepository>()));
     gh.factory<_i1037.ForgetPasswordViewModel>(() =>
@@ -60,6 +72,10 @@ extension GetItInjectableX on _i174.GetIt {
             forgetPasswordUseCase: gh<_i513.ForgetPasswordUserCase>()));
     gh.factory<_i841.RegisterUseCase>(
         () => _i841.RegisterUseCase(registerRepo: gh<_i20.RegisterRepo>()));
+    gh.factory<_i203.LoginUseCase>(
+        () => _i203.LoginUseCase(loginRepository: gh<_i558.LoginRepository>()));
+    gh.factory<_i1073.LoginScreenViewModel>(() =>
+        _i1073.LoginScreenViewModel(loginUseCase: gh<_i203.LoginUseCase>()));
     gh.factory<_i451.RegisterViewModelCubit>(() => _i451.RegisterViewModelCubit(
         registerUseCase: gh<_i841.RegisterUseCase>()));
     return this;

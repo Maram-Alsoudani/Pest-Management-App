@@ -54,4 +54,10 @@ class StringManager {
   static const String userNotFound = "user-not-found";
   static const String invalidCredential = "'invalid-credential'";
   static const String wrongPassword = "Wrong password provided for that user.";
+  static const String keyUserAdmin = "user_admin";
+  static const String passwordRestSuccessfully = "Password Rest Successfully, Check your E-mail";
+  static const String error = "Error";
+  static const String errorOccurred = "An Error Occurred";
+  static const String errorPrefix = "Error: ";
+  static const String errorTitle = "Error";
 }

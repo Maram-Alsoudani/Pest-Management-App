@@ -1,0 +1,15 @@
+import 'package:pesticides/Core/errors/failures.dart';
+import 'package:pesticides/Features/forgotPassword/domain/entities/forget_password_entity.dart';
+
+abstract class ForgetPasswordState {}
+
+class ForgetPasswordInitialState extends ForgetPasswordState {}
+
+class ForgetPasswordLoadingState extends ForgetPasswordState {}
+
+class ForgetPasswordErrorState extends ForgetPasswordState {
+  Failure failure;
+  ForgetPasswordErrorState({required this.failure});
+}
+
+class ForgetPasswordSuccessState extends ForgetPasswordState {}

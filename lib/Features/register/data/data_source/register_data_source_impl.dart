@@ -8,6 +8,8 @@ import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:injectable/injectable.dart';
 import 'package:pesticides/Core/errors/failures.dart';
 import 'package:pesticides/Core/utils/firebase_utils.dart';
+import 'package:pesticides/Core/utils/SharedPrefsLocal.dart';
+import 'package:pesticides/Core/utils/strings.dart';
 import 'package:pesticides/Features/register/data/models/user_model_dto.dart';
 
 import 'data/register_data_source.dart';
@@ -85,6 +87,10 @@ class RegisterDataSourceImpl implements RegisterDataSource {
               (url) => imageUrl = url, // Use the URL if upload is successful
         );
       }
+
+      UserAndAdminModelDto userAndAdminModelDto = UserAndAdminModelDto(
+          image: imagePath, type: type, userName: userName, phone: phone, email: email);
+      SharedPrefsLocal.saveData(key: StringManager.keyUserAdmin, model: userAndAdminModelDto);
 
       return await registerFirebaseFireStore(imageUrl, type, userName, phone, email);
 

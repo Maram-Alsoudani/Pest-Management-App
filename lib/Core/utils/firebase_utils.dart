@@ -5,6 +5,7 @@ import '../../Features/register/data/models/user_model_dto.dart';
 class FirebaseUtils {
   static CollectionReference<UserAndAdminModelDto> getUserCollection(
       String type) {
+    print('Fetching from collection: $type');
     return FirebaseFirestore.instance
         .collection(type)
         .withConverter<UserAndAdminModelDto>(

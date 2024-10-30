@@ -50,4 +50,8 @@ class StringManager {
   static const String ok = "Ok";
   static const String registerSuccessfully = "Register Successfully.";
   static const String failed = "Failed";
+  static const String loginSuccessfully = "Login Successfully.";
+  static const String userNotFound = "user-not-found";
+  static const String invalidCredential = "'invalid-credential'";
+  static const String wrongPassword = "Wrong password provided for that user.";
 }

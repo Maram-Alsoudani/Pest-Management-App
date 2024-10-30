@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pesticides/Config/routes/routes_manger.dart';
+import 'package:pesticides/Features/login/presentation/manager/cubit/login_screen_view_model.dart';
 import 'package:pesticides/di/di.dart';
 
 import 'Config/theme/theming.dart';
@@ -18,7 +19,10 @@ void main()async{
   configureDependencies();
   runApp(MultiBlocProvider(
       providers: [
-        BlocProvider(create: (context) => getIt<RegisterViewModelCubit>(),)
+    BlocProvider(
+      create: (context) => getIt<LoginScreenViewModel>(),
+    ),
+    BlocProvider(create: (context) => getIt<RegisterViewModelCubit>(),)
       ],
       child: MyApp()));
 }

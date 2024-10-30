@@ -39,7 +39,6 @@ class MyApp extends StatelessWidget {
           initialRoute: RoutesManger.routeNameEngOwnerScreen  ,
           routes: RoutesManger.route,
           theme: MyTheme.theme,
-
         );
       },
     );

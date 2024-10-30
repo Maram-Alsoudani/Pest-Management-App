@@ -8,11 +8,10 @@ import '../../../register/domain/entities/user_model_entity.dart';
 @injectable
 class LoginUseCase {
   LoginRepository loginRepository;
-
   LoginUseCase({required this.loginRepository});
 
-  Future<Either<Failure, UserAndAdminModelEntity?>> invoke(
-      String type, String id) {
-    return loginRepository.getUserFromFireStore(type, id);
+  Future<Either<Failure, UserAndAdminModelEntity?>> invoke(String type,
+      String email) {
+    return loginRepository.getUserFromFireStore(type, email);
   }
 }

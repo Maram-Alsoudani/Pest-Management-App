@@ -51,16 +51,16 @@ class LoginScreenViewModel extends Cubit<LoginStates> {
       isLoaded = true;
       userType = type;
       emit(LoginLoadingState());
+
       try {
         var userCredential =
             await FirebaseAuth.instance.signInWithEmailAndPassword(
           email: emailController.text,
           password: passwordController.text,
         );
-
         if (userCredential.user != null) {
           var either = await loginUseCase.invoke(
-              userType!, userCredential.user?.uid ?? "");
+              userType!, userCredential.user?.email ?? "");
           either.fold(
             (failure) => emit(LoginErrorState(errorMsg: failure.errorMessage)),
             (user) => emit(LoginSuccessState()),
@@ -75,11 +75,22 @@ class LoginScreenViewModel extends Cubit<LoginStates> {
           emit(LoginErrorState(errorMsg: "No user found for that email."));
         } else if (e.code == 'invalid-credential') {
           emit(LoginErrorState(errorMsg: StringManager.wrongPassword));
+        } else {
+          emit(LoginErrorState(errorMsg: "Internet connection lost"));
         }
       } catch (e) {
         isLoaded = false;
-        emit(LoginErrorState(errorMsg: "Login failed: ${e.toString()}"));
+        emit(LoginErrorState(errorMsg: e.toString()));
       }
+    }
+
+    @override
+    Future<void> close() {
+      emailController.dispose();
+      passwordController.dispose();
+      animationController.dispose();
+
+      return super.close();
     }
   }
 }

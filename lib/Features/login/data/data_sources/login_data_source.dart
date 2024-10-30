@@ -5,5 +5,5 @@ import '../../../../Core/errors/failures.dart';
 
 abstract class LoginDataSource {
   Future<Either<Failure, UserAndAdminModelDto?>> getUserFromFireStore(
-      String type, String id);
+      String type, String email);
 }

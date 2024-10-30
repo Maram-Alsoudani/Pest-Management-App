@@ -32,12 +32,6 @@ class _LoginScreenState extends State<LoginScreen>
     viewModel.intializeAnimations(this);
   }
 
-  //
-  @override
-  void dispose() {
-    super.dispose();
-  }
-
   @override
   Widget build(BuildContext context) {
     String? type=ModalRoute.of(context)?.settings.arguments as String?;

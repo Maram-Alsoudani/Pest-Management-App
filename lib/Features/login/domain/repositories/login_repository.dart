@@ -5,5 +5,5 @@ import '../../../register/domain/entities/user_model_entity.dart';
 
 abstract class LoginRepository {
   Future<Either<Failure, UserAndAdminModelEntity?>> getUserFromFireStore(
-      String type, String id);
+      String type, String email);
 }

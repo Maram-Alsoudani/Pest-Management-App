@@ -14,8 +14,8 @@ class LoginRepositoryImpl implements LoginRepository {
 
   @override
   Future<Either<Failure, UserAndAdminModelEntity?>> getUserFromFireStore(
-      String type, String id) async {
-    var either = await loginDataSource.getUserFromFireStore(type, id);
+      String type, String email) async {
+    var either = await loginDataSource.getUserFromFireStore(type, email);
     return either.fold((error) => Left(error), (response) => Right(response));
   }
 }

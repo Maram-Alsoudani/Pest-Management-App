@@ -8,7 +8,6 @@ import 'package:pesticides/Core/component/text_feild_custom.dart';
 import 'package:pesticides/Core/component/validators.dart';
 import 'package:pesticides/Features/login/presentation/manager/cubit/login_screen_view_model.dart';
 import 'package:pesticides/Features/login/presentation/manager/states/login_states.dart';
-
 import '../../../../Core/component/custom_dialog.dart';
 import '../../../../Core/utils/colors.dart';
 import '../../../../Core/utils/images.dart';
@@ -24,18 +23,13 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen>
     with SingleTickerProviderStateMixin {
   late LoginScreenViewModel viewModel;
+  final GlobalKey<FormState> _loginFormKey = GlobalKey<FormState>();
+
   @override
   void initState() {
     super.initState();
     viewModel = LoginScreenViewModel.get(context);
-    viewModel.isLoaded = false;
-    viewModel.intializeAnimations(this);
-  }
-
-  //
-  @override
-  void dispose() {
-    super.dispose();
+    viewModel.initializeAnimations(this);
   }
 
   @override
@@ -49,23 +43,28 @@ class _LoginScreenState extends State<LoginScreen>
           } else {
             viewModel.isLoaded = false;
           }
-          if (state is LoginSuccessState) {
+          if (state is LoginSuccessState && !viewModel.dialogShown) {
+            viewModel.dialogShown = true;
             DialogUtils.showAlertDialog(
                 context: context,
                 title: StringManager.success,
                 message: StringManager.loginSuccessfully,
                 posActionTitle: StringManager.ok,
                 posAction: () {
-                  Navigator.pushReplacementNamed(
-                      context, RoutesManger.routeNameCategoryScreen);
+                  viewModel.dialogShown = false;
+                  Navigator.pushNamedAndRemoveUntil(context,
+                      RoutesManger.routeNameCategoryScreen, (route) => false);
                 });
-          } else if (state is LoginErrorState) {
+          } else if (state is LoginErrorState && !viewModel.dialogShown) {
+            viewModel.dialogShown = true;
             DialogUtils.showAlertDialog(
               context: context,
               title: StringManager.failed,
               message: state.errorMsg,
               posActionTitle: StringManager.ok,
-            );
+                posAction: () {
+                  viewModel.dialogShown = false;
+                });
           }
         },
         builder: (context, state) {
@@ -95,7 +94,7 @@ class _LoginScreenState extends State<LoginScreen>
                     child: SizedBox(
                       height: MediaQuery.of(context).size.height,
                       child: Form(
-                        key: viewModel.formKey,
+                        key: _loginFormKey,
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -197,7 +196,12 @@ class _LoginScreenState extends State<LoginScreen>
                                     buttonName: "Login",
                                     enable: type == null ? false : true,
                                     onTap: () {
-                                      viewModel.login(type);
+                                      if (_loginFormKey.currentState!
+                                              .validate() ==
+                                          true) {
+                                        viewModel.login(type);
+                                      }
+
                                       // Navigator.pushReplacementNamed(context,
                                       //     RoutesManger.routeNameCategoryScreen);
                                     },
@@ -219,7 +223,10 @@ class _LoginScreenState extends State<LoginScreen>
                                   child: Text(
                                     "Don't have an account? Sign Up Here",
                                     style:
-                                        Theme.of(context).textTheme.titleSmall,
+                                        Theme.of(context)
+                                        .textTheme
+                                        .titleSmall,
+
                                   ),
                                 ),
                               ),

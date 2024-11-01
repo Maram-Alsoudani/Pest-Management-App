@@ -51,8 +51,11 @@ class StringManager {
   static const String registerSuccessfully = "Register Successfully.";
   static const String failed = "Failed";
   static const String loginSuccessfully = "Login Successfully.";
-  static const String userNotFound = "user-not-found";
-  static const String invalidCredential = "'invalid-credential'";
+  static const String userNotFound =
+      "User not found. Please register and choose the right user type for you.";
+  static const String invalidCredential = "invalid-credential";
+  static const String failedToLogin = "Failed to login. Please try again.";
+
   static const String wrongPassword = "Wrong password provided for that user.";
   static const String keyUserAdmin = "user_admin";
   static const String passwordRestSuccessfully = "Password Rest Successfully, Check your E-mail";
@@ -60,4 +63,7 @@ class StringManager {
   static const String errorOccurred = "An Error Occurred";
   static const String errorPrefix = "Error: ";
   static const String errorTitle = "Error";
+  static const String networkError = "Network connection is lost.";
+  static const String badFormat = "The email address is badly formatted.";
+  static const String login = "Login";
 }

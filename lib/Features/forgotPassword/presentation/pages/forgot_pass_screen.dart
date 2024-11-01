@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -25,44 +24,16 @@ class _ForgotPassScreenState extends State<ForgotPassScreen>
     with SingleTickerProviderStateMixin {
   TextEditingController emailController = TextEditingController();
 
-  late AnimationController _animationController;
-  late Animation<Offset> _slideAnimation;
-  double _opacity = 0.0;
   @override
   void initState() {
     super.initState();
-
-    _animationController =
-        AnimationController(vsync: this, duration: const Duration(seconds: 1));
-
-    _slideAnimation =
-        Tween<Offset>(begin: Offset(-1.w, 0), end: const Offset(0, 0)).animate(
-          CurvedAnimation(
-            parent: _animationController,
-            curve: Curves.easeInOut,
-          ),
-        );
-
-    // Trigger the slide animation after the page loads
-    Future.delayed(const Duration(milliseconds: 300), () {
-      setState(() {
-        _opacity = 1.0;
-      });
-
-      _animationController.forward();
-    });
-  }
-
-  @override
-  void dispose() {
-    _animationController.dispose();
-    super.dispose();
+    ForgetPasswordViewModel.get(context);
+    ForgetPasswordViewModel.get(context).doAnimation(this);
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<ForgetPasswordViewModel, ForgetPasswordState>(
-      bloc: ForgetPasswordViewModel.get(context),
+    return BlocConsumer<ForgetPasswordViewModel, ForgetPasswordState>(
       listener: (context, state) {
         if (state is ForgetPasswordErrorState) {
           DialogUtils.showAlertDialog(
@@ -78,97 +49,108 @@ class _ForgotPassScreenState extends State<ForgotPassScreen>
               posActionTitle: StringManager.ok);
         }
       },
-      child: Scaffold(
-        appBar: AppBar(),
-        body: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 30),
-          child: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                AnimatedOpacity(
-                  duration: const Duration(seconds: 2),
-                  opacity: _opacity,
-                  curve: Curves.easeIn,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      Text(
-                        StringManager.forgotPass,
-                        style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                            color: ColorManager.whiteColor, fontSize: 30),
-                      ),
-                      SizedBox(
-                        height: 15,
-                      ),
-                      Text(StringManager.enterEmailForResetPass,
-                          style: Theme.of(context)
-                              .textTheme
-                              .titleMedium!
-                              .copyWith(
-                              color: ColorManager.greyShade2,
-                              fontSize: 15)),
-                    ],
-                  ),
-                ),
-                SizedBox(
-                  height: 80,
-                ),
-                SlideTransition(
-                  position: _slideAnimation,
-                  child: Form(
-                    key: ForgetPasswordViewModel.get(context)
-                        .forgetPasswordFormKey,
+      builder: (context, state) {
+        return Scaffold(
+          appBar: AppBar(),
+          body: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 30),
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  AnimatedOpacity(
+                    duration: const Duration(seconds: 2),
+                    opacity: ForgetPasswordViewModel.get(context).opacity,
+                    curve: Curves.easeIn,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
-                        Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 8.0),
-                            child: CustomTextFormField(
-                              hint: "Email",
-                              validator: (val) =>
-                                  AppValidators.validateEmail(val),
-                              controller: ForgetPasswordViewModel.get(context).emailController,
-                            )),
-                        ButtonCustom(
-                          buttonName: "Send",
-                          enable: true,
-                          onTap: () {
-                            if (ForgetPasswordViewModel.get(context)
-                                .forgetPasswordFormKey
-                                .currentState!
-                                .validate()) {
-                              ForgetPasswordViewModel.get(context)
-                                  .forgetPassword();
-                            }
-                          },
+                        Text(
+                          StringManager.forgotPass,
+                          style: Theme.of(context)
+                              .textTheme
+                              .titleLarge!
+                              .copyWith(
+                                  color: ColorManager.whiteColor, fontSize: 30),
                         ),
-                        AnimatedOpacity(
-                          duration: const Duration(seconds: 2),
-                          opacity: _opacity,
-                          curve: Curves.easeIn,
-                          child: TextButton(
-                              onPressed: () {
-                                Navigator.pop(context);
-                              },
-                              child: Text(
-                                  "${StringManager.already_have_an_account} Login",
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .titleSmall!
-                                      .copyWith(
-                                    color: ColorManager.whiteColor,
-                                  ))),
-                        )
+                        SizedBox(
+                          height: 15,
+                        ),
+                        Text(StringManager.enterEmailForResetPass,
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleMedium!
+                                .copyWith(
+                                    color: ColorManager.greyShade2,
+                                    fontSize: 15)),
                       ],
                     ),
                   ),
-                ),
-              ],
+                  SizedBox(
+                    height: 80,
+                  ),
+                  SlideTransition(
+                    position:
+                        ForgetPasswordViewModel.get(context).slideAnimation,
+                    child: Form(
+                      key: ForgetPasswordViewModel.get(context)
+                          .forgetPasswordFormKey,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(vertical: 8.0),
+                              child: CustomTextFormField(
+                                hint: "Email",
+                                validator: (val) =>
+                                    AppValidators.validateEmail(val),
+                                controller: ForgetPasswordViewModel.get(context)
+                                    .emailController,
+                              )),
+                          ButtonCustom(
+                            buttonName: "Send",
+                            enable: true,
+                            onTap: () {
+                              if (ForgetPasswordViewModel.get(context)
+                                  .forgetPasswordFormKey
+                                  .currentState!
+                                  .validate()) {
+                                ForgetPasswordViewModel.get(context)
+                                    .forgetPassword();
+                              }
+                            },
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 50.h,
+                  ),
+                  AnimatedOpacity(
+                    duration: const Duration(seconds: 2),
+                    opacity: ForgetPasswordViewModel.get(context).opacity,
+                    curve: Curves.easeIn,
+                    child: TextButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        child: Text(
+                            "${StringManager.already_have_an_account} Login",
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleSmall!
+                                .copyWith(
+                                  color: ColorManager.whiteColor,
+                                ))),
+                  )
+                ],
+              ),
             ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 }

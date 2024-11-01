@@ -227,6 +227,7 @@ class _LoginScreenState extends State<LoginScreen>
                                         Theme.of(context)
                                         .textTheme
                                         .titleSmall,
+
                                   ),
                                 ),
                               ),

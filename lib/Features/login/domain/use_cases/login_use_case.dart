@@ -10,8 +10,8 @@ class LoginUseCase {
   LoginRepository loginRepository;
   LoginUseCase({required this.loginRepository});
 
-  Future<Either<Failure, UserAndAdminModelEntity?>> invoke(String type,
-      String email) {
-    return loginRepository.getUserFromFireStore(type, email);
+  Future<Either<Failure, UserAndAdminModelEntity?>> invoke(
+      String email, String password, String? type) {
+    return loginRepository.login(email, password, type);
   }
 }

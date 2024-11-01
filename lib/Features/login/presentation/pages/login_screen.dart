@@ -25,17 +25,17 @@ class _LoginScreenState extends State<LoginScreen>
     with SingleTickerProviderStateMixin {
   late LoginScreenViewModel viewModel;
   final GlobalKey<FormState> _loginFormKey = GlobalKey<FormState>();
+
   @override
   void initState() {
     super.initState();
     viewModel = LoginScreenViewModel.get(context);
-    viewModel.isLoaded = false;
-    viewModel.intializeAnimations(this);
+    viewModel.initializeAnimations(this);
   }
 
   @override
   Widget build(BuildContext context) {
-    String? type=ModalRoute.of(context)?.settings.arguments as String?;
+    String? type = ModalRoute.of(context)?.settings.arguments as String?;
     return SafeArea(
       child: BlocConsumer<LoginScreenViewModel, LoginStates>(
         listener: (context, state) {
@@ -44,23 +44,28 @@ class _LoginScreenState extends State<LoginScreen>
           } else {
             viewModel.isLoaded = false;
           }
-          if (state is LoginSuccessState) {
+          if (state is LoginSuccessState && !viewModel.dialogShown) {
+            viewModel.dialogShown = true;
             DialogUtils.showAlertDialog(
                 context: context,
                 title: StringManager.success,
                 message: StringManager.loginSuccessfully,
                 posActionTitle: StringManager.ok,
                 posAction: () {
-                  Navigator.pushReplacementNamed(
-                      context, RoutesManger.routeNameCategoryScreen);
+                  viewModel.dialogShown = false;
+                  Navigator.pushNamedAndRemoveUntil(context,
+                      RoutesManger.routeNameCategoryScreen, (route) => false);
                 });
-          } else if (state is LoginErrorState) {
+          } else if (state is LoginErrorState && !viewModel.dialogShown) {
+            viewModel.dialogShown = true;
             DialogUtils.showAlertDialog(
               context: context,
               title: StringManager.failed,
               message: state.errorMsg,
               posActionTitle: StringManager.ok,
-            );
+                posAction: () {
+                  viewModel.dialogShown = false;
+                });
           }
         },
         builder: (context, state) {
@@ -177,7 +182,9 @@ class _LoginScreenState extends State<LoginScreen>
                                         },
                                         child: Text(
                                           "Forgot Password?",
-                                          style: Theme.of(context).textTheme.titleSmall,
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .titleSmall,
                                         ),
                                       ),
                                     ],
@@ -217,8 +224,7 @@ class _LoginScreenState extends State<LoginScreen>
                                   child: Text(
                                     "Don't have an account? Sign Up Here",
                                     style:
-                                        Theme
-                                        .of(context)
+                                        Theme.of(context)
                                         .textTheme
                                         .titleSmall,
                                   ),

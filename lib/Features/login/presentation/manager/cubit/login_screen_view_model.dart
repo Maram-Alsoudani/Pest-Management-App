@@ -1,9 +1,7 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:injectable/injectable.dart';
-import 'package:pesticides/Core/utils/strings.dart';
 import 'package:pesticides/Features/login/domain/use_cases/login_use_case.dart';
 import 'package:pesticides/Features/login/presentation/manager/states/login_states.dart';
 
@@ -15,18 +13,18 @@ class LoginScreenViewModel extends Cubit<LoginStates> {
   static LoginScreenViewModel get(context) =>
       BlocProvider.of<LoginScreenViewModel>(context);
 
-  // Hold Data
+  // Holding Data
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
-  final GlobalKey<FormState> _loginFormKey = GlobalKey<FormState>();
   LoginUseCase loginUseCase;
-  late String? userType;
   bool isLoaded = false;
+  bool dialogShown = false;
   double opacity = 0.0;
   late AnimationController animationController;
   late Animation<Offset> slideAnimation;
 
-  void intializeAnimations(SingleTickerProviderStateMixin single) {
+  // initialize animations
+  void initializeAnimations(SingleTickerProviderStateMixin single) {
     animationController =
         AnimationController(vsync: single, duration: Duration(seconds: 1));
 
@@ -46,41 +44,18 @@ class LoginScreenViewModel extends Cubit<LoginStates> {
   }
 
   // Handle login logic
-  void login(String? type) async {
+  Future<void> login(String? type) async {
     isLoaded = true;
-      userType = type;
-      emit(LoginLoadingState());
-
-      try {
-        var userCredential =
-            await FirebaseAuth.instance.signInWithEmailAndPassword(
-          email: emailController.text,
-          password: passwordController.text,
-        );
-        if (userCredential.user != null) {
-          var either = await loginUseCase.invoke(
-              userType!, userCredential.user?.email ?? "");
-          either.fold(
-            (failure) => emit(LoginErrorState(errorMsg: failure.errorMessage)),
-            (user) => emit(LoginSuccessState()),
-          );
-        } else {
-          isLoaded = false;
-          emit(LoginErrorState(errorMsg: "Login failed. User not found."));
-        }
-      } on FirebaseAuthException catch (e) {
-        if (e.code == StringManager.userNotFound) {
-          isLoaded = false;
-          emit(LoginErrorState(errorMsg: "No user found for that email."));
-        } else if (e.code == 'invalid-credential') {
-          emit(LoginErrorState(errorMsg: StringManager.wrongPassword));
-        } else {
-          emit(LoginErrorState(errorMsg: "Internet connection lost"));
-        }
-      } catch (e) {
-        isLoaded = false;
-        emit(LoginErrorState(errorMsg: e.toString()));
-      }
+    emit(LoginLoadingState());
+    var either = await loginUseCase.invoke(
+        emailController.text, passwordController.text, type);
+    either.fold((error) {
+      isLoaded = false;
+      emit(LoginErrorState(errorMsg: error.errorMessage));
+    }, (user) {
+      isLoaded = false;
+      emit(LoginSuccessState());
+    });
 
     @override
     Future<void> close() {

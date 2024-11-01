@@ -1,12 +1,9 @@
 import 'dart:io';
 
-import 'package:bloc/bloc.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:injectable/injectable.dart';
-import 'package:meta/meta.dart';
-import 'package:pesticides/Features/register/domain/entities/user_model_entity.dart';
 import 'package:pesticides/Features/register/domain/use_cases/register_use_case.dart';
 
 import '../../../../Core/errors/failures.dart';

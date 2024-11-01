@@ -102,14 +102,14 @@ class _ForgotPassScreenState extends State<ForgotPassScreen>
                               padding:
                                   const EdgeInsets.symmetric(vertical: 8.0),
                               child: CustomTextFormField(
-                                hint: "Email",
+                                hint: StringManager.email,
                                 validator: (val) =>
                                     AppValidators.validateEmail(val),
                                 controller: ForgetPasswordViewModel.get(context)
                                     .emailController,
                               )),
                           ButtonCustom(
-                            buttonName: "Send",
+                            buttonName: StringManager.send,
                             enable: true,
                             onTap: () {
                               if (ForgetPasswordViewModel.get(context)
@@ -137,7 +137,7 @@ class _ForgotPassScreenState extends State<ForgotPassScreen>
                           Navigator.pop(context);
                         },
                         child: Text(
-                            "${StringManager.already_have_an_account} Login",
+                            "${StringManager.already_have_an_account} ${StringManager.login} ",
                             style: Theme.of(context)
                                 .textTheme
                                 .titleSmall!

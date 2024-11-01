@@ -18,9 +18,13 @@ class ForgetPasswordDataSourceImpl implements ForgetPasswordDataSource {
             .sendPasswordResetEmail(email: email.trim());
         return Right(response);
       } on FirebaseAuthException catch (e) {
-        //todo remove this print
-        print(e);
-
+        if (e.code == 'channel-error') {
+          return Left(Failure(errorMessage: 'Something went Wrong'));
+        }
+        if (e.code == 'invalid-email') {
+          return Left(
+              Failure(errorMessage: 'The email address is badly formatted'));
+        }
         return Left(Failure(errorMessage: e.toString()));
       }
     } else {

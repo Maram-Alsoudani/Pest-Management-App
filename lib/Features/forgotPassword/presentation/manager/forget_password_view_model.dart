@@ -7,7 +7,10 @@ import '../../domain/use_cases/forget_password_user_case.dart';
 
 @injectable
 class ForgetPasswordViewModel extends Cubit<ForgetPasswordState> {
+  var forgetPasswordFormKey = GlobalKey<FormState>();
   var emailController = TextEditingController();
+  static ForgetPasswordViewModel get(context) =>
+      BlocProvider.of<ForgetPasswordViewModel>(context);
 
   ForgetPasswordUserCase forgetPasswordUseCase;
   ForgetPasswordViewModel({required this.forgetPasswordUseCase})

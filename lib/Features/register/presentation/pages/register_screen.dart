@@ -25,6 +25,7 @@ class RegisterScreen extends StatefulWidget {
 class _RegisterScreenState extends State<RegisterScreen>
     with SingleTickerProviderStateMixin {
   late RegisterViewModelCubit bloc;
+
   @override
   void initState() {
     super.initState();
@@ -35,52 +36,52 @@ class _RegisterScreenState extends State<RegisterScreen>
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: BlocConsumer<RegisterViewModelCubit, RegisterViewModelState>(
-        listener: (context, state) {
-          if (state is RegisterViewModelSuccess) {
-            DialogUtils.showAlertDialog(
-                context: context,
-                title: StringManager.success,
-                message: StringManager.registerSuccessfully,
-              posActionTitle: StringManager.ok,
-            );
-          } else if (state is RegisterViewModelError) {
-            DialogUtils.showAlertDialog(
-              context: context,
-              title: StringManager.failed,
-              message: state.failure.errorMessage,
-              posActionTitle: StringManager.ok,
-            );
-          }
-        },
-        builder: (context, state) {
-          return ModalProgressHUD(
-            opacity: 0.2,
-            color: ColorManager.greyShade3,
-            inAsyncCall: bloc.isLoaded,
-            progressIndicator: Center(
-              child: CircularProgressIndicator(
-                color: ColorManager.primaryColor,
-              ),
+    return BlocConsumer<RegisterViewModelCubit, RegisterViewModelState>(
+      listener: (context, state) {
+        if (state is RegisterViewModelSuccess) {
+          DialogUtils.showAlertDialog(
+            context: context,
+            title: StringManager.success,
+            message: StringManager.registerSuccessfully,
+            posActionTitle: StringManager.ok,
+          );
+        } else if (state is RegisterViewModelError) {
+          DialogUtils.showAlertDialog(
+            context: context,
+            title: StringManager.failed,
+            message: state.failure.errorMessage,
+            posActionTitle: StringManager.ok,
+          );
+        }
+      },
+      builder: (context, state) {
+        return ModalProgressHUD(
+          opacity: 0.2,
+          color: ColorManager.greyShade3,
+          inAsyncCall: bloc.isLoaded,
+          progressIndicator: Center(
+            child: CircularProgressIndicator(
+              color: ColorManager.primaryColor,
             ),
-            child: Scaffold(
-              body: Stack(
-                children: [
-                  // Background image
-                  Container(
-                    width: double.infinity,
-                    height: double.infinity,
-                    decoration: const BoxDecoration(
-                      image: DecorationImage(
-                        image: AssetImage(ImageManager
-                            .background), // Replace with your image path
-                        fit: BoxFit.cover, // Cover the entire screen
-                      ),
+          ),
+          child: Scaffold(
+            body: Stack(
+              children: [
+                // Background image
+                Container(
+                  width: double.infinity,
+                  height: double.infinity,
+                  decoration: const BoxDecoration(
+                    image: DecorationImage(
+                      image: AssetImage(ImageManager.background),
+                      fit: BoxFit.cover,
                     ),
                   ),
+                ),
 
-                  SingleChildScrollView(
+                // Main content wrapped in SafeArea
+                SafeArea(
+                  child: SingleChildScrollView(
                     child: Form(
                       key: bloc.fromKey,
                       child: Column(
@@ -200,12 +201,12 @@ class _RegisterScreenState extends State<RegisterScreen>
                       ),
                     ),
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
-          );
-        },
-      ),
+          ),
+        );
+      },
     );
   }
 }

@@ -5,6 +5,7 @@ class StringManager {
   static const String password = "Password";
   static const String confirmPassword = "Confirm Password";
   static const String register = "Register";
+  static const String login = "Login";
   static const String already_have_an_account = "Already have an account?";
   static const String enter_notes = "Enter Your Notes Here";
   static const String enter_conditions = "Enter Conditions";
@@ -58,12 +59,13 @@ class StringManager {
 
   static const String wrongPassword = "Wrong password provided for that user.";
   static const String keyUserAdmin = "user_admin";
-  static const String passwordRestSuccessfully = "Password Rest Successfully, Check your E-mail";
+  static const String passwordRestSuccessfully =
+      "Password Rest Successfully, Check your E-mail";
   static const String error = "Error";
   static const String errorOccurred = "An Error Occurred";
   static const String errorPrefix = "Error: ";
   static const String errorTitle = "Error";
   static const String networkError = "Network connection is lost.";
   static const String badFormat = "The email address is badly formatted.";
-  static const String login = "Login";
+  static const String save = "Save";
 }

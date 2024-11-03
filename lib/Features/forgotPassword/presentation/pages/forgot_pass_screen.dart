@@ -22,7 +22,6 @@ class ForgotPassScreen extends StatefulWidget {
 
 class _ForgotPassScreenState extends State<ForgotPassScreen>
     with SingleTickerProviderStateMixin {
-  TextEditingController emailController = TextEditingController();
 
   @override
   void initState() {

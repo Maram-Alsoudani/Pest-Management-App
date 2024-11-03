@@ -39,6 +39,7 @@ void main() async {
 
 String autoLogin() {
   var item = SharedPrefsLocal.getData(key: StringManager.keyUserAdmin);
+  print(item?.id);
   String route;
   if (item != null) {
     route = RoutesManger.routeNameCategoryScreen;

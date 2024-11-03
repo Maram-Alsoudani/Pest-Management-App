@@ -64,4 +64,6 @@ class StringManager {
   static const String errorPrefix = "Error: ";
   static const String errorTitle = "Error";
   static const String networkError = "Network connection is lost.";
+  static const String badFormat = "The email address is badly formatted.";
+  static const String login = "Login";
 }

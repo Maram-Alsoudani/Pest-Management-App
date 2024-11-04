@@ -39,19 +39,7 @@ class _RegisterScreenState extends State<RegisterScreen>
     bloc.initValueDropDown();
   }
 
-  Future<void> _pickImage(ImageSource source) async {
-    final ImagePicker _picker = ImagePicker();
-    final XFile? image = await _picker.pickImage(source: source);
-    if (image != null) {
-      setState(() {
-        bloc.isLoaded = true;
-      });
-      await bloc.pickImage(source);
-      setState(() {
-        bloc.isLoaded = false;
-      });
-    }
-  }
+
 
   void _showImagePickerDialog() {
     if (Platform.isIOS || Platform.isMacOS) {
@@ -59,9 +47,9 @@ class _RegisterScreenState extends State<RegisterScreen>
         context: context,
         builder: (BuildContext context) {
           return Container(
-            color: Colors.transparent,
+            clipBehavior: Clip.antiAlias,
             child: ShowModelPickerImage(
-              uploadImage2Screen: _pickImage,
+              uploadImage2Screen: bloc.pickImage,
             ),
           );
         },
@@ -70,9 +58,7 @@ class _RegisterScreenState extends State<RegisterScreen>
       showModalBottomSheet(
         context: context,
         builder: (BuildContext context) {
-          return ShowModelPickerImage(
-            uploadImage2Screen: _pickImage,
-          );
+          return ShowModelPickerImage(uploadImage2Screen: bloc.pickImage);
         },
       );
     }
@@ -139,8 +125,9 @@ class _RegisterScreenState extends State<RegisterScreen>
                             child: GestureDetector(
                               onTap: _showImagePickerDialog,
                               child: PickImageWidget(
+                                imagePath: bloc.image,
                                 icon: Icons.add_a_photo,
-                                onImagePicked: _pickImage,
+                                onImagePicked: bloc.pickImage,
                               ),
                             ),
                           ),

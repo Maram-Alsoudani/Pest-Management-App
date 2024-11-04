@@ -10,12 +10,14 @@ import 'show_model_picker_image.dart';
 class PickImageWidget extends StatefulWidget {
   final IconData icon;
   final String? imageUrl;
+  final File? imagePath;
   final Function(ImageSource) onImagePicked;
 
   PickImageWidget({
     super.key,
     required this.icon,
     this.imageUrl,
+    this.imagePath,
     required this.onImagePicked,
   });
 
@@ -36,9 +38,21 @@ class _PickImageWidgetState extends State<PickImageWidget> {
         alignment: AlignmentDirectional.center,
         children: [
           widget.imageUrl == null
-              ? ImageProfile(
-                  radius: 71.r,
-                )
+              ? widget.imagePath == null
+                  ? ImageProfile(
+                      radius: 71.r,
+                    )
+                  : GestureDetector(
+                      onTap: () => viewImage(widget.imageUrl!),
+                      child: ClipOval(
+                        child: Image.file(
+                          widget.imagePath!,
+                          width: 145.w,
+                          height: 145.h,
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    )
               : GestureDetector(
                   onTap: () => viewImage(widget.imageUrl!),
                   child: ClipOval(
@@ -51,8 +65,8 @@ class _PickImageWidgetState extends State<PickImageWidget> {
                   ),
                 ),
           Positioned(
-            right: -8,
-            bottom: -8,
+            right: 125.w,
+            bottom: -15.h,
             child: IconButton(
                 onPressed: () {
                   showImagePickerDialog(context);

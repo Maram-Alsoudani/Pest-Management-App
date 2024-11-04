@@ -38,6 +38,7 @@ class RegisterDataSourceImpl implements RegisterDataSource {
       final storageRef = FirebaseStorage.instance.ref('uploads/$imgName');
       await storageRef.putData(compressedImage);
       String imgUrl = await storageRef.getDownloadURL();
+      print(imgUrl);
       return Right(imgUrl);
     } catch (e) {
       return Left(Failure(errorMessage: e.toString()));
@@ -61,19 +62,20 @@ class RegisterDataSourceImpl implements RegisterDataSource {
         password: password,
       );
 
+
       String imageUrl = "";
 
       if (imagePath != null && imagePath.isNotEmpty) {
         final result = await addImageToFirebaseStorage(File(imagePath));
         result.fold(
-              (_) {}, // Ignore failure
-              (url) => imageUrl = url, // Use the URL if upload is successful
+              (_) {},
+              (url) => imageUrl = url,
         );
       }
 
       UserAndAdminModelDto userAndAdminModelDto = UserAndAdminModelDto(
         id: credential.user?.uid??"",
-          image: imagePath, type: type, userName: userName, phone: phone, email: email);
+          image: imageUrl, type: type, userName: userName, phone: phone, email: email);
      var userFireStore= await addUserFireStore(userAndAdminModelDto);
 
       SharedPrefsLocal.saveData(key: StringManager.keyUserAdmin, model: userAndAdminModelDto);

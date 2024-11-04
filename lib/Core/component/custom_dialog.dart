@@ -168,8 +168,9 @@ class DialogUtils {
       if (i < actions.length - 1) {
         actionsWithSeparators.add(
           Divider(
-            color:
-                isDarkMode ? ColorManager.greyShade6 : ColorManager.greyShade4,
+            color: isDarkMode
+                ? ColorManager.whiteColor.withOpacity(0.2)
+                : ColorManager.blackColor.withOpacity(0.2),
             thickness: 0.6,
           ),
         );

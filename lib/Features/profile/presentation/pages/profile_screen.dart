@@ -1,142 +1,166 @@
 import 'dart:io';
-
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pesticides/Config/routes/routes_manger.dart';
-import 'package:pesticides/Core/component/button_custom.dart';
+import 'package:pesticides/Core/component/lottie_loading_widget.dart'; // Import the LottieLoadingWidget
 import 'package:pesticides/Core/utils/colors.dart';
+import 'package:pesticides/Core/utils/images.dart';
 import 'package:pesticides/Core/utils/strings.dart';
-import 'package:pesticides/Features/register/presentation/widgets/pick_image_widget.dart';
-
-import '../../../../Core/component/custom_dialog.dart';
-import '../../../../Core/component/text_feild_custom.dart';
-import '../../../../Core/component/validators.dart';
+import 'package:pesticides/Core/component/pick_image_widget.dart';
+import 'package:pesticides/Core/component/show_model_picker_image.dart';
+import 'package:pesticides/Core/component/custom_dialog.dart';
+import 'package:pesticides/Features/profile/presentation/manager/profile_cubit.dart';
+import 'package:pesticides/Features/profile/presentation/manager/profile_state.dart';
 
 class ProfileScreen extends StatelessWidget {
   ProfileScreen({super.key});
 
-  TextEditingController userNameController = TextEditingController();
-
-  TextEditingController phoneController = TextEditingController();
-
-  TextEditingController emailController = TextEditingController();
-
-  TextEditingController passwordController = TextEditingController();
-
-  var fromKey = GlobalKey<FormState>();
-
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
+    return BlocProvider(
+      create: (_) => ProfileCubit(),
       child: Scaffold(
-        appBar: AppBar(
-          actions: [
-            IconButton(
-
-                onPressed: () {
-                  DialogUtils.showAlertDialog(context: context,
-                      title: "Logout",
-                      message:  "Are You Sure?",
-                      posActionTitle: "Yes",
-                      negActionTitle: "No",
-                      posAction: (){
-                        Navigator.pushNamedAndRemoveUntil(context, RoutesManger.routeNameLogin, (route) => false,);
-                      }
-
-                  );
-                },
-                icon: Icon(
-                  Icons.logout,
-                  color: ColorManager.primaryColor,
-                ))
-          ],
-        ),
         body: Stack(
           children: [
-            // Background image
             Container(
-              decoration: BoxDecoration(
+              width: double.infinity,
+              height: double.infinity,
+              decoration: const BoxDecoration(
                 image: DecorationImage(
-                  image: AssetImage('assets/your_background_image.png'), // Replace with your image path
-                  fit: BoxFit.cover, // Cover the entire screen
+                  image: AssetImage(ImageManager.background),
+                  fit: BoxFit.cover,
                 ),
               ),
             ),
-            // Overlay content
-            SingleChildScrollView(
-              child: Form(
-                key: fromKey,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
+            SafeArea(
+              child: SingleChildScrollView(
+                child: BlocBuilder<ProfileCubit, ProfileState>(
+                  builder: (context, state) {
+                    final cubit = context.read<ProfileCubit>();
+                    return Form(
+                      key: cubit.fromKey,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          SizedBox(height: 65.h),
+                          GestureDetector(
+                            onTap: () => _showImagePickerDialog(context, cubit),
+                            child: Stack(
+                              alignment: Alignment.center,
+                              children: [
+                                PickImageWidget(
+                                  icon: Icons.add_a_photo,
+                                  imageUrl: cubit.userProfileImage,
+                                  onImagePicked: cubit.pickImage,
+                                ),
+                                if (state is ProfileUploading)
+                                  const LottieLoadingWidget(),
+                              ],
+                            ),
+                          ),
+                          SizedBox(height: 35.h),
+                          Container(
+                            height: MediaQuery.of(context).size.height * 0.6,
+                            child: ListView(
+                              shrinkWrap: true,
+                              physics: const NeverScrollableScrollPhysics(),
+                              children: [
+                                Card(
+                                  margin: EdgeInsets.symmetric(
+                                      vertical: 10.h, horizontal: 20.w),
+                                  child: ListTile(
+                                    leading: const Icon(CupertinoIcons.info,
+                                        color: ColorManager.primaryColor),
+                                    title: const Text(StringManager.role),
+                                    subtitle: Text(
+                                      cubit.typeController.text == 'user'
+                                          ? 'Engineer'
+                                          : cubit.typeController.text == 'admin'
+                                              ? 'Admin'
+                                              : cubit.typeController.text,
+                                    ),
+                                  ),
+                                ),
+                                Card(
+                                  margin: EdgeInsets.symmetric(
+                                      vertical: 10.h, horizontal: 20.w),
+                                  child: ListTile(
+                                    leading: const Icon(CupertinoIcons.person,
+                                        color: ColorManager.primaryColor),
+                                    title: const Text(StringManager.userName),
+                                    subtitle:
+                                        Text(cubit.userNameController.text),
+                                  ),
+                                ),
+                                Card(
+                                  margin: EdgeInsets.symmetric(
+                                      vertical: 10.h, horizontal: 20.w),
+                                  child: ListTile(
+                                    leading: const Icon(CupertinoIcons.phone,
+                                        color: ColorManager.primaryColor),
+                                    title: const Text(StringManager.phone),
+                                    subtitle: Text(cubit.phoneController.text),
+                                  ),
+                                ),
+                                Card(
+                                  margin: EdgeInsets.symmetric(
+                                      vertical: 10.h, horizontal: 20.w),
+                                  child: ListTile(
+                                    leading: const Icon(CupertinoIcons.mail,
+                                        color: ColorManager.primaryColor),
+                                    title: const Text(StringManager.email),
+                                    subtitle: Text(cubit.emailController.text),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ),
+            Positioned(
+              top: 0,
+              left: 0,
+              right: 0,
+              child: SafeArea(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    SizedBox(height: 65.h),
-                    PickImageWidget(
-                      icon: Icons.edit,
-                    ),
-                    SizedBox(height: 35.h),
-                    CustomTextFormField(
-                      hint: StringManager.userName,
-                      validator: (val) => AppValidators.validateUsername(val),
-                      isSecured: false,
-                      suffixIcon: IconButton(
-                        onPressed: () {},
-                        icon: const Icon(
-                          Icons.edit,
-                          color: ColorManager.greyShade1,
-                        ),
-                      ),
-                      controller: userNameController,
-                    ),
-                    SizedBox(height: 20.h),
-                    CustomTextFormField(
-                      hint: StringManager.phone,
-                      validator: (val) => AppValidators.validatePhoneNumber(val),
-                      isSecured: false,
-                      suffixIcon: IconButton(
-                        onPressed: () {},
-                        icon: const Icon(
-                          Icons.edit,
-                          color: ColorManager.greyShade1,
-                        ),
-                      ),
-                      controller: phoneController,
-                    ),
-                    SizedBox(height: 20.h),
-                    CustomTextFormField(
-                      hint: StringManager.email,
-                      validator: (val) => AppValidators.validateEmail(val),
-                      isSecured: false,
-                      suffixIcon: IconButton(
-                        onPressed: () {},
-                        icon: const Icon(
-                          Icons.edit,
-                          color: ColorManager.greyShade1,
-                        ),
-                      ),
-                      controller: emailController,
-                    ),
-                    SizedBox(height: 20.h),
-                    CustomTextFormField(
-                      hint: StringManager.password,
-                      validator: (val) => AppValidators.validatePassword(val),
-                      isSecured: false,
-                      suffixIcon: IconButton(
-                        onPressed: () {},
-                        icon: const Icon(
-                          Icons.edit,
-                          color: ColorManager.greyShade1,
-                        ),
-                      ),
-                      controller: passwordController,
-                    ),
-                    SizedBox(height: 30.h),
-                    ButtonCustom(
-                      buttonName: StringManager.submit,
-                      onTap: () {
-                        if (fromKey.currentState!.validate()) {
-                          // Handle the submission logic here
-                        }
+                    IconButton(
+                      onPressed: () {
+                        Navigator.pop(context);
                       },
+                      icon: const Icon(
+                        CupertinoIcons.back,
+                        color: ColorManager.whiteColor,
+                      ),
+                    ),
+                    IconButton(
+                      onPressed: () {
+                        DialogUtils.showAlertDialog(
+                            context: context,
+                            title: StringManager.logout,
+                            message: StringManager.logoutMessage,
+                            posActionTitle: StringManager.yes,
+                            negActionTitle: StringManager.no,
+                            posAction: () {
+                              Navigator.pushNamedAndRemoveUntil(
+                                context,
+                                RoutesManger.routeNameLogin,
+                                (route) => false,
+                              );
+                            });
+                      },
+                      icon: const Icon(
+                        CupertinoIcons.square_arrow_right,
+                        color: ColorManager.whiteColor,
+                      ),
                     ),
                   ],
                 ),
@@ -146,5 +170,30 @@ class ProfileScreen extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  void _showImagePickerDialog(BuildContext context, ProfileCubit cubit) {
+    if (Platform.isIOS || Platform.isMacOS) {
+      showCupertinoModalPopup(
+        context: context,
+        builder: (BuildContext context) {
+          return Container(
+            color: Colors.transparent,
+            child: ShowModelPickerImage(
+              uploadImage2Screen: cubit.pickImage,
+            ),
+          );
+        },
+      );
+    } else {
+      showModalBottomSheet(
+        context: context,
+        builder: (BuildContext context) {
+          return ShowModelPickerImage(
+            uploadImage2Screen: cubit.pickImage,
+          );
+        },
+      );
+    }
   }
 }

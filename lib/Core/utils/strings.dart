@@ -68,4 +68,10 @@ class StringManager {
   static const String networkError = "Network connection is lost.";
   static const String badFormat = "The email address is badly formatted.";
   static const String save = "Save";
+  static const String cancel = "Cancel";
+  static const String yes = "Yes";
+  static const String no = "No";
+  static const String logout = "Logout";
+  static const String logoutMessage = "Are you sure you want to logout?";
+  static const String role = "Role";
 }

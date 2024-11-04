@@ -1,5 +1,4 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pesticides/Config/routes/routes_manger.dart';
@@ -21,7 +20,6 @@ class CategoryScreen extends StatefulWidget {
 class _CategoryScreenState extends State<CategoryScreen>
     with SingleTickerProviderStateMixin {
   late AnimationController _animationController;
-  late Animation<double> _animation;
   late Animation<Offset> _rowAnimation; // Animation for Row
 
   @override
@@ -35,12 +33,6 @@ class _CategoryScreenState extends State<CategoryScreen>
     );
 
     // Define the scale animation for GridView items
-    _animation = Tween<double>(begin: 0.0, end: 1.0).animate(
-      CurvedAnimation(
-        parent: _animationController,
-        curve: Curves.easeInOut,
-      ),
-    );
 
     // Define the slide animation for Row
     _rowAnimation = Tween<Offset>(
@@ -104,7 +96,8 @@ class _CategoryScreenState extends State<CategoryScreen>
                       icon: Icon(Icons.more_vert, size: 38.r),
                       onSelected: (String choice) {
                         if (choice == 'Profile') {
-                          Navigator.pushNamed(context, RoutesManger.routeNameProfile);
+                          Navigator.pushNamed(
+                              context, RoutesManger.routeNameProfile);
                         } else if (choice == 'Log Out') {
                           DialogUtils.showAlertDialog(
                             context: context,
@@ -116,7 +109,7 @@ class _CategoryScreenState extends State<CategoryScreen>
                               Navigator.pushNamedAndRemoveUntil(
                                 context,
                                 RoutesManger.routeNameLogin,
-                                    (route) => false,
+                                (route) => false,
                               );
                               FirebaseAuth.instance.signOut();
                               SharedPrefsLocal.prefs.clear();
@@ -140,14 +133,15 @@ class _CategoryScreenState extends State<CategoryScreen>
               Expanded(
                 child: ListView.builder(
                   itemCount: CategoryModel.images.length,
-
                   itemBuilder: (context, index) {
                     return ScaleTransition(
                       scale: Tween<double>(begin: 0.0, end: 1.0).animate(
                         CurvedAnimation(
                           parent: _animationController,
                           curve: Interval(
-                            index / CategoryModel.images.length, // Start based on index
+                            index /
+                                CategoryModel
+                                    .images.length, // Start based on index
                             1.0,
                             curve: Curves.easeInOut,
                           ),
@@ -156,13 +150,16 @@ class _CategoryScreenState extends State<CategoryScreen>
                       child: InkWell(
                         onTap: () {
                           if (index == 0) {
-                            Navigator.pushNamed(context, RoutesManger.routeNameSites);
+                            Navigator.pushNamed(
+                                context, RoutesManger.routeNameSites);
                           }
                           if (index == 1) {
-                            Navigator.pushNamed(context, RoutesManger.routeNamePreviewReport);
+                            Navigator.pushNamed(
+                                context, RoutesManger.routeNamePreviewReport);
                           }
                           if (index == 2) {
-                            Navigator.pushNamed(context, RoutesManger.routeNameInventory);
+                            Navigator.pushNamed(
+                                context, RoutesManger.routeNameInventory);
                           }
                         },
                         child: CategoryItem(

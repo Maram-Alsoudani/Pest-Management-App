@@ -1,6 +1,10 @@
+import 'dart:io';
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:pesticides/Config/routes/routes_manger.dart';
 import 'package:pesticides/Core/component/button_custom.dart';
@@ -8,12 +12,13 @@ import 'package:pesticides/Core/component/custom_dialog.dart';
 import 'package:pesticides/Core/utils/colors.dart';
 import 'package:pesticides/Core/utils/images.dart';
 import 'package:pesticides/Core/utils/strings.dart';
+import 'package:pesticides/Core/component/show_model_picker_image.dart';
 
 import '../../../../Core/component/drop_down_menu_widget.dart';
 import '../../../../Core/component/text_feild_custom.dart';
 import '../../../../Core/component/validators.dart';
 import '../manager/register_view_model_cubit.dart';
-import '../widgets/pick_image_widget.dart';
+import '../../../../Core/component/pick_image_widget.dart';
 
 class RegisterScreen extends StatefulWidget {
   RegisterScreen({super.key});
@@ -32,6 +37,45 @@ class _RegisterScreenState extends State<RegisterScreen>
     bloc = RegisterViewModelCubit.get(context);
     bloc.doAnimation(this);
     bloc.initValueDropDown();
+  }
+
+  Future<void> _pickImage(ImageSource source) async {
+    final ImagePicker _picker = ImagePicker();
+    final XFile? image = await _picker.pickImage(source: source);
+    if (image != null) {
+      setState(() {
+        bloc.isLoaded = true;
+      });
+      await bloc.pickImage(source);
+      setState(() {
+        bloc.isLoaded = false;
+      });
+    }
+  }
+
+  void _showImagePickerDialog() {
+    if (Platform.isIOS || Platform.isMacOS) {
+      showCupertinoModalPopup(
+        context: context,
+        builder: (BuildContext context) {
+          return Container(
+            color: Colors.transparent,
+            child: ShowModelPickerImage(
+              uploadImage2Screen: _pickImage,
+            ),
+          );
+        },
+      );
+    } else {
+      showModalBottomSheet(
+        context: context,
+        builder: (BuildContext context) {
+          return ShowModelPickerImage(
+            uploadImage2Screen: _pickImage,
+          );
+        },
+      );
+    }
   }
 
   @override
@@ -92,8 +136,12 @@ class _RegisterScreenState extends State<RegisterScreen>
                             duration: const Duration(seconds: 2),
                             opacity: bloc.opacity,
                             curve: Curves.easeIn,
-                            child: PickImageWidget(
-                              icon: Icons.add_a_photo,
+                            child: GestureDetector(
+                              onTap: _showImagePickerDialog,
+                              child: PickImageWidget(
+                                icon: Icons.add_a_photo,
+                                onImagePicked: _pickImage,
+                              ),
                             ),
                           ),
                           SizedBox(height: 18.h),

@@ -9,6 +9,7 @@ import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:pesticides/Config/routes/routes_manger.dart';
 import 'package:pesticides/Core/component/button_custom.dart';
 import 'package:pesticides/Core/component/custom_dialog.dart';
+import 'package:pesticides/Core/component/lottie_loading_widget.dart';
 import 'package:pesticides/Core/utils/colors.dart';
 import 'package:pesticides/Core/utils/images.dart';
 import 'package:pesticides/Core/utils/strings.dart';
@@ -39,15 +40,14 @@ class _RegisterScreenState extends State<RegisterScreen>
     bloc.initValueDropDown();
   }
 
-
-
   void _showImagePickerDialog() {
     if (Platform.isIOS || Platform.isMacOS) {
       showCupertinoModalPopup(
         context: context,
         builder: (BuildContext context) {
           return Container(
-            clipBehavior: Clip.antiAlias,
+            color: Colors.transparent,
+            clipBehavior: Clip.none,
             child: ShowModelPickerImage(
               uploadImage2Screen: bloc.pickImage,
             ),
@@ -89,11 +89,7 @@ class _RegisterScreenState extends State<RegisterScreen>
           opacity: 0.2,
           color: ColorManager.greyShade3,
           inAsyncCall: bloc.isLoaded,
-          progressIndicator: Center(
-            child: CircularProgressIndicator(
-              color: ColorManager.primaryColor,
-            ),
-          ),
+          progressIndicator: const Center(child: LottieLoadingWidget()),
           child: Scaffold(
             body: Stack(
               children: [
@@ -122,12 +118,16 @@ class _RegisterScreenState extends State<RegisterScreen>
                             duration: const Duration(seconds: 2),
                             opacity: bloc.opacity,
                             curve: Curves.easeIn,
-                            child: GestureDetector(
-                              onTap: _showImagePickerDialog,
-                              child: PickImageWidget(
-                                imagePath: bloc.image,
-                                icon: Icons.add_a_photo,
-                                onImagePicked: bloc.pickImage,
+                            child: Center(
+                              child: GestureDetector(
+                                onTap: bloc.image == null
+                                    ? null
+                                    : _showImagePickerDialog,
+                                child: PickImageWidget(
+                                  imagePath: bloc.image,
+                                  icon: Icons.add_a_photo,
+                                  onImagePicked: bloc.pickImage,
+                                ),
                               ),
                             ),
                           ),

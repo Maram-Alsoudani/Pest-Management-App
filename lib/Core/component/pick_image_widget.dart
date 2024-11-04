@@ -29,6 +29,8 @@ class _PickImageWidgetState extends State<PickImageWidget> {
   @override
   Widget build(BuildContext context) {
     return Container(
+      width: 150.w,
+      height: 150.h,
       padding: const EdgeInsets.all(5),
       decoration: const BoxDecoration(
         shape: BoxShape.circle,
@@ -37,42 +39,46 @@ class _PickImageWidgetState extends State<PickImageWidget> {
       child: Stack(
         alignment: AlignmentDirectional.center,
         children: [
-          widget.imageUrl == null
-              ? widget.imagePath == null
-                  ? ImageProfile(
-                      radius: 71.r,
-                    )
-                  : GestureDetector(
-                      onTap: () => viewImage(widget.imageUrl!),
-                      child: ClipOval(
-                        child: Image.file(
-                          widget.imagePath!,
-                          width: 145.w,
-                          height: 145.h,
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                    )
-              : GestureDetector(
-                  onTap: () => viewImage(widget.imageUrl!),
-                  child: ClipOval(
-                    child: Image.network(
-                      widget.imageUrl!,
-                      width: 145.w,
-                      height: 145.h,
-                      fit: BoxFit.cover,
-                    ),
-                  ),
+          if (widget.imageUrl == null && widget.imagePath == null)
+            ImageProfile(radius: 71.r)
+          else if (widget.imagePath != null)
+            GestureDetector(
+              onTap: () {
+                viewImage(widget.imagePath!.path);
+              },
+              child: ClipOval(
+                child: Image.file(
+                  widget.imagePath!,
+                  width: 145.w,
+                  height: 145.h,
+                  fit: BoxFit.cover,
                 ),
+              ),
+            )
+          else if (widget.imageUrl != null)
+            GestureDetector(
+              onTap: () {
+                viewImage(widget.imageUrl!);
+              },
+              child: ClipOval(
+                child: Image.network(
+                  widget.imageUrl!,
+                  width: 145.w,
+                  height: 145.h,
+                  fit: BoxFit.cover,
+                ),
+              ),
+            ),
           Positioned(
-            right: 125.w,
-            bottom: -15.h,
+            right: -8.5,
+            bottom: -8.5,
             child: IconButton(
-                onPressed: () {
-                  showImagePickerDialog(context);
-                },
-                icon: Icon(widget.icon),
-                color: ColorManager.whiteColor),
+              onPressed: () {
+                showImagePickerDialog(context);
+              },
+              icon: Icon(widget.icon),
+              color: ColorManager.whiteColor,
+            ),
           ),
         ],
       ),
@@ -86,6 +92,7 @@ class _PickImageWidgetState extends State<PickImageWidget> {
         builder: (BuildContext context) {
           return Container(
             color: Colors.transparent,
+            clipBehavior: Clip.none,
             child: ShowModelPickerImage(
               uploadImage2Screen: widget.onImagePicked,
             ),
@@ -104,7 +111,7 @@ class _PickImageWidgetState extends State<PickImageWidget> {
     }
   }
 
-  void viewImage(String imageUrl) {
+  void viewImage(String imagePath) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -114,7 +121,9 @@ class _PickImageWidgetState extends State<PickImageWidget> {
           ),
           child: ClipRRect(
             borderRadius: BorderRadius.circular(16.r),
-            child: Image.network(imageUrl),
+            child: imagePath.startsWith('http')
+                ? Image.network(imagePath)
+                : Image.file(File(imagePath)),
           ),
         );
       },

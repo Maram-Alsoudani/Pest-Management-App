@@ -8,6 +8,8 @@ import 'package:pesticides/Features/category/data/models/category_model.dart';
 
 import '../../../../Core/component/image_profile.dart';
 import '../../../../Core/utils/font_manager.dart';
+import '../../../../Core/utils/strings.dart';
+import '../../../../Features/register/data/models/user_model_dto.dart';
 import '../widgets/category_item.dart';
 
 class CategoryScreen extends StatefulWidget {
@@ -22,17 +24,20 @@ class _CategoryScreenState extends State<CategoryScreen>
   late AnimationController _animationController;
   late Animation<Offset> _rowAnimation; // Animation for Row
 
+  UserAndAdminModelDto? user;
+
   @override
   void initState() {
     super.initState();
+
+    // Load user data
+    user = SharedPrefsLocal.getData(key: StringManager.keyUserAdmin);
 
     // Initialize the AnimationController
     _animationController = AnimationController(
       vsync: this,
       duration: Duration(milliseconds: 500),
     );
-
-    // Define the scale animation for GridView items
 
     // Define the slide animation for Row
     _rowAnimation = Tween<Offset>(
@@ -71,6 +76,7 @@ class _CategoryScreenState extends State<CategoryScreen>
                   children: [
                     ImageProfile(
                       radius: 40.r,
+                      imageUrl: user?.image,
                     ),
                     SizedBox(
                       width: 20.w,
@@ -79,14 +85,14 @@ class _CategoryScreenState extends State<CategoryScreen>
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          "Mohamed Ali",
+                          user?.userName ?? StringManager.userName,
                           style: Theme.of(context)
                               .textTheme
                               .titleSmall!
                               .copyWith(fontSize: FontSize.s24.sp),
                         ),
                         Text(
-                          "Site Engineer",
+                          user?.type ?? StringManager.role,
                           style: Theme.of(context).textTheme.titleSmall,
                         ),
                       ],
@@ -95,16 +101,16 @@ class _CategoryScreenState extends State<CategoryScreen>
                     PopupMenuButton<String>(
                       icon: Icon(Icons.more_vert, size: 38.r),
                       onSelected: (String choice) {
-                        if (choice == 'Profile') {
+                        if (choice == StringManager.profile) {
                           Navigator.pushNamed(
                               context, RoutesManger.routeNameProfile);
-                        } else if (choice == 'Log Out') {
+                        } else if (choice == StringManager.logout) {
                           DialogUtils.showAlertDialog(
                             context: context,
-                            title: "Logout",
-                            message: "Are You Sure?",
-                            posActionTitle: "Yes",
-                            negActionTitle: "No",
+                            title: StringManager.logout,
+                            message: StringManager.logoutMessage,
+                            posActionTitle: StringManager.yes,
+                            negActionTitle: StringManager.no,
                             posAction: () {
                               Navigator.pushNamedAndRemoveUntil(
                                 context,
@@ -118,7 +124,8 @@ class _CategoryScreenState extends State<CategoryScreen>
                         }
                       },
                       itemBuilder: (BuildContext context) {
-                        return ['Profile', 'Log Out'].map((String choice) {
+                        return [StringManager.profile, StringManager.logout]
+                            .map((String choice) {
                           return PopupMenuItem<String>(
                             value: choice,
                             child: Text(choice),

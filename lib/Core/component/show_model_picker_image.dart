@@ -80,9 +80,9 @@ class _ShowModelPickerImageState extends State<ShowModelPickerImage> {
       );
     } else {
       return Container(
+        color: Colors.transparent,
         padding: EdgeInsets.all(22.r),
         height: 220.h,
-        color: backgroundColor,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [

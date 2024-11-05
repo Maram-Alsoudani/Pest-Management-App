@@ -5,8 +5,9 @@ import 'package:pesticides/Config/routes/routes_manger.dart';
 import 'package:pesticides/Core/component/custom_dialog.dart';
 import 'package:pesticides/Core/utils/SharedPrefsLocal.dart';
 import 'package:pesticides/Features/category/data/models/category_model.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:lottie/lottie.dart';
 
-import '../../../../Core/component/image_profile.dart';
 import '../../../../Core/utils/font_manager.dart';
 import '../../../../Core/utils/strings.dart';
 import '../../../../Features/register/data/models/user_model_dto.dart';
@@ -22,7 +23,7 @@ class CategoryScreen extends StatefulWidget {
 class _CategoryScreenState extends State<CategoryScreen>
     with SingleTickerProviderStateMixin {
   late AnimationController _animationController;
-  late Animation<Offset> _rowAnimation; // Animation for Row
+  late Animation<Offset> _rowAnimation;
 
   UserAndAdminModelDto? user;
 
@@ -74,9 +75,22 @@ class _CategoryScreenState extends State<CategoryScreen>
                 position: _rowAnimation,
                 child: Row(
                   children: [
-                    ImageProfile(
+                    CircleAvatar(
                       radius: 40.r,
-                      imageUrl: user?.image,
+                      backgroundColor: Colors.grey.shade200,
+                      child: CachedNetworkImage(
+                        imageUrl: user?.image ?? '',
+                        placeholder: (context, url) => Lottie.asset(
+                          'assets/animations/loading.json',
+                          width: 40.r,
+                          height: 40.r,
+                        ),
+                        errorWidget: (context, url, error) => Icon(Icons.error),
+                        imageBuilder: (context, imageProvider) => CircleAvatar(
+                          radius: 40.r,
+                          backgroundImage: imageProvider,
+                        ),
+                      ),
                     ),
                     SizedBox(
                       width: 20.w,

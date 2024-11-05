@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:pesticides/Core/utils/colors.dart';
 import '../utils/images.dart';
@@ -14,11 +15,19 @@ class ImageProfile extends StatelessWidget {
     return CircleAvatar(
       backgroundColor: ColorManager.whiteColor,
       radius: radius,
-      backgroundImage: imageUrl != null && imageUrl!.isNotEmpty
-          ? (imageUrl!.startsWith('http')
-              ? NetworkImage(imageUrl!)
-              : FileImage(File(imageUrl!))) as ImageProvider
-          : const AssetImage(ImageManager.image_profile) as ImageProvider,
+      backgroundImage: _getImageProvider(),
     );
+  }
+
+  ImageProvider _getImageProvider() {
+    if (imageUrl != null && imageUrl!.isNotEmpty) {
+      if (imageUrl!.startsWith('http')) {
+        return CachedNetworkImageProvider(imageUrl!);
+      } else {
+        return FileImage(File(imageUrl!));
+      }
+    } else {
+      return const AssetImage(ImageManager.image_profile);
+    }
   }
 }

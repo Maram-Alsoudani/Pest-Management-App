@@ -55,7 +55,7 @@ class _PickImageWidgetState extends State<PickImageWidget> {
                 ),
               ),
             )
-          else if (widget.imageUrl != null)
+          else if (widget.imageUrl != null && widget.imageUrl!.isNotEmpty)
             GestureDetector(
               onTap: () {
                 viewImage(widget.imageUrl!);
@@ -68,7 +68,9 @@ class _PickImageWidgetState extends State<PickImageWidget> {
                   fit: BoxFit.cover,
                 ),
               ),
-            ),
+            )
+          else
+            ImageProfile(radius: 71.r),
           Positioned(
             right: -8.5,
             bottom: -8.5,

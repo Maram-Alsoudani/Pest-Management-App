@@ -29,7 +29,7 @@ class ProfileCubit extends Cubit<ProfileState> {
       userNameController.text = user.userName ?? 'N/A';
       phoneController.text = user.phone ?? 'N/A';
       emailController.text = user.email ?? 'N/A';
-      userProfileImage = user.image;
+      userProfileImage = user.image ?? '';
       emit(ProfileLoaded(userProfileImage));
     }
   }
@@ -81,5 +81,6 @@ class ProfileCubit extends Cubit<ProfileState> {
     await FirebaseUtils.getUserCollection(updatedUser.type ?? "")
         .doc(updatedUser.id)
         .update(updatedUser.toFireStore());
+    emit(ProfileLoaded(imageUrl));
   }
 }

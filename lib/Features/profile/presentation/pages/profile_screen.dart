@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pesticides/Config/routes/routes_manger.dart';
-import 'package:pesticides/Core/component/lottie_loading_widget.dart'; // Import the LottieLoadingWidget
+import 'package:pesticides/Core/component/lottie_loading_widget.dart';
 import 'package:pesticides/Core/utils/colors.dart';
 import 'package:pesticides/Core/utils/images.dart';
 import 'package:pesticides/Core/utils/strings.dart';
@@ -14,9 +14,14 @@ import 'package:pesticides/Core/component/custom_dialog.dart';
 import 'package:pesticides/Features/profile/presentation/manager/profile_cubit.dart';
 import 'package:pesticides/Features/profile/presentation/manager/profile_state.dart';
 
-class ProfileScreen extends StatelessWidget {
+class ProfileScreen extends StatefulWidget {
   ProfileScreen({super.key});
 
+  @override
+  State<ProfileScreen> createState() => _ProfileScreenState();
+}
+
+class _ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(

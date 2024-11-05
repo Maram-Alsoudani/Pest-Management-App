@@ -88,7 +88,9 @@ class _RegisterScreenState extends State<RegisterScreen>
           opacity: 0.2,
           color: ColorManager.greyShade3,
           inAsyncCall: bloc.isLoaded,
-          progressIndicator: const Center(child: LottieLoadingWidget()),
+          progressIndicator: const Center(child: LottieLoadingWidget(
+
+          )),
           child: Scaffold(
             body: Stack(
               children: [

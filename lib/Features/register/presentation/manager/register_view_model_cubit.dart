@@ -91,19 +91,23 @@ class RegisterViewModelCubit extends Cubit<RegisterViewModelState> {
     }, (response) {
       isLoaded = false;
       emit(RegisterViewModelSuccess());
+      clearData();
     });
   }
 
 //===============Close Screen Handle=====================
-  @override
-  Future<void> close() {
-    userNameController.dispose();
-    phoneController.dispose();
-    emailController.dispose();
-    passwordController.dispose();
-    confirmPasswordController.dispose();
+
+  void clearData() {
+    userNameController.clear();
+    phoneController.clear();
+    emailController.clear();
+    passwordController.clear();
+    confirmPasswordController.clear();
     animationController.dispose();
     image = null;
-    return super.close();
   }
+//   @override
+//   Future<void> close() {
+//     return super.close();
+//   }
 }

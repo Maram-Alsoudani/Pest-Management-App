@@ -64,7 +64,7 @@ class LoginScreenViewModel extends Cubit<LoginStates> {
   void clearData() {
     emailController.clear();
     passwordController.clear();
-    animationController.dispose();
+    // animationController.dispose();
   }
 // @override
 // Future<void> close() {

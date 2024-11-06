@@ -84,13 +84,13 @@ extension GetItInjectableX on _i174.GetIt {
         loginDataSource: gh<_i121.LoginDataSource>()));
     gh.factory<_i513.ForgetPasswordUserCase>(() => _i513.ForgetPasswordUserCase(
         forgetPasswordRepository: gh<_i58.ForgetPasswordRepository>()));
-    gh.factory<_i899.ReadUserOrAdminFromFireStoreUseCase>(() =>
-        _i899.ReadUserOrAdminFromFireStoreUseCase(
+    gh.factory<_i43.EditImageInFireStoreUseCase>(() =>
+        _i43.EditImageInFireStoreUseCase(
             categoryRepo: gh<_i78.CategoryRepo>()));
     gh.factory<_i706.EditUserDataUserCase>(() =>
         _i706.EditUserDataUserCase(categoryRepo: gh<_i78.CategoryRepo>()));
-    gh.factory<_i43.EditImageInFireStoreUseCase>(() =>
-        _i43.EditImageInFireStoreUseCase(
+    gh.factory<_i899.ReadUserOrAdminFromFireStoreUseCase>(() =>
+        _i899.ReadUserOrAdminFromFireStoreUseCase(
             categoryRepo: gh<_i78.CategoryRepo>()));
     gh.factory<_i833.ProfileCubit>(() => _i833.ProfileCubit(
           readUserOrAdminFromFireStoreUseCase:

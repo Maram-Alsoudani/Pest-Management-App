@@ -80,6 +80,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             children: [
                               _buildInfoCard(
                                 context,
+                                title: StringManager.role,
+                                value: cubit.typeController.text,
+                              ),
+                              _buildInfoCard(
+                                context,
                                 title: StringManager.userName,
                                 value: cubit.userNameController.text,
                               ),
@@ -194,11 +199,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   controller: cubit.phoneController,
                 ),
                 SizedBox(height: 8.h),
-                CustomTextFormField(
-                  hint: StringManager.email,
-                  validator: (val) => AppValidators.validateEmail(val),
-                  controller: cubit.emailController,
-                ),
+
               ],
             ),
           ),

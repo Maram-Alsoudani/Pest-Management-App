@@ -1,13 +1,20 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:pesticides/Config/routes/routes_manger.dart';
 import 'package:pesticides/Core/component/custom_dialog.dart';
 import 'package:pesticides/Core/utils/SharedPrefsLocal.dart';
 import 'package:pesticides/Features/category/data/models/category_model.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:lottie/lottie.dart';
+import 'package:pesticides/Features/category/presentation/manager/category_cubit.dart';
+import 'package:pesticides/Features/category/profile/presentation/pages/profile_screen.dart';
 
+import '../../../../Core/component/image_profile.dart';
+import '../../../../Core/component/lottie_loading_widget.dart';
+import '../../../../Core/utils/colors.dart';
 import '../../../../Core/utils/font_manager.dart';
 import '../../../../Core/utils/strings.dart';
 import '../../../../Features/register/data/models/user_model_dto.dart';
@@ -22,91 +29,76 @@ class CategoryScreen extends StatefulWidget {
 
 class _CategoryScreenState extends State<CategoryScreen>
     with SingleTickerProviderStateMixin {
-  late AnimationController _animationController;
-  late Animation<Offset> _rowAnimation;
 
-  UserAndAdminModelDto? user;
+  late CategoryCubit bloc;
 
   @override
   void initState() {
     super.initState();
+    bloc = BlocProvider.of<CategoryCubit>(context);
+    bloc.getUserData();
+    bloc.doAnimation(this);
 
-    // Load user data
-    user = SharedPrefsLocal.getData(key: StringManager.keyUserAdmin);
 
-    // Initialize the AnimationController
-    _animationController = AnimationController(
-      vsync: this,
-      duration: Duration(milliseconds: 500),
-    );
-
-    // Define the slide animation for Row
-    _rowAnimation = Tween<Offset>(
-      begin: Offset(-1, 0), // Start slightly to the left
-      end: Offset(0, 0), // End at the original position
-    ).animate(
-      CurvedAnimation(
-        parent: _animationController,
-        curve: Curves.easeInOut,
-      ),
-    );
-
-    // Trigger the animation after the page loads
-    Future.delayed(Duration(milliseconds: 200), () {
-      _animationController.forward();
-    });
   }
 
-  @override
-  void dispose() {
-    _animationController.dispose();
-    super.dispose();
-  }
+
 
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: Scaffold(
-        body: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 25, horizontal: 10),
-          child: Column(
-            children: [
+      child: BlocConsumer<CategoryCubit, CategoryState>(
+        listener: (context, state) {
+          if (state is CategoryFaluireState) {
+            DialogUtils.showAlertDialog(
+                context: context,
+                title: StringManager.failed,
+                message: state.error.errorMessage,
+                posActionTitle: StringManager.ok,
+                posAction: () {
+                  Navigator.pushNamedAndRemoveUntil(
+                    context,
+                    RoutesManger.routeNameEngOwnerScreen,
+                    (route) => false,
+                  );
+                });
+          }
+        },
+        builder: (context, state) {
+          return ModalProgressHUD(
+            opacity: 0.2,
+            color: ColorManager.greyShade3,
+            inAsyncCall: bloc.isLoading,
+            progressIndicator: const Center(child: LottieLoadingWidget()),
+            child: Scaffold(
+              body: Padding(
+                padding:
+                    const EdgeInsets.symmetric(vertical: 25, horizontal: 10),
+                child: state is CategorySuccessState
+                ? Column(
+                  children: [
               SlideTransition(
-                position: _rowAnimation,
+              position: bloc.slideAnimation,
                 child: Row(
                   children: [
-                    CircleAvatar(
+                    state.userAndAdminModelEntity.image != null && state.userAndAdminModelEntity.image!.isNotEmpty
+                        ? CircleAvatar(
                       radius: 40.r,
                       backgroundColor: Colors.grey.shade200,
-                      child: CachedNetworkImage(
-                        imageUrl: user?.image ?? '',
-                        placeholder: (context, url) => Lottie.asset(
-                          'assets/animations/loading.json',
-                          width: 40.r,
-                          height: 40.r,
-                        ),
-                        errorWidget: (context, url, error) => Icon(Icons.error),
-                        imageBuilder: (context, imageProvider) => CircleAvatar(
-                          radius: 40.r,
-                          backgroundImage: imageProvider,
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      width: 20.w,
-                    ),
+                      backgroundImage: CachedNetworkImageProvider(state.userAndAdminModelEntity.image!),
+                    )
+                        : ImageProfile(radius: 40.r), // Replace with your fallback widget
+
+                    SizedBox(width: 20.w),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          user?.userName ?? StringManager.userName,
-                          style: Theme.of(context)
-                              .textTheme
-                              .titleSmall!
-                              .copyWith(fontSize: FontSize.s24.sp),
+                          state.userAndAdminModelEntity.userName ?? "",
+                          style: Theme.of(context).textTheme.titleSmall!.copyWith(fontSize: FontSize.s24.sp),
                         ),
                         Text(
-                          user?.type ?? StringManager.role,
+                          state.userAndAdminModelEntity.type ?? "",
                           style: Theme.of(context).textTheme.titleSmall,
                         ),
                       ],
@@ -116,8 +108,7 @@ class _CategoryScreenState extends State<CategoryScreen>
                       icon: Icon(Icons.more_vert, size: 38.r),
                       onSelected: (String choice) {
                         if (choice == StringManager.profile) {
-                          Navigator.pushNamed(
-                              context, RoutesManger.routeNameProfile);
+                          Navigator.pushNamed(context, RoutesManger.routeNameProfile);
                         } else if (choice == StringManager.logout) {
                           DialogUtils.showAlertDialog(
                             context: context,
@@ -129,7 +120,7 @@ class _CategoryScreenState extends State<CategoryScreen>
                               Navigator.pushNamedAndRemoveUntil(
                                 context,
                                 RoutesManger.routeNameLogin,
-                                (route) => false,
+                                    (route) => false,
                               );
                               FirebaseAuth.instance.signOut();
                               SharedPrefsLocal.prefs.clear();
@@ -149,51 +140,55 @@ class _CategoryScreenState extends State<CategoryScreen>
                     ),
                   ],
                 ),
-              ),
-              SizedBox(height: 70.h),
-              Expanded(
-                child: ListView.builder(
-                  itemCount: CategoryModel.images.length,
-                  itemBuilder: (context, index) {
-                    return ScaleTransition(
-                      scale: Tween<double>(begin: 0.0, end: 1.0).animate(
-                        CurvedAnimation(
-                          parent: _animationController,
-                          curve: Interval(
-                            index /
-                                CategoryModel
-                                    .images.length, // Start based on index
-                            1.0,
-                            curve: Curves.easeInOut,
-                          ),
-                        ),
-                      ),
-                      child: InkWell(
-                        onTap: () {
-                          if (index == 0) {
-                            Navigator.pushNamed(
-                                context, RoutesManger.routeNameSites);
-                          }
-                          if (index == 1) {
-                            Navigator.pushNamed(
-                                context, RoutesManger.routeNamePreviewReport);
-                          }
-                          if (index == 2) {
-                            Navigator.pushNamed(
-                                context, RoutesManger.routeNameInventory);
-                          }
+              )
+              ,
+                    SizedBox(height: 40.h),
+                    Expanded(
+                      child: ListView.builder(
+                        itemCount: CategoryModel.images.length,
+                        itemBuilder: (context, index) {
+                          return ScaleTransition(
+                            scale: Tween<double>(begin: 0.0, end: 1.0).animate(
+                              CurvedAnimation(
+                                parent: bloc.animationController,
+                                curve: Interval(
+                                  index /
+                                      CategoryModel.images
+                                          .length, // Start based on index
+                                  1.0,
+                                  curve: Curves.easeInOut,
+                                ),
+                              ),
+                            ),
+                            child: InkWell(
+                              onTap: () {
+                                if (index == 0) {
+                                  Navigator.pushNamed(
+                                      context, RoutesManger.routeNameSites);
+                                }
+                                if (index == 1) {
+                                  Navigator.pushNamed(context,
+                                      RoutesManger.routeNamePreviewReport);
+                                }
+                                if (index == 2) {
+                                  Navigator.pushNamed(
+                                      context, RoutesManger.routeNameInventory);
+                                }
+                              },
+                              child: CategoryItem(
+                                categoryModel: CategoryModel.images[index],
+                              ),
+                            ),
+                          );
                         },
-                        child: CategoryItem(
-                          categoryModel: CategoryModel.images[index],
-                        ),
                       ),
-                    );
-                  },
-                ),
+                    ),
+                  ],
+                ):SizedBox()
               ),
-            ],
-          ),
-        ),
+            ),
+          );
+        },
       ),
     );
   }

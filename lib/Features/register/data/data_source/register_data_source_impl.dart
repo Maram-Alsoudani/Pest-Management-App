@@ -17,72 +17,51 @@ import 'data/register_data_source.dart';
 @Injectable(as: RegisterDataSource)
 class RegisterDataSourceImpl implements RegisterDataSource {
   static Future<void> addUserFireStore(UserAndAdminModelDto user) {
-    return FirebaseUtils.getUserCollection(user.type??"").doc(user.id).set(user);
+    return FirebaseUtils.getUserCollection(user.type ?? "")
+        .doc(user.id)
+        .set(user);
   }
-
-
-  Future<Either<Failure, String>> addImageToFirebaseStorage(File imgPath) async {
-    try {
-      final compressedImage = await FlutterImageCompress.compressWithFile(
-        imgPath.path,
-        minWidth: 800,
-        minHeight: 600,
-        quality: 80,
-      );
-
-      if (compressedImage == null) {
-        throw Exception("Compression failed");
-      }
-
-      String imgName = DateTime.now().millisecondsSinceEpoch.toString();
-      final storageRef = FirebaseStorage.instance.ref('uploads/$imgName');
-      await storageRef.putData(compressedImage);
-      String imgUrl = await storageRef.getDownloadURL();
-      print(imgUrl);
-      return Right(imgUrl);
-    } catch (e) {
-      return Left(Failure(errorMessage: e.toString()));
-    }
-  }
-
-
 
   @override
   Future<Either<Failure, void>> registerAuth(
-      String? imagePath,
-      String type,
-      String userName,
-      String phone,
-      String email,
-      String password,
-      ) async {
+    String? imagePath,
+    String type,
+    String userName,
+    String phone,
+    String email,
+    String password,
+  ) async {
     try {
-      final credential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
+      final credential =
+          await FirebaseAuth.instance.createUserWithEmailAndPassword(
         email: email,
         password: password,
       );
 
-
       String imageUrl = "";
 
       if (imagePath != null && imagePath.isNotEmpty) {
-        final result = await addImageToFirebaseStorage(File(imagePath));
+        final result =
+            await FirebaseUtils.addImageToFirebaseStorage(File(imagePath));
         result.fold(
-              (_) {},
-              (url) => imageUrl = url,
+          (_) {},
+          (url) => imageUrl = url,
         );
       }
 
       UserAndAdminModelDto userAndAdminModelDto = UserAndAdminModelDto(
-        id: credential.user?.uid??"",
-          image: imageUrl, type: type, userName: userName, phone: phone, email: email);
-     var userFireStore= await addUserFireStore(userAndAdminModelDto);
+          id: credential.user?.uid ?? "",
+          image: imageUrl,
+          type: type,
+          userName: userName,
+          phone: phone,
+          email: email);
+      var userFireStore = await addUserFireStore(userAndAdminModelDto);
 
-      SharedPrefsLocal.saveData(key: StringManager.keyUserAdmin, model: userAndAdminModelDto);
+      SharedPrefsLocal.saveData(
+          key: StringManager.keyUserAdmin, model: userAndAdminModelDto);
 
-
-     return Right(null);
-
+      return Right(null);
     } on FirebaseAuthException catch (e) {
       if (e.code == 'invalid-credential') {
         return Left(Failure(errorMessage: 'Invalid credentials.'));
@@ -97,6 +76,4 @@ class RegisterDataSourceImpl implements RegisterDataSource {
       return Left(Failure(errorMessage: e.toString()));
     }
   }
-
-
 }

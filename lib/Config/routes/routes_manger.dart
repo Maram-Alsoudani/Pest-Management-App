@@ -5,11 +5,11 @@ import 'package:pesticides/Features/material_usage/presentation/pages/material_u
 import 'package:pesticides/Features/forgotPassword/presentation/pages/forgot_pass_screen.dart';
 import 'package:pesticides/Features/photos/presentation/pages/add_photos_screen.dart';
 import 'package:pesticides/Features/preview_report/presentation/pages/preview_report_screen.dart';
-import 'package:pesticides/Features/profile/presentation/pages/profile_screen.dart';
 import 'package:pesticides/Features/recommendations/presentation/pages/recommendations_screen.dart';
 import 'package:pesticides/Features/register/presentation/pages/register_screen.dart';
 import 'package:pesticides/Features/site_report/presentation/pages/site_report_screen.dart';
 import 'package:pesticides/Features/sites/presentation/pages/sites_screen.dart';
+import '../../Features/category/profile/presentation/pages/profile_screen.dart';
 import '../../Features/conditions/presentation/pages/conditions_screen.dart';
 import '../../Features/device/presentation/pages/devcie_screen.dart';
 import '../../Features/eng_owner_screen/presentation/pages/eng_owner_screen.dart';

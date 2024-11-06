@@ -18,7 +18,7 @@ import '../../../../Core/component/drop_down_menu_widget.dart';
 import '../../../../Core/component/text_feild_custom.dart';
 import '../../../../Core/component/validators.dart';
 import '../manager/register_view_model_cubit.dart';
-import '../../../../Core/component/pick_image_widget.dart';
+import '../widgets/pick_Image_widget.dart';
 
 class RegisterScreen extends StatefulWidget {
   RegisterScreen({super.key});
@@ -39,29 +39,7 @@ class _RegisterScreenState extends State<RegisterScreen>
     bloc.initValueDropDown();
   }
 
-  void _showImagePickerDialog() {
-    if (Platform.isIOS || Platform.isMacOS) {
-      showCupertinoModalPopup(
-        context: context,
-        builder: (BuildContext context) {
-          return Container(
-            color: Colors.transparent,
-            clipBehavior: Clip.none,
-            child: ShowModelPickerImage(
-              uploadImage2Screen: bloc.pickImage,
-            ),
-          );
-        },
-      );
-    } else {
-      showModalBottomSheet(
-        context: context,
-        builder: (BuildContext context) {
-          return ShowModelPickerImage(uploadImage2Screen: bloc.pickImage);
-        },
-      );
-    }
-  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -124,7 +102,7 @@ class _RegisterScreenState extends State<RegisterScreen>
                                 onTap: bloc.image == null
                                     ? null
                                     : _showImagePickerDialog,
-                                child: PickImageWidget(
+                                child: PickImageWidgetRegister(
                                   imagePath: bloc.image,
                                   icon: Icons.add_a_photo,
                                   onImagePicked: bloc.pickImage,
@@ -244,5 +222,28 @@ class _RegisterScreenState extends State<RegisterScreen>
         );
       },
     );
+  }
+  void _showImagePickerDialog() {
+    if (Platform.isIOS || Platform.isMacOS) {
+      showCupertinoModalPopup(
+        context: context,
+        builder: (BuildContext context) {
+          return Container(
+            color: Colors.transparent,
+            clipBehavior: Clip.none,
+            child: ShowModelPickerImage(
+              uploadImage2Screen: bloc.pickImage,
+            ),
+          );
+        },
+      );
+    } else {
+      showModalBottomSheet(
+        context: context,
+        builder: (BuildContext context) {
+          return ShowModelPickerImage(uploadImage2Screen: bloc.pickImage);
+        },
+      );
+    }
   }
 }

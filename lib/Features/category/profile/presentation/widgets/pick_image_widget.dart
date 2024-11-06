@@ -4,8 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:pesticides/Core/utils/colors.dart';
-import 'image_profile.dart';
-import 'show_model_picker_image.dart';
+import 'package:cached_network_image/cached_network_image.dart'; // Import the package
+import '../../../../../Core/component/image_profile.dart';
+import '../../../../../Core/component/show_model_picker_image.dart';
 
 class PickImageWidget extends StatefulWidget {
   final IconData icon;
@@ -61,11 +62,16 @@ class _PickImageWidgetState extends State<PickImageWidget> {
                 viewImage(widget.imageUrl!);
               },
               child: ClipOval(
-                child: Image.network(
-                  widget.imageUrl!,
+                child: CachedNetworkImage(
+                  imageUrl: widget.imageUrl!,
                   width: 145.w,
                   height: 145.h,
                   fit: BoxFit.cover,
+                  placeholder: (context, url) => Center(
+                      child:
+                          CircularProgressIndicator()), // Placeholder while loading
+                  errorWidget: (context, url, error) =>
+                      ImageProfile(radius: 70.r), // Error widget if image fails
                 ),
               ),
             )
@@ -105,7 +111,6 @@ class _PickImageWidgetState extends State<PickImageWidget> {
       showModalBottomSheet(
         context: context,
         builder: (BuildContext context) {
-
           return ShowModelPickerImage(
             uploadImage2Screen: widget.onImagePicked,
           );
@@ -125,8 +130,26 @@ class _PickImageWidgetState extends State<PickImageWidget> {
           child: ClipRRect(
             borderRadius: BorderRadius.circular(16.r),
             child: imagePath.startsWith('http')
-                ? Image.network(imagePath)
-                : Image.file(File(imagePath)),
+                ? GestureDetector(
+                    onTap: () => Navigator.of(context).pop(),
+                    child: CachedNetworkImage(
+                      imageUrl: imagePath,
+                      errorWidget: (context, url, error) {
+                        return Center(
+                            child: Icon(Icons.error)); // Fallback error icon
+                      },
+                    ),
+                  )
+                : GestureDetector(
+                    onTap: () => Navigator.of(context).pop(),
+                    child: Image.file(
+                      File(imagePath),
+                      errorBuilder: (context, error, stackTrace) {
+                        return Center(
+                            child: Icon(Icons.error)); // Fallback error icon
+                      },
+                    ),
+                  ),
           ),
         );
       },

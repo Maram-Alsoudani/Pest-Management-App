@@ -4,13 +4,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pesticides/Config/routes/routes_manger.dart';
 import 'package:pesticides/Core/component/error_widget.dart';
+import 'package:pesticides/Features/category/presentation/manager/category_cubit.dart';
 import 'package:pesticides/Features/forgotPassword/presentation/manager/forget_password_view_model.dart';
 import 'package:pesticides/Features/login/presentation/manager/cubit/login_screen_view_model.dart';
 import 'package:pesticides/Core/utils/strings.dart';
-import 'package:pesticides/Features/profile/presentation/manager/profile_cubit.dart';
 import 'package:pesticides/di/di.dart';
 import 'Config/theme/theming.dart';
 import 'Core/utils/SharedPrefsLocal.dart';
+import 'Features/category/profile/presentation/manager/profile_cubit.dart';
 import 'Features/register/presentation/manager/register_view_model_cubit.dart';
 import 'firebase_options.dart';
 
@@ -46,8 +47,12 @@ void main() async {
           create: (context) => getIt<ForgetPasswordViewModel>(),
         ),
         BlocProvider(
+          create: (context) => getIt<CategoryCubit>(),
+        ),
+        BlocProvider(
           create: (context) => getIt<ProfileCubit>(),
         ),
+
       ],
       child: MyApp(
         route: route,
@@ -56,7 +61,6 @@ void main() async {
 
 String autoLogin() {
   var item = SharedPrefsLocal.getData(key: StringManager.keyUserAdmin);
-  print(item?.id);
   String route;
   if (item != null) {
     route = RoutesManger.routeNameCategoryScreen;

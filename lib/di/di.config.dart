@@ -11,6 +11,20 @@
 import 'package:get_it/get_it.dart' as _i174;
 import 'package:injectable/injectable.dart' as _i526;
 
+import '../Features/category/data/data_source/category_data_source.dart'
+    as _i903;
+import '../Features/category/data/data_source/impl/category_data_source_impl.dart'
+    as _i53;
+import '../Features/category/data/repo/category_repo_impl.dart' as _i781;
+import '../Features/category/domin/repo/category_repo.dart' as _i78;
+import '../Features/category/domin/use_case/edit_image.dart' as _i43;
+import '../Features/category/domin/use_case/edit_user_data_use_case.dart'
+    as _i706;
+import '../Features/category/domin/use_case/read_user_or_admin_from_fireStore_use_case.dart'
+    as _i899;
+import '../Features/category/presentation/manager/category_cubit.dart' as _i386;
+import '../Features/category/profile/presentation/manager/profile_cubit.dart'
+    as _i833;
 import '../Features/forgotPassword/data/data_sources/forget_password_data_source.dart'
     as _i134;
 import '../Features/forgotPassword/data/data_sources/forget_password_data_source_impl.dart'
@@ -54,10 +68,13 @@ extension GetItInjectableX on _i174.GetIt {
       environment,
       environmentFilter,
     );
+    gh.factory<_i903.CategoryDataSource>(() => _i53.CategoryDataSourceImpl());
     gh.factory<_i134.ForgetPasswordDataSource>(
         () => _i290.ForgetPasswordDataSourceImpl());
     gh.factory<_i121.LoginDataSource>(() => _i535.LoginDataSourceImpl());
     gh.factory<_i969.RegisterDataSource>(() => _i1056.RegisterDataSourceImpl());
+    gh.factory<_i78.CategoryRepo>(() => _i781.CategoryRepoImpl(
+        categoryDataSource: gh<_i903.CategoryDataSource>()));
     gh.factory<_i58.ForgetPasswordRepository>(() =>
         _i657.ForgetPasswordRepositoryImpl(
             forgetPasswordDataSource: gh<_i134.ForgetPasswordDataSource>()));
@@ -67,6 +84,23 @@ extension GetItInjectableX on _i174.GetIt {
         loginDataSource: gh<_i121.LoginDataSource>()));
     gh.factory<_i513.ForgetPasswordUserCase>(() => _i513.ForgetPasswordUserCase(
         forgetPasswordRepository: gh<_i58.ForgetPasswordRepository>()));
+    gh.factory<_i899.ReadUserOrAdminFromFireStoreUseCase>(() =>
+        _i899.ReadUserOrAdminFromFireStoreUseCase(
+            categoryRepo: gh<_i78.CategoryRepo>()));
+    gh.factory<_i706.EditUserDataUserCase>(() =>
+        _i706.EditUserDataUserCase(categoryRepo: gh<_i78.CategoryRepo>()));
+    gh.factory<_i43.EditImageInFireStoreUseCase>(() =>
+        _i43.EditImageInFireStoreUseCase(
+            categoryRepo: gh<_i78.CategoryRepo>()));
+    gh.factory<_i833.ProfileCubit>(() => _i833.ProfileCubit(
+          readUserOrAdminFromFireStoreUseCase:
+              gh<_i899.ReadUserOrAdminFromFireStoreUseCase>(),
+          editUserDataUserCase: gh<_i706.EditUserDataUserCase>(),
+          editImageInFireStoreUseCase: gh<_i43.EditImageInFireStoreUseCase>(),
+        ));
+    gh.factory<_i386.CategoryCubit>(() => _i386.CategoryCubit(
+        readUserOrAdminFromFireStoreUseCase:
+            gh<_i899.ReadUserOrAdminFromFireStoreUseCase>()));
     gh.factory<_i1037.ForgetPasswordViewModel>(() =>
         _i1037.ForgetPasswordViewModel(
             forgetPasswordUseCase: gh<_i513.ForgetPasswordUserCase>()));

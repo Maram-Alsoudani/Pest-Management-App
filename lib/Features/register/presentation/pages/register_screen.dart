@@ -1,6 +1,3 @@
-import 'dart:io';
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -8,17 +5,15 @@ import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:pesticides/Config/routes/routes_manger.dart';
 import 'package:pesticides/Core/component/button_custom.dart';
 import 'package:pesticides/Core/component/custom_dialog.dart';
-import 'package:pesticides/Core/component/lottie_loading_widget.dart';
 import 'package:pesticides/Core/utils/colors.dart';
 import 'package:pesticides/Core/utils/images.dart';
 import 'package:pesticides/Core/utils/strings.dart';
-import 'package:pesticides/Core/component/show_model_picker_image.dart';
 
 import '../../../../Core/component/drop_down_menu_widget.dart';
 import '../../../../Core/component/text_feild_custom.dart';
 import '../../../../Core/component/validators.dart';
 import '../manager/register_view_model_cubit.dart';
-import '../../../../Core/component/pick_image_widget.dart';
+import '../widgets/pick_image_widget.dart';
 
 class RegisterScreen extends StatefulWidget {
   RegisterScreen({super.key});
@@ -30,7 +25,6 @@ class RegisterScreen extends StatefulWidget {
 class _RegisterScreenState extends State<RegisterScreen>
     with SingleTickerProviderStateMixin {
   late RegisterViewModelCubit bloc;
-
   @override
   void initState() {
     super.initState();
@@ -39,76 +33,54 @@ class _RegisterScreenState extends State<RegisterScreen>
     bloc.initValueDropDown();
   }
 
-  void _showImagePickerDialog() {
-    if (Platform.isIOS || Platform.isMacOS) {
-      showCupertinoModalPopup(
-        context: context,
-        builder: (BuildContext context) {
-          return Container(
-            color: Colors.transparent,
-            clipBehavior: Clip.none,
-            child: ShowModelPickerImage(
-              uploadImage2Screen: bloc.pickImage,
-            ),
-          );
-        },
-      );
-    } else {
-      showModalBottomSheet(
-        context: context,
-        builder: (BuildContext context) {
-          return ShowModelPickerImage(uploadImage2Screen: bloc.pickImage);
-        },
-      );
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<RegisterViewModelCubit, RegisterViewModelState>(
-      listener: (context, state) {
-        if (state is RegisterViewModelSuccess) {
-          DialogUtils.showAlertDialog(
-            context: context,
-            title: StringManager.success,
-            message: StringManager.registerSuccessfully,
-            posActionTitle: StringManager.ok,
-          );
-        } else if (state is RegisterViewModelError) {
-          DialogUtils.showAlertDialog(
-            context: context,
-            title: StringManager.failed,
-            message: state.failure.errorMessage,
-            posActionTitle: StringManager.ok,
-          );
-        }
-      },
-      builder: (context, state) {
-        return ModalProgressHUD(
-          opacity: 0.2,
-          color: ColorManager.greyShade3,
-          inAsyncCall: bloc.isLoaded,
-          progressIndicator: const Center(child: LottieLoadingWidget(
-
-          )),
-          child: Scaffold(
-            body: Stack(
-              children: [
-                // Background image
-                Container(
-                  width: double.infinity,
-                  height: double.infinity,
-                  decoration: const BoxDecoration(
-                    image: DecorationImage(
-                      image: AssetImage(ImageManager.background),
-                      fit: BoxFit.cover,
+    return SafeArea(
+      child: BlocConsumer<RegisterViewModelCubit, RegisterViewModelState>(
+        listener: (context, state) {
+          if (state is RegisterViewModelSuccess) {
+            DialogUtils.showAlertDialog(
+                context: context,
+                title: StringManager.success,
+                message: StringManager.registerSuccessfully,
+              posActionTitle: StringManager.ok,
+            );
+          } else if (state is RegisterViewModelError) {
+            DialogUtils.showAlertDialog(
+              context: context,
+              title: StringManager.failed,
+              message: state.failure.errorMessage,
+              posActionTitle: StringManager.ok,
+            );
+          }
+        },
+        builder: (context, state) {
+          return ModalProgressHUD(
+            opacity: 0.2,
+            color: ColorManager.greyShade3,
+            inAsyncCall: bloc.isLoaded,
+            progressIndicator: Center(
+              child: CircularProgressIndicator(
+                color: ColorManager.primaryColor,
+              ),
+            ),
+            child: Scaffold(
+              body: Stack(
+                children: [
+                  // Background image
+                  Container(
+                    width: double.infinity,
+                    height: double.infinity,
+                    decoration: const BoxDecoration(
+                      image: DecorationImage(
+                        image: AssetImage(ImageManager
+                            .background), // Replace with your image path
+                        fit: BoxFit.cover, // Cover the entire screen
+                      ),
                     ),
                   ),
-                ),
 
-                // Main content wrapped in SafeArea
-                SafeArea(
-                  child: SingleChildScrollView(
+                  SingleChildScrollView(
                     child: Form(
                       key: bloc.fromKey,
                       child: Column(
@@ -119,17 +91,8 @@ class _RegisterScreenState extends State<RegisterScreen>
                             duration: const Duration(seconds: 2),
                             opacity: bloc.opacity,
                             curve: Curves.easeIn,
-                            child: Center(
-                              child: GestureDetector(
-                                onTap: bloc.image == null
-                                    ? null
-                                    : _showImagePickerDialog,
-                                child: PickImageWidget(
-                                  imagePath: bloc.image,
-                                  icon: Icons.add_a_photo,
-                                  onImagePicked: bloc.pickImage,
-                                ),
-                              ),
+                            child: PickImageWidget(
+                              icon: Icons.add_a_photo,
                             ),
                           ),
                           SizedBox(height: 18.h),
@@ -237,12 +200,12 @@ class _RegisterScreenState extends State<RegisterScreen>
                       ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-        );
-      },
+          );
+        },
+      ),
     );
   }
 }

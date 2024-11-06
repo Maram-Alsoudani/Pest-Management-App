@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+
 import '../../Features/register/data/models/user_model_dto.dart';
 
 class FirebaseUtils {

@@ -3,7 +3,6 @@ import 'package:dartz/dartz.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:injectable/injectable.dart';
 import 'package:pesticides/Core/errors/failures.dart';
-import 'package:pesticides/Core/utils/strings.dart';
 import 'forget_password_data_source.dart';
 
 @Injectable(as: ForgetPasswordDataSource)
@@ -19,18 +18,15 @@ class ForgetPasswordDataSourceImpl implements ForgetPasswordDataSource {
             .sendPasswordResetEmail(email: email.trim());
         return Right(response);
       } on FirebaseAuthException catch (e) {
-        if (e.code == 'channel-error') {
-          return Left(Failure(errorMessage: StringManager.errorOccurred));
-        }
-        if (e.code == 'invalid-email') {
-          return Left(
-              Failure(errorMessage: StringManager.badFormat));
-        }
+        //todo remove this print
+        print(e);
+
         return Left(Failure(errorMessage: e.toString()));
       }
     } else {
       return Left(NetworkFailure(
-          errorMessage: StringManager.networkError));
+          errorMessage:
+              'No internet connection , please check internet connection'));
     }
   }
 }

@@ -13,5 +13,3 @@ class ForgetPasswordErrorState extends ForgetPasswordState {
 }
 
 class ForgetPasswordSuccessState extends ForgetPasswordState {}
-
-class ForgetPasswordAnimationState extends ForgetPasswordState {}

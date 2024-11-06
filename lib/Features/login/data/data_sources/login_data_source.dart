@@ -4,6 +4,6 @@ import 'package:pesticides/Features/register/data/models/user_model_dto.dart';
 import '../../../../Core/errors/failures.dart';
 
 abstract class LoginDataSource {
-  Future<Either<Failure, UserAndAdminModelDto?>> login(
-      String email, String password, String? type);
+  Future<Either<Failure, UserAndAdminModelDto?>> getUserFromFireStore(
+      String type, String id);
 }

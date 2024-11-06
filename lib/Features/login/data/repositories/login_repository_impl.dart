@@ -1,20 +1,21 @@
 import 'package:dartz/dartz.dart';
 import 'package:injectable/injectable.dart';
+import 'package:pesticides/Core/errors/failures.dart';
+import 'package:pesticides/Features/login/data/data_sources/login_data_source.dart';
+import 'package:pesticides/Features/login/domain/repositories/login_repository.dart';
 
-import '../../../../Core/errors/failures.dart';
 import '../../../register/domain/entities/user_model_entity.dart';
-import '../../domain/repositories/login_repository.dart';
-import '../data_sources/login_data_source.dart';
 
 @Injectable(as: LoginRepository)
 class LoginRepositoryImpl implements LoginRepository {
   LoginDataSource loginDataSource;
+
   LoginRepositoryImpl({required this.loginDataSource});
 
   @override
-  Future<Either<Failure, UserAndAdminModelEntity?>> login(
-      String email, String password, String? type) async {
-    var either = await loginDataSource.login(email, password, type);
-    return either.fold((error) => Left(error), (user) => Right(user));
+  Future<Either<Failure, UserAndAdminModelEntity?>> getUserFromFireStore(
+      String type, String id) async {
+    var either = await loginDataSource.getUserFromFireStore(type, id);
+    return either.fold((error) => Left(error), (response) => Right(response));
   }
 }

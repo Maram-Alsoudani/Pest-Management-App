@@ -5,6 +5,7 @@ import 'package:pesticides/Core/component/button_custom.dart';
 import 'package:pesticides/Core/component/text_feild_custom.dart';
 import 'package:pesticides/Core/utils/colors.dart';
 import 'package:pesticides/Core/utils/strings.dart';
+import 'package:pesticides/Features/eng_owner_screen/presentation/widget/custom_button.dart';
 import 'package:pesticides/Features/forgotPassword/presentation/manager/forget_password_state.dart';
 import 'package:pesticides/Features/forgotPassword/presentation/manager/forget_password_view_model.dart';
 import 'package:pesticides/di/di.dart';
@@ -13,7 +14,7 @@ import '../../../../Core/component/custom_dialog.dart';
 import '../../../../Core/component/validators.dart';
 
 class ForgotPassScreen extends StatefulWidget {
-  ForgotPassScreen({super.key});
+   ForgotPassScreen({super.key});
   ForgetPasswordViewModel viewModel = getIt<ForgetPasswordViewModel>();
 
   @override
@@ -22,25 +23,54 @@ class ForgotPassScreen extends StatefulWidget {
 
 class _ForgotPassScreenState extends State<ForgotPassScreen>
     with SingleTickerProviderStateMixin {
+  TextEditingController emailController = TextEditingController();
 
+  late AnimationController _animationController;
+  late Animation<Offset> _slideAnimation;
+  double _opacity = 0.0;
   @override
   void initState() {
     super.initState();
-    ForgetPasswordViewModel.get(context);
-    ForgetPasswordViewModel.get(context).doAnimation(this);
+
+    _animationController =
+        AnimationController(vsync: this, duration: const Duration(seconds: 1));
+
+    _slideAnimation =
+        Tween<Offset>(begin: Offset(-1.w, 0), end: const Offset(0, 0)).animate(
+      CurvedAnimation(
+        parent: _animationController,
+        curve: Curves.easeInOut,
+      ),
+    );
+
+    // Trigger the slide animation after the page loads
+    Future.delayed(const Duration(milliseconds: 300), () {
+      setState(() {
+        _opacity = 1.0;
+      });
+
+      _animationController.forward();
+    });
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<ForgetPasswordViewModel, ForgetPasswordState>(
-      listener: (context, state) {
-        if (state is ForgetPasswordErrorState) {
+    return BlocListener<ForgetPasswordViewModel , ForgetPasswordState>(
+      bloc: widget.viewModel,
+      listener: (context , state){
+        if(state is ForgetPasswordErrorState){
           DialogUtils.showAlertDialog(
               context: context,
               title: StringManager.error,
               message: state.failure.errorMessage,
               posActionTitle: StringManager.ok);
-        } else if (state is ForgetPasswordSuccessState) {
+        }else if(state is ForgetPasswordSuccessState){
           DialogUtils.showAlertDialog(
               context: context,
               title: StringManager.success,
@@ -48,108 +78,78 @@ class _ForgotPassScreenState extends State<ForgotPassScreen>
               posActionTitle: StringManager.ok);
         }
       },
-      builder: (context, state) {
-        return Scaffold(
-          appBar: AppBar(),
-          body: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 30),
-            child: SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  AnimatedOpacity(
-                    duration: const Duration(seconds: 2),
-                    opacity: ForgetPasswordViewModel.get(context).opacity,
-                    curve: Curves.easeIn,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        Text(
-                          StringManager.forgotPass,
-                          style: Theme.of(context)
-                              .textTheme
-                              .titleLarge!
-                              .copyWith(
-                                  color: ColorManager.whiteColor, fontSize: 30),
-                        ),
-                        SizedBox(
-                          height: 15,
-                        ),
-                        Text(StringManager.enterEmailForResetPass,
-                            style: Theme.of(context)
-                                .textTheme
-                                .titleMedium!
-                                .copyWith(
-                                    color: ColorManager.greyShade2,
-                                    fontSize: 15)),
-                      ],
+      child: Scaffold(
+        appBar: AppBar(),
+        body: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 30),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              AnimatedOpacity(
+                duration: const Duration(seconds: 2),
+                opacity: _opacity,
+                curve: Curves.easeIn,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Text(
+                      StringManager.forgotPass,
+                      style: Theme.of(context)
+                          .textTheme
+                          .titleLarge!
+                          .copyWith(color: ColorManager.whiteColor, fontSize: 30),
                     ),
-                  ),
-                  SizedBox(
-                    height: 80,
-                  ),
-                  SlideTransition(
-                    position:
-                        ForgetPasswordViewModel.get(context).slideAnimation,
-                    child: Form(
-                      key: ForgetPasswordViewModel.get(context)
-                          .forgetPasswordFormKey,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(vertical: 8.0),
-                              child: CustomTextFormField(
-                                hint: StringManager.email,
-                                validator: (val) =>
-                                    AppValidators.validateEmail(val),
-                                controller: ForgetPasswordViewModel.get(context)
-                                    .emailController,
-                              )),
-                          ButtonCustom(
-                            buttonName: StringManager.send,
-                            enable: true,
-                            onTap: () {
-                              if (ForgetPasswordViewModel.get(context)
-                                  .forgetPasswordFormKey
-                                  .currentState!
-                                  .validate()) {
-                                ForgetPasswordViewModel.get(context)
-                                    .forgetPassword();
-                              }
-                            },
-                          ),
-                        ],
-                      ),
+                    SizedBox(
+                      height: 15,
                     ),
-                  ),
-                  SizedBox(
-                    height: 50.h,
-                  ),
-                  AnimatedOpacity(
-                    duration: const Duration(seconds: 2),
-                    opacity: ForgetPasswordViewModel.get(context).opacity,
-                    curve: Curves.easeIn,
-                    child: TextButton(
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                        child: Text(
-                            "${StringManager.already_have_an_account} ${StringManager.login} ",
-                            style: Theme.of(context)
-                                .textTheme
-                                .titleSmall!
-                                .copyWith(
-                                  color: ColorManager.whiteColor,
-                                ))),
-                  )
-                ],
+                    Text(StringManager.enterEmailForResetPass,
+                        style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                            color: ColorManager.greyShade2, fontSize: 15)),
+                  ],
+                ),
               ),
-            ),
+              SizedBox(
+                height: 80,
+              ),
+              SlideTransition(
+                position: _slideAnimation,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 8.0),
+                        child: CustomTextFormField(
+                          hint: "Email",
+                          validator: (val) => AppValidators.validateEmail(val),
+                          controller: widget.viewModel.emailController,
+                        )),
+                    ButtonCustom(
+                      buttonName: "Send",
+                      enable: true,
+                      onTap: () {widget.viewModel.forgetPassword();},
+                    )
+                  ],
+                ),
+              ),
+              Spacer(),
+              AnimatedOpacity(
+                duration: const Duration(seconds: 2),
+                opacity: _opacity,
+                curve: Curves.easeIn,
+                child: TextButton(
+                    onPressed: () {
+
+                      Navigator.pop(context);
+                    },
+                    child: Text("${StringManager.already_have_an_account} Login",
+                        style: Theme.of(context).textTheme.titleSmall!.copyWith(
+                              color: ColorManager.whiteColor,
+                            ))),
+              )
+            ],
           ),
-        );
-      },
+        ),
+      ),
     );
   }
 }

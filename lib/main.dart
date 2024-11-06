@@ -3,11 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pesticides/Config/routes/routes_manger.dart';
-import 'package:pesticides/Core/component/error_widget.dart';
-import 'package:pesticides/Features/forgotPassword/presentation/manager/forget_password_view_model.dart';
 import 'package:pesticides/Features/login/presentation/manager/cubit/login_screen_view_model.dart';
 import 'package:pesticides/Core/utils/strings.dart';
-import 'package:pesticides/Features/profile/presentation/manager/profile_cubit.dart';
+import 'package:pesticides/Core/component/error_widget.dart';
 import 'package:pesticides/di/di.dart';
 import 'Config/theme/theming.dart';
 import 'Core/utils/SharedPrefsLocal.dart';
@@ -22,32 +20,13 @@ void main() async {
   await SharedPrefsLocal.init();
   var route = autoLogin();
   configureDependencies();
-
-  // Set up the global error handler
-  FlutterError.onError = (FlutterErrorDetails details) {
-    FlutterError.presentError(details);
-    runApp(ErrorWidgetApp(details));
-  };
-
-  // Set up the custom error widget for the app
-  ErrorWidget.builder = (FlutterErrorDetails details) {
-    return CustomErrorWidget(errorMessage: details.exceptionAsString());
-  };
-
   runApp(MultiBlocProvider(
       providers: [
-        BlocProvider(
-          create: (context) => getIt<LoginScreenViewModel>(),
-        ),
-        BlocProvider(
-          create: (context) => getIt<RegisterViewModelCubit>(),
-        ),
-        BlocProvider(
-          create: (context) => getIt<ForgetPasswordViewModel>(),
-        ),
-        BlocProvider(
-          create: (context) => getIt<ProfileCubit>(),
-        ),
+    BlocProvider(
+      create: (context) => getIt<LoginScreenViewModel>(),
+    ),
+    BlocProvider(create: (context) => getIt<RegisterViewModelCubit>(),)
+
       ],
       child: MyApp(
         route: route,
@@ -56,7 +35,6 @@ void main() async {
 
 String autoLogin() {
   var item = SharedPrefsLocal.getData(key: StringManager.keyUserAdmin);
-  print(item?.id);
   String route;
   if (item != null) {
     route = RoutesManger.routeNameCategoryScreen;
@@ -64,6 +42,7 @@ String autoLogin() {
     route = RoutesManger.routeNameEngOwnerScreen;
   }
   return route;
+
 }
 
 class MyApp extends StatelessWidget {

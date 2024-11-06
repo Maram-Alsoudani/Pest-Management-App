@@ -5,6 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:pesticides/Core/utils/strings.dart';
 import 'package:pesticides/Core/utils/colors.dart';
+import 'package:pesticides/Core/component/show_model_picker_image.dart';
 
 class AddPhotosScreen extends StatefulWidget {
   @override
@@ -25,34 +26,28 @@ class _AddPhotosScreenState extends State<AddPhotosScreen> {
   }
 
   void _showImagePickerDialog() {
-    showModalBottomSheet(
-      context: context,
-      builder: (BuildContext context) {
-        return SafeArea(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              ListTile(
-                leading: const Icon(CupertinoIcons.camera),
-                title: const Text(StringManager.takePhoto),
-                onTap: () {
-                  Navigator.pop(context);
-                  _pickImage(ImageSource.camera);
-                },
-              ),
-              ListTile(
-                leading: const Icon(CupertinoIcons.photo_fill),
-                title: const Text(StringManager.chooseFromGallery),
-                onTap: () {
-                  Navigator.pop(context);
-                  _pickImage(ImageSource.gallery);
-                },
-              ),
-            ],
-          ),
-        );
-      },
-    );
+    if (Platform.isIOS || Platform.isMacOS) {
+      showCupertinoModalPopup(
+        context: context,
+        builder: (BuildContext context) {
+          return Container(
+            color: Colors.transparent,
+            child: ShowModelPickerImage(
+              uploadImage2Screen: _pickImage,
+            ),
+          );
+        },
+      );
+    } else {
+      showModalBottomSheet(
+        context: context,
+        builder: (BuildContext context) {
+          return ShowModelPickerImage(
+            uploadImage2Screen: _pickImage,
+          );
+        },
+      );
+    }
   }
 
   void _viewImage(File image) {
@@ -89,15 +84,13 @@ class _AddPhotosScreenState extends State<AddPhotosScreen> {
           children: [
             Expanded(
               child: GridView.builder(
-                itemCount: images.length+1 ,
+                itemCount: images.length + 1,
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 3,
                   crossAxisSpacing: 10.w,
                   mainAxisSpacing: 10.h,
                 ),
                 itemBuilder: (context, index) {
-                  print("index: $index");
-                  print("images.length: ${images.length}");
                   if (index == images.length) {
                     return GestureDetector(
                       onTap: _showImagePickerDialog,

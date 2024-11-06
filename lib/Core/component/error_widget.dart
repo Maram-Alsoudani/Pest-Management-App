@@ -35,6 +35,7 @@ class ErrorWidgetApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: StringManager.errorTitle,
       home: CustomErrorWidget(
         errorMessage: errorDetails.exceptionAsString(),

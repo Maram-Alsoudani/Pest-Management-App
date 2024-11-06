@@ -1,12 +1,9 @@
 import 'dart:io';
 
-import 'package:bloc/bloc.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:injectable/injectable.dart';
-import 'package:meta/meta.dart';
-import 'package:pesticides/Features/register/domain/entities/user_model_entity.dart';
 import 'package:pesticides/Features/register/domain/use_cases/register_use_case.dart';
 
 import '../../../../Core/errors/failures.dart';
@@ -18,23 +15,19 @@ class RegisterViewModelCubit extends Cubit<RegisterViewModelState> {
   RegisterUseCase registerUseCase;
   RegisterViewModelCubit({required this.registerUseCase})
       : super(RegisterViewModelInitial());
- static RegisterViewModelCubit get(context)=> BlocProvider.of<RegisterViewModelCubit>(context);
+  static RegisterViewModelCubit get(context) =>
+      BlocProvider.of<RegisterViewModelCubit>(context);
 
   //===============Variables Handle=======================
   List<String> list = ["admin", "user"];
   String? selectedValue;
   bool isLoaded = false;
   var fromKey = GlobalKey<FormState>();
-  TextEditingController userNameController =
-      TextEditingController(text: "osman");
-  TextEditingController phoneController =
-      TextEditingController(text: "01212442793");
-  TextEditingController emailController =
-      TextEditingController(text: "mohamed@gmail.com");
-  TextEditingController passwordController =
-      TextEditingController(text: "Mm#123456");
-  TextEditingController confirmPasswordController =
-      TextEditingController(text: "Mm#123456");
+  TextEditingController userNameController = TextEditingController();
+  TextEditingController phoneController = TextEditingController();
+  TextEditingController emailController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
+  TextEditingController confirmPasswordController = TextEditingController();
 
   //===============Image Profile Handle===================
   final ImagePicker picker = ImagePicker();
@@ -44,13 +37,12 @@ class RegisterViewModelCubit extends Cubit<RegisterViewModelState> {
     if (pickedFile != null) {
       image = File(pickedFile.path);
       emit(RegisterViewModelChangeImage());
-
-    }else{
-      image=null;
+    } else {
+      image = null;
       emit(RegisterViewModelChangeImage());
-
     }
   }
+
   //===============Animation Handle=======================
   late AnimationController animationController;
   late Animation<Offset> slideAnimation;
@@ -61,7 +53,8 @@ class RegisterViewModelCubit extends Cubit<RegisterViewModelState> {
         vsync: single, duration: const Duration(seconds: 1));
 
     slideAnimation =
-        Tween<Offset>(begin: const Offset(-1, 0), end: const Offset(0, 0)).animate(
+        Tween<Offset>(begin: const Offset(-1, 0), end: const Offset(0, 0))
+            .animate(
       CurvedAnimation(
         parent: animationController,
         curve: Curves.easeInOut,
@@ -86,7 +79,7 @@ class RegisterViewModelCubit extends Cubit<RegisterViewModelState> {
     isLoaded = true;
     emit(RegisterViewModelLoading());
     var either = await registerUseCase.registerFireStore(
-        image?.path??"",
+        image?.path ?? "",
         selectedValue ?? "admin",
         userNameController.text,
         phoneController.text,
@@ -98,21 +91,23 @@ class RegisterViewModelCubit extends Cubit<RegisterViewModelState> {
     }, (response) {
       isLoaded = false;
       emit(RegisterViewModelSuccess());
+      clearData();
     });
   }
 
 //===============Close Screen Handle=====================
-  @override
-  Future<void> close() {
-    userNameController.dispose();
-    phoneController.dispose();
-    emailController.dispose();
-    passwordController.dispose();
-    confirmPasswordController.dispose();
-    animationController.dispose();
-    image=null;
-    return super.close();
+
+  void clearData() {
+    userNameController.clear();
+    phoneController.clear();
+    emailController.clear();
+    passwordController.clear();
+    confirmPasswordController.clear();
+    // animationController.dispose();
+    image = null;
   }
-
-
+//   @override
+//   Future<void> close() {
+//     return super.close();
+//   }
 }

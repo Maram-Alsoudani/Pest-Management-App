@@ -1,14 +1,16 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pesticides/Config/routes/routes_manger.dart';
 import 'package:pesticides/Core/component/custom_dialog.dart';
 import 'package:pesticides/Core/utils/SharedPrefsLocal.dart';
 import 'package:pesticides/Features/category/data/models/category_model.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:lottie/lottie.dart';
 
-import '../../../../Core/component/image_profile.dart';
 import '../../../../Core/utils/font_manager.dart';
+import '../../../../Core/utils/strings.dart';
+import '../../../../Features/register/data/models/user_model_dto.dart';
 import '../widgets/category_item.dart';
 
 class CategoryScreen extends StatefulWidget {
@@ -21,25 +23,21 @@ class CategoryScreen extends StatefulWidget {
 class _CategoryScreenState extends State<CategoryScreen>
     with SingleTickerProviderStateMixin {
   late AnimationController _animationController;
-  late Animation<double> _animation;
-  late Animation<Offset> _rowAnimation; // Animation for Row
+  late Animation<Offset> _rowAnimation;
+
+  UserAndAdminModelDto? user;
 
   @override
   void initState() {
     super.initState();
 
+    // Load user data
+    user = SharedPrefsLocal.getData(key: StringManager.keyUserAdmin);
+
     // Initialize the AnimationController
     _animationController = AnimationController(
       vsync: this,
       duration: Duration(milliseconds: 500),
-    );
-
-    // Define the scale animation for GridView items
-    _animation = Tween<double>(begin: 0.0, end: 1.0).animate(
-      CurvedAnimation(
-        parent: _animationController,
-        curve: Curves.easeInOut,
-      ),
     );
 
     // Define the slide animation for Row
@@ -77,8 +75,22 @@ class _CategoryScreenState extends State<CategoryScreen>
                 position: _rowAnimation,
                 child: Row(
                   children: [
-                    ImageProfile(
+                    CircleAvatar(
                       radius: 40.r,
+                      backgroundColor: Colors.grey.shade200,
+                      child: CachedNetworkImage(
+                        imageUrl: user?.image ?? '',
+                        placeholder: (context, url) => Lottie.asset(
+                          'assets/animations/loading.json',
+                          width: 40.r,
+                          height: 40.r,
+                        ),
+                        errorWidget: (context, url, error) => Icon(Icons.error),
+                        imageBuilder: (context, imageProvider) => CircleAvatar(
+                          radius: 40.r,
+                          backgroundImage: imageProvider,
+                        ),
+                      ),
                     ),
                     SizedBox(
                       width: 20.w,
@@ -87,14 +99,14 @@ class _CategoryScreenState extends State<CategoryScreen>
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          "Mohamed Ali",
+                          user?.userName ?? StringManager.userName,
                           style: Theme.of(context)
                               .textTheme
                               .titleSmall!
                               .copyWith(fontSize: FontSize.s24.sp),
                         ),
                         Text(
-                          "Site Engineer",
+                          user?.type ?? StringManager.role,
                           style: Theme.of(context).textTheme.titleSmall,
                         ),
                       ],
@@ -103,20 +115,21 @@ class _CategoryScreenState extends State<CategoryScreen>
                     PopupMenuButton<String>(
                       icon: Icon(Icons.more_vert, size: 38.r),
                       onSelected: (String choice) {
-                        if (choice == 'Profile') {
-                          Navigator.pushNamed(context, RoutesManger.routeNameProfile);
-                        } else if (choice == 'Log Out') {
+                        if (choice == StringManager.profile) {
+                          Navigator.pushNamed(
+                              context, RoutesManger.routeNameProfile);
+                        } else if (choice == StringManager.logout) {
                           DialogUtils.showAlertDialog(
                             context: context,
-                            title: "Logout",
-                            message: "Are You Sure?",
-                            posActionTitle: "Yes",
-                            negActionTitle: "No",
+                            title: StringManager.logout,
+                            message: StringManager.logoutMessage,
+                            posActionTitle: StringManager.yes,
+                            negActionTitle: StringManager.no,
                             posAction: () {
                               Navigator.pushNamedAndRemoveUntil(
                                 context,
                                 RoutesManger.routeNameLogin,
-                                    (route) => false,
+                                (route) => false,
                               );
                               FirebaseAuth.instance.signOut();
                               SharedPrefsLocal.prefs.clear();
@@ -125,7 +138,8 @@ class _CategoryScreenState extends State<CategoryScreen>
                         }
                       },
                       itemBuilder: (BuildContext context) {
-                        return ['Profile', 'Log Out'].map((String choice) {
+                        return [StringManager.profile, StringManager.logout]
+                            .map((String choice) {
                           return PopupMenuItem<String>(
                             value: choice,
                             child: Text(choice),
@@ -140,14 +154,15 @@ class _CategoryScreenState extends State<CategoryScreen>
               Expanded(
                 child: ListView.builder(
                   itemCount: CategoryModel.images.length,
-
                   itemBuilder: (context, index) {
                     return ScaleTransition(
                       scale: Tween<double>(begin: 0.0, end: 1.0).animate(
                         CurvedAnimation(
                           parent: _animationController,
                           curve: Interval(
-                            index / CategoryModel.images.length, // Start based on index
+                            index /
+                                CategoryModel
+                                    .images.length, // Start based on index
                             1.0,
                             curve: Curves.easeInOut,
                           ),
@@ -156,13 +171,16 @@ class _CategoryScreenState extends State<CategoryScreen>
                       child: InkWell(
                         onTap: () {
                           if (index == 0) {
-                            Navigator.pushNamed(context, RoutesManger.routeNameSites);
+                            Navigator.pushNamed(
+                                context, RoutesManger.routeNameSites);
                           }
                           if (index == 1) {
-                            Navigator.pushNamed(context, RoutesManger.routeNamePreviewReport);
+                            Navigator.pushNamed(
+                                context, RoutesManger.routeNamePreviewReport);
                           }
                           if (index == 2) {
-                            Navigator.pushNamed(context, RoutesManger.routeNameInventory);
+                            Navigator.pushNamed(
+                                context, RoutesManger.routeNameInventory);
                           }
                         },
                         child: CategoryItem(

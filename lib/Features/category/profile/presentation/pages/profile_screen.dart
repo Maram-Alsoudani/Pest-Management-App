@@ -31,6 +31,14 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    ProfileCubit.get(context).getUserData();
+
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<ProfileCubit, ProfileState>(
@@ -183,6 +191,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               context,
                               RoutesManger.routeNameCategoryScreen,
                             );
+                            ProfileCubit.get(context).clearData();
+
 
                           },
                           icon: const Icon(CupertinoIcons.back,
@@ -204,6 +214,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 );
                                 SharedPrefsLocal.prefs.clear();
                                 FirebaseAuth.instance.signOut();
+                                ProfileCubit.get(context).clearData();
                               },
                             );
                           },

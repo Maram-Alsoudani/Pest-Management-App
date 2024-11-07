@@ -39,19 +39,20 @@ class _RegisterScreenState extends State<RegisterScreen>
     bloc.initValueDropDown();
   }
 
-
-
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<RegisterViewModelCubit, RegisterViewModelState>(
       listener: (context, state) {
         if (state is RegisterViewModelSuccess) {
           DialogUtils.showAlertDialog(
-            context: context,
-            title: StringManager.success,
-            message: StringManager.registerSuccessfully,
-            posActionTitle: StringManager.ok,
-          );
+              context: context,
+              title: StringManager.success,
+              message: StringManager.registerSuccessfully,
+              posActionTitle: StringManager.ok,
+              posAction: () {
+                Navigator.pushNamedAndRemoveUntil(context,
+                    RoutesManger.routeNameCategoryScreen, (route) => false);
+              });
         } else if (state is RegisterViewModelError) {
           DialogUtils.showAlertDialog(
             context: context,
@@ -66,9 +67,7 @@ class _RegisterScreenState extends State<RegisterScreen>
           opacity: 0.2,
           color: ColorManager.greyShade3,
           inAsyncCall: bloc.isLoaded,
-          progressIndicator: const Center(child: LottieLoadingWidget(
-
-          )),
+          progressIndicator: const Center(child: LottieLoadingWidget()),
           child: Scaffold(
             body: Stack(
               children: [
@@ -223,6 +222,7 @@ class _RegisterScreenState extends State<RegisterScreen>
       },
     );
   }
+
   void _showImagePickerDialog() {
     if (Platform.isIOS || Platform.isMacOS) {
       showCupertinoModalPopup(

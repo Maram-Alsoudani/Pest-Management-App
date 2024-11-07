@@ -25,7 +25,8 @@ class ProfileCubit extends Cubit<ProfileState> {
       required this.editUserDataUserCase,
       required this.editImageInFireStoreUseCase})
       : super(ProfileInitial()) {
-    getUserData();
+
+
   }
 
   TextEditingController userNameController = TextEditingController();
@@ -119,5 +120,13 @@ class ProfileCubit extends Cubit<ProfileState> {
       image = null;
       emit(ProfileChangeImage());
     }
+  }
+
+  void clearData(){
+    userNameController.clear();
+    phoneController.clear();
+    emailController.clear();
+    typeController.clear();
+    image = null;
   }
 }

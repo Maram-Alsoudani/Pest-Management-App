@@ -68,7 +68,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       },
       builder: (context, state) {
         return ModalProgressHUD(
-          opacity: 0.2,
+          opacity: 0.4,
           color: ColorManager.greyShade3,
           inAsyncCall: ProfileCubit.get(context).isLoading,
           progressIndicator: const Center(child: LottieLoadingWidget(

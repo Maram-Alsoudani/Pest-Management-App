@@ -64,7 +64,7 @@ class _RegisterScreenState extends State<RegisterScreen>
       },
       builder: (context, state) {
         return ModalProgressHUD(
-          opacity: 0.2,
+          opacity: 0.4,
           color: ColorManager.greyShade3,
           inAsyncCall: bloc.isLoaded,
           progressIndicator: const Center(child: LottieLoadingWidget()),

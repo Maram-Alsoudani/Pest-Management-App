@@ -65,7 +65,7 @@ class _CategoryScreenState extends State<CategoryScreen>
         },
         builder: (context, state) {
           return ModalProgressHUD(
-            opacity: 0.2,
+            opacity: 0.4,
             color: ColorManager.greyShade3,
             inAsyncCall: bloc.isLoading,
             progressIndicator: const Center(child: LottieLoadingWidget()),
@@ -94,6 +94,7 @@ class _CategoryScreenState extends State<CategoryScreen>
                                           progressIndicatorBuilder: (context,
                                                   url, downloadProgress) =>
                                               CircularProgressIndicator(
+                                                color: ColorManager.primaryColor,
                                                   value: downloadProgress
                                                       .progress),
 

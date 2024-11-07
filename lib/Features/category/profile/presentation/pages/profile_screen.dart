@@ -15,7 +15,6 @@ import 'package:pesticides/Features/category/profile/presentation/widgets/edit_p
 import 'package:pesticides/Features/category/profile/presentation/widgets/pick_image_widget.dart';
 import 'package:pesticides/Core/component/custom_dialog.dart';
 import 'package:pesticides/Features/category/presentation/manager/category_cubit.dart';
-
 import '../../../../../Core/component/text_feild_custom.dart';
 import '../manager/profile_cubit.dart';
 
@@ -45,6 +44,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     fit: BoxFit.cover,
                   ),
                 ),
+
               ),
               SafeArea(
                 child: SingleChildScrollView(

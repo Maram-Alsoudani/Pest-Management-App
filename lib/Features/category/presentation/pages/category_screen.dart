@@ -39,11 +39,7 @@ class _CategoryScreenState extends State<CategoryScreen>
     bloc.doAnimation(this);
   }
 
-  @override
-  dispose() {
-    bloc.animationController.dispose();
-    super.dispose();
-  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -100,6 +96,7 @@ class _CategoryScreenState extends State<CategoryScreen>
                                               CircularProgressIndicator(
                                                   value: downloadProgress
                                                       .progress),
+
                                           errorWidget:
                                               (context, url, error) =>
                                                   ImageProfile(radius: 40.r),

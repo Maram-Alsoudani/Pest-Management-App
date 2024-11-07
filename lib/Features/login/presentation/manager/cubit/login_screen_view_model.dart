@@ -33,6 +33,7 @@ class LoginScreenViewModel extends Cubit<LoginStates> {
       CurvedAnimation(
         parent: animationController,
         curve: Curves.easeInOut,
+
       ),
     );
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -64,7 +65,8 @@ class LoginScreenViewModel extends Cubit<LoginStates> {
   void clearData() {
     emailController.clear();
     passwordController.clear();
-    animationController.dispose();
+    // animationController.dispose();
+
   }
 
 }

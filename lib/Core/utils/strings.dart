@@ -74,4 +74,6 @@ class StringManager {
       "User not found. Please register and choose the right user type for you.";
   static const String wrongPassword = "Wrong password provided for that user.";
   static const String yes = "Yes";
+  static const String editProfile = "Edit Profile";
+  static const String edit = "Edit";
 }

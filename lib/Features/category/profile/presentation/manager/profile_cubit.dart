@@ -97,6 +97,7 @@ class ProfileCubit extends Cubit<ProfileState> {
     either.fold(
       (f) {
         isLoading = false;
+        print("${ f.errorMessage.toString()}");
         emit(ProfileUpdateError(error: f));
       },
       (_) {
@@ -117,6 +118,7 @@ class ProfileCubit extends Cubit<ProfileState> {
       editDataImage();
       emit(ProfileChangeImage());
     } else {
+      print('error');
       image = null;
       emit(ProfileChangeImage());
     }

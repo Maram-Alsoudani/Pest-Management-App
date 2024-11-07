@@ -16,8 +16,7 @@ import '../category_data_source.dart';
 @Injectable(as: CategoryDataSource)
 class CategoryDataSourceImpl implements CategoryDataSource {
   @override
-  Future<Either<Failure, UserAndAdminModelDto>>
-      readUserOrAdminFromFireStore() async {
+  Future<Either<Failure, UserAndAdminModelDto>> readUserOrAdminFromFireStore() async {
     try {
       var connectivityResult = await Connectivity().checkConnectivity();
       if (connectivityResult.contains(ConnectivityResult.wifi) ||
@@ -76,19 +75,34 @@ class CategoryDataSourceImpl implements CategoryDataSource {
       if (connectivityResult.contains(ConnectivityResult.wifi) ||
           connectivityResult.contains(ConnectivityResult.mobile)) {
         var user = SharedPrefsLocal.getData(key: StringManager.keyUserAdmin);
-        var dataUserCollection = await FirebaseUtils.getUserCollection(user?.type ?? "")
+        var dataUserCollection =
+        await FirebaseUtils.getUserCollection(user?.type ?? "")
             .doc(user!.id)
             .get();
 
         String currentImageUrl = dataUserCollection.data()?.image ?? "";
+
+        // Delete the existing image if it exists
         if (currentImageUrl.isNotEmpty) {
-          final ref = FirebaseStorage.instance.refFromURL(currentImageUrl);
-          await ref.delete();
+          try {
+            final ref = FirebaseStorage.instance.refFromURL(currentImageUrl);
+            await ref.delete();
+          } catch (error) {
+            // Ignore 'object-not-found' error and proceed
+            if (error.toString().contains('object-not-found')) {
+              print("No object exists at the desired reference, continuing...");
+            } else {
+              rethrow;
+            }
+          }
         }
 
+        // Proceed to upload the new image
         String imageUrl = "";
-        var userLocal = SharedPrefsLocal.getData(key: StringManager.keyUserAdmin);
-        final result = await FirebaseUtils.addImageToFirebaseStorage(File(image!));
+        var userLocal =
+        SharedPrefsLocal.getData(key: StringManager.keyUserAdmin);
+        final result =
+        await FirebaseUtils.addImageToFirebaseStorage(File(image!));
         result.fold(
               (_) {},
               (url) => imageUrl = url,

@@ -37,7 +37,6 @@ class LoginDataSourceImpl implements LoginDataSource {
         if (userCredential.user != null) {
           var userData = querySnapshot.docs.first.data();
           var user = UserAndAdminModelDto.fromFireStore(userData);
-          print(user.id);
           // Save user to shared preference
           SharedPrefsLocal.saveData(
               key: StringManager.keyUserAdmin, model: user);

@@ -41,7 +41,7 @@ class _CategoryScreenState extends State<CategoryScreen>
 
   @override
   dispose() {
-    bloc.animationController.dispose(); // you need this
+    bloc.animationController.dispose();
     super.dispose();
   }
 

@@ -33,14 +33,17 @@ class _EngOwnerScreenState extends State<EngOwnerScreen> with SingleTickerProvid
     Future.delayed(Duration(milliseconds: 300), () {
       setState(() {
         _opacity = 1.0;
-
       });
       _animationController.forward();
     });
-
   }
-  
-  
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -60,47 +63,44 @@ class _EngOwnerScreenState extends State<EngOwnerScreen> with SingleTickerProvid
           // Content on top of the background image
           Padding(
             padding: const EdgeInsets.all(16.0), // Add some padding
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                SizedBox(height: 50.h),
-                AnimatedOpacity(
-                  opacity: _opacity,
-                  duration: Duration(seconds: 2),
-                  curve: Curves.easeIn,
-                  child: Image.asset(
-                    ImageManager.logoTeam,
-                    height: 220.h,
-                    width: 400.w,
-                    fit: BoxFit.fill,
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  SizedBox(height: 50.h),
+                  AnimatedOpacity(
+                    opacity: _opacity,
+                    duration: Duration(seconds: 2),
+                    curve: Curves.easeIn,
+                    child: Image.asset(
+                      ImageManager.logoTeam,
+                      height: 220.h,
+                      width: 400.w,
+                      fit: BoxFit.fill,
+                    ),
                   ),
-                ),
-                SizedBox(
-                  height: 30.h,
-                ),
-                SlideTransition(
-                  position: _slideAnimation,
-                  child: CustomButton(
-                    name: 'Engineer',
-                    image: ImageManager.engIcon,
-                    routeName: RoutesManger.routeNameLogin,
-                    type: "user",
+                  SizedBox(height: 30.h),
+                  SlideTransition(
+                    position: _slideAnimation,
+                    child: CustomButton(
+                      name: 'Engineer',
+                      image: ImageManager.engIcon,
+                      routeName: RoutesManger.routeNameLogin,
+                      type: "user",
+                    ),
                   ),
-                ),
-                SizedBox(
-                  height: 30.h,
-                ),
-                SlideTransition(
-                  position: _slideAnimation,
-
-                  child: CustomButton(
-                    name: 'Administrator',
-                    image: ImageManager.ownerIcon,
-                    routeName: RoutesManger.routeNameLogin,
-                    type: "admin",
+                  SizedBox(height: 30.h),
+                  SlideTransition(
+                    position: _slideAnimation,
+                    child: CustomButton(
+                      name: 'Administrator',
+                      image: ImageManager.ownerIcon,
+                      routeName: RoutesManger.routeNameLogin,
+                      type: "admin",
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ],
@@ -108,3 +108,4 @@ class _EngOwnerScreenState extends State<EngOwnerScreen> with SingleTickerProvid
     );
   }
 }
+

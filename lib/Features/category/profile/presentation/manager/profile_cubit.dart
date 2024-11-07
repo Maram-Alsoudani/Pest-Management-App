@@ -23,8 +23,7 @@ class ProfileCubit extends Cubit<ProfileState> {
   ProfileCubit(
       {required this.readUserOrAdminFromFireStoreUseCase,
       required this.editUserDataUserCase,
-      required this.editImageInFireStoreUseCase
-      })
+      required this.editImageInFireStoreUseCase})
       : super(ProfileInitial()) {
     getUserData();
   }
@@ -71,33 +70,37 @@ class ProfileCubit extends Cubit<ProfileState> {
   Future<void> editDataUser() async {
     isLoading = true;
     emit(ProfileUpdateLoading());
-    UserAndAdminModelEntity user=UserAndAdminModelEntity(
+    UserAndAdminModelEntity user = UserAndAdminModelEntity(
         image: userProfileImage,
-        type:  typeController.text,
+        type: typeController.text,
         userName: userNameController.text,
         phone: phoneController.text,
         email: emailController.text);
     var either = await editUserDataUserCase.invoke(user);
     either.fold(
-          (f) {
+      (f) {
         isLoading = false;
         emit(ProfileUpdateError(error: f));
       },
-          (_) {
+      (_) {
+        isLoading = false;
         emit(ProfileUpdateSuccess());
       },
     );
   }
+
   Future<void> editDataImage() async {
     isLoading = true;
     emit(ProfileUpdateLoading());
-    var either = await editImageInFireStoreUseCase.invoke(image?.path??"");
+    var either = await editImageInFireStoreUseCase.invoke(image?.path ?? "");
     either.fold(
-          (f) {
+      (f) {
         isLoading = false;
         emit(ProfileUpdateError(error: f));
       },
-          (_) {
+      (_) {
+        isLoading = false;
+
         emit(ProfileUpdateSuccess());
       },
     );
@@ -117,6 +120,4 @@ class ProfileCubit extends Cubit<ProfileState> {
       emit(ProfileChangeImage());
     }
   }
-
-
 }

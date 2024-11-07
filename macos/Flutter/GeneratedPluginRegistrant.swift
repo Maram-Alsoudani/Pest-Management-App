@@ -14,7 +14,7 @@ import firebase_storage
 import flutter_image_compress_macos
 import path_provider_foundation
 import shared_preferences_foundation
-import sqflite_darwin
+import sqflite
 
 func RegisterGeneratedPlugins(registry: FlutterPluginRegistry) {
   FLTFirebaseFirestorePlugin.register(with: registry.registrar(forPlugin: "FLTFirebaseFirestorePlugin"))

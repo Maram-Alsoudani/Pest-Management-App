@@ -5,17 +5,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pesticides/Config/routes/routes_manger.dart';
 import 'package:pesticides/Core/component/button_custom.dart';
-import 'package:pesticides/Core/component/lottie_loading_widget.dart';
 import 'package:pesticides/Core/component/validators.dart';
 import 'package:pesticides/Core/utils/colors.dart';
 import 'package:pesticides/Core/utils/images.dart';
 import 'package:pesticides/Core/utils/strings.dart';
+import 'package:pesticides/Features/category/profile/presentation/widgets/build_info_card.dart';
 import 'package:pesticides/Features/category/profile/presentation/widgets/pick_image_widget.dart';
-import 'package:pesticides/Core/component/show_model_picker_image.dart';
 import 'package:pesticides/Core/component/custom_dialog.dart';
 import 'package:pesticides/Features/category/presentation/manager/category_cubit.dart';
-import 'package:pesticides/Features/eng_owner_screen/presentation/widget/custom_button.dart';
-import 'package:pesticides/Features/register/presentation/widgets/pick_Image_widget.dart';
 
 import '../../../../../Core/component/text_feild_custom.dart';
 import '../manager/profile_cubit.dart';
@@ -63,13 +60,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           children: [
                             PickImageWidget(
                               icon: Icons.add_a_photo,
-                              imageUrl: cubit.userProfileImage?.isNotEmpty == true ? cubit.userProfileImage : 'path_to_fallback_image', // Handle empty or null URL
+                              imageUrl: cubit.userProfileImage?.isNotEmpty ==
+                                      true
+                                  ? cubit.userProfileImage
+                                  : 'path_to_fallback_image', // Handle empty or null URL
                               imagePath: cubit.image,
                               onImagePicked: cubit.pickImage,
                             ),
-
                           ],
-
                         ),
                         SizedBox(height: 35.h),
                         Container(
@@ -78,28 +76,25 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             shrinkWrap: true,
                             physics: const NeverScrollableScrollPhysics(),
                             children: [
-                              _buildInfoCard(
-                                context,
+                              BuildInfoCard(
                                 title: StringManager.role,
                                 value: cubit.typeController.text,
                               ),
-                              _buildInfoCard(
-                                context,
+                              BuildInfoCard(
                                 title: StringManager.userName,
                                 value: cubit.userNameController.text,
                               ),
-                              _buildInfoCard(
-                                context,
+                              BuildInfoCard(
                                 title: StringManager.phone,
                                 value: cubit.phoneController.text,
                               ),
-                              _buildInfoCard(
-                                context,
+                              BuildInfoCard(
                                 title: StringManager.email,
                                 value: cubit.emailController.text,
                               ),
                               Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 13.w, vertical: 10.h),
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 13.w, vertical: 10.h),
                                 child: ButtonCustom(
                                   buttonName: "Edit",
                                   onTap: () {
@@ -129,7 +124,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 children: [
                   IconButton(
                     onPressed: () => Navigator.pop(context),
-                    icon: const Icon(CupertinoIcons.back, color: ColorManager.whiteColor),
+                    icon: const Icon(CupertinoIcons.back,
+                        color: ColorManager.whiteColor),
                   ),
                   IconButton(
                     onPressed: () {
@@ -143,29 +139,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           Navigator.pushNamedAndRemoveUntil(
                             context,
                             RoutesManger.routeNameLogin,
-                                (route) => false,
+                            (route) => false,
                           );
                         },
                       );
                     },
-                    icon: const Icon(CupertinoIcons.square_arrow_right, color: ColorManager.whiteColor),
+                    icon: const Icon(CupertinoIcons.square_arrow_right,
+                        color: ColorManager.whiteColor),
                   ),
                 ],
               ),
             ),
           ),
         ],
-      ),
-    );
-  }
-
-  Widget _buildInfoCard(BuildContext context, {required String title, required String value}) {
-    return Card(
-      margin: EdgeInsets.symmetric(vertical: 10.h, horizontal: 20.w),
-      child: ListTile(
-        leading: const Icon(CupertinoIcons.info, color: ColorManager.primaryColor),
-        title: Text(title),
-        subtitle: Text(value),
       ),
     );
   }
@@ -179,7 +165,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
           backgroundColor: ColorManager.backgroundColor,
           title: Text(
             'Edit Profile',
-            style: Theme.of(context).textTheme.titleSmall!.copyWith(fontSize: 24.sp),
+            style: Theme.of(context)
+                .textTheme
+                .titleSmall!
+                .copyWith(fontSize: 24.sp),
           ),
           content: Form(
             key: dialogFormKey, // Assign the dialog-specific form key here
@@ -199,14 +188,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   controller: cubit.phoneController,
                 ),
                 SizedBox(height: 8.h),
-
               ],
             ),
           ),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: Text('Cancel', style: Theme.of(context).textTheme.titleSmall),
+              child:
+                  Text('Cancel', style: Theme.of(context).textTheme.titleSmall),
             ),
             ButtonCustom(
               buttonName: "Save",
@@ -224,4 +213,3 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 }
-

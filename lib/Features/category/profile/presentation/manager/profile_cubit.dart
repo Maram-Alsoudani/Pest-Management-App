@@ -36,6 +36,11 @@ class ProfileCubit extends Cubit<ProfileState> {
   bool isLoading = false;
   String? userProfileImage;
 
+  //todo====================Added by mohamed ali =======================
+  static ProfileCubit get(context) => BlocProvider.of<ProfileCubit>(context);
+  final dialogFormKey = GlobalKey<FormState>();
+  //todo================================================================
+
   Future<void> getUserData() async {
     isLoading = true;
     emit(ProfileLoading());

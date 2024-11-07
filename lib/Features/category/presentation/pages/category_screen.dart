@@ -29,7 +29,6 @@ class CategoryScreen extends StatefulWidget {
 
 class _CategoryScreenState extends State<CategoryScreen>
     with SingleTickerProviderStateMixin {
-
   late CategoryCubit bloc;
 
   @override
@@ -38,11 +37,13 @@ class _CategoryScreenState extends State<CategoryScreen>
     bloc = BlocProvider.of<CategoryCubit>(context);
     bloc.getUserData();
     bloc.doAnimation(this);
-
-
   }
 
-
+  @override
+  dispose() {
+    bloc.animationController.dispose(); // you need this
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -72,120 +73,144 @@ class _CategoryScreenState extends State<CategoryScreen>
             progressIndicator: const Center(child: LottieLoadingWidget()),
             child: Scaffold(
               body: Padding(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 25, horizontal: 10),
-                child: state is CategorySuccessState
-                ? Column(
-                  children: [
-              SlideTransition(
-              position: bloc.slideAnimation,
-                child: Row(
-                  children: [
-                    state.userAndAdminModelEntity.image != null && state.userAndAdminModelEntity.image!.isNotEmpty
-                        ? CircleAvatar(
-                      radius: 40.r,
-                      backgroundColor: Colors.grey.shade200,
-                      backgroundImage: CachedNetworkImageProvider(state.userAndAdminModelEntity.image!),
-                    )
-                        : ImageProfile(radius: 40.r), // Replace with your fallback widget
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 25, horizontal: 10),
+                  child: state is CategorySuccessState
+                      ? Column(
+                          children: [
+                            SlideTransition(
+                              position: bloc.slideAnimation,
+                              child: Row(
+                                children: [
+                                  state.userAndAdminModelEntity.image != null &&
+                                          state.userAndAdminModelEntity.image!
+                                              .isNotEmpty
+                                      ? CircleAvatar(
+                                          radius: 40.r,
+                                          backgroundColor: Colors.grey.shade200,
+                                          backgroundImage:
+                                              CachedNetworkImageProvider(state
+                                                  .userAndAdminModelEntity
+                                                  .image!),
+                                        )
+                                      : ImageProfile(
+                                          radius: 40
+                                              .r), // Replace with your fallback widget
 
-                    SizedBox(width: 20.w),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          state.userAndAdminModelEntity.userName ?? "",
-                          style: Theme.of(context).textTheme.titleSmall!.copyWith(fontSize: FontSize.s24.sp),
-                        ),
-                        Text(
-                          state.userAndAdminModelEntity.type ?? "",
-                          style: Theme.of(context).textTheme.titleSmall,
-                        ),
-                      ],
-                    ),
-                    Spacer(),
-                    PopupMenuButton<String>(
-                      icon: Icon(Icons.more_vert, size: 38.r),
-                      onSelected: (String choice) {
-                        if (choice == StringManager.profile) {
-                          Navigator.pushNamed(context, RoutesManger.routeNameProfile);
-                        } else if (choice == StringManager.logout) {
-                          DialogUtils.showAlertDialog(
-                            context: context,
-                            title: StringManager.logout,
-                            message: StringManager.logoutMessage,
-                            posActionTitle: StringManager.yes,
-                            negActionTitle: StringManager.no,
-                            posAction: () {
-                              Navigator.pushNamedAndRemoveUntil(
-                                context,
-                                RoutesManger.routeNameLogin,
-                                    (route) => false,
-                              );
-                              FirebaseAuth.instance.signOut();
-                              SharedPrefsLocal.prefs.clear();
-                            },
-                          );
-                        }
-                      },
-                      itemBuilder: (BuildContext context) {
-                        return [StringManager.profile, StringManager.logout]
-                            .map((String choice) {
-                          return PopupMenuItem<String>(
-                            value: choice,
-                            child: Text(choice),
-                          );
-                        }).toList();
-                      },
-                    ),
-                  ],
-                ),
-              )
-              ,
-                    SizedBox(height: 40.h),
-                    Expanded(
-                      child: ListView.builder(
-                        itemCount: CategoryModel.images.length,
-                        itemBuilder: (context, index) {
-                          return ScaleTransition(
-                            scale: Tween<double>(begin: 0.0, end: 1.0).animate(
-                              CurvedAnimation(
-                                parent: bloc.animationController,
-                                curve: Interval(
-                                  index /
-                                      CategoryModel.images
-                                          .length, // Start based on index
-                                  1.0,
-                                  curve: Curves.easeInOut,
-                                ),
+                                  SizedBox(width: 20.w),
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        state.userAndAdminModelEntity
+                                                .userName ??
+                                            "",
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .titleSmall!
+                                            .copyWith(
+                                                fontSize: FontSize.s24.sp),
+                                      ),
+                                      Text(
+                                        state.userAndAdminModelEntity.type ??
+                                            "",
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .titleSmall,
+                                      ),
+                                    ],
+                                  ),
+                                  Spacer(),
+                                  PopupMenuButton<String>(
+                                    icon: Icon(Icons.more_vert, size: 38.r),
+                                    onSelected: (String choice) {
+                                      if (choice == StringManager.profile) {
+                                        Navigator.pushNamed(context,
+                                            RoutesManger.routeNameProfile);
+                                      } else if (choice ==
+                                          StringManager.logout) {
+                                        DialogUtils.showAlertDialog(
+                                          context: context,
+                                          title: StringManager.logout,
+                                          message: StringManager.logoutMessage,
+                                          posActionTitle: StringManager.yes,
+                                          negActionTitle: StringManager.no,
+                                          posAction: () {
+                                            Navigator.pushNamedAndRemoveUntil(
+                                              context,
+                                              RoutesManger.routeNameLogin,
+                                              (route) => false,
+                                            );
+                                            FirebaseAuth.instance.signOut();
+                                            SharedPrefsLocal.prefs.clear();
+                                          },
+                                        );
+                                      }
+                                    },
+                                    itemBuilder: (BuildContext context) {
+                                      return [
+                                        StringManager.profile,
+                                        StringManager.logout
+                                      ].map((String choice) {
+                                        return PopupMenuItem<String>(
+                                          value: choice,
+                                          child: Text(choice),
+                                        );
+                                      }).toList();
+                                    },
+                                  ),
+                                ],
                               ),
                             ),
-                            child: InkWell(
-                              onTap: () {
-                                if (index == 0) {
-                                  Navigator.pushNamed(
-                                      context, RoutesManger.routeNameSites);
-                                }
-                                if (index == 1) {
-                                  Navigator.pushNamed(context,
-                                      RoutesManger.routeNamePreviewReport);
-                                }
-                                if (index == 2) {
-                                  Navigator.pushNamed(
-                                      context, RoutesManger.routeNameInventory);
-                                }
-                              },
-                              child: CategoryItem(
-                                categoryModel: CategoryModel.images[index],
+                            SizedBox(height: 40.h),
+                            Expanded(
+                              child: ListView.builder(
+                                itemCount: CategoryModel.images.length,
+                                itemBuilder: (context, index) {
+                                  return ScaleTransition(
+                                    scale: Tween<double>(begin: 0.0, end: 1.0)
+                                        .animate(
+                                      CurvedAnimation(
+                                        parent: bloc.animationController,
+                                        curve: Interval(
+                                          index /
+                                              CategoryModel.images
+                                                  .length, // Start based on index
+                                          1.0,
+                                          curve: Curves.easeInOut,
+                                        ),
+                                      ),
+                                    ),
+                                    child: InkWell(
+                                      onTap: () {
+                                        if (index == 0) {
+                                          Navigator.pushNamed(context,
+                                              RoutesManger.routeNameSites);
+                                        }
+                                        if (index == 1) {
+                                          Navigator.pushNamed(
+                                              context,
+                                              RoutesManger
+                                                  .routeNamePreviewReport);
+                                        }
+                                        if (index == 2) {
+                                          Navigator.pushNamed(context,
+                                              RoutesManger.routeNameInventory);
+                                        }
+                                      },
+                                      child: CategoryItem(
+                                        categoryModel:
+                                            CategoryModel.images[index],
+                                      ),
+                                    ),
+                                  );
+                                },
                               ),
                             ),
-                          );
-                        },
-                      ),
-                    ),
-                  ],
-                ):SizedBox()
-              ),
+                          ],
+                        )
+                      : SizedBox()),
             ),
           );
         },

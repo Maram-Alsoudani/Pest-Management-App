@@ -26,11 +26,18 @@ class CategoryCubit extends Cubit<CategoryState> {
     either.fold(
       (f) {
         isLoading = false;
-        emit(CategoryFaluireState(error: f));
+        emit(
+            CategoryFaluireState(error: Failure(errorMessage: f.errorMessage)));
       },
       (r) {
         isLoading = false;
-        emit(CategorySuccessState(userAndAdminModelEntity: r));
+        emit(CategorySuccessState(
+            userAndAdminModelEntity: UserAndAdminModelEntity(
+                image: r.image,
+                type: r.type,
+                userName: r.userName,
+                phone: r.phone,
+                email: r.phone)));
         WidgetsBinding.instance.addPostFrameCallback((_) {
           animationController.forward();
         });

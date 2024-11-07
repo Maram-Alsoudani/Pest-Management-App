@@ -1,4 +1,6 @@
 import 'dart:io';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -8,6 +10,7 @@ import 'package:pesticides/Config/routes/routes_manger.dart';
 import 'package:pesticides/Core/component/button_custom.dart';
 import 'package:pesticides/Core/component/lottie_loading_widget.dart';
 import 'package:pesticides/Core/component/validators.dart';
+import 'package:pesticides/Core/utils/SharedPrefsLocal.dart';
 import 'package:pesticides/Core/utils/colors.dart';
 import 'package:pesticides/Core/utils/images.dart';
 import 'package:pesticides/Core/utils/strings.dart';
@@ -175,7 +178,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         IconButton(
-                          onPressed: () => Navigator.pop(context),
+                          onPressed: () {
+                            Navigator.pushReplacementNamed(
+                              context,
+                              RoutesManger.routeNameCategoryScreen,
+                            );
+
+                          },
                           icon: const Icon(CupertinoIcons.back,
                               color: ColorManager.whiteColor),
                         ),
@@ -193,6 +202,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   RoutesManger.routeNameLogin,
                                   (route) => false,
                                 );
+                                SharedPrefsLocal.prefs.clear();
+                                FirebaseAuth.instance.signOut();
                               },
                             );
                           },

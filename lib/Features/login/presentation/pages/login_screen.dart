@@ -5,6 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:pesticides/Config/routes/routes_manger.dart';
 import 'package:pesticides/Core/component/button_custom.dart';
+import 'package:pesticides/Core/component/lottie_loading_widget.dart';
 import 'package:pesticides/Core/component/text_feild_custom.dart';
 import 'package:pesticides/Core/component/validators.dart';
 import 'package:pesticides/Features/login/presentation/manager/cubit/login_screen_view_model.dart';
@@ -32,6 +33,7 @@ class _LoginScreenState extends State<LoginScreen>
     viewModel = LoginScreenViewModel.get(context);
     viewModel.initializeAnimations(this);
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -73,14 +75,10 @@ class _LoginScreenState extends State<LoginScreen>
         },
         builder: (context, state) {
           return ModalProgressHUD(
-            opacity: 0.2,
+            opacity: 0.4,
             color: ColorManager.greyShade3,
             inAsyncCall: viewModel.isLoaded,
-            progressIndicator: Center(
-              child: CircularProgressIndicator(
-                color: ColorManager.primaryColor,
-              ),
-            ),
+            progressIndicator: const LottieLoadingWidget(),
             child: Scaffold(
               body: Stack(
                 children: [

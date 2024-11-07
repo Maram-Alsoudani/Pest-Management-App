@@ -53,17 +53,17 @@ class _CategoryScreenState extends State<CategoryScreen>
           if (state is CategoryFaluireState) {
             DialogUtils.showAlertDialog(
                 context: context,
-
                 title: StringManager.failed,
                 message: state.error.errorMessage,
                 posActionTitle: StringManager.ok,
                 posAction: () {
                   Navigator.pushNamedAndRemoveUntil(
                     context,
-                    RoutesManger.routeNameEngOwnerScreen,
+                    RoutesManger.routeNameLogin,
                     (route) => false,
                   );
                   SharedPrefsLocal.prefs.clear();
+                  FirebaseAuth.instance.signOut();
                 });
           }
         },
@@ -87,14 +87,24 @@ class _CategoryScreenState extends State<CategoryScreen>
                                   state.userAndAdminModelEntity.image != null &&
                                           state.userAndAdminModelEntity.image!
                                               .isNotEmpty
-                                      ? CircleAvatar(
-                                          radius: 40.r,
-                                          backgroundColor: Colors.grey.shade200,
-                                          backgroundImage:
-                                              CachedNetworkImageProvider(state
-                                                  .userAndAdminModelEntity
-                                                  .image!),
-                                        )
+                                      ? ClipRRect(
+                                    borderRadius: BorderRadius.circular(50.r),
+                                        child: CachedNetworkImage(
+                                          width: 100.w,
+                                          height: 100.h,
+                                          fit: BoxFit.fill,
+                                          imageUrl: state
+                                              .userAndAdminModelEntity.image!,
+                                          progressIndicatorBuilder: (context,
+                                                  url, downloadProgress) =>
+                                              CircularProgressIndicator(
+                                                  value: downloadProgress
+                                                      .progress),
+                                          errorWidget:
+                                              (context, url, error) =>
+                                                  ImageProfile(radius: 40.r),
+                                        ),
+                                      )
                                       : ImageProfile(
                                           radius: 40
                                               .r), // Replace with your fallback widget

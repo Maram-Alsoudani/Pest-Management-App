@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lottie/lottie.dart';
+import 'package:pesticides/Core/utils/images.dart';
 
 class LottieLoadingWidget extends StatelessWidget {
   final double width;
@@ -8,16 +9,17 @@ class LottieLoadingWidget extends StatelessWidget {
 
   const LottieLoadingWidget({
     Key? key,
-    this.width = 100,
-    this.height = 50,
+    this.width = 200,
+    this.height = 200,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Lottie.asset(
-      'assets/animations/loading.json',
+        ImageManager.loadingLottie,
       width: width.r,
       height: height.r,
+      fit: BoxFit.cover
     );
   }
 }

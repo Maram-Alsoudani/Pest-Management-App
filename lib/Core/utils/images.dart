@@ -12,4 +12,6 @@ class ImageManager {
   static const String office = "assets/images/office 1.png";
   static const String report = "assets/images/report 1.png";
   static const String background = "assets/images/background.png";
+
+  static const String loadingLottie = "assets/animations/loading2.json";
 }

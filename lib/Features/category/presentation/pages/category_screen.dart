@@ -53,6 +53,7 @@ class _CategoryScreenState extends State<CategoryScreen>
           if (state is CategoryFaluireState) {
             DialogUtils.showAlertDialog(
                 context: context,
+
                 title: StringManager.failed,
                 message: state.error.errorMessage,
                 posActionTitle: StringManager.ok,
@@ -62,6 +63,7 @@ class _CategoryScreenState extends State<CategoryScreen>
                     RoutesManger.routeNameEngOwnerScreen,
                     (route) => false,
                   );
+                  SharedPrefsLocal.prefs.clear();
                 });
           }
         },

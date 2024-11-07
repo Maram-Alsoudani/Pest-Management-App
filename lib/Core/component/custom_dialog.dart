@@ -95,6 +95,7 @@ class DialogUtils {
     Function? posAction,
     Function? negAction,
     Function? thirdAction,
+    bool? barrierDismissible,
     Color posColor = ColorManager.dialogBlueColor,
     Color negColor = ColorManager.dialogRedColor,
     Color thirdColor = ColorManager.dialogBlueColor,
@@ -180,6 +181,7 @@ class DialogUtils {
     if (Platform.isIOS || Platform.isMacOS) {
       // iOS Style
       showCupertinoDialog(
+        barrierDismissible:barrierDismissible??false ,
         context: context,
         builder: (BuildContext context) {
           return CupertinoTheme(
@@ -192,6 +194,7 @@ class DialogUtils {
                   : ColorManager.whiteColor.withOpacity(0.8),
             ),
             child: CupertinoAlertDialog(
+
               title: Padding(
                 padding: const EdgeInsets.only(bottom: 8.0),
                 child: Center(
@@ -232,6 +235,8 @@ class DialogUtils {
     } else {
       // Android Style
       showDialog(
+        barrierDismissible:barrierDismissible??false ,
+
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(

@@ -26,8 +26,7 @@ class _InventoryScreenState extends State<InventoryScreen> {
     super.initState();
     bloc = InventoryViewModelCubit.get(context);
     bloc.getMaterails();
-    bloc.searchController
-        .addListener(bloc.filterItems); // Listen for search input changes
+    bloc.searchController.addListener(bloc.searchMethod);
   }
 
   @override
@@ -35,27 +34,60 @@ class _InventoryScreenState extends State<InventoryScreen> {
     return BlocConsumer<InventoryViewModelCubit, InventoryViewModelState>(
       listener: (context, state) {
         if (state is InventoryAddedMaterailSuccess) {
-          DialogUtils.showAlertDialog(
-            context: context,
-            title: StringManager.success,
-            message: "Save Successfully",
-            posActionTitle: StringManager.ok,
-          );
-          bloc.getMaterails();
+          // Safe to show dialog
+          if (mounted) {
+            DialogUtils.showAlertDialog(
+              context: context,
+              title: StringManager.success,
+              message: "Added Successfully",
+              posActionTitle: StringManager.ok,
+            );
+          }
         } else if (state is InventoryAddedMaterailError) {
-          DialogUtils.showAlertDialog(
-            context: context,
-            title: StringManager.failed,
-            message: state.error.errorMessage,
-            posActionTitle: StringManager.ok,
-          );
+          if (mounted) {
+            DialogUtils.showAlertDialog(
+              context: context,
+              title: StringManager.failed,
+              message: state.error.errorMessage,
+              posActionTitle: StringManager.ok,
+            );
+          }
         } else if (state is InventoryGetMaterailError) {
-          DialogUtils.showAlertDialog(
-            context: context,
-            title: StringManager.failed,
-            message: state.error.errorMessage,
-            posActionTitle: StringManager.ok,
-          );
+          if (mounted) {
+            DialogUtils.showAlertDialog(
+              context: context,
+              title: StringManager.failed,
+              message: state.error.errorMessage,
+              posActionTitle: StringManager.ok,
+            );
+          }
+        } else if (state is InventoryUpdateMaterailError) {
+          if (mounted) {
+            DialogUtils.showAlertDialog(
+              context: context,
+              title: StringManager.failed,
+              message: state.error.errorMessage,
+              posActionTitle: StringManager.ok,
+            );
+          }
+        } else if (state is InventoryUpdateMaterailSuccess) {
+          if (mounted) {
+            DialogUtils.showAlertDialog(
+              context: context,
+              title: StringManager.success,
+              message: "Updated Successfully",
+              posActionTitle: StringManager.ok,
+            );
+          }
+        }else if (state is InventoryDeleteMaterailSuccess) {
+          if (mounted) {
+            DialogUtils.showAlertDialog(
+              context: context,
+              title: StringManager.success,
+              message: "Deleted Successfully",
+              posActionTitle: StringManager.ok,
+            );
+          }
         }
       },
       builder: (context, state) {
@@ -80,9 +112,16 @@ class _InventoryScreenState extends State<InventoryScreen> {
                     showDialog(
                       context: context,
                       builder: (context) {
-                        return AddedMaterailDialog(
+                        return AddedOrEditMaterailDialog(
                           title: StringManager.addMaterial,
                           buttonName: "Add",
+                          onTap: () {
+                            InventoryViewModelCubit.get(context).addedMaterails();
+                            InventoryViewModelCubit.get(context).nameController.clear();
+                            InventoryViewModelCubit.get(context).quantityController.clear();
+                            Navigator.pop(context);
+                            bloc.getMaterails();
+                          },
                         );
                       },
                     );
@@ -113,16 +152,14 @@ class _InventoryScreenState extends State<InventoryScreen> {
                       itemCount: bloc.filteredItems.length,
                       itemBuilder: (context, index) {
                         final item = bloc.filteredItems[index];
-                        final isUnavailable = (item["quantity"] is int &&
-                            item["quantity"] == 0) ||
-                            (item["quantity"] is String &&
-                                int.parse(item["quantity"]) == 0);
+                        final isUnavailable =
+                            (item.quantity is int && item.quantity == 0) ||
+                                (item.quantity is String &&
+                                    int.parse(item.quantity as String) == 0);
                         return Padding(
-
                           padding: EdgeInsets.symmetric(vertical: 8.0.r),
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(16.0.r),
-
                             child: Container(
                               decoration: BoxDecoration(
                                 color: ColorManager.whiteColor,
@@ -137,11 +174,13 @@ class _InventoryScreenState extends State<InventoryScreen> {
                                   children: [
                                     SlidableAction(
                                       onPressed: (context) {
-                                        bloc.deleteMaterails(item["name"]);
+                                        bloc.deleteMaterails(item.id);
+                                        bloc.getMaterails();
 
 
                                       },
-                                      backgroundColor: ColorManager.primaryColor,
+                                      backgroundColor:
+                                      ColorManager.primaryColor,
                                       foregroundColor: ColorManager.whiteColor,
                                       icon: Icons.delete,
                                       label: StringManager.delete,
@@ -150,15 +189,22 @@ class _InventoryScreenState extends State<InventoryScreen> {
                                 ),
                                 child: GestureDetector(
                                   onTap: () {
-                                    bloc.nameController.text = item["name"];
+                                    bloc.nameController.text = item.name ?? "";
                                     bloc.quantityController.text =
-                                        item["quantity"].toString();
+                                        item.quantity.toString();
                                     showDialog(
                                       context: context,
                                       builder: (context) {
-                                        return AddedMaterailDialog(
+                                        return AddedOrEditMaterailDialog(
                                           title: StringManager.edit,
                                           buttonName: StringManager.save,
+                                          onTap: () {
+                                            InventoryViewModelCubit.get(context).updateMaterails(item.id);
+                                            InventoryViewModelCubit.get(context).nameController.clear();
+                                            InventoryViewModelCubit.get(context).quantityController.clear();
+                                            Navigator.pop(context);
+                                            bloc.getMaterails();
+                                          },
                                         );
                                       },
                                     );

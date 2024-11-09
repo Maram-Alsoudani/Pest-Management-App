@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pesticides/Core/utils/colors.dart';
+import 'package:pesticides/Features/inventory/domain/entities/materail_enitiy.dart';
 import 'package:pesticides/Features/inventory/presentation/pages/inventory_screen.dart';
 
 class MaterailItem extends StatelessWidget {
@@ -13,7 +14,7 @@ class MaterailItem extends StatelessWidget {
   });
 
   final bool isUnavailable;
-  final Map<String,dynamic> item;
+  final MaterailEntity item;
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +37,7 @@ class MaterailItem extends StatelessWidget {
               color: ColorManager.primaryColor,
             ),
             title: Text(
-              item["name"],
+              item.name??"",
               style: TextStyle(
                 fontSize: 20.sp,
                 color: isUnavailable
@@ -47,7 +48,7 @@ class MaterailItem extends StatelessWidget {
                     : TextDecoration.none,
               ),
             ),
-            trailing: Text('Quantity: ${item["quantity"].toString()}'),
+            trailing: Text('Quantity: ${item.quantity.toString()}'),
           ),
         ),
       ),

@@ -10,11 +10,12 @@ import 'package:pesticides/Features/inventory/presentation/manager/inventory_vie
 
 
 
-class AddedMaterailDialog extends StatelessWidget {
+class AddedOrEditMaterailDialog extends StatelessWidget {
   final String buttonName;
   final String title;
+  final Function onTap;
 
-  const AddedMaterailDialog({super.key, required this.buttonName, required this.title});
+  const AddedOrEditMaterailDialog({super.key, required this.buttonName, required this.title, required this.onTap});
   @override
   Widget build(BuildContext context) {
     return BlocBuilder(
@@ -30,13 +31,13 @@ class AddedMaterailDialog extends StatelessWidget {
                 .copyWith(fontSize: 24.sp),
           ),
           content: Form(
-            key: ProfileCubit.get(context)
-                .dialogFormKey, // Assign the dialog-specific form key here
+            key: InventoryViewModelCubit.get(context)
+                .formKey, // Assign the dialog-specific form key here
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
                 SizedBox(height: 8.h),
-                title==StringManager.addMaterial?
+
                 CustomTextFormField(
                   hint: "name",
                   validator:  (val) {
@@ -46,7 +47,7 @@ class AddedMaterailDialog extends StatelessWidget {
                     return null;
                   },
                   controller: InventoryViewModelCubit.get(context).nameController,
-                ):SizedBox(),
+                ),
                 SizedBox(height: 8.h),
                 CustomTextFormField(
                   keyboardType: TextInputType.number,
@@ -72,16 +73,10 @@ class AddedMaterailDialog extends StatelessWidget {
             ButtonCustom(
               buttonName: buttonName,
               onTap: () {
-                // Validate the dialog form before proceeding
-                if (ProfileCubit.get(context)
-                    .dialogFormKey
-                    .currentState!
-                    .validate()) {
-                  InventoryViewModelCubit.get(context).addedMaterails();
-                  InventoryViewModelCubit.get(context).nameController.clear();
-                  InventoryViewModelCubit.get(context).quantityController.clear();
-                  Navigator.pop(context); // Close dialog
+                if (InventoryViewModelCubit.get(context).formKey.currentState!.validate()){
+                  onTap();
                 }
+
               },
             ),
           ],

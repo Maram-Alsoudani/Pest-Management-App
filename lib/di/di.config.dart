@@ -51,6 +51,8 @@ import '../Features/inventory/domain/use_cases/delete_matrails_use_case.dart'
     as _i635;
 import '../Features/inventory/domain/use_cases/get_materails_use_case.dart'
     as _i730;
+import '../Features/inventory/domain/use_cases/update_matrails_use_case.dart'
+    as _i276;
 import '../Features/inventory/presentation/manager/inventory_view_model_cubit.dart'
     as _i118;
 import '../Features/login/data/data_sources/login_data_source.dart' as _i121;
@@ -99,6 +101,15 @@ extension GetItInjectableX on _i174.GetIt {
         _i635.DeleteMaterialUseCase(inventoryRepo: gh<_i1010.InventoryRepo>()));
     gh.factory<_i730.GetMaterailUseCase>(() =>
         _i730.GetMaterailUseCase(inventoryRepo: gh<_i1010.InventoryRepo>()));
+    gh.factory<_i276.UpdateMaterialUseCase>(() =>
+        _i276.UpdateMaterialUseCase(inventoryRepo: gh<_i1010.InventoryRepo>()));
+    gh.factory<_i118.InventoryViewModelCubit>(
+        () => _i118.InventoryViewModelCubit(
+              addedMaterailUseCase: gh<_i917.AddedMaterailUseCase>(),
+              getMaterailUseCase: gh<_i730.GetMaterailUseCase>(),
+              deleteMaterailUseCase: gh<_i635.DeleteMaterialUseCase>(),
+              updateMaterailUseCase: gh<_i276.UpdateMaterialUseCase>(),
+            ));
     gh.factory<_i78.CategoryRepo>(() => _i781.CategoryRepoImpl(
         categoryDataSource: gh<_i903.CategoryDataSource>()));
     gh.factory<_i58.ForgetPasswordRepository>(() =>
@@ -108,12 +119,6 @@ extension GetItInjectableX on _i174.GetIt {
         registerDataSource: gh<_i969.RegisterDataSource>()));
     gh.factory<_i558.LoginRepository>(() => _i313.LoginRepositoryImpl(
         loginDataSource: gh<_i121.LoginDataSource>()));
-    gh.factory<_i118.InventoryViewModelCubit>(
-        () => _i118.InventoryViewModelCubit(
-              addedMaterailUseCase: gh<_i917.AddedMaterailUseCase>(),
-              getMaterailUseCase: gh<_i730.GetMaterailUseCase>(),
-              deleteMaterailUseCase: gh<_i635.DeleteMaterialUseCase>(),
-            ));
     gh.factory<_i513.ForgetPasswordUserCase>(() => _i513.ForgetPasswordUserCase(
         forgetPasswordRepository: gh<_i58.ForgetPasswordRepository>()));
     gh.factory<_i43.EditImageInFireStoreUseCase>(() =>

@@ -22,17 +22,16 @@ class FirebaseUtils {
           toFirestore: (user, options) => user.toFireStore(),
         );
   }
-  static CollectionReference<MaterialDto> getMaterailCollection(
+  static CollectionReference<MaterailModelDto> getMaterailCollection(
       ) {
     return FirebaseFirestore.instance
-        .collection(MaterialDto.collectionName)
-        .withConverter<MaterialDto>(
+        .collection(MaterailModelDto.collectionName)
+        .withConverter<MaterailModelDto>(
       fromFirestore: (snapshot, options) {
-
-       return MaterialDto.fromMap(snapshot.data()!);
+       return MaterailModelDto.fromFireStore(snapshot.data()!);
       }
           ,
-      toFirestore: (user, options) => user.toMap(),
+      toFirestore: (user, options) => user.toFirestore(),
     );
   }
 

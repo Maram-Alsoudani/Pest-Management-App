@@ -1,8 +1,9 @@
 class MaterailEntity {
+  String id;
+  String? name;
+  int? quantity;
 
-  Map<String, dynamic> materials;
-
-  MaterailEntity({required this.materials});
+  MaterailEntity({required this.name,required this.quantity,this.id =""});
 
 
 }

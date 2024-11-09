@@ -1,28 +1,26 @@
+import '../../domain/entities/materail_enitiy.dart';
 
-import 'package:pesticides/Features/inventory/domain/entities/materail_enitiy.dart';
+class MaterailModelDto extends MaterailEntity {
+  static const String collectionName = "materail";
 
-class MaterialDto extends MaterailEntity{
-  static const String collectionName = "materials";
+  MaterailModelDto({
+    required super.name,
+    required super.quantity,
+    super.id = "",
+  });
 
+  MaterailModelDto.fromFireStore(Map<String, dynamic> data)
+      : this(
+          name: data["name"] as String,
+          quantity: data["quantity"] as int,
+          id: data["id"] as String,
+        );
 
-  MaterialDto({required super.materials});
-
-  Map<String, dynamic> toMap() {
-    return materials;
-  }
-
-  factory MaterialDto.fromMap(Map<String, dynamic> map) {
-    Map<String, Map<String, dynamic>> materials = {};
-
-    map.forEach((key, value) {
-      materials[key] = Map<String, dynamic>.from(value);
-    });
-
-    return MaterialDto(materials: materials);
+  Map<String, dynamic> toFirestore() {
+    return {
+      "name": name,
+      "quantity": quantity,
+      "id": id,
+    };
   }
 }
-
-
-
-
-

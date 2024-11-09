@@ -8,7 +8,7 @@ class InventoryViewModelInitial extends InventoryViewModelState {}
 class InventoryGetMaterailLoading extends InventoryViewModelState {}
 
 class InventoryGetMaterailSuccess extends InventoryViewModelState {
-  final List<Map<String, dynamic>> data;
+  final List<MaterailEntity> data;
 
   InventoryGetMaterailSuccess({required this.data});
 }
@@ -29,6 +29,15 @@ class InventoryAddedMaterailError extends InventoryViewModelState {
   final Failure error;
 
   InventoryAddedMaterailError({required this.error});
+}
+class InventoryUpdateMaterailLoading extends InventoryViewModelState {}
+
+class InventoryUpdateMaterailSuccess extends InventoryViewModelState {}
+
+class InventoryUpdateMaterailError extends InventoryViewModelState {
+  final Failure error;
+
+  InventoryUpdateMaterailError({required this.error});
 }
 
 class InventoryDeleteMaterailLoading extends InventoryViewModelState {}

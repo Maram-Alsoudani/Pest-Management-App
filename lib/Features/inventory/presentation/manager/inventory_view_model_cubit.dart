@@ -37,15 +37,30 @@ class InventoryViewModelCubit extends Cubit<InventoryViewModelState> {
   TextEditingController quantityController = TextEditingController();
   TextEditingController searchController = TextEditingController();
   final formKey = GlobalKey<FormState>();
+  late AnimationController animationController;
+  late Animation<Offset> slideAnimation;
 
   List<MaterailEntity> materails = [];
   List<MaterailEntity> filteredItems = [];
 
-  UserAndAdminModelEntity? getUser(){
-   var user= SharedPrefsLocal.getData(key: StringManager.keyUserAdmin);
-   return user;
+  UserAndAdminModelEntity? getUser() {
+    var user = SharedPrefsLocal.getData(key: StringManager.keyUserAdmin);
+    return user;
   }
 
+  void doAnimation(SingleTickerProviderStateMixin single) {
+    animationController = AnimationController(
+        vsync: single, duration: const Duration(seconds: 1));
+
+    slideAnimation =
+        Tween<Offset>(begin: const Offset(-5, 0), end: const Offset(0, 0))
+            .animate(
+          CurvedAnimation(
+            parent: animationController,
+            curve: Curves.easeInOut,
+          ),
+        );
+  }
   void searchMethod() {
     filteredItems = materails.where((item) {
       var name = item.name;
@@ -77,7 +92,6 @@ class InventoryViewModelCubit extends Cubit<InventoryViewModelState> {
   void updateMaterails(String id) async {
     isLoading = true;
     emit(InventoryUpdateMaterailLoading());
-    print("========id=$id");
     MaterailEntity materail = MaterailEntity(
         id: id,
         name: nameController.text,
@@ -110,6 +124,9 @@ class InventoryViewModelCubit extends Cubit<InventoryViewModelState> {
         materails = r;
         filteredItems = materails;
         emit(InventoryGetMaterailSuccess(data: r));
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          animationController.forward();
+        });
       },
     );
   }

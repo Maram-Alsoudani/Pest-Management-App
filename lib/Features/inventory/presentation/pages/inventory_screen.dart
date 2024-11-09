@@ -19,7 +19,8 @@ class InventoryScreen extends StatefulWidget {
   _InventoryScreenState createState() => _InventoryScreenState();
 }
 
-class _InventoryScreenState extends State<InventoryScreen> {
+class _InventoryScreenState extends State<InventoryScreen>
+    with SingleTickerProviderStateMixin {
   late InventoryViewModelCubit bloc;
 
   @override
@@ -27,8 +28,9 @@ class _InventoryScreenState extends State<InventoryScreen> {
     super.initState();
     bloc = InventoryViewModelCubit.get(context);
     bloc.getMaterails();
+    bloc.doAnimation(this);
     bloc.searchController.addListener(bloc.searchMethod);
-    bloc.user=bloc.getUser()!;
+    bloc.user = bloc.getUser()!;
   }
 
   @override
@@ -109,126 +111,147 @@ class _InventoryScreenState extends State<InventoryScreen> {
                     .copyWith(fontSize: 25.sp),
               ),
             ),
-            floatingActionButton:bloc.user.type==UserAndAdminModelDto.admin? FloatingActionButton(
-              backgroundColor: ColorManager.primaryColor,
-              onPressed: () {
-                InventoryViewModelCubit.get(context).nameController.clear();
-                InventoryViewModelCubit.get(context).quantityController.clear();
-                showDialog(
-                  context: context,
-                  builder: (context) {
-                    return AddedOrEditMaterailDialog(
-                      title: StringManager.addMaterial,
-                      buttonName: StringManager.add,
-                      onTap: () {
-                        InventoryViewModelCubit.get(context).addedMaterails();
+            floatingActionButton: bloc.user.type == UserAndAdminModelDto.admin
+                ? SlideTransition(
+              position: bloc.slideAnimation,
+                  child: FloatingActionButton(
+                      backgroundColor: ColorManager.primaryColor,
+                      onPressed: () {
+                        InventoryViewModelCubit.get(context)
+                            .nameController
+                            .clear();
+                        InventoryViewModelCubit.get(context)
+                            .quantityController
+                            .clear();
+                        showDialog(
+                          context: context,
+                          builder: (context) {
+                            return AddedOrEditMaterailDialog(
+                              title: StringManager.addMaterial,
+                              buttonName: StringManager.add,
+                              onTap: () {
+                                InventoryViewModelCubit.get(context)
+                                    .addedMaterails();
 
-                        Navigator.pop(context);
-                        bloc.getMaterails();
-                      },
-                    );
-                  },
-                );
-              },
-              child: const Icon(
-                Icons.add,
-                color: ColorManager.whiteColor,
-              ),
-            ):null,
-            body: Padding(
-              padding: EdgeInsets.all(10.0.r),
-              child: Column(
-                children: [
-                  CustomTextFormField(
-                    hint: StringManager.searchHint,
-                    controller: bloc.searchController,
-                    validator: (value) {
-                      return null;
-                    },
-                    borderRadius: BorderRadius.circular(26.0.r),
-                  ),
-                  SizedBox(height: 6.0.h),
-                  Expanded(
-                    child: ListView.builder(
-                      itemCount: bloc.filteredItems.length,
-                      itemBuilder: (context, index) {
-                        final item = bloc.filteredItems[index];
-                        final isUnavailable =
-                            (item.quantity is int && item.quantity == 0) ||
-                                (item.quantity is String &&
-                                    int.parse(item.quantity as String) == 0);
-                        return bloc.user.type==UserAndAdminModelDto.admin?Padding(
-                          padding: EdgeInsets.symmetric(vertical: 8.0.r),
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(16.0.r),
-                            child: Container(
-                              decoration: BoxDecoration(
-                                color: ColorManager.whiteColor,
-                                borderRadius: BorderRadius.circular(16.0.r),
-                              ),
-                              child: Slidable(
-                                dragStartBehavior: DragStartBehavior.down,
-                                endActionPane: ActionPane(
-                                  dragDismissible: false,
-                                  motion: const BehindMotion(),
-                                  extentRatio: 0.25,
-                                  children: [
-                                    SlidableAction(
-                                      onPressed: (context) {
-                                        bloc.deleteMaterails(item.id);
-                                        bloc.getMaterails();
-                                      },
-                                      backgroundColor:
-                                          ColorManager.primaryColor,
-                                      foregroundColor: ColorManager.whiteColor,
-                                      icon: Icons.delete,
-                                      label: StringManager.delete,
-                                    ),
-                                  ],
-                                ),
-                                child: GestureDetector(
-                                  onTap: () {
-                                    bloc.nameController.text = item.name ?? "";
-                                    bloc.quantityController.text =
-                                        item.quantity.toString();
-                                    showDialog(
-                                      context: context,
-                                      builder: (context) {
-                                        return AddedOrEditMaterailDialog(
-                                          title: StringManager.edit,
-                                          buttonName: StringManager.save,
-                                          onTap: () {
-                                            InventoryViewModelCubit.get(context)
-                                                .updateMaterails(item.id);
-                                            InventoryViewModelCubit.get(context)
-                                                .nameController
-                                                .clear();
-                                            InventoryViewModelCubit.get(context)
-                                                .quantityController
-                                                .clear();
-                                            Navigator.pop(context);
-                                            bloc.getMaterails();
-                                          },
-                                        );
-                                      },
-                                    );
-                                  },
-                                  child: MaterailItem(
-                                    isUnavailable: isUnavailable,
-                                    item: item,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ):MaterailItem(
-                          isUnavailable: isUnavailable,
-                          item: item,
+                                Navigator.pop(context);
+                                bloc.getMaterails();
+                              },
+                            );
+                          },
                         );
                       },
+                      child: const Icon(
+                        Icons.add,
+                        color: ColorManager.whiteColor,
+                      ),
                     ),
-                  )
-                ],
+                )
+                : null,
+            body: SlideTransition(
+              position: bloc.slideAnimation,
+              child: Padding(
+                padding: EdgeInsets.all(10.0.r),
+                child: Column(
+                  children: [
+                    CustomTextFormField(
+                      hint: StringManager.searchHint,
+                      controller: bloc.searchController,
+                      validator: (value) {
+                        return null;
+                      },
+                      borderRadius: BorderRadius.circular(26.0.r),
+                    ),
+                    SizedBox(height: 6.0.h),
+                    Expanded(
+                      child: ListView.builder(
+                        itemCount: bloc.filteredItems.length,
+                        itemBuilder: (context, index) {
+                          final item = bloc.filteredItems[index];
+                          final isUnavailable =
+                              (item.quantity is int && item.quantity == 0) ||
+                                  (item.quantity is String &&
+                                      int.parse(item.quantity as String) == 0);
+                          return bloc.user.type == UserAndAdminModelDto.admin
+                              ? Padding(
+                                  padding: EdgeInsets.symmetric(vertical: 8.0.r),
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(16.0.r),
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        color: ColorManager.whiteColor,
+                                        borderRadius:
+                                            BorderRadius.circular(16.0.r),
+                                      ),
+                                      child: Slidable(
+                                        dragStartBehavior: DragStartBehavior.down,
+                                        endActionPane: ActionPane(
+                                          dragDismissible: false,
+                                          motion: const BehindMotion(),
+                                          extentRatio: 0.25,
+                                          children: [
+                                            SlidableAction(
+                                              onPressed: (context) {
+                                                bloc.deleteMaterails(item.id);
+                                                bloc.getMaterails();
+                                              },
+                                              backgroundColor:
+                                                  ColorManager.primaryColor,
+                                              foregroundColor:
+                                                  ColorManager.whiteColor,
+                                              icon: Icons.delete,
+                                              label: StringManager.delete,
+                                            ),
+                                          ],
+                                        ),
+                                        child: GestureDetector(
+                                          onTap: () {
+                                            bloc.nameController.text =
+                                                item.name ?? "";
+                                            bloc.quantityController.text =
+                                                item.quantity.toString();
+                                            showDialog(
+                                              context: context,
+                                              builder: (context) {
+                                                return AddedOrEditMaterailDialog(
+                                                  title: StringManager.edit,
+                                                  buttonName: StringManager.save,
+                                                  onTap: () {
+                                                    InventoryViewModelCubit.get(
+                                                            context)
+                                                        .updateMaterails(item.id);
+                                                    InventoryViewModelCubit.get(
+                                                            context)
+                                                        .nameController
+                                                        .clear();
+                                                    InventoryViewModelCubit.get(
+                                                            context)
+                                                        .quantityController
+                                                        .clear();
+                                                    Navigator.pop(context);
+                                                    bloc.getMaterails();
+                                                  },
+                                                );
+                                              },
+                                            );
+                                          },
+                                          child: MaterailItem(
+                                            isUnavailable: isUnavailable,
+                                            item: item,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                )
+                              : MaterailItem(
+                                  isUnavailable: isUnavailable,
+                                  item: item,
+                                );
+                        },
+                      ),
+                    )
+                  ],
+                ),
               ),
             ),
           ),

@@ -54,14 +54,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
            DialogUtils.showAlertDialog(
              context: context,
              title: StringManager.success,
-             message: "Saved Successfully",
+             message: StringManager.savedSuccessfully,
              posActionTitle: StringManager.ok,
            );
          }else if (state is ProfileUpdateSuccess) {
            DialogUtils.showAlertDialog(
              context: context,
              title: StringManager.success,
-             message: "Saved Successfully",
+             message: StringManager.savedSuccessfully,
              posActionTitle: StringManager.ok,
            );
          }
@@ -154,7 +154,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                       child: ButtonCustom(
                                           buttonName: StringManager.edit,
                                           onTap: () {
-                                            //todo Function to show dialog with editable fields and validation
                                             if (ProfileCubit.get(context)
                                                 .fromKey
                                                 .currentState!

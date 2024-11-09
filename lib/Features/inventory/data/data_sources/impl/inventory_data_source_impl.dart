@@ -45,10 +45,10 @@ class InventoryDataSourceImpl implements InventoryDataSource {
         await addMaterailsFireStore(materails);
         return const Right(null);
       } else {
-        return Left(Failure(errorMessage: "No internet connection"));
+        return Left(Failure(errorMessage: StringManager.networkError));
       }
     } catch (e) {
-      return Left(Failure(errorMessage: "An error occurred: $e"));
+      return Left(Failure(errorMessage: StringManager.someThingWentWrong));
     }
   }
 
@@ -61,11 +61,11 @@ class InventoryDataSourceImpl implements InventoryDataSource {
         await deleteMaterailsFireStore(id);
         return const Right(null);
       } else {
-        return Left(Failure(errorMessage: "No internet connection"));
+        return Left(Failure(errorMessage: StringManager.networkError));
       }
     } catch (e) {
       print(e);
-      return Left(Failure(errorMessage: "An error occurred: $e"));
+      return Left(Failure(errorMessage: StringManager.someThingWentWrong));
     }
   }
 
@@ -83,10 +83,10 @@ class InventoryDataSourceImpl implements InventoryDataSource {
         List<MaterailModelDto> list=data.map((e) =>e.data()).toList();
         return  Right(list);
       } else {
-        return Left(Failure(errorMessage: "No internet connection"));
+        return Left(Failure(errorMessage: StringManager.networkError));
       }
     } catch (e) {
-      return Left(Failure(errorMessage: "An error occurred: $e"));
+      return Left(Failure(errorMessage: StringManager.someThingWentWrong));
     }
   }
 
@@ -102,10 +102,10 @@ class InventoryDataSourceImpl implements InventoryDataSource {
 
         return  Right(null);
       } else {
-        return Left(Failure(errorMessage: "No internet connection"));
+        return Left(Failure(errorMessage: StringManager.networkError));
       }
     } catch (e) {
-      return Left(Failure(errorMessage: "An error occurred: $e"));
+      return Left(Failure(errorMessage: StringManager.someThingWentWrong));
     }
   }
 }

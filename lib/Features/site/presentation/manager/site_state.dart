@@ -1,0 +1,37 @@
+import 'package:pesticides/Core/errors/failures.dart';
+import 'package:pesticides/Features/site/domain/entities/site_entitiy.dart';
+
+abstract class SiteState {}
+
+class SiteInitialState extends SiteState {}
+
+class SiteLoadingState extends SiteState {}
+
+class SiteErrorState extends SiteState {
+  Failure failure;
+  SiteErrorState({required this.failure});
+}
+
+class SiteSuccessState extends SiteState {}
+
+//todo ===========================
+
+class UsersSiteLoadingState extends SiteState {}
+
+class UsersSiteErrorState extends SiteState {
+  Failure failure;
+  UsersSiteErrorState({required this.failure});
+}
+
+class UsersSiteSuccessState extends SiteState {}
+
+//todo ===========================
+
+class AddSiteLoadingState extends SiteState {}
+
+class AddSiteErrorState extends SiteState {
+  Failure failure;
+  AddSiteErrorState({required this.failure});
+}
+
+class AddSiteSuccessState extends SiteState {}

@@ -11,6 +11,7 @@ import 'package:pesticides/Features/reports/presentation/pages/sites_of_user.dar
 import 'package:pesticides/Features/signatures/presentation/pages/signatures_screen.dart';
 
 import 'package:pesticides/Features/site_report/presentation/pages/site_report_screen.dart';
+
 import 'package:pesticides/Features/sites/presentation/pages/sites_screen.dart';
 
 import '../../Features/category/profile/presentation/pages/profile_screen.dart';
@@ -20,18 +21,20 @@ import '../../Features/eng_owner_screen/presentation/pages/eng_owner_screen.dart
 import '../../Features/inventory/presentation/pages/inventory_screen.dart';
 import '../../Features/login/presentation/pages/login_screen.dart';
 import '../../Features/notes/presentation/pages/notes_screen.dart';
+import '../../Features/inventory/presentation/pages/inventory_screen.dart';
+import '../../Features/site/presentation/pages/sites_screen.dart';
 import '../../Features/reports/presentation/pages/all_users.dart';
 
 class RoutesManger {
   static Map<String, Widget Function(BuildContext)> route = {
     routeNameRegister: (context) => RegisterScreen(),
     routeNameEngOwnerScreen: (context) => EngOwnerScreen(),
-    routeNameLogin: (context) => LoginScreen(),
-    routeNameCategoryScreen: (context) => CategoryScreen(),
-    routeNameSiteReportScreen: (context) => SiteReportScreen(),
+    routeNameLogin: (context) => const LoginScreen(),
+    routeNameCategoryScreen: (context) => const CategoryScreen(),
+    routeNameSiteReportScreen: (context) => const SiteReportScreen(),
     routeNameNotesScreen: (context) => NotesScreen(),
     routeNameConditionsScreen: (context) => ConditionsScreen(),
-    routeNameSites: (context) => SitesScreen(),
+    routeNameSites: (context) =>  SitesScreen(),
     routeNameProfile: (context) => ProfileScreen(),
     routeNameMaterialUsageScreen: (context) => MaterialUsageScreen(),
     routeNameDevice: (context) => DeviceScreen(),

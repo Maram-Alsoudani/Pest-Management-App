@@ -74,6 +74,19 @@ import '../Features/register/domain/repositories/register_repo.dart' as _i20;
 import '../Features/register/domain/use_cases/register_use_case.dart' as _i841;
 import '../Features/register/presentation/manager/register_view_model_cubit.dart'
     as _i451;
+import '../Features/site/data/data_sources/add_site_data_source.dart' as _i998;
+import '../Features/site/data/data_sources/add_site_data_source_impl.dart'
+    as _i610;
+import '../Features/site/data/repositories/add_site_repository_impl.dart'
+    as _i9;
+import '../Features/site/domain/repositories/site_repository.dart' as _i311;
+import '../Features/site/domain/use_cases/add_site_user_case.dart' as _i855;
+import '../Features/site/domain/use_cases/fetch_site_data_use_case.dart'
+    as _i891;
+import '../Features/site/domain/use_cases/fetch_user_data_user_case.dart'
+    as _i720;
+import '../Features/site/presentation/manager/site_view_model.dart' as _i869;
+
 import '../Features/reports/data/data_sources/get_sites_of_user_data_source.dart'
     as _i924;
 import '../Features/reports/data/data_sources/get_sites_of_user_data_source_impl.dart'
@@ -108,7 +121,25 @@ extension GetItInjectableX on _i174.GetIt {
       environment,
       environmentFilter,
     );
+    gh.factory<_i998.AddSiteDataSource>(() => _i610.AddSiteDataSourceImpl());
     gh.factory<_i903.CategoryDataSource>(() => _i53.CategoryDataSourceImpl());
+    gh.factory<_i311.SiteRepository>(() => _i9.AddSiteRepositoryImpl(
+        addSiteDataSource: gh<_i998.AddSiteDataSource>()));
+    gh.factory<_i134.ForgetPasswordDataSource>(
+        () => _i290.ForgetPasswordDataSourceImpl());
+    gh.factory<_i855.AddSiteUserCase>(() =>
+        _i855.AddSiteUserCase(siteRepository: gh<_i311.SiteRepository>()));
+    gh.factory<_i891.FetchSiteDataUseCase>(() =>
+        _i891.FetchSiteDataUseCase(siteRepository: gh<_i311.SiteRepository>()));
+    gh.factory<_i720.FetchUsersDataUseCase>(() => _i720.FetchUsersDataUseCase(
+        siteRepository: gh<_i311.SiteRepository>()));
+    gh.factory<_i121.LoginDataSource>(() => _i535.LoginDataSourceImpl());
+    gh.factory<_i969.RegisterDataSource>(() => _i1056.RegisterDataSourceImpl());
+    gh.factory<_i869.SiteViewModel>(() => _i869.SiteViewModel(
+          addSiteUserCase: gh<_i855.AddSiteUserCase>(),
+          fetchSiteDataUseCase: gh<_i891.FetchSiteDataUseCase>(),
+          fetchUsersDataUseCase: gh<_i720.FetchUsersDataUseCase>(),
+        ));
     gh.factory<_i924.GetSitesOfUserDataSource>(
         () => _i803.GetSitesOfUserDataSourceImpl());
     gh.factory<_i208.InventoryDataSource>(

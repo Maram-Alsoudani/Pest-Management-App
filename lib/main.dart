@@ -16,6 +16,7 @@ import 'Config/theme/theming.dart';
 import 'Core/utils/SharedPrefsLocal.dart';
 import 'Features/category/profile/presentation/manager/profile_cubit.dart';
 import 'Features/register/presentation/manager/register_view_model_cubit.dart';
+import 'Features/site/presentation/manager/site_view_model.dart';
 import 'firebase_options.dart';
 
 void main() async {
@@ -58,7 +59,10 @@ void main() async {
         ),
         BlocProvider(
           create: (context) => getIt<ProfileCubit>(),
+        ), BlocProvider(
+          create: (context) => getIt<SiteViewModel>(),
         ),
+
         BlocProvider(
           create: (context) => getIt<InventoryViewModelCubit>(),
         ),

@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -7,17 +8,13 @@ import 'package:pesticides/Config/routes/routes_manger.dart';
 import 'package:pesticides/Core/component/custom_dialog.dart';
 import 'package:pesticides/Core/utils/SharedPrefsLocal.dart';
 import 'package:pesticides/Features/category/data/models/category_model.dart';
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:lottie/lottie.dart';
 import 'package:pesticides/Features/category/presentation/manager/category_cubit.dart';
-import 'package:pesticides/Features/category/profile/presentation/pages/profile_screen.dart';
 
 import '../../../../Core/component/image_profile.dart';
 import '../../../../Core/component/lottie_loading_widget.dart';
 import '../../../../Core/utils/colors.dart';
 import '../../../../Core/utils/font_manager.dart';
 import '../../../../Core/utils/strings.dart';
-import '../../../../Features/register/data/models/user_model_dto.dart';
 import '../widgets/category_item.dart';
 
 class CategoryScreen extends StatefulWidget {
@@ -201,8 +198,7 @@ class _CategoryScreenState extends State<CategoryScreen>
                                         if (index == 1) {
                                           Navigator.pushNamed(
                                               context,
-                                              RoutesManger
-                                                  .routeNamePreviewReport);
+                                              RoutesManger.routeNameReports);
                                         }
                                         if (index == 2) {
                                           Navigator.pushNamed(context,

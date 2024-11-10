@@ -76,6 +76,11 @@ class StringManager {
   static const String yes = "Yes";
   static const String editProfile = "Edit Profile";
   static const String edit = "Edit";
+  static const String reportsSubmittedBy = "Reports submitted by:";
+  static const String somethingWentWrong = "Something went wrong";
+  static const String view = "View  ";
+  static const String noUsersFound = "No Users Found";
+  static const String noSitesFound = 'No sites found for this user';
   static const String updateSuccessfully = "Updated Successfully";
   static const String deletedSuccessfully = "Deleted Successfully";
   static const String addedSuccessfully = "Added Successfully";

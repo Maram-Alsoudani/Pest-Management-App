@@ -1,0 +1,17 @@
+import 'package:dartz/dartz.dart';
+import 'package:injectable/injectable.dart';
+import 'package:pesticides/Features/site/domain/repositories/site_repository.dart';
+
+import '../../../../Core/errors/failures.dart';
+import '../entities/site_entitiy.dart';
+
+@injectable
+class AddSiteUserCase {
+  SiteRepository siteRepository;
+  AddSiteUserCase({required this.siteRepository});
+
+  Future<Either<Failure, void>> invoke(
+      String siteName, String siteLocation ,String uId) {
+    return siteRepository.addSite(siteName, siteLocation, uId);
+  }
+}

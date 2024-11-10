@@ -5,8 +5,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../utils/colors.dart';
 
 class DropDownMenuWidget extends StatelessWidget {
-  final List<String > list;
-  final String ?selectedValue;
+  final List<dynamic> list;
+  final dynamic selectedValue;
   final Function(String?) onChange;
   const DropDownMenuWidget({super.key, this.selectedValue, required this.onChange, required this.list});
 
@@ -14,9 +14,9 @@ class DropDownMenuWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding:  EdgeInsets.all(8.r),
-      child: DropdownButtonFormField<String>(
+      child: DropdownButtonFormField<dynamic>(
         items: list.map((e) {
-          return DropdownMenuItem<String>(
+          return DropdownMenuItem<dynamic>(
             value: e,
             child: Text(
               e,
@@ -24,7 +24,7 @@ class DropDownMenuWidget extends StatelessWidget {
             ),
           );
         }).toList(),
-        onChanged: (String? value) {
+        onChanged: (dynamic value) {
           onChange(value);
         },
         value: selectedValue,

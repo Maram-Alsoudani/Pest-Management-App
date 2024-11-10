@@ -76,4 +76,7 @@ class StringManager {
   static const String yes = "Yes";
   static const String editProfile = "Edit Profile";
   static const String edit = "Edit";
+  static const String siteAddSuccessfully = "Site Add Successfully";
+  static const String siteLocation = "Site Location:";
+  static const String selectUser = "Select User";
 }

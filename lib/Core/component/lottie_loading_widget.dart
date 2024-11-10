@@ -8,18 +8,14 @@ class LottieLoadingWidget extends StatelessWidget {
   final double height;
 
   const LottieLoadingWidget({
-    Key? key,
+    super.key,
     this.width = 200,
     this.height = 200,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
-    return Lottie.asset(
-        ImageManager.loadingLottie,
-      width: width.r,
-      height: height.r,
-      fit: BoxFit.cover
-    );
+    return Lottie.asset(ImageManager.loadingLottie,
+        width: width.r, height: height.r, fit: BoxFit.cover);
   }
 }

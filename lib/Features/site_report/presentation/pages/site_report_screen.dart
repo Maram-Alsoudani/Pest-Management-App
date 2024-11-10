@@ -33,7 +33,7 @@ class _SiteReportScreenState extends State<SiteReportScreen>
       "screen": RoutesManger.routeNameAddPhotosScreen
     },
     {"title": StringManager.devices, "screen": RoutesManger.routeNameDevice},
-    {"title": StringManager.signatures, "screen": ""},
+    {"title": StringManager.signatures, "screen": RoutesManger.routeNameSignature},
   ];
 
   late AnimationController _animationController;

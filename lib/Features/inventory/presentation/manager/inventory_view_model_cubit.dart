@@ -53,7 +53,7 @@ class InventoryViewModelCubit extends Cubit<InventoryViewModelState> {
         vsync: single, duration: const Duration(seconds: 1));
 
     slideAnimation =
-        Tween<Offset>(begin: const Offset(-5, 0), end: const Offset(0, 0))
+        Tween<Offset>(begin: const Offset(-2, 0), end: const Offset(0, 0))
             .animate(
           CurvedAnimation(
             parent: animationController,

@@ -559,6 +559,7 @@ packages:
     source: hosted
     version: "3.1.1"
   flutter_svg:
+
     dependency: "direct main"
     description:
       name: flutter_svg
@@ -900,6 +901,7 @@ packages:
     dependency: transitive
     description:
       name: path_parsing
+
       sha256: "883402936929eac138ee0a45da5b0f2c80f89913e6dc3bf77eb65b84b409c6ca"
       url: "https://pub.dev"
     source: hosted
@@ -976,6 +978,7 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.8"
+
   pool:
     dependency: transitive
     description:
@@ -1221,6 +1224,7 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.2.2"
+
   uuid:
     dependency: transitive
     description:
@@ -1233,6 +1237,7 @@ packages:
     dependency: transitive
     description:
       name: vector_graphics
+
       sha256: "0b9149c6ddb013818075b072b9ddc1b89a5122fff1275d4648d297086b46c4f0"
       url: "https://pub.dev"
     source: hosted
@@ -1241,6 +1246,7 @@ packages:
     dependency: transitive
     description:
       name: vector_graphics_codec
+
       sha256: "2430b973a4ca3c4dbc9999b62b8c719a160100dcbae5c819bae0cacce32c9cdb"
       url: "https://pub.dev"
     source: hosted
@@ -1249,6 +1255,7 @@ packages:
     dependency: transitive
     description:
       name: vector_graphics_compiler
+
       sha256: f3b9b6e4591c11394d4be4806c63e72d3a41778547b2c1e2a8a04fadcfd7d173
       url: "https://pub.dev"
     source: hosted

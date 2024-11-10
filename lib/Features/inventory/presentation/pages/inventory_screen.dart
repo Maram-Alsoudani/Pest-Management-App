@@ -113,8 +113,8 @@ class _InventoryScreenState extends State<InventoryScreen>
             ),
             floatingActionButton: bloc.user.type == UserAndAdminModelDto.admin
                 ? SlideTransition(
-              position: bloc.slideAnimation,
-                  child: FloatingActionButton(
+                    position: bloc.slideAnimation,
+                    child: FloatingActionButton(
                       backgroundColor: ColorManager.primaryColor,
                       onPressed: () {
                         InventoryViewModelCubit.get(context)
@@ -145,7 +145,7 @@ class _InventoryScreenState extends State<InventoryScreen>
                         color: ColorManager.whiteColor,
                       ),
                     ),
-                )
+                  )
                 : null,
             body: SlideTransition(
               position: bloc.slideAnimation,
@@ -162,94 +162,122 @@ class _InventoryScreenState extends State<InventoryScreen>
                       borderRadius: BorderRadius.circular(26.0.r),
                     ),
                     SizedBox(height: 6.0.h),
-                    Expanded(
-                      child: ListView.builder(
-                        itemCount: bloc.filteredItems.length,
-                        itemBuilder: (context, index) {
-                          final item = bloc.filteredItems[index];
-                          final isUnavailable =
-                              (item.quantity is int && item.quantity == 0) ||
-                                  (item.quantity is String &&
-                                      int.parse(item.quantity as String) == 0);
-                          return bloc.user.type == UserAndAdminModelDto.admin
-                              ? Padding(
-                                  padding: EdgeInsets.symmetric(vertical: 8.0.r),
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(16.0.r),
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                        color: ColorManager.whiteColor,
-                                        borderRadius:
-                                            BorderRadius.circular(16.0.r),
-                                      ),
-                                      child: Slidable(
-                                        dragStartBehavior: DragStartBehavior.down,
-                                        endActionPane: ActionPane(
-                                          dragDismissible: false,
-                                          motion: const BehindMotion(),
-                                          extentRatio: 0.25,
-                                          children: [
-                                            SlidableAction(
-                                              onPressed: (context) {
-                                                bloc.deleteMaterails(item.id);
-                                                bloc.getMaterails();
-                                              },
-                                              backgroundColor:
-                                                  ColorManager.primaryColor,
-                                              foregroundColor:
-                                                  ColorManager.whiteColor,
-                                              icon: Icons.delete,
-                                              label: StringManager.delete,
+                    bloc.filteredItems.isEmpty
+                        ? Expanded(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                "Materail Not Found",
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .titleMedium!
+                                    .copyWith(
+                                        fontSize: 2.sp,
+                                        color: ColorManager.greyShade4),
+                              ),
+                            ],
+                          ),
+                        )
+                        : Expanded(
+                            child: ListView.builder(
+                              itemCount: bloc.filteredItems.length,
+                              itemBuilder: (context, index) {
+                                final item = bloc.filteredItems[index];
+                                final isUnavailable = (item.quantity is int &&
+                                        item.quantity == 0) ||
+                                    (item.quantity is String &&
+                                        int.parse(item.quantity as String) ==
+                                            0);
+                                return bloc.user.type ==
+                                        UserAndAdminModelDto.admin
+                                    ? Padding(
+                                        padding: EdgeInsets.symmetric(
+                                            vertical: 8.0.r),
+                                        child: ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(16.0.r),
+                                          child: Container(
+                                            decoration: BoxDecoration(
+                                              color: ColorManager.whiteColor,
+                                              borderRadius:
+                                                  BorderRadius.circular(16.0.r),
                                             ),
-                                          ],
-                                        ),
-                                        child: GestureDetector(
-                                          onTap: () {
-                                            bloc.nameController.text =
-                                                item.name ?? "";
-                                            bloc.quantityController.text =
-                                                item.quantity.toString();
-                                            showDialog(
-                                              context: context,
-                                              builder: (context) {
-                                                return AddedOrEditMaterailDialog(
-                                                  title: StringManager.edit,
-                                                  buttonName: StringManager.save,
-                                                  onTap: () {
-                                                    InventoryViewModelCubit.get(
-                                                            context)
-                                                        .updateMaterails(item.id);
-                                                    InventoryViewModelCubit.get(
-                                                            context)
-                                                        .nameController
-                                                        .clear();
-                                                    InventoryViewModelCubit.get(
-                                                            context)
-                                                        .quantityController
-                                                        .clear();
-                                                    Navigator.pop(context);
-                                                    bloc.getMaterails();
-                                                  },
-                                                );
-                                              },
-                                            );
-                                          },
-                                          child: MaterailItem(
-                                            isUnavailable: isUnavailable,
-                                            item: item,
+                                            child: Slidable(
+                                              dragStartBehavior:
+                                                  DragStartBehavior.down,
+                                              endActionPane: ActionPane(
+                                                dragDismissible: false,
+                                                motion: const BehindMotion(),
+                                                extentRatio: 0.25,
+                                                children: [
+                                                  SlidableAction(
+                                                    onPressed: (context) {
+                                                      bloc.deleteMaterails(
+                                                          item.id);
+                                                      bloc.getMaterails();
+                                                    },
+                                                    backgroundColor:
+                                                        ColorManager
+                                                            .primaryColor,
+                                                    foregroundColor:
+                                                        ColorManager.whiteColor,
+                                                    icon: Icons.delete,
+                                                    label: StringManager.delete,
+                                                  ),
+                                                ],
+                                              ),
+                                              child: GestureDetector(
+                                                onTap: () {
+                                                  bloc.nameController.text =
+                                                      item.name ?? "";
+                                                  bloc.quantityController.text =
+                                                      item.quantity.toString();
+                                                  showDialog(
+                                                    context: context,
+                                                    builder: (context) {
+                                                      return AddedOrEditMaterailDialog(
+                                                        title:
+                                                            StringManager.edit,
+                                                        buttonName:
+                                                            StringManager.save,
+                                                        onTap: () {
+                                                          InventoryViewModelCubit
+                                                                  .get(context)
+                                                              .updateMaterails(
+                                                                  item.id);
+                                                          InventoryViewModelCubit
+                                                                  .get(context)
+                                                              .nameController
+                                                              .clear();
+                                                          InventoryViewModelCubit
+                                                                  .get(context)
+                                                              .quantityController
+                                                              .clear();
+                                                          Navigator.pop(
+                                                              context);
+                                                          bloc.getMaterails();
+                                                        },
+                                                      );
+                                                    },
+                                                  );
+                                                },
+                                                child: MaterailItem(
+                                                  isUnavailable: isUnavailable,
+                                                  item: item,
+                                                ),
+                                              ),
+                                            ),
                                           ),
                                         ),
-                                      ),
-                                    ),
-                                  ),
-                                )
-                              : MaterailItem(
-                                  isUnavailable: isUnavailable,
-                                  item: item,
-                                );
-                        },
-                      ),
-                    )
+                                      )
+                                    : MaterailItem(
+                                        isUnavailable: isUnavailable,
+                                        item: item,
+                                      );
+                              },
+                            ),
+                          )
                   ],
                 ),
               ),

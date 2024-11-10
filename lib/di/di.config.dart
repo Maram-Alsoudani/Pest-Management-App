@@ -56,6 +56,28 @@ import '../Features/register/domain/repositories/register_repo.dart' as _i20;
 import '../Features/register/domain/use_cases/register_use_case.dart' as _i841;
 import '../Features/register/presentation/manager/register_view_model_cubit.dart'
     as _i451;
+import '../Features/reports/data/data_sources/get_sites_of_user_data_source.dart'
+    as _i924;
+import '../Features/reports/data/data_sources/get_sites_of_user_data_source_impl.dart'
+    as _i803;
+import '../Features/reports/data/data_sources/get_users_data_source.dart'
+    as _i44;
+import '../Features/reports/data/data_sources/get_users_data_source_impl.dart'
+    as _i285;
+import '../Features/reports/data/repositories/get_sites_of_user_repo_impl.dart'
+    as _i372;
+import '../Features/reports/data/repositories/get_users_repo_impl.dart'
+    as _i294;
+import '../Features/reports/domain/repositories/get_sites_of_user_repo.dart'
+    as _i115;
+import '../Features/reports/domain/repositories/get_users_repo.dart' as _i1014;
+import '../Features/reports/domain/use_cases/get_sites_of_user_use_case.dart'
+    as _i886;
+import '../Features/reports/domain/use_cases/get_users_use_case.dart' as _i808;
+import '../Features/reports/presentation/manager/all_users_screen_view_model.dart'
+    as _i111;
+import '../Features/reports/presentation/manager/get_sites_of_user_view_model.dart'
+    as _i1037;
 
 extension GetItInjectableX on _i174.GetIt {
 // initializes the registration of main-scope dependencies inside of GetIt
@@ -69,19 +91,30 @@ extension GetItInjectableX on _i174.GetIt {
       environmentFilter,
     );
     gh.factory<_i903.CategoryDataSource>(() => _i53.CategoryDataSourceImpl());
+    gh.factory<_i924.GetSitesOfUserDataSource>(
+        () => _i803.GetSitesOfUserDataSourceImpl());
     gh.factory<_i134.ForgetPasswordDataSource>(
         () => _i290.ForgetPasswordDataSourceImpl());
     gh.factory<_i121.LoginDataSource>(() => _i535.LoginDataSourceImpl());
     gh.factory<_i969.RegisterDataSource>(() => _i1056.RegisterDataSourceImpl());
+    gh.factory<_i44.GetUsersDataSource>(() => _i285.GetUsersDataSourceImpl());
+    gh.factory<_i115.GetSitesOfUserRepo>(() => _i372.GetSitesOfUserRepoImpl(
+        getSitesOfUserDataSource: gh<_i924.GetSitesOfUserDataSource>()));
+    gh.factory<_i1014.GetUsersRepo>(() => _i294.GetUsersRepoImpl(
+        getUsersDataSource: gh<_i44.GetUsersDataSource>()));
     gh.factory<_i78.CategoryRepo>(() => _i781.CategoryRepoImpl(
         categoryDataSource: gh<_i903.CategoryDataSource>()));
     gh.factory<_i58.ForgetPasswordRepository>(() =>
         _i657.ForgetPasswordRepositoryImpl(
             forgetPasswordDataSource: gh<_i134.ForgetPasswordDataSource>()));
+    gh.factory<_i886.GetSitesOfUserUseCase>(() => _i886.GetSitesOfUserUseCase(
+        getSitesOfUser: gh<_i115.GetSitesOfUserRepo>()));
     gh.factory<_i20.RegisterRepo>(() => _i391.RegisterRepoImpl(
         registerDataSource: gh<_i969.RegisterDataSource>()));
     gh.factory<_i558.LoginRepository>(() => _i313.LoginRepositoryImpl(
         loginDataSource: gh<_i121.LoginDataSource>()));
+    gh.factory<_i808.GetUsersUseCase>(
+        () => _i808.GetUsersUseCase(getUsersRepo: gh<_i1014.GetUsersRepo>()));
     gh.factory<_i513.ForgetPasswordUserCase>(() => _i513.ForgetPasswordUserCase(
         forgetPasswordRepository: gh<_i58.ForgetPasswordRepository>()));
     gh.factory<_i43.EditImageInFireStoreUseCase>(() =>
@@ -92,6 +125,12 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i899.ReadUserOrAdminFromFireStoreUseCase>(() =>
         _i899.ReadUserOrAdminFromFireStoreUseCase(
             categoryRepo: gh<_i78.CategoryRepo>()));
+    gh.factory<_i111.AllUsersScreenViewModel>(() =>
+        _i111.AllUsersScreenViewModel(
+            getUsersUseCase: gh<_i808.GetUsersUseCase>()));
+    gh.factory<_i1037.GetSitesOfUsersViewModel>(() =>
+        _i1037.GetSitesOfUsersViewModel(
+            getSitesOfUserUseCase: gh<_i886.GetSitesOfUserUseCase>()));
     gh.factory<_i833.ProfileCubit>(() => _i833.ProfileCubit(
           readUserOrAdminFromFireStoreUseCase:
               gh<_i899.ReadUserOrAdminFromFireStoreUseCase>(),

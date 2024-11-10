@@ -5,11 +5,12 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pesticides/Config/routes/routes_manger.dart';
 import 'package:pesticides/Core/component/error_widget.dart';
 import 'package:pesticides/Core/my_bloc_observer.dart';
+import 'package:pesticides/Core/utils/strings.dart';
 import 'package:pesticides/Features/category/presentation/manager/category_cubit.dart';
 import 'package:pesticides/Features/forgotPassword/presentation/manager/forget_password_view_model.dart';
 import 'package:pesticides/Features/login/presentation/manager/cubit/login_screen_view_model.dart';
-import 'package:pesticides/Core/utils/strings.dart';
 import 'package:pesticides/di/di.dart';
+
 import 'Config/theme/theming.dart';
 import 'Core/utils/SharedPrefsLocal.dart';
 import 'Features/category/profile/presentation/manager/profile_cubit.dart';
@@ -18,6 +19,7 @@ import 'firebase_options.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
@@ -30,6 +32,7 @@ void main() async {
   // Set up the global error handler
   FlutterError.onError = (FlutterErrorDetails details) {
     FlutterError.presentError(details);
+
     runApp(ErrorWidgetApp(details));
   };
 

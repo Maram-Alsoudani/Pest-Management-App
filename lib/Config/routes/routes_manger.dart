@@ -8,6 +8,8 @@ import 'package:pesticides/Features/preview_report/presentation/pages/preview_re
 import 'package:pesticides/Features/recommendations/presentation/pages/recommendations_screen.dart';
 import 'package:pesticides/Features/register/presentation/pages/register_screen.dart';
 import 'package:pesticides/Features/reports/presentation/pages/sites_of_user.dart';
+import 'package:pesticides/Features/signatures/presentation/pages/signatures_screen.dart';
+
 import 'package:pesticides/Features/site_report/presentation/pages/site_report_screen.dart';
 import 'package:pesticides/Features/sites/presentation/pages/sites_screen.dart';
 
@@ -41,6 +43,7 @@ class RoutesManger {
     routeNameInventory: (context) => InventoryScreen(),
     routeNameReports: (context) => AllUsers(),
     routeNameSitesOfUser: (context) => SitesOFUser(),
+    routeNameSignature: (context) => SignaturesScreen(),
   };
 
   static const String routeNameEngOwnerScreen = "EngOwnerScreen";
@@ -62,4 +65,5 @@ class RoutesManger {
   static const String routeNameInventory = "inventory";
   static const String routeNameReports = "reports";
   static const String routeNameSitesOfUser = "sites of user";
+  static const String routeNameSignature = "signature";
 }

@@ -37,6 +37,24 @@ import '../Features/forgotPassword/domain/use_cases/forget_password_user_case.da
     as _i513;
 import '../Features/forgotPassword/presentation/manager/forget_password_view_model.dart'
     as _i1037;
+import '../Features/inventory/data/data_sources/impl/inventory_data_source_impl.dart'
+    as _i868;
+import '../Features/inventory/data/data_sources/inventory_data_source.dart'
+    as _i208;
+import '../Features/inventory/data/repositories/inventory_repo_impl.dart'
+    as _i663;
+import '../Features/inventory/domain/repositories/inventory_repo.dart'
+    as _i1010;
+import '../Features/inventory/domain/use_cases/added_matrails_use_case.dart'
+    as _i917;
+import '../Features/inventory/domain/use_cases/delete_matrails_use_case.dart'
+    as _i635;
+import '../Features/inventory/domain/use_cases/get_materails_use_case.dart'
+    as _i730;
+import '../Features/inventory/domain/use_cases/update_matrails_use_case.dart'
+    as _i276;
+import '../Features/inventory/presentation/manager/inventory_view_model_cubit.dart'
+    as _i118;
 import '../Features/login/data/data_sources/login_data_source.dart' as _i121;
 import '../Features/login/data/data_sources/login_data_source_impl.dart'
     as _i535;
@@ -93,8 +111,12 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i903.CategoryDataSource>(() => _i53.CategoryDataSourceImpl());
     gh.factory<_i924.GetSitesOfUserDataSource>(
         () => _i803.GetSitesOfUserDataSourceImpl());
+    gh.factory<_i208.InventoryDataSource>(
+        () => _i868.InventoryDataSourceImpl());
     gh.factory<_i134.ForgetPasswordDataSource>(
         () => _i290.ForgetPasswordDataSourceImpl());
+    gh.factory<_i1010.InventoryRepo>(() => _i663.InventoryRepoImpl(
+        inventoryDataSource: gh<_i208.InventoryDataSource>()));
     gh.factory<_i121.LoginDataSource>(() => _i535.LoginDataSourceImpl());
     gh.factory<_i969.RegisterDataSource>(() => _i1056.RegisterDataSourceImpl());
     gh.factory<_i44.GetUsersDataSource>(() => _i285.GetUsersDataSourceImpl());
@@ -102,6 +124,21 @@ extension GetItInjectableX on _i174.GetIt {
         getSitesOfUserDataSource: gh<_i924.GetSitesOfUserDataSource>()));
     gh.factory<_i1014.GetUsersRepo>(() => _i294.GetUsersRepoImpl(
         getUsersDataSource: gh<_i44.GetUsersDataSource>()));
+    gh.factory<_i917.AddedMaterailUseCase>(() =>
+        _i917.AddedMaterailUseCase(inventoryRepo: gh<_i1010.InventoryRepo>()));
+    gh.factory<_i635.DeleteMaterialUseCase>(() =>
+        _i635.DeleteMaterialUseCase(inventoryRepo: gh<_i1010.InventoryRepo>()));
+    gh.factory<_i730.GetMaterailUseCase>(() =>
+        _i730.GetMaterailUseCase(inventoryRepo: gh<_i1010.InventoryRepo>()));
+    gh.factory<_i276.UpdateMaterialUseCase>(() =>
+        _i276.UpdateMaterialUseCase(inventoryRepo: gh<_i1010.InventoryRepo>()));
+    gh.factory<_i118.InventoryViewModelCubit>(
+        () => _i118.InventoryViewModelCubit(
+              addedMaterailUseCase: gh<_i917.AddedMaterailUseCase>(),
+              getMaterailUseCase: gh<_i730.GetMaterailUseCase>(),
+              deleteMaterailUseCase: gh<_i635.DeleteMaterialUseCase>(),
+              updateMaterailUseCase: gh<_i276.UpdateMaterialUseCase>(),
+            ));
     gh.factory<_i78.CategoryRepo>(() => _i781.CategoryRepoImpl(
         categoryDataSource: gh<_i903.CategoryDataSource>()));
     gh.factory<_i58.ForgetPasswordRepository>(() =>

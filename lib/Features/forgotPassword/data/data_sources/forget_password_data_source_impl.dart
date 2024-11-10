@@ -26,7 +26,7 @@ class ForgetPasswordDataSourceImpl implements ForgetPasswordDataSource {
           return Left(
               Failure(errorMessage: StringManager.badFormat));
         }
-        return Left(Failure(errorMessage: e.toString()));
+        return Left(Failure(errorMessage: StringManager.someThingWentWrong));
       }
     } else {
       return Left(NetworkFailure(

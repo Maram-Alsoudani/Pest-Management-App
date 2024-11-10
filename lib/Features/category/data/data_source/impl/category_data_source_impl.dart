@@ -29,14 +29,14 @@ class CategoryDataSourceImpl implements CategoryDataSource {
           return Right(dataUser.data()!);
         } else {
           return Left(Failure(
-              errorMessage: "User data not found in SharedPreferences"));
+              errorMessage: StringManager.someThingWentWrong));
         }
       } else {
-        return Left(Failure(errorMessage: "No internet connection"));
+        return Left(Failure(errorMessage: StringManager.networkError));
       }
     } catch (e) {
       print(e.toString());
-      return Left(Failure(errorMessage: "An error occurred: $e"));
+      return Left(Failure(errorMessage: StringManager.someThingWentWrong));
     }
   }
 
@@ -60,11 +60,11 @@ class CategoryDataSourceImpl implements CategoryDataSource {
         });
         return Right(null);
       } else {
-        return Left(Failure(errorMessage: "No internet connection"));
+        return Left(Failure(errorMessage: StringManager.networkError));
       }
     } catch (e) {
       print(e.toString());
-      return Left(Failure(errorMessage: "An error occurred: $e"));
+      return Left(Failure(errorMessage: StringManager.someThingWentWrong));
     }
   }
 
@@ -88,9 +88,7 @@ class CategoryDataSourceImpl implements CategoryDataSource {
             final ref = FirebaseStorage.instance.refFromURL(currentImageUrl);
             await ref.delete();
           } catch (error) {
-            // Ignore 'object-not-found' error and proceed
             if (error.toString().contains('object-not-found')) {
-              print("No object exists at the desired reference, continuing...");
             } else {
               rethrow;
             }
@@ -116,11 +114,10 @@ class CategoryDataSourceImpl implements CategoryDataSource {
 
         return Right(null);
       } else {
-        return Left(Failure(errorMessage: "No internet connection"));
+        return Left(Failure(errorMessage: StringManager.networkError));
       }
     } catch (e) {
-      print(e.toString());
-      return Left(Failure(errorMessage: "An error occurred: $e"));
+      return Left(Failure(errorMessage: StringManager.someThingWentWrong));
     }
   }
 

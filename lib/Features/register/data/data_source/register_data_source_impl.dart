@@ -64,13 +64,13 @@ class RegisterDataSourceImpl implements RegisterDataSource {
       return Right(null);
     } on FirebaseAuthException catch (e) {
       if (e.code == 'invalid-credential') {
-        return Left(Failure(errorMessage: 'Invalid credentials.'));
+        return Left(Failure(errorMessage: StringManager.badFormat));
       } else if (e.code == 'email-already-in-use') {
-        return Left(Failure(errorMessage: 'Email is already in use.'));
+        return Left(Failure(errorMessage: StringManager.emailAlreadyInUse));
       } else if (e.code == 'network-request-failed') {
-        return Left(Failure(errorMessage: 'Network request failed.'));
+        return Left(Failure(errorMessage: StringManager.networkError));
       } else {
-        return Left(Failure(errorMessage: 'Authentication error.'));
+        return Left(Failure(errorMessage: StringManager.someThingWentWrong));
       }
     } catch (e) {
       return Left(Failure(errorMessage: e.toString()));

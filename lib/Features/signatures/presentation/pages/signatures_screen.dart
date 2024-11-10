@@ -41,7 +41,7 @@ class _SignaturesScreenState extends State<SignaturesScreen> {
   }
 
   void selectAll() {
-    for (int i = 0; i < signaturesList.length; i++) {
+    for (int i = 0; i <= signaturesList.length; i++) {
       selectedIndices.add(i);
     }
     setState(() {});

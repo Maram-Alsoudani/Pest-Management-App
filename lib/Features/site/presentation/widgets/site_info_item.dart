@@ -4,10 +4,11 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pesticides/Config/routes/routes_manger.dart';
 import 'package:pesticides/Core/utils/colors.dart';
 import 'package:pesticides/Core/utils/strings.dart';
-import '../../domain/entities/site_entitiy.dart';
+
+import '../../../reports/domain/entities/site_entity.dart';
 
 class SiteInfoItem extends StatelessWidget {
-  SiteEntitiy site;
+  SiteEntity site;
   SiteInfoItem({required this.site});
 
   @override

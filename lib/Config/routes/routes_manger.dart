@@ -12,7 +12,6 @@ import 'package:pesticides/Features/signatures/presentation/pages/signatures_scr
 
 import 'package:pesticides/Features/site_report/presentation/pages/site_report_screen.dart';
 
-import 'package:pesticides/Features/sites/presentation/pages/sites_screen.dart';
 
 import '../../Features/category/profile/presentation/pages/profile_screen.dart';
 import '../../Features/conditions/presentation/pages/conditions_screen.dart';

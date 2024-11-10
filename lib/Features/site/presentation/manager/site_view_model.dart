@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 import 'package:pesticides/Features/register/domain/entities/user_model_entity.dart';
-import 'package:pesticides/Features/site/domain/entities/site_entitiy.dart';
 import 'package:pesticides/Features/site/presentation/manager/site_state.dart';
+import '../../../reports/domain/entities/site_entity.dart';
 import '../../domain/use_cases/add_site_user_case.dart';
 import '../../domain/use_cases/fetch_site_data_use_case.dart';
 import '../../domain/use_cases/fetch_user_data_user_case.dart';
@@ -15,7 +15,7 @@ class SiteViewModel extends Cubit<SiteState> {
   FetchSiteDataUseCase fetchSiteDataUseCase;
   FetchUsersDataUseCase fetchUsersDataUseCase;
   List<UserAndAdminModelEntity> users = [];
-  List<SiteEntitiy> sites = [];
+  List<SiteEntity> sites = [];
   UserAndAdminModelEntity? selectedValue;
   TextEditingController siteNameController = TextEditingController();
   TextEditingController siteLocationController = TextEditingController();

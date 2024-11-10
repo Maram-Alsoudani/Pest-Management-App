@@ -2,7 +2,7 @@ import 'package:pesticides/Features/reports/domain/entities/site_entity.dart';
 
 class SiteDto extends SiteEntity {
   SiteDto({
-    required super.siteId,
+     super.siteId,
     required super.siteLocation,
     required super.siteName,
   });

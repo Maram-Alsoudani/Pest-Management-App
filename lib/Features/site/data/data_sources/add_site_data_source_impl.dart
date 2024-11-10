@@ -6,11 +6,11 @@ import 'package:pesticides/Core/errors/failures.dart';
 import 'package:pesticides/Core/utils/firebase_utils.dart';
 import 'package:pesticides/Features/register/domain/entities/user_model_entity.dart';
 import 'package:pesticides/Features/site/data/data_sources/add_site_data_source.dart';
-import 'package:pesticides/Features/site/data/models/siteDTO.dart';
-import 'package:pesticides/Features/site/domain/entities/site_entitiy.dart';
+
 
 import '../../../../Core/utils/strings.dart';
 import '../../../register/data/models/user_model_dto.dart';
+import '../../../reports/data/models/site_dto.dart';
 
 @Injectable(as: AddSiteDataSource)
 class AddSiteDataSourceImpl implements AddSiteDataSource {
@@ -22,7 +22,7 @@ class AddSiteDataSourceImpl implements AddSiteDataSource {
 
     if (connectivityResult.contains(ConnectivityResult.wifi) ||
         connectivityResult.contains(ConnectivityResult.mobile)) {
-      var site = SitedDTO(siteName: siteName, siteLocation: siteLocation);
+      var site = SiteDto(siteName: siteName, siteLocation: siteLocation);
       try {
         var response =
             await FirebaseUtils.addSiteToUsersFireStore(site: site, uId: uId);
@@ -38,7 +38,7 @@ class AddSiteDataSourceImpl implements AddSiteDataSource {
   }
 
   @override
-  Future<Either<Failure, List<SitedDTO>>> fetchSiteData() async {
+  Future<Either<Failure, List<SiteDto>>> fetchSiteData() async {
     final List<ConnectivityResult> connectivityResult =
         await (Connectivity().checkConnectivity());
 

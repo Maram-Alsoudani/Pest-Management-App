@@ -1,5 +1,4 @@
 import 'package:pesticides/Core/errors/failures.dart';
-import 'package:pesticides/Features/site/domain/entities/site_entitiy.dart';
 
 abstract class SiteState {}
 

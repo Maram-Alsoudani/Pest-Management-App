@@ -3,8 +3,9 @@ import 'package:injectable/injectable.dart';
 import 'package:pesticides/Core/errors/failures.dart';
 import 'package:pesticides/Features/register/domain/entities/user_model_entity.dart';
 import 'package:pesticides/Features/site/data/data_sources/add_site_data_source.dart';
-import 'package:pesticides/Features/site/domain/entities/site_entitiy.dart';
 import 'package:pesticides/Features/site/domain/repositories/site_repository.dart';
+
+import '../../../reports/domain/entities/site_entity.dart';
 
 @Injectable(as: SiteRepository)
 class AddSiteRepositoryImpl implements SiteRepository {
@@ -19,7 +20,7 @@ class AddSiteRepositoryImpl implements SiteRepository {
   }
 
   @override
-  Future<Either<Failure, List<SiteEntitiy>>> fetchSiteData() async {
+  Future<Either<Failure, List<SiteEntity>>> fetchSiteData() async {
     var either = await addSiteDataSource.fetchSiteData();
     return either.fold((error) => Left(error), (response) => Right(response));
   }

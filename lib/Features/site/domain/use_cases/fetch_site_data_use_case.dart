@@ -3,14 +3,14 @@ import 'package:injectable/injectable.dart';
 import 'package:pesticides/Features/site/domain/repositories/site_repository.dart';
 
 import '../../../../Core/errors/failures.dart';
-import '../entities/site_entitiy.dart';
+import '../../../reports/domain/entities/site_entity.dart';
 
 @injectable
 class FetchSiteDataUseCase {
   SiteRepository siteRepository;
   FetchSiteDataUseCase({required this.siteRepository});
 
-  Future<Either<Failure, List<SiteEntitiy>>> invoke() {
+  Future<Either<Failure, List<SiteEntity>>> invoke() {
     return siteRepository.fetchSiteData();
   }
 }

@@ -3,10 +3,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
-import 'package:pesticides/Features/register/domain/entities/user_model_entity.dart';
-import 'package:pesticides/Features/site/data/models/siteDTO.dart';
+import 'package:pesticides/Features/reports/domain/entities/site_entity.dart';
 import '../../Features/inventory/data/models/materail_model_dto.dart';
 import '../../Features/register/data/models/user_model_dto.dart';
+import '../../Features/reports/data/models/site_dto.dart';
 import '../errors/failures.dart';
 
 class FirebaseUtils {
@@ -82,27 +82,27 @@ class FirebaseUtils {
     }*/
   }
 
-  static CollectionReference<SitedDTO> getSiteCollection(
+  static CollectionReference<SiteDto> getSiteCollection(
       {required String uId}) {
     return getUserCollection('user')
         .doc(uId)
-        .collection(SitedDTO.collectionName)
-        .withConverter<SitedDTO>(
+        .collection(SiteEntity.collectionName)
+        .withConverter<SiteDto>(
             fromFirestore: (snapshot, _) =>
-                SitedDTO.fromFireStore(snapshot.data()!),
+                SiteDto.fromFireStore(snapshot.data()!),
             toFirestore: (site, _) => site.toFireStore());
   }
 
   static Future<void> addSiteToUsersFireStore(
-      {required SitedDTO site, required String uId}) {
+      {required SiteDto site, required String uId}) {
     var siteCollection = getSiteCollection(uId: uId);
     var siteDocRef = siteCollection.doc();
-    site.id = siteDocRef.id; // this make an auto Id;
+    site.siteId = siteDocRef.id; // this make an auto Id;
     return siteDocRef.set(site);
   }
 
-  static Future<List<SitedDTO>> fetchAllSitesAcrossAllUsers() async {
-    List<SitedDTO> allSites = [];
+  static Future<List<SiteDto>> fetchAllSitesAcrossAllUsers() async {
+    List<SiteDto> allSites = [];
     var userCollection = FirebaseUtils.getUserCollection('user');
 
     // Step 1: Get all user documents
@@ -112,10 +112,10 @@ class FirebaseUtils {
     for (var userDoc in usersSnapshot.docs) {
       var userId = userDoc.id;
       var siteCollection = userDoc.reference
-          .collection(SitedDTO.collectionName)
-          .withConverter<SitedDTO>(
+          .collection(SiteEntity.collectionName)
+          .withConverter<SiteDto>(
             fromFirestore: (snapshot, _) =>
-                SitedDTO.fromFireStore(snapshot.data()!),
+                SiteDto.fromFireStore(snapshot.data()!),
             toFirestore: (site, _) => site.toFireStore(),
           );
 

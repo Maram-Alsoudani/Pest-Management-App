@@ -6,7 +6,7 @@ class SiteEntity {
   String? siteName;
 
   SiteEntity({
-    required this.siteId,
+     this.siteId,
     required this.siteLocation,
     required this.siteName,
   });

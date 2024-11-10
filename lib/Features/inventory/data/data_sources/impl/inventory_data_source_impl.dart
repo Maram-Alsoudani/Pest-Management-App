@@ -19,7 +19,8 @@ class InventoryDataSourceImpl implements InventoryDataSource {
     materails.id = taskDoc.id;
     return  taskDoc.set(materails);
   }
-   Future<void> editMaterail(
+
+  Future<void> editMaterail(
       MaterailModelDto materails
       ) async {
     var taskCollection = FirebaseUtils.getMaterailCollection();

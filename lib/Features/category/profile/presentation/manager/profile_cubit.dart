@@ -12,6 +12,7 @@ import 'package:pesticides/Features/category/domin/use_case/read_user_or_admin_f
 import 'package:pesticides/Features/register/data/models/user_model_dto.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:pesticides/Features/register/domain/entities/user_model_entity.dart';
+import '../../../../register/presentation/manager/register_view_model_cubit.dart';
 import 'profile_state.dart';
 
 @injectable
@@ -41,6 +42,9 @@ class ProfileCubit extends Cubit<ProfileState> {
   final dialogFormKey = GlobalKey<FormState>();
   final fromKey = GlobalKey<FormState>();
   //todo================================================================
+  late AnimationController animationController;
+  late Animation<Offset> slideAnimation;
+  double opacity = 0.0;
 
   Future<void> getUserData() async {
     isLoading = true;

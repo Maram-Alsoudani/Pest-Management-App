@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:pesticides/Config/theme/theming.dart';
 import 'package:pesticides/Core/utils/colors.dart';
 import 'package:pesticides/Core/utils/firebase_utils.dart';
 import 'package:pesticides/Core/utils/strings.dart';
@@ -17,25 +19,71 @@ class UserDropdown extends StatefulWidget {
 class _UserDropdownState extends State<UserDropdown> {
   @override
   Widget build(BuildContext context) {
-    return DropdownButton<UserAndAdminModelEntity>(
-      style: TextStyle(color: ColorManager.whiteColor),
-      dropdownColor: ColorManager.backgroundColor,
-      hint: Text(
-        StringManager.selectUser,
+    return Padding(
+      padding: EdgeInsets.all(8.0.r),
+      child: DropdownButtonFormField<UserAndAdminModelEntity>(
+        decoration: InputDecoration(
+          enabledBorder: OutlineInputBorder(
+            borderRadius:  BorderRadius.circular(8.r),
+            borderSide: BorderSide(
+              width: 1,
+              color:  ColorManager.whiteColor,
+            ),
+          ),
+          disabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(8.r),
+            borderSide: BorderSide(
+              width: 1,
+              color:  ColorManager.greyShade6,
+            ),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius:  BorderRadius.circular(8.r),
+            borderSide: BorderSide(
+              width: 1,
+              color:ColorManager.whiteColor,
+            ),
+          ),
+          errorBorder: OutlineInputBorder(
+            borderRadius:  BorderRadius.circular(8.r),
+            borderSide: BorderSide(
+              width: 1,
+              color:  ColorManager.primaryColor,
+            ),
+          ),
+          focusedErrorBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(8.r),
+            borderSide: BorderSide(
+              width: 1,
+              color:  ColorManager.primaryColor,
+            ),
+          ),
+        ),
+        validator: (value) {
+          if (value == null) {
+            return "Requird Select User";
+          }
+          return null;
+        },
         style: TextStyle(color: ColorManager.whiteColor),
+        dropdownColor: ColorManager.backgroundColor,
+        hint: Text(
+          StringManager.selectUser,
+          style: TextStyle(color: ColorManager.whiteColor),
+        ),
+        value: SiteViewModel.get(context).selectedValue,
+        items: SiteViewModel.get(context).users.map((user) {
+          return DropdownMenuItem<UserAndAdminModelEntity>(
+            value: user,
+            child: Text(user.userName ?? ""), // Replace 'name' with your field
+          );
+        }).toList(),
+        onChanged: (UserAndAdminModelEntity? newValue) {
+          setState(() {
+            SiteViewModel.get(context).selectedValue = newValue!;
+          });
+        },
       ),
-      value: SiteViewModel.get(context).selectedValue,
-      items: SiteViewModel.get(context).users.map((user) {
-        return DropdownMenuItem<UserAndAdminModelEntity>(
-          value: user,
-          child: Text(user.userName ?? ""), // Replace 'name' with your field
-        );
-      }).toList(),
-      onChanged: (UserAndAdminModelEntity? newValue) {
-        setState(() {
-          SiteViewModel.get(context).selectedValue = newValue!;
-        });
-      },
     );
   }
 }

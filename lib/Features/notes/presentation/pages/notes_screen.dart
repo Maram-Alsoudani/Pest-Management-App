@@ -63,39 +63,41 @@ class _NotesScreenState extends State<NotesScreen> with SingleTickerProviderStat
           ),
         ],
       ),
-      body: Padding(
-        padding: EdgeInsets.all(16.0.sp),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SlideTransition(
-              position: _slideAnimation,
-              child: TextField(
-                maxLength: maxCharacters,
-                onChanged: (text) {
-                  setState(() {
-                    inputText = text;
-                  });
-                },
-                cursorColor: ColorManager.primaryColor,
-                decoration: InputDecoration(
-                  focusColor: ColorManager.greyShade5,
-                  filled: true,
-                  fillColor: ColorManager.whiteColor,
-                  hintText: StringManager.enter_notes,
-                  hintStyle: Theme.of(context)
-                      .textTheme
-                      .titleMedium!
-                      .copyWith(color: ColorManager.greyShade4),
-                  counterStyle: Theme.of(context)
-                      .textTheme
-                      .titleSmall!
-                      .copyWith(color: ColorManager.greyShade4),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: EdgeInsets.all(16.0.sp),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SlideTransition(
+                position: _slideAnimation,
+                child: TextField(
+                  maxLength: maxCharacters,
+                  onChanged: (text) {
+                    setState(() {
+                      inputText = text;
+                    });
+                  },
+                  cursorColor: ColorManager.primaryColor,
+                  decoration: InputDecoration(
+                    focusColor: ColorManager.greyShade5,
+                    filled: true,
+                    fillColor: ColorManager.whiteColor,
+                    hintText: StringManager.enter_notes,
+                    hintStyle: Theme.of(context)
+                        .textTheme
+                        .titleMedium!
+                        .copyWith(color: ColorManager.greyShade4),
+                    counterStyle: Theme.of(context)
+                        .textTheme
+                        .titleSmall!
+                        .copyWith(color: ColorManager.greyShade4),
+                  ),
+                  maxLines: 15,
                 ),
-                maxLines: 15,
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

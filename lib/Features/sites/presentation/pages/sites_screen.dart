@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pesticides/Config/routes/routes_manger.dart';
-import 'package:pesticides/Config/theme/theming.dart';
 import 'package:pesticides/Core/utils/images.dart';
-import 'package:pesticides/Features/sites/presentation/pages/sites_detailes/sites_detailes.dart';
 import 'package:pesticides/Features/sites/presentation/widgets/list_tile_custom.dart';
 import 'package:pesticides/Core/utils/colors.dart';
 
@@ -34,20 +32,17 @@ class SitesScreen extends StatelessWidget {
           ],
         ),
         body: Container(
-
           width: 500.w,
           margin: EdgeInsets.all(15.r),
           padding: EdgeInsets.all(12.r),
           decoration: BoxDecoration(
               color: ColorManager.whiteColor,
               borderRadius: BorderRadius.circular(15.r),
-            image: DecorationImage(
-              opacity: 0.5,
-              image: AssetImage(ImageManager.location,
-              )
-            )
-          
-          ),
+              image: DecorationImage(
+                  opacity: 0.5,
+                  image: AssetImage(
+                    ImageManager.location,
+                  ))),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -71,7 +66,7 @@ class SitesScreen extends StatelessWidget {
                     ),
                     onTap: () {
                       Navigator.pushNamed(
-                          context, RoutesManger.routeNameSitesDetailes);
+                          context, RoutesManger.routeNameSiteReportScreen);
                     },
                   )
                 ],
@@ -96,7 +91,7 @@ class SitesScreen extends StatelessWidget {
                     ),
                     onTap: () {
                       Navigator.pushNamed(
-                          context, RoutesManger.routeNameSitesDetailes);
+                          context, RoutesManger.routeNameSiteReportScreen);
                     },
                   )
                 ],
@@ -121,7 +116,7 @@ class SitesScreen extends StatelessWidget {
                     ),
                     onTap: () {
                       Navigator.pushNamed(
-                          context, RoutesManger.routeNameSitesDetailes);
+                          context, RoutesManger.routeNameSiteReportScreen);
                     },
                   )
                 ],
@@ -146,11 +141,12 @@ class SitesScreen extends StatelessWidget {
                     ),
                     onTap: () {
                       Navigator.pushNamed(
-                          context, RoutesManger.routeNameSitesDetailes);
+                          context, RoutesManger.routeNameSiteReportScreen);
                     },
                   )
                 ],
               ),
+
             ],
           ),
         ),

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:pesticides/Config/routes/routes_manger.dart';
 import 'package:pesticides/Core/component/button_custom.dart';
 import '../../../../Core/utils/colors.dart';
 import '../../../../Core/utils/strings.dart';
@@ -12,6 +14,7 @@ class DeviceScreen extends StatefulWidget {
 
 class _DeviceScreenState extends State<DeviceScreen>
     with SingleTickerProviderStateMixin {
+  String code = 'Unkown';
   double _opacity = 0.0;
   late AnimationController _animationController;
   late Animation<Offset> _slideAnimation;
@@ -25,11 +28,12 @@ class _DeviceScreenState extends State<DeviceScreen>
 
     _slideAnimation =
         Tween<Offset>(begin: Offset(-1.w, 0), end: Offset(0, 0)).animate(
-          CurvedAnimation(
-            parent: _animationController,
-            curve: Curves.easeInOut,
-          ),
-        );
+      CurvedAnimation(
+        parent: _animationController,
+        curve: Curves.easeInOut,
+      ),
+    );
+
 
     Future.delayed(Duration(milliseconds: 300), () {
       setState(() {
@@ -59,7 +63,7 @@ class _DeviceScreenState extends State<DeviceScreen>
             SlideTransition(
                 position: _slideAnimation,
                 child: ButtonCustom(
-                    buttonName: StringManager.deviceNewScan, onTap: () {})),
+                    buttonName: StringManager.deviceNewScan, onTap: scan)),
             SizedBox(height: 20.h),
             AnimatedOpacity(
               opacity: _opacity,
@@ -85,5 +89,25 @@ class _DeviceScreenState extends State<DeviceScreen>
         ),
       ),
     );
+  }
+
+  Future<void> scan() async {
+    late String scanCode;
+    try {
+      scanCode = await FlutterBarcodeScanner.scanBarcode(
+          '#ff6666', 'Cancel', true, ScanMode.QR);
+
+      if (!mounted) return;
+
+      setState(() {
+        code = scanCode;
+      });
+
+      Navigator.of(context).pushNamed(
+          RoutesManger.routeNameDeviceInspectionScreen,
+          arguments: code);
+    } catch (e) {
+      print('this is the error : $e');
+    }
   }
 }

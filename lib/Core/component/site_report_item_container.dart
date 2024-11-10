@@ -4,10 +4,10 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../utils/colors.dart';
 
 class SiteReportItemContainer extends StatelessWidget {
-  String title;
-  void Function() onClicked;
+  final String title;
+  final void Function() onClicked;
 
-  SiteReportItemContainer(
+  const SiteReportItemContainer(
       {super.key, required this.title, required this.onClicked});
 
   @override

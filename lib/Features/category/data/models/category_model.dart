@@ -10,6 +10,5 @@ class CategoryModel {
     CategoryModel(image: ImageManager.location, name: "SITES"),
     CategoryModel(image: ImageManager.report, name: "REPORTS"),
     CategoryModel(image: ImageManager.monitor, name: "INVENTORY"),
-    CategoryModel(image: ImageManager.office, name: "START VISIT"),
   ];
 }

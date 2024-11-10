@@ -68,7 +68,7 @@ class _RecommendationsScreenState extends State<RecommendationsScreen>
         ],
       ),
       body: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 10.w),
+        padding: EdgeInsets.only(left: 25.w, right: 10.w),
         child: ListView.builder(
           itemCount: recommendations.length,
           itemBuilder: (context, index) {

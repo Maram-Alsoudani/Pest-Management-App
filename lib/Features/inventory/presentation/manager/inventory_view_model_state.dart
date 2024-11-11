@@ -43,6 +43,7 @@ class InventoryUpdateMaterailError extends InventoryViewModelState {
 class InventoryDeleteMaterailLoading extends InventoryViewModelState {}
 
 class InventoryDeleteMaterailSuccess extends InventoryViewModelState {}
+class InventoryAnimationMaterailSuccess extends InventoryViewModelState {}
 
 class InventoryDeleteMaterailError extends InventoryViewModelState {
   final Failure error;

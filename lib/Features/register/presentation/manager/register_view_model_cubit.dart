@@ -64,7 +64,6 @@ class RegisterViewModelCubit extends Cubit<RegisterViewModelState> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       opacity = 1.0;
       emit(RegisterViewModelAnimation());
-
       animationController.forward();
     });
   }
@@ -104,6 +103,7 @@ class RegisterViewModelCubit extends Cubit<RegisterViewModelState> {
     passwordController.clear();
     confirmPasswordController.clear();
     // animationController.dispose();
+    opacity=0.0;
     image = null;
   }
 //   @override

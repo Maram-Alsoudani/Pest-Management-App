@@ -39,7 +39,6 @@ class LoginScreenViewModel extends Cubit<LoginStates> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       opacity = 1.0;
       emit(LoginViewModelAnimation());
-
       animationController.forward();
     });
   }
@@ -65,6 +64,7 @@ class LoginScreenViewModel extends Cubit<LoginStates> {
   void clearData() {
     emailController.clear();
     passwordController.clear();
+
     // animationController.dispose();
 
   }

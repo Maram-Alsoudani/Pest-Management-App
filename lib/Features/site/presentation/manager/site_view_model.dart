@@ -68,8 +68,9 @@ class SiteViewModel extends Cubit<SiteState> {
       isLoading = false;
       emit(SiteErrorState(failure: l));
     }, (r) {
-      isLoading = false;
+
       sites = r;
+      isLoading = false;
       emit(SiteSuccessState());
     });
   }

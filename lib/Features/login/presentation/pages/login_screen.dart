@@ -40,6 +40,7 @@ class _LoginScreenState extends State<LoginScreen>
   @override
   Widget build(BuildContext context) {
     String? type = ModalRoute.of(context)?.settings.arguments as String?;
+
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: SystemUiOverlayStyle.light.copyWith(
         statusBarColor: Colors.transparent,
@@ -60,6 +61,8 @@ class _LoginScreenState extends State<LoginScreen>
                 posActionTitle: StringManager.ok,
                 posAction: () {
                   viewModel.dialogShown = false;
+                  viewModel.opacity=0.0;
+
                   Navigator.pushNamedAndRemoveUntil(context,
                       RoutesManger.routeNameCategoryScreen, (route) => false);
                 });
@@ -132,6 +135,8 @@ class _LoginScreenState extends State<LoginScreen>
                                               context,
                                               RoutesManger
                                                   .routeNameEngOwnerScreen);
+                                          viewModel.opacity=0.0;
+
                                         },
                                         child: Column(
                                           children: [
@@ -248,6 +253,7 @@ class _LoginScreenState extends State<LoginScreen>
                                     onPressed: () {
                                       Navigator.pushReplacementNamed(context,
                                           RoutesManger.routeNameRegister);
+                                      viewModel.opacity=0.0;
                                     },
                                     child: Text(
                                       "Don't have an account? Sign Up",

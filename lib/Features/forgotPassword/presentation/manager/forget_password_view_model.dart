@@ -10,6 +10,7 @@ class ForgetPasswordViewModel extends Cubit<ForgetPasswordState> {
   //todo========================*( ForgetPassword )*=================
   var forgetPasswordFormKey = GlobalKey<FormState>();
   var emailController = TextEditingController();
+  bool isLoading=false;
   static ForgetPasswordViewModel get(context) =>
       BlocProvider.of<ForgetPasswordViewModel>(context);
 
@@ -18,11 +19,16 @@ class ForgetPasswordViewModel extends Cubit<ForgetPasswordState> {
       : super(ForgetPasswordInitialState());
   //todo hold data - handel logic
   void forgetPassword() async {
+    isLoading=true;
     emit(ForgetPasswordLoadingState());
     var either = await forgetPasswordUseCase.invoke(emailController.text);
     either.fold((l) {
+      isLoading=false;
       emit(ForgetPasswordErrorState(failure: l));
-    }, (r) => emit(ForgetPasswordSuccessState()));
+    }, (r) {
+      isLoading=false;
+      emit(ForgetPasswordSuccessState());
+    });
   }
 
   //todo========================*( Animations )*=================

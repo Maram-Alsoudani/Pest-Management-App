@@ -22,7 +22,6 @@ import 'package:pesticides/Features/category/profile/presentation/widgets/pick_i
 import 'package:pesticides/Core/component/custom_dialog.dart';
 import 'package:pesticides/Features/category/presentation/manager/category_cubit.dart';
 
-
 class ProfileScreen extends StatefulWidget {
   ProfileScreen({super.key});
 
@@ -30,50 +29,48 @@ class ProfileScreen extends StatefulWidget {
   State<ProfileScreen> createState() => _ProfileScreenState();
 }
 
-class _ProfileScreenState extends State<ProfileScreen> {
-
+class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProviderStateMixin {
   @override
   void initState() {
-    // TODO: implement initState
     ProfileCubit.get(context).getUserData();
-
+    ProfileCubit.get(context).doAnimation(this);
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
+    ProfileCubit.get(context).opacity=0.0;
     return BlocConsumer<ProfileCubit, ProfileState>(
       listener: (context, state) {
-         if (state is ProfileError) {
+        if (state is ProfileError) {
           DialogUtils.showAlertDialog(
             context: context,
             title: StringManager.failed,
             message: state.error.errorMessage,
             posActionTitle: StringManager.ok,
           );
-        }else if (state is ProfileUpdateSuccess) {
-           DialogUtils.showAlertDialog(
-             context: context,
-             title: StringManager.success,
-             message: StringManager.savedSuccessfully,
-             posActionTitle: StringManager.ok,
-           );
-         }else if (state is ProfileUpdateSuccess) {
-           DialogUtils.showAlertDialog(
-             context: context,
-             title: StringManager.success,
-             message: StringManager.savedSuccessfully,
-             posActionTitle: StringManager.ok,
-           );
-         }
+        } else if (state is ProfileUpdateSuccess) {
+          DialogUtils.showAlertDialog(
+            context: context,
+            title: StringManager.success,
+            message: StringManager.savedSuccessfully,
+            posActionTitle: StringManager.ok,
+          );
+        } else if (state is ProfileUpdateSuccess) {
+          DialogUtils.showAlertDialog(
+            context: context,
+            title: StringManager.success,
+            message: StringManager.savedSuccessfully,
+            posActionTitle: StringManager.ok,
+          );
+        }
       },
       builder: (context, state) {
         return ModalProgressHUD(
           opacity: 0.4,
           color: ColorManager.greyShade3,
           inAsyncCall: ProfileCubit.get(context).isLoading,
-          progressIndicator: const Center(child: LottieLoadingWidget(
-
-          )),
+          progressIndicator: const Center(child: LottieLoadingWidget()),
           child: Scaffold(
             body: Stack(
               children: [
@@ -87,7 +84,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       fit: BoxFit.cover,
                     ),
                   ),
-
                 ),
                 SafeArea(
                   child: SingleChildScrollView(
@@ -99,74 +95,85 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             crossAxisAlignment: CrossAxisAlignment.stretch,
                             children: [
                               SizedBox(height: 65.h),
-                              Stack(
-                                alignment: Alignment.center,
-                                children: [
-                                  PickImageWidget(
-                                    icon: Icons.add_a_photo,
-                                    imageUrl: ProfileCubit.get(context)
-                                                .userProfileImage
-                                                ?.isNotEmpty ==
-                                            true
-                                        ? ProfileCubit.get(context)
-                                            .userProfileImage
-                                        : 'path_to_fallback_image', // Handle empty or null URL
-                                    imagePath: ProfileCubit.get(context).image,
-                                    onImagePicked:
-                                        ProfileCubit.get(context).pickImage,
-                                  ),
-                                ],
+                              AnimatedOpacity(
+                                duration: const Duration(seconds: 2),
+                                opacity: ProfileCubit.get(context).opacity,
+                                curve: Curves.easeIn,
+                                child: Stack(
+                                  alignment: Alignment.center,
+                                  children: [
+                                    PickImageWidget(
+                                      icon: Icons.add_a_photo,
+                                      imageUrl: ProfileCubit.get(context)
+                                                  .userProfileImage
+                                                  ?.isNotEmpty ==
+                                              true
+                                          ? ProfileCubit.get(context)
+                                              .userProfileImage
+                                          : 'path_to_fallback_image', // Handle empty or null URL
+                                      imagePath:
+                                          ProfileCubit.get(context).image,
+                                      onImagePicked:
+                                          ProfileCubit.get(context).pickImage,
+                                    ),
+                                  ],
+                                ),
                               ),
                               SizedBox(height: 35.h),
-                              Container(
-                                height: MediaQuery.of(context).size.height * 0.6,
-                                child: ListView(
-                                  shrinkWrap: true,
-                                  physics: const NeverScrollableScrollPhysics(),
-                                  children: [
-                                    BuildInfoCard(
-                                      title: StringManager.role,
-                                      value: ProfileCubit.get(context)
-                                          .typeController
-                                          .text,
-                                    ),
-                                    BuildInfoCard(
-                                      title: StringManager.userName,
-                                      value: ProfileCubit.get(context)
-                                          .userNameController
-                                          .text,
-                                    ),
-                                    BuildInfoCard(
-                                      title: StringManager.phone,
-                                      value: ProfileCubit.get(context)
-                                          .phoneController
-                                          .text,
-                                    ),
-                                    BuildInfoCard(
-                                      title: StringManager.email,
-                                      value: ProfileCubit.get(context)
-                                          .emailController
-                                          .text,
-                                    ),
-                                    Padding(
-                                      padding: EdgeInsets.symmetric(
-                                          horizontal: 13.w, vertical: 10.h),
-                                      child: ButtonCustom(
-                                          buttonName: StringManager.edit,
-                                          onTap: () {
-                                            if (ProfileCubit.get(context)
-                                                .fromKey
-                                                .currentState!
-                                                .validate()) {
-                                              showDialog(
-                                                  context: context,
-                                                  builder: (context) {
-                                                    return EditProfileDialog();
-                                                  });
-                                            }
-                                          }),
-                                    )
-                                  ],
+                              SlideTransition(
+
+                                position:ProfileCubit.get(context).slideAnimation ,
+                                child: Container(
+                                  height:
+                                      MediaQuery.of(context).size.height * 0.6,
+                                  child: ListView(
+                                    shrinkWrap: true,
+                                    physics: const NeverScrollableScrollPhysics(),
+                                    children: [
+                                      BuildInfoCard(
+                                        title: StringManager.role,
+                                        value: ProfileCubit.get(context)
+                                            .typeController
+                                            .text,
+                                      ),
+                                      BuildInfoCard(
+                                        title: StringManager.userName,
+                                        value: ProfileCubit.get(context)
+                                            .userNameController
+                                            .text,
+                                      ),
+                                      BuildInfoCard(
+                                        title: StringManager.phone,
+                                        value: ProfileCubit.get(context)
+                                            .phoneController
+                                            .text,
+                                      ),
+                                      BuildInfoCard(
+                                        title: StringManager.email,
+                                        value: ProfileCubit.get(context)
+                                            .emailController
+                                            .text,
+                                      ),
+                                      Padding(
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal: 13.w, vertical: 10.h),
+                                        child: ButtonCustom(
+                                            buttonName: StringManager.edit,
+                                            onTap: () {
+                                              if (ProfileCubit.get(context)
+                                                  .fromKey
+                                                  .currentState!
+                                                  .validate()) {
+                                                showDialog(
+                                                    context: context,
+                                                    builder: (context) {
+                                                      return EditProfileDialog();
+                                                    });
+                                              }
+                                            }),
+                                      )
+                                    ],
+                                  ),
                                 ),
                               ),
                             ],
@@ -191,8 +198,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               RoutesManger.routeNameCategoryScreen,
                             );
                             ProfileCubit.get(context).clearData();
-
-
                           },
                           icon: const Icon(CupertinoIcons.back,
                               color: ColorManager.whiteColor),

@@ -39,7 +39,7 @@ class InventoryViewModelCubit extends Cubit<InventoryViewModelState> {
   final formKey = GlobalKey<FormState>();
   late AnimationController animationController;
   late Animation<Offset> slideAnimation;
-
+  double opacity = 0.0;
   List<MaterailEntity> materails = [];
   List<MaterailEntity> filteredItems = [];
 
@@ -55,12 +55,14 @@ class InventoryViewModelCubit extends Cubit<InventoryViewModelState> {
     slideAnimation =
         Tween<Offset>(begin: const Offset(-2, 0), end: const Offset(0, 0))
             .animate(
-          CurvedAnimation(
-            parent: animationController,
-            curve: Curves.easeInOut,
-          ),
-        );
+      CurvedAnimation(
+        parent: animationController,
+        curve: Curves.easeInOut,
+      ),
+    );
+
   }
+
   void searchMethod() {
     filteredItems = materails.where((item) {
       var name = item.name;
@@ -112,6 +114,7 @@ class InventoryViewModelCubit extends Cubit<InventoryViewModelState> {
 
   void getMaterails() async {
     isLoading = true;
+    opacity=0.0;
     emit(InventoryGetMaterailLoading());
     var data = await getMaterailUseCase.fetchMaterialsList();
     data.fold(
@@ -125,6 +128,8 @@ class InventoryViewModelCubit extends Cubit<InventoryViewModelState> {
         filteredItems = materails;
         emit(InventoryGetMaterailSuccess(data: r));
         WidgetsBinding.instance.addPostFrameCallback((_) {
+          opacity = 1.0;
+          emit(InventoryAnimationMaterailSuccess());
           animationController.forward();
         });
       },

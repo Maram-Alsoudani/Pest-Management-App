@@ -25,10 +25,7 @@ class ProfileCubit extends Cubit<ProfileState> {
       {required this.readUserOrAdminFromFireStoreUseCase,
       required this.editUserDataUserCase,
       required this.editImageInFireStoreUseCase})
-      : super(ProfileInitial()) {
-
-
-  }
+      : super(ProfileInitial()) {}
 
   TextEditingController userNameController = TextEditingController();
   TextEditingController phoneController = TextEditingController();
@@ -45,6 +42,19 @@ class ProfileCubit extends Cubit<ProfileState> {
   late AnimationController animationController;
   late Animation<Offset> slideAnimation;
   double opacity = 0.0;
+  void doAnimation(SingleTickerProviderStateMixin single) {
+    animationController = AnimationController(
+        vsync: single, duration: const Duration(seconds: 1));
+
+    slideAnimation =
+        Tween<Offset>(begin: const Offset(-1, 0), end: const Offset(0, 0))
+            .animate(
+      CurvedAnimation(
+        parent: animationController,
+        curve: Curves.easeInOut,
+      ),
+    );
+  }
 
   Future<void> getUserData() async {
     isLoading = true;
@@ -65,9 +75,11 @@ class ProfileCubit extends Cubit<ProfileState> {
         emailController.text = user.email ?? 'N/A';
         userProfileImage = user.image ?? '';
 
-        // WidgetsBinding.instance.addPostFrameCallback((_) {
-        //   animationController.forward();
-        // });
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          opacity = 1;
+          emit(ProfileAnimationSuccess());
+          animationController.forward();
+        });
       },
     );
   }
@@ -101,7 +113,6 @@ class ProfileCubit extends Cubit<ProfileState> {
     either.fold(
       (f) {
         isLoading = false;
-        print("${ f.errorMessage.toString()}");
         emit(ProfileUpdateError(error: f));
       },
       (_) {
@@ -128,7 +139,7 @@ class ProfileCubit extends Cubit<ProfileState> {
     }
   }
 
-  void clearData(){
+  void clearData() {
     userNameController.clear();
     phoneController.clear();
     emailController.clear();

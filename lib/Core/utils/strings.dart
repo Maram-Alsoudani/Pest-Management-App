@@ -91,4 +91,7 @@ class StringManager {
   static const String add = "Add";
   static const String someThingWentWrong = "Some Thing Went Wrong";
   static const String emailAlreadyInUse = "Email Already InUse";
+  static const String addSite = "Add Site";
+  static const String siteName = "Site Name";
+  static const String requiredField = "This filed is required";
 }

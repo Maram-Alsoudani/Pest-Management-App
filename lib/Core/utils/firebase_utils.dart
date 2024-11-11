@@ -15,25 +15,22 @@ class FirebaseUtils {
     return FirebaseFirestore.instance
         .collection(type)
         .withConverter<UserAndAdminModelDto>(
-          fromFirestore: (snapshot, options){
-
+          fromFirestore: (snapshot, options) {
             return UserAndAdminModelDto.fromFireStore(snapshot.data()!);
-          }
-              ,
+          },
           toFirestore: (user, options) => user.toFireStore(),
         );
   }
-  static CollectionReference<MaterailModelDto> getMaterailCollection(
-      ) {
+
+  static CollectionReference<MaterailModelDto> getMaterailCollection() {
     return FirebaseFirestore.instance
         .collection(MaterailModelDto.collectionName)
         .withConverter<MaterailModelDto>(
-      fromFirestore: (snapshot, options) {
-       return MaterailModelDto.fromFireStore(snapshot.data()!);
-      }
-          ,
-      toFirestore: (user, options) => user.toFirestore(),
-    );
+          fromFirestore: (snapshot, options) {
+            return MaterailModelDto.fromFireStore(snapshot.data()!);
+          },
+          toFirestore: (user, options) => user.toFirestore(),
+        );
   }
 
   static Future<Either<Failure, String>> addImageToFirebaseStorage(
@@ -82,8 +79,7 @@ class FirebaseUtils {
     }*/
   }
 
-  static CollectionReference<SiteDto> getSiteCollection(
-      {required String uId}) {
+  static CollectionReference<SiteDto> getSiteCollection({required String uId}) {
     return getUserCollection('user')
         .doc(uId)
         .collection(SiteEntity.collectionName)

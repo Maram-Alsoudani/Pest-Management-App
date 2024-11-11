@@ -37,11 +37,7 @@ class _AllUsersState extends State<AllUsers>
     });
   }
 
-  @override
-  void dispose() {
-    searchController.dispose();
-    super.dispose();
-  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -59,15 +55,20 @@ class _AllUsersState extends State<AllUsers>
             progressIndicator: const Center(child: LottieLoadingWidget()),
             child: Column(
               children: [
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 8.0),
-                  child: CustomTextFormField(
-                    hint: StringManager.searchHint,
-                    controller: searchController,
-                    validator: (value) {
-                      return null;
-                    },
-                    borderRadius: BorderRadius.circular(26.0.r),
+                AnimatedOpacity(
+                  duration: const Duration(seconds: 2),
+                  opacity: allUsersViewModel.opacity,
+                  curve: Curves.easeIn,
+                  child: Padding(
+                    padding: const EdgeInsets.only(bottom: 8.0),
+                    child: CustomTextFormField(
+                      hint: StringManager.searchHint,
+                      controller: searchController,
+                      validator: (value) {
+                        return null;
+                      },
+                      borderRadius: BorderRadius.circular(26.0.r),
+                    ),
                   ),
                 ),
                 Expanded(
@@ -90,27 +91,27 @@ class _AllUsersState extends State<AllUsers>
                                 .copyWith(color: ColorManager.greyShade4),
                           ),
                         );
-                      } else if (state is GetAllUsersSuccessState) {
+                      } else  {
                         return SlideTransition(
                           position: allUsersViewModel.slideAnimation,
                           child: Padding(
                             padding: EdgeInsets.all(15.sp),
                             child: ListView.builder(
-                              itemCount: state.usersList.length,
+                              itemCount: allUsersViewModel.allUsers.length,
                               itemBuilder: (context, index) {
-                                final user = state.usersList[index];
+                                final user =allUsersViewModel.allUsers[index];
 
                                 return InkWell(
                                   onTap: () {
                                     Navigator.pushNamed(context,
                                         RoutesManger.routeNameSitesOfUser,
-                                        arguments: state.usersList[index]!.id);
+                                        arguments: allUsersViewModel.allUsers[index].id);
                                   },
                                   child: UserWidget(
-                                    imageUrl: user?.image ??
+                                    imageUrl: user.image ??
                                         "assets/images/avatar.png",
-                                    userName: user?.userName ?? "Unknown User",
-                                    email: user?.email ?? "",
+                                    userName: user.userName ?? "Unknown User",
+                                    email: user.email ?? "",
                                   ),
                                 );
                               },

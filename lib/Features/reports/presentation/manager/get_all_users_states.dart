@@ -17,3 +17,6 @@ class GetAllUsersSuccessState extends GetAllUsersState {
 }
 
 class NoSearchResultsState extends GetAllUsersState {}
+
+class GetAllUsersAnimationState extends GetAllUsersState {}
+

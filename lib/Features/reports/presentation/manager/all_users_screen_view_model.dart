@@ -19,6 +19,7 @@ class AllUsersScreenViewModel extends Cubit<GetAllUsersState> {
 
   late AnimationController animationController;
   late Animation<Offset> slideAnimation;
+  double opacity = 0.0;
 
   void initializeAnimation(SingleTickerProviderStateMixin single) {
     animationController = AnimationController(
@@ -49,7 +50,11 @@ class AllUsersScreenViewModel extends Cubit<GetAllUsersState> {
         isLoading = false;
         emit(GetAllUsersSuccessState(usersList: users));
 
-        animationController.forward();
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          opacity = 1.0;
+          emit(GetAllUsersAnimationState());
+          animationController.forward();
+        });
       },
     );
   }
@@ -72,5 +77,11 @@ class AllUsersScreenViewModel extends Cubit<GetAllUsersState> {
         animationController.forward(from: 0);
       }
     }
+  }
+  @override
+  Future<void> close() {
+    // TODO: implement close
+
+    return super.close();
   }
 }

@@ -34,3 +34,7 @@ class AddSiteErrorState extends SiteState {
 }
 
 class AddSiteSuccessState extends SiteState {}
+
+//todo =======================
+
+class AnimationsSiteSuccessState extends SiteState {}

@@ -112,8 +112,10 @@ class _InventoryScreenState extends State<InventoryScreen>
               ),
             ),
             floatingActionButton: bloc.user.type == UserAndAdminModelDto.admin
-                ? SlideTransition(
-                    position: bloc.slideAnimation,
+                ? AnimatedOpacity(
+                    duration: const Duration(seconds: 2),
+                    opacity: bloc.opacity,
+                    curve: Curves.easeIn,
                     child: FloatingActionButton(
                       backgroundColor: ColorManager.primaryColor,
                       onPressed: () {
@@ -147,13 +149,15 @@ class _InventoryScreenState extends State<InventoryScreen>
                     ),
                   )
                 : null,
-            body: SlideTransition(
-              position: bloc.slideAnimation,
-              child: Padding(
-                padding: EdgeInsets.all(10.0.r),
-                child: Column(
-                  children: [
-                    CustomTextFormField(
+            body: Padding(
+              padding: EdgeInsets.all(10.0.r),
+              child: Column(
+                children: [
+                  AnimatedOpacity(
+                    duration: const Duration(seconds: 2),
+                    opacity: bloc.opacity,
+                    curve: Curves.easeIn,
+                    child: CustomTextFormField(
                       hint: StringManager.searchHint,
                       controller: bloc.searchController,
                       validator: (value) {
@@ -161,9 +165,10 @@ class _InventoryScreenState extends State<InventoryScreen>
                       },
                       borderRadius: BorderRadius.circular(26.0.r),
                     ),
-                    SizedBox(height: 6.0.h),
-                    bloc.filteredItems.isEmpty
-                        ? Expanded(
+                  ),
+                  SizedBox(height: 6.0.h),
+                  bloc.filteredItems.isEmpty
+                      ? Expanded(
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
@@ -179,7 +184,9 @@ class _InventoryScreenState extends State<InventoryScreen>
                             ],
                           ),
                         )
-                        : Expanded(
+                      : Expanded(
+                          child: SlideTransition(
+                            position: bloc.slideAnimation,
                             child: ListView.builder(
                               itemCount: bloc.filteredItems.length,
                               itemBuilder: (context, index) {
@@ -206,6 +213,62 @@ class _InventoryScreenState extends State<InventoryScreen>
                                             child: Slidable(
                                               dragStartBehavior:
                                                   DragStartBehavior.down,
+                                              startActionPane: ActionPane(
+                                                dragDismissible: false,
+                                                motion: const BehindMotion(),
+                                                extentRatio: 0.25,
+                                                children: [
+                                                  SlidableAction(
+                                                    onPressed: (context) {
+                                                      bloc.nameController.text =
+                                                          item.name ?? "";
+                                                      bloc.quantityController
+                                                              .text =
+                                                          item.quantity
+                                                              .toString();
+                                                      showDialog(
+                                                        context: context,
+                                                        builder: (context) {
+                                                          return AddedOrEditMaterailDialog(
+                                                            title: StringManager
+                                                                .edit,
+                                                            buttonName:
+                                                                StringManager
+                                                                    .save,
+                                                            onTap: () {
+                                                              InventoryViewModelCubit
+                                                                      .get(
+                                                                          context)
+                                                                  .updateMaterails(
+                                                                      item.id);
+                                                              InventoryViewModelCubit
+                                                                      .get(
+                                                                          context)
+                                                                  .nameController
+                                                                  .clear();
+                                                              InventoryViewModelCubit
+                                                                      .get(
+                                                                          context)
+                                                                  .quantityController
+                                                                  .clear();
+                                                              Navigator.pop(
+                                                                  context);
+                                                              bloc.getMaterails();
+                                                            },
+                                                          );
+                                                        },
+                                                      );
+                                                    },
+                                                    backgroundColor:
+                                                        ColorManager
+                                                            .greyShade3,
+                                                    foregroundColor:
+                                                        ColorManager.whiteColor,
+                                                    icon: Icons.edit,
+                                                    label: StringManager.edit,
+                                                  ),
+                                                ],
+                                              ),
                                               endActionPane: ActionPane(
                                                 dragDismissible: false,
                                                 motion: const BehindMotion(),
@@ -227,45 +290,9 @@ class _InventoryScreenState extends State<InventoryScreen>
                                                   ),
                                                 ],
                                               ),
-                                              child: GestureDetector(
-                                                onTap: () {
-                                                  bloc.nameController.text =
-                                                      item.name ?? "";
-                                                  bloc.quantityController.text =
-                                                      item.quantity.toString();
-                                                  showDialog(
-                                                    context: context,
-                                                    builder: (context) {
-                                                      return AddedOrEditMaterailDialog(
-                                                        title:
-                                                            StringManager.edit,
-                                                        buttonName:
-                                                            StringManager.save,
-                                                        onTap: () {
-                                                          InventoryViewModelCubit
-                                                                  .get(context)
-                                                              .updateMaterails(
-                                                                  item.id);
-                                                          InventoryViewModelCubit
-                                                                  .get(context)
-                                                              .nameController
-                                                              .clear();
-                                                          InventoryViewModelCubit
-                                                                  .get(context)
-                                                              .quantityController
-                                                              .clear();
-                                                          Navigator.pop(
-                                                              context);
-                                                          bloc.getMaterails();
-                                                        },
-                                                      );
-                                                    },
-                                                  );
-                                                },
-                                                child: MaterailItem(
-                                                  isUnavailable: isUnavailable,
-                                                  item: item,
-                                                ),
+                                              child: MaterailItem(
+                                                isUnavailable: isUnavailable,
+                                                item: item,
                                               ),
                                             ),
                                           ),
@@ -277,9 +304,9 @@ class _InventoryScreenState extends State<InventoryScreen>
                                       );
                               },
                             ),
-                          )
-                  ],
-                ),
+                          ),
+                        )
+                ],
               ),
             ),
           ),

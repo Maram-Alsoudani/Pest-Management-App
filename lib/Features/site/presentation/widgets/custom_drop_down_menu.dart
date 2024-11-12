@@ -24,44 +24,44 @@ class _UserDropdownState extends State<UserDropdown> {
       child: DropdownButtonFormField<UserAndAdminModelEntity>(
         decoration: InputDecoration(
           enabledBorder: OutlineInputBorder(
-            borderRadius:  BorderRadius.circular(8.r),
+            borderRadius: BorderRadius.circular(8.r),
             borderSide: BorderSide(
               width: 1,
-              color:  ColorManager.whiteColor,
+              color: ColorManager.whiteColor,
             ),
           ),
           disabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(8.r),
             borderSide: BorderSide(
               width: 1,
-              color:  ColorManager.greyShade6,
+              color: ColorManager.greyShade6,
             ),
           ),
           focusedBorder: OutlineInputBorder(
-            borderRadius:  BorderRadius.circular(8.r),
+            borderRadius: BorderRadius.circular(8.r),
             borderSide: BorderSide(
               width: 1,
-              color:ColorManager.whiteColor,
+              color: ColorManager.whiteColor,
             ),
           ),
           errorBorder: OutlineInputBorder(
-            borderRadius:  BorderRadius.circular(8.r),
+            borderRadius: BorderRadius.circular(8.r),
             borderSide: BorderSide(
               width: 1,
-              color:  ColorManager.primaryColor,
+              color: ColorManager.primaryColor,
             ),
           ),
           focusedErrorBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(8.r),
             borderSide: BorderSide(
               width: 1,
-              color:  ColorManager.primaryColor,
+              color: ColorManager.primaryColor,
             ),
           ),
         ),
         validator: (value) {
           if (value == null) {
-            return "Requird Select User";
+            return StringManager.requiredField;
           }
           return null;
         },

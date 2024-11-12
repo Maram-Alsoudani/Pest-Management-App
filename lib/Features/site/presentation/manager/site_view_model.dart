@@ -30,6 +30,7 @@ class SiteViewModel extends Cubit<SiteState> {
       required this.fetchUsersDataUseCase})
       : super(SiteInitialState());
 
+  //todo  ================= Add site to fire base =================
   void addSite() async {
     emit(AddSiteLoadingState());
     var either = await addSiteUserCase.invoke(siteNameController.text,
@@ -41,6 +42,8 @@ class SiteViewModel extends Cubit<SiteState> {
       emit(AddSiteSuccessState());
     });
   }
+
+  //todo =========== get user from fire base ===================
 
   Future<void> fetchUsers() async {
     isLoading = true;
@@ -55,6 +58,7 @@ class SiteViewModel extends Cubit<SiteState> {
       emit(UsersSiteSuccessState());
     });
   }
+//todo ============= Get Sites from fire base =================
 
   Future<void> fetchSite() async {
     isLoading = true;
@@ -64,8 +68,9 @@ class SiteViewModel extends Cubit<SiteState> {
       isLoading = false;
       emit(SiteErrorState(failure: l));
     }, (r) {
-      isLoading = false;
+
       sites = r;
+      isLoading = false;
       emit(SiteSuccessState());
     });
   }
@@ -74,5 +79,32 @@ class SiteViewModel extends Cubit<SiteState> {
     siteNameController.clear();
     siteLocationController.clear();
     selectedValue = null;
+  }
+
+  //todo ============= Animations =========================
+
+  late AnimationController animationController;
+  late Animation<Offset> slideAnimation;
+  double opacity = 0.0;
+
+  void doAnimation(SingleTickerProviderStateMixin single) {
+    animationController = AnimationController(
+        vsync: single, duration: const Duration(seconds: 1));
+
+    slideAnimation =
+        Tween<Offset>(begin: const Offset(-1, 0), end: const Offset(0, 0))
+            .animate(
+      CurvedAnimation(
+        parent: animationController,
+        curve: Curves.easeInOut,
+      ),
+    );
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      opacity = 1.0;
+      emit(AnimationsSiteSuccessState());
+
+      animationController.forward();
+    });
   }
 }

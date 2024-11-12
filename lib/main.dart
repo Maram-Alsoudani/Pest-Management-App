@@ -59,14 +59,13 @@ void main() async {
         ),
         BlocProvider(
           create: (context) => getIt<ProfileCubit>(),
-        ), BlocProvider(
+        ),
+        BlocProvider(
           create: (context) => getIt<SiteViewModel>(),
         ),
-
         BlocProvider(
           create: (context) => getIt<InventoryViewModelCubit>(),
         ),
-
       ],
       child: MyApp(
         route: route,

@@ -24,6 +24,9 @@ class ProfileChangeImage extends ProfileState {}
 class ProfileUpdateSuccess extends ProfileState {
 
 }
+class ProfileAnimationSuccess extends ProfileState {
+
+}
 
 class ProfileUpdateLoading extends ProfileState {}
 class ProfileUpdateError extends ProfileState {

@@ -193,6 +193,7 @@ class _RegisterScreenState extends State<RegisterScreen>
                                 context,
                                 RoutesManger.routeNameLogin,
                               );
+                              bloc.opacity=0.0;
                             },
                             child: AnimatedOpacity(
                               duration: const Duration(seconds: 2),

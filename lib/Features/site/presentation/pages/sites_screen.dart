@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
-import 'package:pesticides/Config/routes/routes_manger.dart';
 import 'package:pesticides/Core/utils/images.dart';
 import 'package:pesticides/Core/utils/colors.dart';
 import 'package:pesticides/Features/site/presentation/manager/site_state.dart';
@@ -10,9 +9,7 @@ import 'package:pesticides/Features/site/presentation/manager/site_view_model.da
 import 'package:pesticides/Features/site/presentation/widgets/add_new_site.dart';
 import '../../../../Core/component/custom_dialog.dart';
 import '../../../../Core/component/lottie_loading_widget.dart';
-import '../widgets/expansion_tile_custom.dart';
 import '../../../../Core/utils/strings.dart';
-import '../widgets/list_tile_custom.dart';
 import '../widgets/site_info_item.dart';
 
 class SitesScreen extends StatefulWidget {
@@ -22,13 +19,15 @@ class SitesScreen extends StatefulWidget {
   State<SitesScreen> createState() => _SitesScreenState();
 }
 
-class _SitesScreenState extends State<SitesScreen> {
+class _SitesScreenState extends State<SitesScreen>
+    with SingleTickerProviderStateMixin {
   late SiteViewModel bloc;
   @override
   void initState() {
     bloc = SiteViewModel.get(context);
     bloc.fetchSite();
     bloc.fetchUsers();
+    bloc.doAnimation(this);
     super.initState();
   }
 
@@ -120,18 +119,23 @@ class _SitesScreenState extends State<SitesScreen> {
                   ]),
             ),
             floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-            floatingActionButton: FloatingActionButton(
-              backgroundColor: ColorManager.primaryColor,
-              onPressed: () {
-                showDialog(
-                    context: context,
-                    builder: (context) {
-                      return AddNewSite();
-                    });
-              },
-              child: const Icon(
-                Icons.add,
-                color: ColorManager.whiteColor,
+            floatingActionButton: AnimatedOpacity(
+              duration: const Duration(seconds: 2),
+              opacity: bloc.opacity,
+              curve: Curves.easeIn,
+              child: FloatingActionButton(
+                backgroundColor: ColorManager.primaryColor,
+                onPressed: () {
+                  showDialog(
+                      context: context,
+                      builder: (context) {
+                        return AddNewSite();
+                      });
+                },
+                child: const Icon(
+                  Icons.add,
+                  color: ColorManager.whiteColor,
+                ),
               ),
             ),
           )),

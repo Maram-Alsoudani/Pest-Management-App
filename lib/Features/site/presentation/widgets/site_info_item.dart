@@ -30,7 +30,7 @@ class SiteInfoItem extends StatelessWidget {
             style: TextStyle(fontWeight: FontWeight.bold),
           ),
           onTap: () {
-            Navigator.pushNamed(context, RoutesManger.routeNamePreviewReport);
+            Navigator.pushNamed(context, RoutesManger.routeNameSiteReportScreen);
           },
         ));
   }

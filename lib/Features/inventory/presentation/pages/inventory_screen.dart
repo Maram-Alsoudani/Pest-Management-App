@@ -260,8 +260,7 @@ class _InventoryScreenState extends State<InventoryScreen>
                                                       );
                                                     },
                                                     backgroundColor:
-                                                        ColorManager
-                                                            .greyShade3,
+                                                        ColorManager.greyShade3,
                                                     foregroundColor:
                                                         ColorManager.whiteColor,
                                                     icon: Icons.edit,

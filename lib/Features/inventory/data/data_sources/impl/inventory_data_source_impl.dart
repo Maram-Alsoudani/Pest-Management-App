@@ -17,22 +17,19 @@ class InventoryDataSourceImpl implements InventoryDataSource {
     var taskCollection = FirebaseUtils.getMaterailCollection();
     DocumentReference<MaterailModelDto> taskDoc = taskCollection.doc();
     materails.id = taskDoc.id;
-    return  taskDoc.set(materails);
+    return taskDoc.set(materails);
   }
 
-  Future<void> editMaterail(
-      MaterailModelDto materails
-      ) async {
+  Future<void> editMaterail(MaterailModelDto materails) async {
     var taskCollection = FirebaseUtils.getMaterailCollection();
-    return  taskCollection.doc(materails.id).update({
+    return taskCollection.doc(materails.id).update({
       'name': materails.name,
       'quantity': materails.quantity,
-    });}
+    });
+  }
 
   Future<void> deleteMaterailsFireStore(String id) {
-    return FirebaseUtils.getMaterailCollection()
-        .doc(id)
-        .delete();
+    return FirebaseUtils.getMaterailCollection().doc(id).delete();
   }
 
   @override
@@ -71,18 +68,16 @@ class InventoryDataSourceImpl implements InventoryDataSource {
   }
 
   @override
-  Future<Either<Failure, List<MaterailModelDto>>>
-      fetchMaterialsList() async {
+  Future<Either<Failure, List<MaterailModelDto>>> fetchMaterialsList() async {
     try {
       var connectivityResult = await Connectivity().checkConnectivity();
       if (connectivityResult.contains(ConnectivityResult.wifi) ||
           connectivityResult.contains(ConnectivityResult.mobile)) {
-        var docSnapshot =
-            await FirebaseUtils.getMaterailCollection().get();
-        var data=docSnapshot.docs;
+        var docSnapshot = await FirebaseUtils.getMaterailCollection().get();
+        var data = docSnapshot.docs;
 
-        List<MaterailModelDto> list=data.map((e) =>e.data()).toList();
-        return  Right(list);
+        List<MaterailModelDto> list = data.map((e) => e.data()).toList();
+        return Right(list);
       } else {
         return Left(Failure(errorMessage: StringManager.networkError));
       }
@@ -92,16 +87,18 @@ class InventoryDataSourceImpl implements InventoryDataSource {
   }
 
   @override
-  Future<Either<Failure, void>> updateMaterail(String id,String name, int quantity)async {
+  Future<Either<Failure, void>> updateMaterail(
+      String id, String name, int quantity) async {
     try {
       var connectivityResult = await Connectivity().checkConnectivity();
       if (connectivityResult.contains(ConnectivityResult.wifi) ||
           connectivityResult.contains(ConnectivityResult.mobile)) {
         print("osman=====================================$id");
-        MaterailModelDto materails=MaterailModelDto(id:id,name: name, quantity: quantity);
-        var editFunc=await editMaterail(materails);
+        MaterailModelDto materails =
+            MaterailModelDto(id: id, name: name, quantity: quantity);
+        var editFunc = await editMaterail(materails);
 
-        return  Right(null);
+        return Right(null);
       } else {
         return Left(Failure(errorMessage: StringManager.networkError));
       }

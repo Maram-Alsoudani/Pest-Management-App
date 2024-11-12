@@ -173,13 +173,11 @@ class _InventoryScreenState extends State<InventoryScreen>
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Text(
-                                "Materail Not Found",
+                                StringManager.noMaterialFound,
                                 style: Theme.of(context)
                                     .textTheme
-                                    .titleMedium!
-                                    .copyWith(
-                                        fontSize: 2.sp,
-                                        color: ColorManager.greyShade4),
+                                    .bodyMedium!
+                                    .copyWith(color: ColorManager.greyShade4),
                               ),
                             ],
                           ),
@@ -260,8 +258,7 @@ class _InventoryScreenState extends State<InventoryScreen>
                                                       );
                                                     },
                                                     backgroundColor:
-                                                        ColorManager
-                                                            .greyShade3,
+                                                        ColorManager.greyShade3,
                                                     foregroundColor:
                                                         ColorManager.whiteColor,
                                                     icon: Icons.edit,

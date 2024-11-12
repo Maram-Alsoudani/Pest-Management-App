@@ -83,10 +83,12 @@ class StringManager {
   static const String somethingWentWrong = "Something went wrong";
   static const String view = "View  ";
   static const String noUsersFound = "No Users Found";
-  static const String noSitesFound = 'No sites found for this user';
+  static const String noSitesFound = 'No sites found';
+  static const String noMaterialFound = 'No material found';
   static const String updateSuccessfully = "Updated Successfully";
   static const String deletedSuccessfully = "Deleted Successfully";
   static const String addedSuccessfully = "Added Successfully";
+  static const String siteDeleteSuccessfully = "Site Deleted Successfully";
   static const String savedSuccessfully = "Saved Successfully";
   static const String add = "Add";
   static const String someThingWentWrong = "Some Thing Went Wrong";

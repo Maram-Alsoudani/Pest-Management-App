@@ -167,7 +167,7 @@ class _InventoryScreenState extends State<InventoryScreen>
                     ),
                   ),
                   SizedBox(height: 6.0.h),
-                  bloc.filteredItems.isEmpty
+                  state is InventoryNoSearchResultMaterail
                       ? Expanded(
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,

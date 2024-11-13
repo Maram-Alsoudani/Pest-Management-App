@@ -79,7 +79,7 @@ class SiteViewModel extends Cubit<SiteState> {
       emit(UsersSiteSuccessState());
     });
   }
-//todo ============= Get Sites from fire base =================
+//todo ============= Get Sites from firebase =================
 
   Future<void> fetchSite() async {
     isLoading = true;
@@ -89,10 +89,17 @@ class SiteViewModel extends Cubit<SiteState> {
       isLoading = false;
       emit(SiteErrorState(failure: l));
     }, (r) {
-      sites = r;
-      searchedSites = sites;
-      isLoading = false;
-      emit(SiteSuccessState());
+      if(r.isNotEmpty){
+        sites = r;
+        searchedSites = sites;
+        isLoading = false;
+        emit(SiteSuccessState());
+      }else{
+        isLoading = false;
+        emit(NoResultSearchSiteSuccessState());
+      }
+
+
     });
   }
 
@@ -170,6 +177,12 @@ class SiteViewModel extends Cubit<SiteState> {
               site.siteName!.toLowerCase().contains(query.toLowerCase()))
           .toList();
     }
-    emit(SearchSiteSuccessState()); // Emit state to trigger UI update
+    if(searchedSites.isEmpty){
+      emit(NoResultSearchSiteSuccessState());
+
+    }else{
+      emit(SearchSiteSuccessState());
+
+    }
   }
 }

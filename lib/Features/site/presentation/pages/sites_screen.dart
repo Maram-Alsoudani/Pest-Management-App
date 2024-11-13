@@ -131,7 +131,7 @@ class _SitesScreenState extends State<SitesScreen>
                               ),
                             ),
                           ),
-                          bloc.searchedSites.isEmpty
+                          state is NoResultSearchSiteSuccessState
                               ? Expanded(
                                   child: Center(
                                     child: Text(

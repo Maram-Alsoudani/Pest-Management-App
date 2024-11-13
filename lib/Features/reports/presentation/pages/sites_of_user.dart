@@ -29,14 +29,13 @@ class _SitesOFUserState extends State<SitesOFUser>
     super.initState();
     viewModel.initializeAnimation(this);
 
-    // Delay the execution of context-based code until after the widget is built
     WidgetsBinding.instance.addPostFrameCallback((_) {
       var args = ModalRoute.of(context)!.settings.arguments as String;
-      viewModel.getSites(args); // Now it's safe to use context
+      viewModel.getSites(args);
     });
 
     searchController.addListener(() {
-      viewModel.searchSites(searchController.text); // Update search when typing
+      viewModel.searchSites(searchController.text);
     });
   }
 

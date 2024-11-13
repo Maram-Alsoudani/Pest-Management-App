@@ -68,7 +68,11 @@ class InventoryViewModelCubit extends Cubit<InventoryViewModelState> {
       return name is String &&
           name.toLowerCase().contains(searchController.text.toLowerCase());
     }).toList();
-    emit(InventorySearchMaterail());
+    if (filteredItems.isEmpty) {
+      emit(InventoryNoSearchResultMaterail());
+    } else {
+      emit(InventorySearchMaterail());
+    }
   }
 
   void addedMaterails() async {
@@ -122,15 +126,22 @@ class InventoryViewModelCubit extends Cubit<InventoryViewModelState> {
         emit(InventoryGetMaterailError(error: f));
       },
       (r) {
-        isLoading = false;
-        materails = r;
-        filteredItems = materails;
-        emit(InventoryGetMaterailSuccess(data: r));
-        WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (r.isNotEmpty) {
+          materails = r;
+          filteredItems = materails;
+          isLoading = false;
+          emit(InventoryGetMaterailSuccess(data: r));
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            opacity = 1.0;
+            emit(InventoryAnimationMaterailSuccess());
+            animationController.forward();
+          });
+        } else {
           opacity = 1.0;
           emit(InventoryAnimationMaterailSuccess());
-          animationController.forward();
-        });
+          isLoading = false;
+          emit(InventoryNoSearchResultMaterail());
+        }
       },
     );
   }

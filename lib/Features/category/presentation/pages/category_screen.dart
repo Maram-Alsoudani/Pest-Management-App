@@ -210,9 +210,24 @@ class _CategoryScreenState extends State<CategoryScreen>
                                                   RoutesManger.routeNameSites);
                                             }
                                             if (index == 1) {
-                                              Navigator.pushNamed(
-                                                  context,
-                                                  RoutesManger.routeNameReports);
+                                              var currentUser =
+                                                  SharedPrefsLocal.getData(
+                                                      key: StringManager
+                                                          .keyUserAdmin);
+                                              if (currentUser!.type ==
+                                                  'admin') {
+                                                Navigator.pushNamed(
+                                                    context,
+                                                    RoutesManger
+                                                        .routeNameReportsOfAllUsersForAdmin);
+                                              } else if (currentUser.type ==
+                                                  'user') {
+                                                Navigator.pushNamed(
+                                                    context,
+                                                    RoutesManger
+                                                        .routeNameSitesOfUserForAdmin,
+                                                    arguments: currentUser.id);
+                                              }
                                             }
                                             if (index == 2) {
                                               Navigator.pushNamed(context,

@@ -25,8 +25,15 @@ class ProfileCubit extends Cubit<ProfileState> {
       {required this.readUserOrAdminFromFireStoreUseCase,
       required this.editUserDataUserCase,
       required this.editImageInFireStoreUseCase})
-      : super(ProfileInitial()) {}
+      : super(ProfileInitial()) ;
 
+
+  UserAndAdminModelDto?user;
+
+  UserAndAdminModelEntity? getUser() {
+     user = SharedPrefsLocal.getData(key: StringManager.keyUserAdmin);
+    return user;
+  }
   TextEditingController userNameController = TextEditingController();
   TextEditingController phoneController = TextEditingController();
   TextEditingController emailController = TextEditingController();

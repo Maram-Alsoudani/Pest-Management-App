@@ -110,6 +110,34 @@ class FirebaseUtils {
       var siteCollection = userDoc.reference
           .collection(SiteEntity.collectionName)
           .withConverter<SiteDto>(
+            fromFirestore: (snapshot, _) => SiteDto.fromFireStore(
+              snapshot.data()!,
+            ), // Pass userId here
+            toFirestore: (site, _) => site.toFireStore(),
+          );
+
+      // Step 3: Retrieve all sites in this user's subcollection
+      var sitesSnapshot = await siteCollection.get();
+      var userSites = sitesSnapshot.docs.map((doc) => doc.data()).toList();
+
+      // Step 4: Add these sites to the allSites list
+      allSites.addAll(userSites);
+    }
+
+    return allSites;
+
+    /* List<SiteDto> allSites = [];
+    var userCollection = FirebaseUtils.getUserCollection('user');
+
+    // Step 1: Get all user documents
+    var usersSnapshot = await userCollection.get();
+
+    // Step 2: For each user, get sites from their subcollection
+    for (var userDoc in usersSnapshot.docs) {
+      var userId = userDoc.id;
+      var siteCollection = userDoc.reference
+          .collection(SiteEntity.collectionName)
+          .withConverter<SiteDto>(
             fromFirestore: (snapshot, _) =>
                 SiteDto.fromFireStore(snapshot.data()!),
             toFirestore: (site, _) => site.toFireStore(),
@@ -123,6 +151,20 @@ class FirebaseUtils {
       allSites.addAll(userSites);
     }
 
-    return allSites;
+    return allSites;*/
+  }
+
+  static Future<List<SiteDto>> getUserSite(String uId) async {
+    var sites = FirebaseUtils.getSiteCollection(uId: uId);
+    var siteDoc = await sites.get();
+    return siteDoc.docs.map((doc) => doc.data()).toList();
+  }
+
+  static Future<void> deleteSites(SiteDto site) async {
+    return FirebaseUtils.getUserCollection('user')
+        .doc(site.userId)
+        .collection('site')
+        .doc(site.siteId)
+        .delete();
   }
 }

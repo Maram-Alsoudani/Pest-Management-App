@@ -1,12 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 import 'package:pesticides/Features/register/domain/entities/user_model_entity.dart';
 import 'package:pesticides/Features/site/presentation/manager/site_state.dart';
+import '../../../../Core/utils/SharedPrefsLocal.dart';
+import '../../../../Core/utils/strings.dart';
 import '../../../reports/domain/entities/site_entity.dart';
 import '../../domain/use_cases/add_site_user_case.dart';
+import '../../domain/use_cases/delete_sites_user_case.dart';
 import '../../domain/use_cases/fetch_site_data_use_case.dart';
 import '../../domain/use_cases/fetch_user_data_user_case.dart';
+import '../../domain/use_cases/fetch_user_sites_user_case.dart';
 
 @injectable
 class SiteViewModel extends Cubit<SiteState> {
@@ -14,11 +19,18 @@ class SiteViewModel extends Cubit<SiteState> {
   AddSiteUserCase addSiteUserCase;
   FetchSiteDataUseCase fetchSiteDataUseCase;
   FetchUsersDataUseCase fetchUsersDataUseCase;
+  FetchUsersSitesUseCase fetchUsersSitesUseCase;
+  DeleteSitesUseCase deleteSitesUseCase;
   List<UserAndAdminModelEntity> users = [];
+  late UserAndAdminModelEntity user;
+  SiteEntity? site;
   List<SiteEntity> sites = [];
+  List<SiteEntity> userSites = [];
+  List<SiteEntity> searchedSites = [];
   UserAndAdminModelEntity? selectedValue;
   TextEditingController siteNameController = TextEditingController();
   TextEditingController siteLocationController = TextEditingController();
+  TextEditingController searchController = TextEditingController();
 
   bool isLoading = false;
 
@@ -27,8 +39,17 @@ class SiteViewModel extends Cubit<SiteState> {
   SiteViewModel(
       {required this.addSiteUserCase,
       required this.fetchSiteDataUseCase,
-      required this.fetchUsersDataUseCase})
+      required this.fetchUsersDataUseCase,
+      required this.fetchUsersSitesUseCase,
+      required this.deleteSitesUseCase})
       : super(SiteInitialState());
+
+  //todo ============== get user from shared pref ==========
+
+  UserAndAdminModelEntity? getUser() {
+    var user = SharedPrefsLocal.getData(key: StringManager.keyUserAdmin);
+    return user;
+  }
 
   //todo  ================= Add site to fire base =================
   void addSite() async {
@@ -68,17 +89,48 @@ class SiteViewModel extends Cubit<SiteState> {
       isLoading = false;
       emit(SiteErrorState(failure: l));
     }, (r) {
-
       sites = r;
+      searchedSites = sites;
       isLoading = false;
       emit(SiteSuccessState());
     });
   }
 
+  //todo ================= clear =============
   void clearDate() {
     siteNameController.clear();
     siteLocationController.clear();
     selectedValue = null;
+  }
+
+  //todo ================= get user sites =============
+
+  Future<void> fetchUserSites() async {
+    isLoading = true;
+    emit(GetUserSiteLoadingState());
+    var data = await fetchUsersSitesUseCase.invoke(user.id!);
+    data.fold((l) {
+      isLoading = false;
+      emit(GetUserSiteErrorState(failure: l));
+    }, (r) {
+      userSites = r;
+      isLoading = false;
+      emit(GetUserSiteSuccessState());
+    });
+  }
+//todo ========================= Delete Sites ============
+
+  Future<void> deleteSite(SiteEntity site) async {
+    isLoading = true;
+    emit(DeleteSiteLoadingState());
+    var data = await deleteSitesUseCase.invoke(site);
+    data.fold((l) {
+      isLoading = false;
+      emit(DeleteSiteErrorState(failure: l));
+    }, (r) {
+      isLoading = false;
+      emit(DeleteSiteSuccessState());
+    });
   }
 
   //todo ============= Animations =========================
@@ -106,5 +158,18 @@ class SiteViewModel extends Cubit<SiteState> {
 
       animationController.forward();
     });
+  }
+
+  //todo ======== Search ====================
+  void filterSites(String query) {
+    if (query.isEmpty) {
+      searchedSites = sites;
+    } else {
+      searchedSites = sites
+          .where((site) =>
+              site.siteName!.toLowerCase().contains(query.toLowerCase()))
+          .toList();
+    }
+    emit(SearchSiteSuccessState()); // Emit state to trigger UI update
   }
 }

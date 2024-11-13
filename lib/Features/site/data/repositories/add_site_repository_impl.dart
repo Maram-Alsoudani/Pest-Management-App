@@ -14,7 +14,6 @@ class AddSiteRepositoryImpl implements SiteRepository {
   @override
   Future<Either<Failure, void>> addSite(
       String siteName, String siteLocation, String uId) async {
-
     var either = await addSiteDataSource.addSite(siteName, siteLocation, uId);
     return either.fold((error) => Left(error), (response) => Right(response));
   }
@@ -28,6 +27,18 @@ class AddSiteRepositoryImpl implements SiteRepository {
   @override
   Future<Either<Failure, List<UserAndAdminModelEntity>>> fetchUserData() async {
     var either = await addSiteDataSource.fetchUserData();
+    return either.fold((error) => Left(error), (response) => Right(response));
+  }
+
+  @override
+  Future<Either<Failure, List<SiteEntity>>> fetchUserSites(String uId) async {
+    var either = await addSiteDataSource.fetchUserSites(uId);
+    return either.fold((error) => Left(error), (response) => Right(response));
+  }
+
+  @override
+  Future<Either<Failure, void>> deleteSite(SiteEntity site) async {
+    var either = await addSiteDataSource.deleteSite(site);
     return either.fold((error) => Left(error), (response) => Right(response));
   }
 }

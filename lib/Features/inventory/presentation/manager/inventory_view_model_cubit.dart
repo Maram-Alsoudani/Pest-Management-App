@@ -60,7 +60,6 @@ class InventoryViewModelCubit extends Cubit<InventoryViewModelState> {
         curve: Curves.easeInOut,
       ),
     );
-
   }
 
   void searchMethod() {
@@ -114,7 +113,7 @@ class InventoryViewModelCubit extends Cubit<InventoryViewModelState> {
 
   void getMaterails() async {
     isLoading = true;
-    opacity=0.0;
+    opacity = 0.0;
     emit(InventoryGetMaterailLoading());
     var data = await getMaterailUseCase.fetchMaterialsList();
     data.fold(

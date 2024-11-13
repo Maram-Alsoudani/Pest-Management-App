@@ -37,8 +37,6 @@ class _AllUsersState extends State<AllUsers>
     });
   }
 
-
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -84,14 +82,14 @@ class _AllUsersState extends State<AllUsers>
                       } else if (state is NoSearchResultsState) {
                         return Center(
                           child: Text(
-                            StringManager.noUsersFound,
+                            StringManager.noSitesFound,
                             style: Theme.of(context)
                                 .textTheme
                                 .bodyMedium!
                                 .copyWith(color: ColorManager.greyShade4),
                           ),
                         );
-                      } else  {
+                      } else {
                         return SlideTransition(
                           position: allUsersViewModel.slideAnimation,
                           child: Padding(
@@ -99,7 +97,7 @@ class _AllUsersState extends State<AllUsers>
                             child: ListView.builder(
                               itemCount: allUsersViewModel.allUsers.length,
                               itemBuilder: (context, index) {
-                                final user =allUsersViewModel.allUsers[index];
+                                final user = allUsersViewModel.allUsers[index];
 
                                 return InkWell(
                                   onTap: () {
@@ -107,6 +105,8 @@ class _AllUsersState extends State<AllUsers>
                                         RoutesManger
                                             .routeNameSitesOfUserForAdmin,
                                         arguments: allUsersViewModel.allUsers[index].id);
+
+
                                   },
                                   child: UserWidget(
                                     imageUrl: user.image ??

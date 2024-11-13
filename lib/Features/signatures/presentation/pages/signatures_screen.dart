@@ -1,8 +1,12 @@
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pesticides/Core/utils/colors.dart';
-import 'package:pesticides/Features/signatures/presentation/pages/signature_pad.dart';
+import 'package:pesticides/Features/signatures/presentation/manager/states.dart';
+
+import '../manager/signatures_view_model.dart';
+import 'signature_pad.dart';
 
 class SignaturesScreen extends StatefulWidget {
   SignaturesScreen({super.key});
@@ -12,129 +16,86 @@ class SignaturesScreen extends StatefulWidget {
 }
 
 class _SignaturesScreenState extends State<SignaturesScreen> {
-  List<Uint8List> signaturesList = [];
-  List<int> selectedIndices = [];
-  bool isMultiSelectMode = false;
+  SignaturesViewModel viewModel = SignaturesViewModel();
 
-  Future<void> addNewSignature() async {
-    clearAllSelected();
-    final result = await Navigator.push(
+  Future<void> addNewSignature(BuildContext context) async {
+    var result = await Navigator.push(
       context,
       PullFromButtonPageRoute(page: SignaturePad()),
     );
-    if (result != null) {
-      setState(() {
-        signaturesList.add(result);
-      });
+    if (result != null && result is Uint8List) {
+      viewModel.addNewSignature(result);
     }
-  }
-
-  void deleteSelected() {
-    setState(() {
-      selectedIndices.sort((a, b) => b.compareTo(a));
-      for (var index in selectedIndices) {
-        signaturesList.removeAt(index);
-      }
-      selectedIndices.clear();
-      isMultiSelectMode = false;
-    });
-  }
-
-  void selectAll() {
-    if(signaturesList.length ==selectedIndices.length )return;
-    for (int i = 0; i <= signaturesList.length; i++) {
-      selectedIndices.add(i);
-    }
-    setState(() {});
-  }
-
-  void clearAllSelected() {
-    setState(() {
-      selectedIndices.clear();
-    });
-  }
-
-  void toggleSelection(int index) {
-    setState(() {
-      if (selectedIndices.contains(index)) {
-        selectedIndices.remove(index);
-      } else {
-        selectedIndices.add(index);
-      }
-      isMultiSelectMode = selectedIndices.isNotEmpty;
-    });
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(isMultiSelectMode
-            ? '${selectedIndices.length} Selected'
-            : 'Signatures'),
-        actions: isMultiSelectMode
-            ? [
-                IconButton(icon: Icon(Icons.select_all), onPressed: selectAll),
-                IconButton(
-                  icon: Icon(Icons.delete),
-                  onPressed: deleteSelected,
-                ),
-                IconButton(
-                  icon: Icon(Icons.close),
-                  onPressed: clearAllSelected,
-                ),
-              ]
-            : null,
-      ),
-      body: signaturesList.isEmpty
-          ? Center(
-              child: Text(
+    return BlocProvider(
+      create: (context) => viewModel,
+      child: BlocBuilder<SignaturesViewModel, SignaturesState>(
+        builder: (context, state) {
+          return Scaffold(
+            appBar: AppBar(
+              title: Text(viewModel.isMultiSelectMode
+                  ? '${viewModel.selectedIndices.length} Selected'
+                  : 'Signatures'),
+              actions: viewModel.isMultiSelectMode
+                  ? [
+                      IconButton(
+                          icon: Icon(Icons.select_all),
+                          onPressed: viewModel.selectAll),
+                      IconButton(
+                          icon: Icon(Icons.delete),
+                          onPressed: viewModel.deleteSelected),
+                      IconButton(
+                          icon: Icon(Icons.close),
+                          onPressed: viewModel.clearAllSelected),
+                    ]
+                  : null,
+            ),
+            body: viewModel.signaturesList.isEmpty
+                ? Center(
+                    child: Text(
                 "No signatures added yet",
                 style: TextStyle(color: Colors.white),
                 textAlign: TextAlign.center,
               ),
             )
-          : GridView.builder(
-              itemCount: signaturesList.length,
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                : GridView.builder(
+                    itemCount: viewModel.signaturesList.length,
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,
                 crossAxisSpacing: 5,
                 mainAxisSpacing: 5,
               ),
               itemBuilder: (context, index) {
-                final isSelected = selectedIndices.contains(index);
-                return GestureDetector(
+                      final isSelected =
+                          viewModel.selectedIndices.contains(index);
+                      return GestureDetector(
                   onLongPress: () {
-                    setState(() {
-                      isMultiSelectMode = true;
-                      selectedIndices.add(index);
-                    });
-                  },
+                          viewModel.toggleSelection(index);
+                        },
                   onTap: () {
-                    if (isMultiSelectMode) {
-                      setState(() {
-                        toggleSelection(index);
-                      });
-                    }
+                          if (viewModel.isMultiSelectMode) {
+                            viewModel.toggleSelection(index);
+                          }
                   },
                   child: Stack(
                     children: [
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Container(
-                          width: 200,
-                          height: 200,
                           decoration: BoxDecoration(
                             border: isSelected
-                                ? Border.all(
-                                    color: ColorManager.primaryColor, width: 3)
-                                : null,
+                                      ? Border.all(
+                                          color: ColorManager.primaryColor,
+                                          width: 3)
+                                      : null,
                           ),
                           child: Image.memory(
-                            signaturesList[index],
-                            width: double.infinity,
-                            height: double.infinity,
-                            fit: BoxFit.fill,
+                                  viewModel.signaturesList[index].imageData
+                                      as Uint8List,
+                                  fit: BoxFit.fill,
                           ),
                         ),
                       ),
@@ -152,15 +113,13 @@ class _SignaturesScreenState extends State<SignaturesScreen> {
                 );
               },
             ),
-      floatingActionButton: FloatingActionButton(
-        child: Icon(
-          Icons.add,
-          color: ColorManager.whiteColor,
-          size: 30,
-        ),
-        backgroundColor: ColorManager.primaryColor,
-        shape: CircleBorder(),
-        onPressed: addNewSignature,
+            floatingActionButton: FloatingActionButton(
+              onPressed: () => addNewSignature(context),
+              child: Icon(Icons.add, color: ColorManager.whiteColor, size: 30),
+              backgroundColor: ColorManager.primaryColor,
+            ),
+          );
+        },
       ),
     );
   }
@@ -177,9 +136,8 @@ class PullFromButtonPageRoute extends PageRouteBuilder {
             const end = Offset.zero;
             const curve = Curves.easeInOut;
 
-            var tween =
-                Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
-            var offsetAnimation = animation.drive(tween);
+            var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+      var offsetAnimation = animation.drive(tween);
 
             return SlideTransition(
               position: offsetAnimation,

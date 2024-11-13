@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart'; // Add this import
+import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:pesticides/Config/routes/routes_manger.dart';
-import 'package:pesticides/Features/reports/presentation/manager/all_users_screen_view_model.dart';
-import 'package:pesticides/Features/reports/presentation/manager/get_all_users_states.dart';
 import 'package:pesticides/Features/reports/presentation/widgets/user_widget.dart';
 import 'package:pesticides/di/di.dart';
 
@@ -12,6 +10,8 @@ import '../../../../Core/component/lottie_loading_widget.dart';
 import '../../../../Core/component/text_feild_custom.dart';
 import '../../../../Core/utils/colors.dart';
 import '../../../../Core/utils/strings.dart';
+import '../manager/all_users_screen_view_model.dart';
+import '../manager/get_all_users_states.dart';
 
 class AllUsers extends StatefulWidget {
   const AllUsers({super.key});
@@ -104,7 +104,8 @@ class _AllUsersState extends State<AllUsers>
                                 return InkWell(
                                   onTap: () {
                                     Navigator.pushNamed(context,
-                                        RoutesManger.routeNameSitesOfUser,
+                                        RoutesManger
+                                            .routeNameSitesOfUserForAdmin,
                                         arguments: allUsersViewModel.allUsers[index].id);
                                   },
                                   child: UserWidget(

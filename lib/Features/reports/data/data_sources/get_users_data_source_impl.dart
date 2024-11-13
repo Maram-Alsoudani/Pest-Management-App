@@ -2,12 +2,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:dartz/dartz.dart';
 import 'package:injectable/injectable.dart';
-import 'package:pesticides/Core/utils/strings.dart';
 import 'package:pesticides/Features/register/data/models/user_model_dto.dart';
 import 'package:pesticides/Features/reports/data/data_sources/get_users_data_source.dart';
 
 import '../../../../Core/errors/failures.dart';
-import '../../../../Core/utils/SharedPrefsLocal.dart';
 
 @Injectable(as: GetUsersDataSource)
 class GetUsersDataSourceImpl implements GetUsersDataSource {
@@ -18,9 +16,6 @@ class GetUsersDataSourceImpl implements GetUsersDataSource {
     if (connectivityResult.contains(ConnectivityResult.wifi) ||
         connectivityResult.contains(ConnectivityResult.mobile)) {
       try {
-        var currentUser =
-            SharedPrefsLocal.getData(key: StringManager.keyUserAdmin);
-        if (currentUser != null && currentUser.type == "user") {
           var usersCollection = FirebaseFirestore.instance.collection('user');
           var querySnapshot = await usersCollection.get();
           var users = querySnapshot.docs.map((doc) {
@@ -28,16 +23,6 @@ class GetUsersDataSourceImpl implements GetUsersDataSource {
             return UserAndAdminModelDto.fromFireStore(data);
           }).toList();
           return Right(users);
-        } else {
-          //ToDo: handle this part when current user is user,BUT for now it's the same for both admin and user
-          var usersCollection = FirebaseFirestore.instance.collection('user');
-          var querySnapshot = await usersCollection.get();
-          var users = querySnapshot.docs.map((doc) {
-            final data = doc.data();
-            return UserAndAdminModelDto.fromFireStore(data);
-          }).toList();
-          return Right(users);
-        }
       } catch (e) {
         return Left(Failure(errorMessage: e.toString()));
       }

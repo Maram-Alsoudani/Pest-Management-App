@@ -10,6 +10,10 @@ class GetSitesErrorState extends GetSitesState {
   GetSitesErrorState({required this.errorMessage});
 }
 
+class NoSearchResultsState extends GetSitesState {}
+
+class GetAllUsersAnimationState extends GetSitesState {}
+
 class GetSitesSuccessState extends GetSitesState {
   List<SiteEntity> sitesList;
 

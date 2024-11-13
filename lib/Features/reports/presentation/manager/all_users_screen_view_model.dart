@@ -3,7 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 import 'package:pesticides/Features/register/domain/entities/user_model_entity.dart';
 import 'package:pesticides/Features/reports/domain/use_cases/get_users_use_case.dart';
-import 'package:pesticides/Features/reports/presentation/manager/get_all_users_states.dart';
+
+import 'get_all_users_states.dart';
 
 @injectable
 class AllUsersScreenViewModel extends Cubit<GetAllUsersState> {
@@ -12,6 +13,7 @@ class AllUsersScreenViewModel extends Cubit<GetAllUsersState> {
   AllUsersScreenViewModel({required this.getUsersUseCase})
       : super(GetAllUsersLoadingState());
 
+  List<UserAndAdminModelEntity> originalUsersList = [];
   List<UserAndAdminModelEntity> allUsers = [];
   List<UserAndAdminModelEntity> queryMatchList = [];
 
@@ -46,23 +48,21 @@ class AllUsersScreenViewModel extends Cubit<GetAllUsersState> {
         emit(GetAllUsersErrorState(errorMessage: failure.errorMessage));
       },
       (users) {
+        originalUsersList = users;
         allUsers = users;
         isLoading = false;
         emit(GetAllUsersSuccessState(usersList: users));
-
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          opacity = 1.0;
-          emit(GetAllUsersAnimationState());
-          animationController.forward();
-        });
+        opacity = 1.0;
+        emit(GetAllUsersAnimationState());
+        animationController.forward();
       },
     );
   }
 
   void searchUsers(String query) {
     if (query.isEmpty) {
+      allUsers = originalUsersList;
       emit(GetAllUsersSuccessState(usersList: allUsers));
-      animationController.forward(from: 0);
     } else {
       queryMatchList = allUsers
           .where((user) =>
@@ -73,15 +73,14 @@ class AllUsersScreenViewModel extends Cubit<GetAllUsersState> {
       if (queryMatchList.isEmpty) {
         emit(NoSearchResultsState());
       } else {
-        emit(GetAllUsersSuccessState(usersList: queryMatchList));
-        animationController.forward(from: 0);
+        allUsers = queryMatchList;
+        emit(GetAllUsersSuccessState(usersList: allUsers));
       }
     }
   }
+
   @override
   Future<void> close() {
-    // TODO: implement close
-
     return super.close();
   }
 }

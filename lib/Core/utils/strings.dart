@@ -83,7 +83,7 @@ class StringManager {
   static const String somethingWentWrong = "Something went wrong";
   static const String view = "View  ";
   static const String noUsersFound = "No Users Found";
-  static const String noSitesFound = 'No sites found for this user';
+  static const String noSitesFound = 'No sites found.';
   static const String updateSuccessfully = "Updated Successfully";
   static const String deletedSuccessfully = "Deleted Successfully";
   static const String addedSuccessfully = "Added Successfully";
@@ -94,4 +94,5 @@ class StringManager {
   static const String addSite = "Add Site";
   static const String siteName = "Site Name";
   static const String requiredField = "This filed is required";
+  static const String reports = "Reports";
 }

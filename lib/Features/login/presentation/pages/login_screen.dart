@@ -243,27 +243,6 @@ class _LoginScreenState extends State<LoginScreen>
                                   ),
                                 ],
                               ),
-                              AnimatedOpacity(
-                                duration: Duration(seconds: 2),
-                                opacity: viewModel.opacity,
-                                curve: Curves.easeIn,
-                                child: Padding(
-                                  padding: EdgeInsets.only(bottom: 100.h),
-                                  child: TextButton(
-                                    onPressed: () {
-                                      Navigator.pushReplacementNamed(context,
-                                          RoutesManger.routeNameRegister);
-                                      viewModel.opacity=0.0;
-                                    },
-                                    child: Text(
-                                      "Don't have an account? Sign Up",
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .titleSmall,
-                                    ),
-                                  ),
-                                ),
-                              ),
                             ],
                           ),
                         ),

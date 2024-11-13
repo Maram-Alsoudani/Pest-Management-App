@@ -98,4 +98,5 @@ class StringManager {
   static const String siteName = "Site Name";
   static const String requiredField = "This filed is required";
   static const String reports = "Reports";
+  static const String addAccount = "Add Account";
 }

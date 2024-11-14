@@ -26,52 +26,48 @@ class _AddNewSiteState extends State<AddNewSite>
   @override
   void initState() {
     bloc = SiteViewModel.get(context);
-    bloc.doAnimation(this);
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return SlideTransition(
-      position: bloc.slideAnimation,
-      child: AlertDialog(
-        backgroundColor: ColorManager.backgroundColor,
-        title: Text(
-          StringManager.addSite,
-          style: TextStyle(color: ColorManager.whiteColor),
-        ),
-        content: Form(
-          key: SiteViewModel.get(context).fromKey,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              CustomTextFormField(
-                  hint: StringManager.siteName,
-                  validator: (val) => AppValidators.validateSite(val),
-                  controller: SiteViewModel.get(context).siteNameController),
-              CustomTextFormField(
-                  hint: StringManager.siteLocation,
-                  validator: (val) => AppValidators.validateSite(val),
-                  controller:
-                      SiteViewModel.get(context).siteLocationController),
-              SizedBox(width: 232.w, child: UserDropdown()),
-              ButtonCustom(
-                onTap: () async {
-                  if (SiteViewModel.get(context)
-                          .fromKey
-                          .currentState!
-                          .validate() &&
-                      SiteViewModel.get(context).selectedValue != null) {
-                    SiteViewModel.get(context).addSite();
-                    SiteViewModel.get(context).clearDate();
-                    Navigator.pop(context);
-                    SiteViewModel.get(context).fetchSite();
-                  }
-                },
-                buttonName: StringManager.addSite,
-              )
-            ],
-          ),
+    return AlertDialog(
+      backgroundColor: ColorManager.backgroundColor,
+      title: Text(
+        StringManager.addSite,
+        style: TextStyle(color: ColorManager.whiteColor),
+      ),
+      content: Form(
+        key: SiteViewModel.get(context).fromKey,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            CustomTextFormField(
+                hint: StringManager.siteName,
+                validator: (val) => AppValidators.validateSite(val),
+                controller: SiteViewModel.get(context).siteNameController),
+            CustomTextFormField(
+                hint: StringManager.siteLocation,
+                validator: (val) => AppValidators.validateSite(val),
+                controller:
+                    SiteViewModel.get(context).siteLocationController),
+            SizedBox(width: 232.w, child: UserDropdown()),
+            ButtonCustom(
+              onTap: () async {
+                if (SiteViewModel.get(context)
+                        .fromKey
+                        .currentState!
+                        .validate() &&
+                    SiteViewModel.get(context).selectedValue != null) {
+                  SiteViewModel.get(context).addSite();
+                  SiteViewModel.get(context).clearDate();
+                  Navigator.pop(context);
+                  SiteViewModel.get(context).fetchSite();
+                }
+              },
+              buttonName: StringManager.addSite,
+            )
+          ],
         ),
       ),
     );

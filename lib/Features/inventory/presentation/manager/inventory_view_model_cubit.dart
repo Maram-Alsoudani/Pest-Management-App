@@ -31,7 +31,7 @@ class InventoryViewModelCubit extends Cubit<InventoryViewModelState> {
   }) : super(InventoryViewModelInitial());
   static InventoryViewModelCubit get(context, [bool? listen]) =>
       BlocProvider.of(context, listen: listen ?? false);
-  late UserAndAdminModelEntity user;
+
   bool isLoading = false;
   TextEditingController nameController = TextEditingController();
   TextEditingController quantityController = TextEditingController();
@@ -42,7 +42,7 @@ class InventoryViewModelCubit extends Cubit<InventoryViewModelState> {
   double opacity = 0.0;
   List<MaterailEntity> materails = [];
   List<MaterailEntity> filteredItems = [];
-
+  late UserAndAdminModelEntity user;
   UserAndAdminModelEntity? getUser() {
     var user = SharedPrefsLocal.getData(key: StringManager.keyUserAdmin);
     return user;
@@ -146,7 +146,7 @@ class InventoryViewModelCubit extends Cubit<InventoryViewModelState> {
     );
   }
 
-  void deleteMaterails(String key) async {
+  void deleteMaterails(String key,int index) async {
     isLoading = true;
     emit(InventoryDeleteMaterailLoading());
     var data = await deleteMaterailUseCase.invoke(key);
@@ -157,7 +157,13 @@ class InventoryViewModelCubit extends Cubit<InventoryViewModelState> {
       },
       (r) {
         isLoading = false;
+        filteredItems.removeAt(index);
         emit(InventoryDeleteMaterailSuccess());
+        if(filteredItems.isEmpty){
+          emit(InventoryNoSearchResultMaterail());
+
+        }
+
       },
     );
   }

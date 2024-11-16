@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pesticides/Features/category/presentation/pages/category_screen.dart';
+import 'package:pesticides/Features/chat/presentation/pages/chat_screen.dart';
 import 'package:pesticides/Features/device_inspection/presentation/pages/device_inspection.dart';
 import 'package:pesticides/Features/forgotPassword/presentation/pages/forgot_pass_screen.dart';
 import 'package:pesticides/Features/material_usage/presentation/pages/material_usage_screen.dart';
@@ -43,6 +44,7 @@ class RoutesManger {
     routeNameReportsOfAllUsersForAdmin: (context) => AllUsers(),
     routeNameSitesOfUserForAdmin: (context) => SitesOFUser(),
     routeNameSignature: (context) => SignaturesScreen(),
+    routeNameChat: (context) => ChatScreen(),
   };
 
   static const String routeNameEngOwnerScreen = "EngOwnerScreen";
@@ -65,4 +67,5 @@ class RoutesManger {
   static const String routeNameReportsOfAllUsersForAdmin = "reports";
   static const String routeNameSitesOfUserForAdmin = "sites of user";
   static const String routeNameSignature = "signature";
+  static const String routeNameChat = "chat";
 }

@@ -1,7 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:injectable/injectable.dart';
 import 'package:pesticides/Core/errors/failures.dart';
-import 'package:pesticides/Features/inventory/data/data_sources/impl/inventory_data_source_impl.dart';
 import 'package:pesticides/Features/inventory/data/data_sources/inventory_data_source.dart';
 import 'package:pesticides/Features/inventory/domain/repositories/inventory_repo.dart';
 

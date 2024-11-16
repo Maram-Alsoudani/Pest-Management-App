@@ -37,8 +37,6 @@ class _CategoryScreenState extends State<CategoryScreen>
     bloc.doAnimation(this);
   }
 
-
-
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<CategoryCubit, CategoryState>(
@@ -82,8 +80,8 @@ class _CategoryScreenState extends State<CategoryScreen>
                 child: Scaffold(
                   backgroundColor: Colors.transparent,
                   body: Padding(
-                      padding:
-                          const EdgeInsets.symmetric(vertical: 25, horizontal: 10),
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 25, horizontal: 10),
                       child: state is CategorySuccessState
                           ? Column(
                               children: [
@@ -91,29 +89,34 @@ class _CategoryScreenState extends State<CategoryScreen>
                                   position: bloc.slideAnimation,
                                   child: Row(
                                     children: [
-                                      state.userAndAdminModelEntity.image != null &&
-                                              state.userAndAdminModelEntity.image!
-                                                  .isNotEmpty
+                                      state.userAndAdminModelEntity.image !=
+                                                  null &&
+                                              state.userAndAdminModelEntity
+                                                  .image!.isNotEmpty
                                           ? ClipRRect(
-                                        borderRadius: BorderRadius.circular(50.r),
-                                            child: CachedNetworkImage(
-                                              width: 100.w,
-                                              height: 100.h,
-                                              fit: BoxFit.fill,
-                                              imageUrl: state
-                                                  .userAndAdminModelEntity.image!,
-                                              progressIndicatorBuilder: (context,
-                                                      url, downloadProgress) =>
-                                                  CircularProgressIndicator(
-                                                    color: ColorManager.primaryColor,
-                                                      value: downloadProgress
-                                                          .progress),
-
-                                              errorWidget:
-                                                  (context, url, error) =>
-                                                      ImageProfile(radius: 40.r),
-                                            ),
-                                          )
+                                              borderRadius:
+                                                  BorderRadius.circular(50.r),
+                                              child: CachedNetworkImage(
+                                                width: 100.w,
+                                                height: 100.h,
+                                                fit: BoxFit.fill,
+                                                imageUrl: state
+                                                    .userAndAdminModelEntity
+                                                    .image!,
+                                                progressIndicatorBuilder:
+                                                    (context, url,
+                                                            downloadProgress) =>
+                                                        CircularProgressIndicator(
+                                                            color: ColorManager
+                                                                .primaryColor,
+                                                            value:
+                                                                downloadProgress
+                                                                    .progress),
+                                                errorWidget: (context, url,
+                                                        error) =>
+                                                    ImageProfile(radius: 40.r),
+                                              ),
+                                            )
                                           : ImageProfile(
                                               radius: 40
                                                   .r), // Replace with your fallback widget
@@ -134,7 +137,8 @@ class _CategoryScreenState extends State<CategoryScreen>
                                                     fontSize: FontSize.s24.sp),
                                           ),
                                           Text(
-                                            state.userAndAdminModelEntity.type ??
+                                            state.userAndAdminModelEntity
+                                                    .type ??
                                                 "",
                                             style: Theme.of(context)
                                                 .textTheme
@@ -143,6 +147,9 @@ class _CategoryScreenState extends State<CategoryScreen>
                                         ],
                                       ),
                                       Spacer(),
+                                      IconButton(onPressed: (){
+                                        Navigator.pushNamed(context, RoutesManger.routeNameChat);
+                                      }, icon: Icon(Icons.message)),
                                       PopupMenuButton<String>(
                                         icon: Icon(Icons.more_vert, size: 38.r),
                                         onSelected: (String choice) {
@@ -154,11 +161,13 @@ class _CategoryScreenState extends State<CategoryScreen>
                                             DialogUtils.showAlertDialog(
                                               context: context,
                                               title: StringManager.logout,
-                                              message: StringManager.logoutMessage,
+                                              message:
+                                                  StringManager.logoutMessage,
                                               posActionTitle: StringManager.yes,
                                               negActionTitle: StringManager.no,
                                               posAction: () {
-                                                Navigator.pushNamedAndRemoveUntil(
+                                                Navigator
+                                                    .pushNamedAndRemoveUntil(
                                                   context,
                                                   RoutesManger.routeNameLogin,
                                                   (route) => false,
@@ -190,8 +199,9 @@ class _CategoryScreenState extends State<CategoryScreen>
                                     itemCount: CategoryModel.images.length,
                                     itemBuilder: (context, index) {
                                       return ScaleTransition(
-                                        scale: Tween<double>(begin: 0.0, end: 1.0)
-                                            .animate(
+                                        scale:
+                                            Tween<double>(begin: 0.0, end: 1.0)
+                                                .animate(
                                           CurvedAnimation(
                                             parent: bloc.animationController,
                                             curve: Interval(
@@ -230,8 +240,10 @@ class _CategoryScreenState extends State<CategoryScreen>
                                               }
                                             }
                                             if (index == 2) {
-                                              Navigator.pushNamed(context,
-                                                  RoutesManger.routeNameInventory);
+                                              Navigator.pushNamed(
+                                                  context,
+                                                  RoutesManger
+                                                      .routeNameInventory);
                                             }
                                           },
                                           child: CategoryItem(

@@ -99,4 +99,7 @@ class StringManager {
   static const String requiredField = "This filed is required";
   static const String reports = "Reports";
   static const String addAccount = "Add Account";
+  static const String theCompanyGroup = "The Company Group";
+  static const String sendMessage = "Send";
+  static const String typeYourMessage = "Type your message...";
 }

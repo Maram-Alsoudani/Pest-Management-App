@@ -25,6 +25,15 @@ import '../Features/category/domin/use_case/read_user_or_admin_from_fireStore_us
 import '../Features/category/presentation/manager/category_cubit.dart' as _i386;
 import '../Features/category/profile/presentation/manager/profile_cubit.dart'
     as _i833;
+import '../Features/chat/data/data_sources/chat_data_source.dart' as _i451;
+import '../Features/chat/data/data_sources/impl/chat_data_source_impl.dart'
+    as _i585;
+import '../Features/chat/data/repositories/chat_repo_impl.dart' as _i634;
+import '../Features/chat/domain/repositories/chat_repo.dart' as _i136;
+import '../Features/chat/domain/use_cases/get_message_use_case.dart' as _i925;
+import '../Features/chat/domain/use_cases/send_message_use_case.dart' as _i928;
+import '../Features/chat/presentation/manager/chat_view_model_cubit.dart'
+    as _i532;
 import '../Features/forgotPassword/data/data_sources/forget_password_data_source.dart'
     as _i134;
 import '../Features/forgotPassword/data/data_sources/forget_password_data_source_impl.dart'
@@ -146,6 +155,7 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i166.FetchUsersSitesUseCase>(() => _i166.FetchUsersSitesUseCase(
         siteRepository: gh<_i311.SiteRepository>()));
     gh.factory<_i121.LoginDataSource>(() => _i535.LoginDataSourceImpl());
+    gh.factory<_i451.ChatDataSource>(() => _i585.ChatDataSourceImpl());
     gh.factory<_i969.RegisterDataSource>(() => _i1056.RegisterDataSourceImpl());
     gh.factory<_i44.GetUsersDataSource>(() => _i285.GetUsersDataSourceImpl());
     gh.factory<_i917.AddedMaterailUseCase>(() =>
@@ -176,11 +186,21 @@ extension GetItInjectableX on _i174.GetIt {
         ));
     gh.factory<_i78.CategoryRepo>(() => _i781.CategoryRepoImpl(
         categoryDataSource: gh<_i903.CategoryDataSource>()));
+    gh.factory<_i136.ChatRepo>(
+        () => _i634.ChatRepoImpl(chatDataSource: gh<_i451.ChatDataSource>()));
+    gh.factory<_i925.GetMessageUseCase>(
+        () => _i925.GetMessageUseCase(chatRepo: gh<_i136.ChatRepo>()));
+    gh.factory<_i928.SendMessageUseCase>(
+        () => _i928.SendMessageUseCase(chatRepo: gh<_i136.ChatRepo>()));
     gh.factory<_i58.ForgetPasswordRepository>(() =>
         _i657.ForgetPasswordRepositoryImpl(
             forgetPasswordDataSource: gh<_i134.ForgetPasswordDataSource>()));
     gh.factory<_i886.GetSitesOfUserUseCase>(() => _i886.GetSitesOfUserUseCase(
         getSitesOfUser: gh<_i115.GetSitesOfUserRepo>()));
+    gh.factory<_i532.ChatViewModelCubit>(() => _i532.ChatViewModelCubit(
+          getMessageUseCase: gh<_i925.GetMessageUseCase>(),
+          sendMessageUseCase: gh<_i928.SendMessageUseCase>(),
+        ));
     gh.factory<_i20.RegisterRepo>(() => _i391.RegisterRepoImpl(
         registerDataSource: gh<_i969.RegisterDataSource>()));
     gh.factory<_i558.LoginRepository>(() => _i313.LoginRepositoryImpl(

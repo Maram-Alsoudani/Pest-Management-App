@@ -274,7 +274,9 @@ class _InventoryScreenState extends State<InventoryScreen>
                                                   SlidableAction(
                                                     onPressed: (context) {
                                                       bloc.deleteMaterails(
-                                                          item.id);
+                                                          item.id,index);
+
+
                                                       bloc.getMaterails();
                                                     },
                                                     backgroundColor:

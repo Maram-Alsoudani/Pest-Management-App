@@ -10,6 +10,7 @@ import 'package:pesticides/Features/category/presentation/manager/category_cubit
 import 'package:pesticides/Features/forgotPassword/presentation/manager/forget_password_view_model.dart';
 import 'package:pesticides/Features/inventory/presentation/manager/inventory_view_model_cubit.dart';
 import 'package:pesticides/Features/login/presentation/manager/cubit/login_screen_view_model.dart';
+import 'package:pesticides/Features/site_report/presentation/manager/report_view_model.dart';
 import 'package:pesticides/di/di.dart';
 
 import 'Config/theme/theming.dart';
@@ -65,6 +66,9 @@ void main() async {
         ),
         BlocProvider(
           create: (context) => getIt<InventoryViewModelCubit>(),
+        ),
+        BlocProvider(
+          create: (context) => getIt<ReportViewModel>(),
         ),
       ],
       child: MyApp(

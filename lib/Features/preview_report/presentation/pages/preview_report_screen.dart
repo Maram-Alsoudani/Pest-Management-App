@@ -1,13 +1,17 @@
+import 'dart:typed_data';
+import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:pesticides/Core/utils/images.dart';
-import 'package:pesticides/Features/preview_report/presentation/widgets/location_widget.dart';
 import 'package:pesticides/Core/utils/colors.dart';
-import 'package:pesticides/Features/preview_report/presentation/widgets/photos_widget.dart';
-
-import '../../../../Core/utils/strings.dart';
-import '../widgets/device_widget.dart';
-import '../widgets/recommendtions_and_materiel_usages_widget.dart';
+import 'package:pesticides/Core/utils/strings.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:pesticides/Features/site_report/presentation/manager/report_view_model.dart';
+import 'package:pesticides/Features/preview_report/presentation/widgets/device_widget.dart';
+import 'package:pesticides/Features/preview_report/presentation/widgets/recommendtions_and_materiel_usages_widget.dart';
+import '../../../site_report/domain/entities/report_entity.dart';
+import '../widgets/image_viewer_widget.dart';
+import '../widgets/title_divider_widget.dart';
 
 class PreviewReportScreen extends StatefulWidget {
   PreviewReportScreen({super.key});
@@ -16,23 +20,12 @@ class PreviewReportScreen extends StatefulWidget {
   State<PreviewReportScreen> createState() => _PreviewReportScreenState();
 }
 
-class _PreviewReportScreenState extends State<PreviewReportScreen> with SingleTickerProviderStateMixin {
-  final List<String> rec = [
-    'Air curtain must be maintained',
-    'Bait Stations are without baits',
-    'Bathroom Unsanitary / Please Sanitize',
-    'Bathroom Unsanitary / Please Sanitize ',
-  ];
-
-  final List<String> mat = [
-    'Funnel Trap * 1',
-    'Funnel Trap * 2',
-    'Funnel Trap * 3',
-    'Funnel Trap * 4',
-  ];
+class _PreviewReportScreenState extends State<PreviewReportScreen>
+    with SingleTickerProviderStateMixin {
   late AnimationController _animationController;
   late Animation<Offset> _slideAnimation;
   double _opacity = 0.0;
+
   @override
   void initState() {
     super.initState();
@@ -41,19 +34,18 @@ class _PreviewReportScreenState extends State<PreviewReportScreen> with SingleTi
         AnimationController(vsync: this, duration: const Duration(seconds: 1));
 
     _slideAnimation =
-        Tween<Offset>(begin:  Offset(-1.w, 0), end: const Offset(0, 0)).animate(
-          CurvedAnimation(
-            parent: _animationController,
-            curve: Curves.easeInOut,
-          ),
-        );
+        Tween<Offset>(begin: Offset(-1.w, 0), end: const Offset(0, 0)).animate(
+      CurvedAnimation(
+        parent: _animationController,
+        curve: Curves.easeInOut,
+      ),
+    );
 
     // Trigger the slide animation after the page loads
     Future.delayed(const Duration(milliseconds: 300), () {
       setState(() {
         _opacity = 1.0;
       });
-
 
       _animationController.forward();
     });
@@ -65,8 +57,77 @@ class _PreviewReportScreenState extends State<PreviewReportScreen> with SingleTi
     super.dispose();
   }
 
+  void _viewImage(Uint8List image) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return ImageViewerDialog(imageBytes: image);
+      },
+    );
+  }
+
+  void _viewFileImage(File image) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return ImageViewerDialog(imageFile: image);
+      },
+    );
+  }
+
+  void _submitReport() async {
+    final reportViewModel = context.read<ReportViewModel>();
+    if (reportViewModel.signatures.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text(StringManager.signaturesRequired)),
+      );
+      return;
+    }
+
+    final args =
+        ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
+    final siteName = args?['siteName'] ?? 'Site Name';
+    final userId = args?['userId'] ?? 'userId';
+
+    if (userId == null || userId.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('User ID is missing.')),
+      );
+      return;
+    }
+
+    final report = ReportEntity(
+      id: '',
+      siteName: siteName,
+      notes:
+          reportViewModel.notes.isNotEmpty ? reportViewModel.notes : 'No notes',
+      conditions: reportViewModel.conditions.isNotEmpty
+          ? reportViewModel.conditions
+          : 'No conditions',
+      recommendations: reportViewModel.recommendations.isNotEmpty
+          ? reportViewModel.recommendations
+          : ['No recommendations'],
+      materialUsages: reportViewModel.materials.isNotEmpty
+          ? reportViewModel.materials
+          : {'No material usages': 0},
+      photos: reportViewModel.photos.isNotEmpty
+          ? reportViewModel.photos
+          : ['No photos'],
+      devices: reportViewModel.devices.isNotEmpty
+          ? reportViewModel.devices
+          : ['No devices'],
+      signatures: reportViewModel.signatures,
+      userId: userId,
+      createdAt: DateTime.now(),
+    );
+
+    await reportViewModel.createReport(report, context);
+  }
+
   @override
   Widget build(BuildContext context) {
+    final reportViewModel = context.read<ReportViewModel>();
+
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
@@ -78,11 +139,9 @@ class _PreviewReportScreenState extends State<PreviewReportScreen> with SingleTi
           actions: [
             Padding(
               padding: EdgeInsets.all(15.r),
-              child: const InkWell(
-                child: Icon(
-                  Icons.send,
-                  color: ColorManager.primaryColor,
-                ),
+              child: IconButton(
+                icon: const Icon(Icons.send, color: ColorManager.whiteColor),
+                onPressed: _submitReport,
               ),
             )
           ],
@@ -92,88 +151,157 @@ class _PreviewReportScreenState extends State<PreviewReportScreen> with SingleTi
           margin: EdgeInsets.all(15.r),
           padding: EdgeInsets.all(12.r),
           decoration: BoxDecoration(
-              color: ColorManager.whiteColor,
-              borderRadius: BorderRadius.circular(15.r),
-              ),
+            color: ColorManager.whiteColor,
+            borderRadius: BorderRadius.circular(15.r),
+          ),
           child: SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                AnimatedOpacity(
-                  duration: const Duration(seconds: 2),
+                // Display Notes
+                const SectionTitleWithDivider(title: StringManager.notes),
+                SizedBox(height: 8.h),
+                Text(
+                  reportViewModel.notes.isNotEmpty
+                      ? reportViewModel.notes
+                      : StringManager.noNotes,
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodyMedium!
+                      .copyWith(color: ColorManager.blackColor),
+                ),
+                SizedBox(height: 16.h),
+
+                // Display Conditions
+                const SectionTitleWithDivider(title: StringManager.conditions),
+                SizedBox(height: 8.h),
+                Text(
+                  reportViewModel.conditions.isNotEmpty
+                      ? reportViewModel.conditions
+                      : StringManager.noConditions,
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodyMedium!
+                      .copyWith(color: ColorManager.blackColor),
+                ),
+                SizedBox(height: 16.h),
+
+                // Display Recommendations
+                MaterialUsagesAndRecommendtions(
+                  title: StringManager.recommendations,
+                  materials: reportViewModel.recommendations.isNotEmpty
+                      ? {
+                          for (var item in reportViewModel.recommendations)
+                            item: 1
+                        }
+                      : {StringManager.noRecommendations: 0},
                   opacity: _opacity,
-                  curve: Curves.easeIn,
-                  child: const LocationWidget(
-                    location: "Carrefour , Maddi",
+                  position: _slideAnimation,
+                ),
+                SizedBox(height: 16.h),
+
+                // Display Material Usages
+                MaterialUsagesAndRecommendtions(
+                  title: StringManager.materialUsages,
+                  materials: reportViewModel.materials.isNotEmpty
+                      ? reportViewModel.materials
+                      : {StringManager.noMaterialUsages: 0},
+                  opacity: _opacity,
+                  position: _slideAnimation,
+                ),
+                SizedBox(height: 16.h),
+
+                // Display Photos
+                const SectionTitleWithDivider(title: StringManager.photos),
+                SizedBox(height: 8.h),
+                SizedBox(
+                  height: 80.h, // Set the height for the horizontal ListView
+                  child: SlideTransition(
+                    position: _slideAnimation,
+                    child: reportViewModel.photos.isNotEmpty
+                        ? ListView.builder(
+                            scrollDirection: Axis.horizontal,
+                            itemCount: reportViewModel.photos.length,
+                            itemBuilder: (context, index) {
+                              return GestureDetector(
+                                onTap: () => _viewFileImage(
+                                    File(reportViewModel.photos[index])),
+                                child: Padding(
+                                  padding:
+                                      EdgeInsets.symmetric(horizontal: 8.0.w),
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(8.r),
+                                    child: Container(
+                                      width: 80.w,
+                                      height: 80.h,
+                                      decoration: BoxDecoration(
+                                        borderRadius:
+                                            BorderRadius.circular(8.r),
+                                      ),
+                                      child: Image.file(
+                                        File(reportViewModel.photos[index]),
+                                        fit: BoxFit.cover,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              );
+                            },
+                          )
+                        : Center(
+                            child: Text(
+                              StringManager.noPhotos,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyMedium!
+                                  .copyWith(color: ColorManager.blackColor),
+                            ),
+                          ),
                   ),
                 ),
-                const Divider(color:ColorManager.primaryColor),
-                MaterialUsagesAndRecommendtions(
-                  position: _slideAnimation,
-                  opacity: _opacity,
-                  text: rec,
-                  tilte: StringManager.recommendations,
-                ),
-                const Divider(color:ColorManager.primaryColor),
+                SizedBox(height: 16.h),
 
-                MaterialUsagesAndRecommendtions(
-                  position: _slideAnimation,
-                  opacity: _opacity,
-                  text: mat,
-                  tilte: StringManager.materialUsages,
-                ),
-                const Divider(color:ColorManager.primaryColor),
-                PhotosWidget(
-                  opacity: _opacity,
-                  position: _slideAnimation,
-                ),
-                SizedBox(height: 15.h,),
-                const Divider(color:ColorManager.primaryColor),
+                // Display Devices
                 DeviceWidget(
                   opacity: _opacity,
                   position: _slideAnimation,
+                ),
+                SizedBox(height: 16.h),
 
+                // Display Signatures
+                const SectionTitleWithDivider(title: StringManager.signatures),
+                SizedBox(height: 8.h),
+                Wrap(
+                  spacing: 8.w,
+                  runSpacing: 8.h,
+                  children: reportViewModel.signatures.map((signature) {
+                    return GestureDetector(
+                      onTap: () =>
+                          _viewImage(Uint8List.fromList(signature.codeUnits)),
+                      child: Container(
+                        width: 80.w,
+                        height: 80.h,
+                        decoration: BoxDecoration(
+                          border: Border.all(color: ColorManager.primaryColor),
+                          borderRadius: BorderRadius.circular(8.r),
+                        ),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(8.r),
+                          child: Image.memory(
+                            Uint8List.fromList(signature.codeUnits),
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      ),
+                    );
+                  }).toList(),
                 ),
-                SizedBox(height: 20.h,),
-                const Divider(color:ColorManager.primaryColor),
-                AnimatedOpacity(
-                  duration: const Duration(seconds: 2),
-                  opacity: _opacity,
-                  curve: Curves.easeIn,
-                  child: Text("${StringManager.notes}:  ",
-                      style: Theme.of(context).textTheme.bodyLarge),
-                ),
-                SlideTransition(
-                  position: _slideAnimation,
-                  child: Text("Noting Come Easy/////////////////////////////////////////",
-                      style: Theme.of(context).textTheme.bodyMedium),
-                ),
-                SizedBox(height: 20.h,),
-                const Divider(color:ColorManager.primaryColor),
-                AnimatedOpacity(
-                  duration: const Duration(seconds: 2),
-                  opacity: _opacity,
-                  curve: Curves.easeIn,
-                  child: Text("${StringManager.conditions}:",
-                      style: Theme.of(context).textTheme.bodyLarge),
-                ),
-                SlideTransition(
-                  position: _slideAnimation,
-                  child: Text("Noting Come Easy/////////////////////////////////////////",
-                      style: Theme.of(context).textTheme.bodyMedium),
-                ),
-                SizedBox(height: 20.h,),
-                const Divider(color:ColorManager.primaryColor),
-                AnimatedOpacity(
-                  duration: const Duration(seconds: 2),
-                  opacity: _opacity,
-                  curve: Curves.easeIn,
-                  child: Text("${StringManager.signatures}:",
-                      style: Theme.of(context).textTheme.bodyLarge),
-                ),
-
-
-
+                if (reportViewModel.signatures.isEmpty)
+                  Text(StringManager.signaturesRequired,
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodyMedium!
+                          .copyWith(color: Colors.red)),
               ],
             ),
           ),

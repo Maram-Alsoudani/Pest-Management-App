@@ -29,6 +29,7 @@ class StringManager {
       "Enter your email and we will send you a password reset link";
   static const String enter_conditions = "Enter Conditions";
   static const String enter_notes = "Enter Your Notes Here";
+  static const String enterQuantity = "Enter Quantity";
   static const String error = "Error";
   static const String errorOccurred = "An Error Occurred";
   static const String errorPrefix = "Error: ";
@@ -59,6 +60,7 @@ class StringManager {
   static const String recommendationsScreenName = "Recommendations";
   static const String register = "Register";
   static const String registerSuccessfully = "Register Successfully.";
+  static const String remove = "Remove";
   static const String role = "Role";
   static const String save = "Save";
   static const String searchHint = "Search";
@@ -73,6 +75,7 @@ class StringManager {
   static const String userNotFound =
       "User not found. Please register and choose the right user type for you.";
   static const String wrongPassword = "Wrong password provided for that user.";
+  static const String quantity = "Quantity";
   static const String yes = "Yes";
   static const String editProfile = "Edit Profile";
   static const String edit = "Edit";
@@ -94,4 +97,14 @@ class StringManager {
   static const String addSite = "Add Site";
   static const String siteName = "Site Name";
   static const String requiredField = "This filed is required";
+  static const String siteReports = "Site Reports";
+  static const String reportSubmittedSuccessfully =
+      "Report submitted successfully";
+  static const String noNotes = "no notes";
+  static const String noConditions = "no conditions";
+  static const String noRecommendations = "no recommendations";
+  static const String noMaterialUsages = "no material usages";
+  static const String noPhotos = "no photos";
+  static const String signaturesRequired = "Signatures are required";
+  static const String noDevices = "no devices";
 }

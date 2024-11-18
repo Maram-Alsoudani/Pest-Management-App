@@ -22,4 +22,8 @@ class SharedPrefsLocal {
     }
     return null;
   }
+
+  static Future<void> removeData({required String key}) async {
+    await prefs.remove(key);
+  }
 }

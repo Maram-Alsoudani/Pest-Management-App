@@ -1,8 +1,10 @@
 import 'dart:typed_data';
-
 import 'package:flutter/material.dart';
 import 'package:pesticides/Core/utils/colors.dart';
-import 'package:pesticides/Features/signatures/presentation/pages/signature_pad.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:pesticides/Features/site_report/presentation/manager/report_view_model.dart';
+
+import 'signature_pad.dart';
 
 class SignaturesScreen extends StatefulWidget {
   SignaturesScreen({super.key});
@@ -15,6 +17,15 @@ class _SignaturesScreenState extends State<SignaturesScreen> {
   List<Uint8List> signaturesList = [];
   List<int> selectedIndices = [];
   bool isMultiSelectMode = false;
+
+  @override
+  void initState() {
+    super.initState();
+    final reportViewModel = context.read<ReportViewModel>();
+    signaturesList = reportViewModel.signatures
+        .map((e) => Uint8List.fromList(e.codeUnits))
+        .toList();
+  }
 
   Future<void> addNewSignature() async {
     clearAllSelected();
@@ -66,6 +77,8 @@ class _SignaturesScreenState extends State<SignaturesScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final reportViewModel = context.read<ReportViewModel>();
+
     return Scaffold(
       appBar: AppBar(
         title: Text(isMultiSelectMode
@@ -83,7 +96,17 @@ class _SignaturesScreenState extends State<SignaturesScreen> {
                   onPressed: clearAllSelected,
                 ),
               ]
-            : null,
+            : [
+                IconButton(
+                  icon: const Icon(Icons.save, color: ColorManager.whiteColor),
+                  onPressed: () {
+                    reportViewModel.updateSignatures(signaturesList
+                        .map((e) => String.fromCharCodes(e))
+                        .toList());
+                    Navigator.pop(context);
+                  },
+                ),
+              ],
       ),
       body: signaturesList.isEmpty
           ? Center(
@@ -103,50 +126,25 @@ class _SignaturesScreenState extends State<SignaturesScreen> {
               itemBuilder: (context, index) {
                 final isSelected = selectedIndices.contains(index);
                 return GestureDetector(
-                  onLongPress: () {
-                    setState(() {
-                      isMultiSelectMode = true;
-                      selectedIndices.add(index);
-                    });
-                  },
                   onTap: () {
                     if (isMultiSelectMode) {
-                      setState(() {
-                        toggleSelection(index);
-                      });
+                      toggleSelection(index);
                     }
                   },
-                  child: Stack(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Container(
-                          width: 200,
-                          height: 200,
-                          decoration: BoxDecoration(
-                            border: isSelected
-                                ? Border.all(
-                                    color: ColorManager.primaryColor, width: 3)
-                                : null,
-                          ),
-                          child: Image.memory(
-                            signaturesList[index],
-                            width: double.infinity,
-                            height: double.infinity,
-                            fit: BoxFit.fill,
-                          ),
-                        ),
+                  onLongPress: () {
+                    toggleSelection(index);
+                  },
+                  child: Container(
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                        color: isSelected
+                            ? ColorManager.primaryColor
+                            : Colors.transparent,
+                        width: 3,
                       ),
-                      if (isSelected)
-                        Positioned(
-                          top: 10,
-                          right: 10,
-                          child: Icon(
-                            Icons.check_circle,
-                            color: ColorManager.primaryColor,
-                          ),
-                        ),
-                    ],
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Image.memory(signaturesList[index]),
                   ),
                 );
               },

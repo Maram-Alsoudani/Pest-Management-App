@@ -1,17 +1,33 @@
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:pesticides/Core/utils/strings.dart';
+import 'package:pesticides/Features/site_report/presentation/manager/report_view_model.dart';
 
-import '../../../../Core/utils/strings.dart';
+import 'image_viewer_widget.dart';
 
 class PhotosWidget extends StatelessWidget {
   final double opacity;
   final Animation<Offset> position;
-  const PhotosWidget({super.key, required this.opacity, required this.position});
+  const PhotosWidget(
+      {super.key, required this.opacity, required this.position});
+
+  void _viewImage(BuildContext context, File image) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return ImageViewerDialog(imageFile: image);
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
-    return   Column(
+    final reportViewModel = context.read<ReportViewModel>();
+
+    return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         AnimatedOpacity(
@@ -22,22 +38,41 @@ class PhotosWidget extends StatelessWidget {
               style: Theme.of(context).textTheme.bodyLarge),
         ),
         SizedBox(
-          height: 80.h, // Set the height for the horizontal ListView
+          height: 80.h,
           child: SlideTransition(
             position: position,
-            child: ListView.builder(
-              scrollDirection: Axis.horizontal,
-              padding: EdgeInsets.zero,
-              itemCount: 10,
-              itemBuilder: (context, index) {
-                return Padding(
-                  padding: const EdgeInsets.all(3.0),
-                  child: ClipRRect(
-                      borderRadius: BorderRadius.circular(12.r),
-                      child: Image.asset("assets/images/ins_logo.png")),
-                );
-              },
-            ),
+            child: reportViewModel.photos.isNotEmpty
+                ? ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: reportViewModel.photos.length,
+                    itemBuilder: (context, index) {
+                      return GestureDetector(
+                        onTap: () => _viewImage(
+                            context, File(reportViewModel.photos[index])),
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 8.0.w),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(8.r),
+                            child: Container(
+                              width: 80.w,
+                              height: 80.h,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(8.r),
+                              ),
+                              child: Image.file(
+                                File(reportViewModel.photos[index]),
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                          ),
+                        ),
+                      );
+                    },
+                  )
+                : Center(
+                    child: Text(StringManager.noPhotos,
+                        style: Theme.of(context).textTheme.titleMedium),
+                  ),
           ),
         ),
       ],

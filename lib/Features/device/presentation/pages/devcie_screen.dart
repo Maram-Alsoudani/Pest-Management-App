@@ -3,8 +3,10 @@ import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pesticides/Config/routes/routes_manger.dart';
 import 'package:pesticides/Core/component/button_custom.dart';
-import '../../../../Core/utils/colors.dart';
-import '../../../../Core/utils/strings.dart';
+import 'package:pesticides/Core/utils/colors.dart';
+import 'package:pesticides/Core/utils/strings.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:pesticides/Features/site_report/presentation/manager/report_view_model.dart';
 import '../widgets/custome_date_table.dart';
 
 class DeviceScreen extends StatefulWidget {
@@ -14,7 +16,7 @@ class DeviceScreen extends StatefulWidget {
 
 class _DeviceScreenState extends State<DeviceScreen>
     with SingleTickerProviderStateMixin {
-  String code = 'Unkown';
+  String code = 'Unknown';
   double _opacity = 0.0;
   late AnimationController _animationController;
   late Animation<Offset> _slideAnimation;
@@ -34,7 +36,6 @@ class _DeviceScreenState extends State<DeviceScreen>
       ),
     );
 
-
     Future.delayed(Duration(milliseconds: 300), () {
       setState(() {
         _opacity = 1.0;
@@ -51,9 +52,20 @@ class _DeviceScreenState extends State<DeviceScreen>
 
   @override
   Widget build(BuildContext context) {
+    final reportViewModel = context.read<ReportViewModel>();
+
     return Scaffold(
       appBar: AppBar(
         title: Text(StringManager.device),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.save, color: ColorManager.whiteColor),
+            onPressed: () {
+              reportViewModel.updateDevices([code]);
+              Navigator.pop(context);
+            },
+          ),
+        ],
       ),
       body: Padding(
         padding: EdgeInsets.all(10.r),

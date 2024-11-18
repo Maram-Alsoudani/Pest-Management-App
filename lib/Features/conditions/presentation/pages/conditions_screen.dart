@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:pesticides/Core/utils/colors.dart';
 import 'package:pesticides/Core/utils/strings.dart';
-import '../../../../Core/utils/colors.dart';
+import 'package:pesticides/Features/site_report/presentation/manager/report_view_model.dart';
 
 class ConditionsScreen extends StatefulWidget {
-  ConditionsScreen({super.key});
+  const ConditionsScreen({Key? key}) : super(key: key);
 
   @override
   State<ConditionsScreen> createState() => _ConditionsScreenState();
@@ -14,9 +16,11 @@ class _ConditionsScreenState extends State<ConditionsScreen>
     with SingleTickerProviderStateMixin {
   final int maxCharacters = 500;
   String inputText = '';
+  final TextEditingController _conditionsController = TextEditingController();
 
   late AnimationController _animationController;
   late Animation<Offset> _slideAnimation;
+
   @override
   void initState() {
     super.initState();
@@ -25,20 +29,24 @@ class _ConditionsScreenState extends State<ConditionsScreen>
         AnimationController(vsync: this, duration: const Duration(seconds: 1));
 
     _slideAnimation =
-        Tween<Offset>(begin:  Offset(0, 2.h), end: const Offset(0, 0)).animate(
-          CurvedAnimation(
-            parent: _animationController,
-            curve: Curves.easeInOut,
-          ),
-        );
+        Tween<Offset>(begin: Offset(0, 2.h), end: const Offset(0, 0)).animate(
+      CurvedAnimation(
+        parent: _animationController,
+        curve: Curves.easeInOut,
+      ),
+    );
 
     // Trigger the slide animation after the page loads
     Future.delayed(const Duration(milliseconds: 300), () {
-
-
-
       _animationController.forward();
     });
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final reportViewModel = context.read<ReportViewModel>();
+    _conditionsController.text = reportViewModel.conditions;
   }
 
   @override
@@ -49,23 +57,15 @@ class _ConditionsScreenState extends State<ConditionsScreen>
 
   @override
   Widget build(BuildContext context) {
+    final reportViewModel = context.read<ReportViewModel>();
+
     return Scaffold(
       appBar: AppBar(
-        title: Text("Carrefour",
+        title: Text(StringManager.conditions,
             style: Theme.of(context)
                 .textTheme
                 .titleSmall!
                 .copyWith(fontSize: 25.sp)),
-        actions: [
-          Padding(
-            padding: EdgeInsets.only(right: 15.w),
-            child: Icon(
-              Icons.check,
-              size: 35.sp,
-              color: ColorManager.primaryColor,
-            ),
-          ),
-        ],
       ),
       body: Padding(
         padding: EdgeInsets.all(16.0.sp),
@@ -76,11 +76,13 @@ class _ConditionsScreenState extends State<ConditionsScreen>
             SlideTransition(
               position: _slideAnimation,
               child: TextField(
+                controller: _conditionsController,
                 maxLength: maxCharacters,
                 onChanged: (text) {
                   setState(() {
                     inputText = text;
                   });
+                  reportViewModel.updateConditions(text);
                 },
                 cursorColor: ColorManager.primaryColor,
                 decoration: InputDecoration(
@@ -97,6 +99,27 @@ class _ConditionsScreenState extends State<ConditionsScreen>
                       .copyWith(color: ColorManager.greyShade4),
                 ),
                 maxLines: 15,
+              ),
+            ),
+            SizedBox(height: 20.h),
+            Center(
+              child: ElevatedButton(
+                onPressed: () {
+                  Navigator.pop(context, _conditionsController.text);
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: ColorManager.primaryColor,
+                  padding:
+                      EdgeInsets.symmetric(horizontal: 32.w, vertical: 12.h),
+                  textStyle: TextStyle(
+                    fontSize: 18.sp,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                child: Text(
+                  'Save Conditions',
+                  style: Theme.of(context).textTheme.titleSmall,
+                ),
               ),
             ),
           ],

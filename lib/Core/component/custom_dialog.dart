@@ -170,7 +170,7 @@ class DialogUtils {
         actionsWithSeparators.add(
           Divider(
             color: isDarkMode
-                ? ColorManager.whiteColor.withOpacity(0.2)
+                ? ColorManager.whiteColor.withOpacity(0.1)
                 : ColorManager.blackColor.withOpacity(0.2),
             thickness: 0.6,
           ),
@@ -181,7 +181,7 @@ class DialogUtils {
     if (Platform.isIOS || Platform.isMacOS) {
       // iOS Style
       showCupertinoDialog(
-        barrierDismissible:barrierDismissible??false ,
+        barrierDismissible: barrierDismissible ?? false,
         context: context,
         builder: (BuildContext context) {
           return CupertinoTheme(
@@ -194,7 +194,6 @@ class DialogUtils {
                   : ColorManager.whiteColor.withOpacity(0.8),
             ),
             child: CupertinoAlertDialog(
-
               title: Padding(
                 padding: const EdgeInsets.only(bottom: 8.0),
                 child: Center(
@@ -235,8 +234,7 @@ class DialogUtils {
     } else {
       // Android Style
       showDialog(
-        barrierDismissible:barrierDismissible??false ,
-
+        barrierDismissible: barrierDismissible ?? false,
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(

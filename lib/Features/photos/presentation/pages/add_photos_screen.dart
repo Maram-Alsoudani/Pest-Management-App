@@ -6,6 +6,8 @@ import 'package:image_picker/image_picker.dart';
 import 'package:pesticides/Core/utils/strings.dart';
 import 'package:pesticides/Core/utils/colors.dart';
 import 'package:pesticides/Core/component/show_model_picker_image.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:pesticides/Features/site_report/presentation/manager/report_view_model.dart';
 
 class AddPhotosScreen extends StatefulWidget {
   @override
@@ -15,6 +17,13 @@ class AddPhotosScreen extends StatefulWidget {
 class _AddPhotosScreenState extends State<AddPhotosScreen> {
   List<File> images = [];
   final ImagePicker _picker = ImagePicker();
+
+  @override
+  void initState() {
+    super.initState();
+    final reportViewModel = context.read<ReportViewModel>();
+    images = reportViewModel.photos.map((path) => File(path)).toList();
+  }
 
   Future<void> _pickImage(ImageSource source) async {
     final pickedFile = await _picker.pickImage(source: source);
@@ -69,6 +78,8 @@ class _AddPhotosScreenState extends State<AddPhotosScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final reportViewModel = context.read<ReportViewModel>();
+
     return Scaffold(
       appBar: AppBar(
         surfaceTintColor: Colors.transparent,
@@ -77,6 +88,15 @@ class _AddPhotosScreenState extends State<AddPhotosScreen> {
           style:
               Theme.of(context).textTheme.titleSmall!.copyWith(fontSize: 25.sp),
         ),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.save, color: ColorManager.whiteColor),
+            onPressed: () {
+              reportViewModel.updatePhotos(images.map((e) => e.path).toList());
+              Navigator.pop(context);
+            },
+          ),
+        ],
       ),
       body: Padding(
         padding: EdgeInsets.all(16.0.r),
@@ -113,13 +133,9 @@ class _AddPhotosScreenState extends State<AddPhotosScreen> {
                         borderRadius: BorderRadius.circular(16.r),
                         child: Container(
                           decoration: BoxDecoration(
-                            color: ColorManager.greyShade2,
                             borderRadius: BorderRadius.circular(16.r),
                           ),
-                          child: Image.file(
-                            images[index],
-                            fit: BoxFit.cover,
-                          ),
+                          child: Image.file(images[index], fit: BoxFit.cover),
                         ),
                       ),
                     );

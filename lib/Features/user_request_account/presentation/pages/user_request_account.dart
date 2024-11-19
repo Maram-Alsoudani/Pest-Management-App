@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -17,43 +19,40 @@ import 'package:pesticides/Core/component/show_model_picker_image.dart';
 import '../../../../Core/component/drop_down_menu_widget.dart';
 import '../../../../Core/component/text_feild_custom.dart';
 import '../../../../Core/component/validators.dart';
-import '../manager/register_view_model_cubit.dart';
+import '../manager/user_request_account_view_model_cubit.dart';
 import '../widgets/pick_Image_widget.dart';
 
-class RegisterScreen extends StatefulWidget {
-  RegisterScreen({super.key});
+class UserRequestAccount extends StatefulWidget {
+  UserRequestAccount({super.key});
 
   @override
-  State<RegisterScreen> createState() => _RegisterScreenState();
+  State<UserRequestAccount> createState() => _UserRequestAccountState();
 }
 
-class _RegisterScreenState extends State<RegisterScreen>
+class _UserRequestAccountState extends State<UserRequestAccount>
     with SingleTickerProviderStateMixin {
-  late RegisterViewModelCubit bloc;
+  late UserRequestAccountCubit bloc;
 
   @override
   void initState() {
     super.initState();
-    bloc = RegisterViewModelCubit.get(context);
+    bloc = UserRequestAccountCubit.get(context);
     bloc.doAnimation(this);
     bloc.initValueDropDown();
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<RegisterViewModelCubit, RegisterViewModelState>(
+    return BlocConsumer<UserRequestAccountCubit, UserRequestAccountState>(
       listener: (context, state) {
-        if (state is RegisterViewModelSuccess) {
+        if (state is UserRequestAccountViewModelSuccess) {
           DialogUtils.showAlertDialog(
               context: context,
               title: StringManager.success,
-              message: StringManager.registerSuccessfully,
+              message: StringManager.sentRequestSuccssfully,
               posActionTitle: StringManager.ok,
-              posAction: () {
-                Navigator.pushNamedAndRemoveUntil(context,
-                    RoutesManger.routeNameCategoryScreen, (route) => false);
-              });
-        } else if (state is RegisterViewModelError) {
+            );
+        } else if (state is UserRequestAccountViewModelError) {
           DialogUtils.showAlertDialog(
             context: context,
             title: StringManager.failed,
@@ -180,11 +179,14 @@ class _RegisterScreenState extends State<RegisterScreen>
                         SlideTransition(
                           position: bloc.slideAnimation,
                           child: ButtonCustom(
-                            buttonName: StringManager.addAccount,
-                            onTap: () {
+                            buttonName: StringManager.requestAccount,
+                            onTap: () async{
                               if (bloc.fromKey.currentState!.validate()) {
-                                bloc.register();
+                                bloc.userRequestAccount();
                               }
+                              final signInMethods = await FirebaseAuth.instance.fetchSignInMethodsForEmail("ahmed2@gmail.com");
+                     
+            
                             },
                           ),
                         ),

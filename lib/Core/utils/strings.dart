@@ -102,4 +102,9 @@ class StringManager {
   static const String theCompanyGroup = "The Company Group";
   static const String sendMessage = "Send";
   static const String typeYourMessage = "Type your message...";
+  static const String accept = "Accept";
+  static const String decline = "Decline";
+  static const String accountRequests = "Account Requests";
+  static const String requestAccount = "Request Account";
+  static const String sentRequestSuccssfully = "Sent Request Successfully";
 }

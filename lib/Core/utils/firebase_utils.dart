@@ -5,6 +5,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:pesticides/Features/chat/data/models/message_dto.dart';
 import 'package:pesticides/Features/reports/domain/entities/site_entity.dart';
+import 'package:pesticides/Features/user_request_account/data/models/user_request_account_model_dto.dart';
 import '../../Features/inventory/data/models/materail_model_dto.dart';
 import '../../Features/register/data/models/user_model_dto.dart';
 import '../../Features/reports/data/models/site_dto.dart';
@@ -18,6 +19,17 @@ class FirebaseUtils {
         .withConverter<UserAndAdminModelDto>(
           fromFirestore: (snapshot, options) {
             return UserAndAdminModelDto.fromFireStore(snapshot.data()!);
+          },
+          toFirestore: (user, options) => user.toFireStore(),
+        );
+  }
+  static CollectionReference<UserRequestAccountDto> getUserRequestAccountCollection(
+      String type) {
+    return FirebaseFirestore.instance
+        .collection(type)
+        .withConverter<UserRequestAccountDto>(
+          fromFirestore: (snapshot, options) {
+            return UserRequestAccountDto.fromFireStore(snapshot.data()!);
           },
           toFirestore: (user, options) => user.toFireStore(),
         );

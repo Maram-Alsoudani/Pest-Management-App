@@ -148,6 +148,9 @@ class _CategoryScreenState extends State<CategoryScreen>
                                       ),
                                       Spacer(),
                                       IconButton(onPressed: (){
+                                        Navigator.pushNamed(context, RoutesManger.routeNameRequiest);
+                                      }, icon: Icon(Icons.attribution,size: 28.sp,)),
+                                      IconButton(onPressed: (){
                                         Navigator.pushNamed(context, RoutesManger.routeNameChat);
                                       }, icon: Icon(Icons.message)),
                                       PopupMenuButton<String>(

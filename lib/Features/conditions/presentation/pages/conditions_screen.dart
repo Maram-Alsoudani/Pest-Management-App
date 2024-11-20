@@ -69,60 +69,62 @@ class _ConditionsScreenState extends State<ConditionsScreen>
       ),
       body: Padding(
         padding: EdgeInsets.all(16.0.sp),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Add SlideTransition for the TextField
-            SlideTransition(
-              position: _slideAnimation,
-              child: TextField(
-                controller: _conditionsController,
-                maxLength: maxCharacters,
-                onChanged: (text) {
-                  setState(() {
-                    inputText = text;
-                  });
-                  reportViewModel.updateConditions(text);
-                },
-                cursorColor: ColorManager.primaryColor,
-                decoration: InputDecoration(
-                  filled: true,
-                  fillColor: ColorManager.whiteColor,
-                  hintText: StringManager.enter_conditions,
-                  hintStyle: Theme.of(context)
-                      .textTheme
-                      .titleMedium!
-                      .copyWith(color: ColorManager.greyShade4),
-                  counterStyle: Theme.of(context)
-                      .textTheme
-                      .titleSmall!
-                      .copyWith(color: ColorManager.greyShade4),
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Add SlideTransition for the TextField
+              SlideTransition(
+                position: _slideAnimation,
+                child: TextField(
+                  controller: _conditionsController,
+                  maxLength: maxCharacters,
+                  onChanged: (text) {
+                    setState(() {
+                      inputText = text;
+                    });
+                    reportViewModel.updateConditions(text);
+                  },
+                  cursorColor: ColorManager.primaryColor,
+                  decoration: InputDecoration(
+                    filled: true,
+                    fillColor: ColorManager.whiteColor,
+                    hintText: StringManager.enter_conditions,
+                    hintStyle: Theme.of(context)
+                        .textTheme
+                        .titleMedium!
+                        .copyWith(color: ColorManager.greyShade4),
+                    counterStyle: Theme.of(context)
+                        .textTheme
+                        .titleSmall!
+                        .copyWith(color: ColorManager.greyShade4),
+                  ),
+                  maxLines: 15,
                 ),
-                maxLines: 15,
               ),
-            ),
-            SizedBox(height: 20.h),
-            Center(
-              child: ElevatedButton(
-                onPressed: () {
-                  Navigator.pop(context, _conditionsController.text);
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: ColorManager.primaryColor,
-                  padding:
-                      EdgeInsets.symmetric(horizontal: 32.w, vertical: 12.h),
-                  textStyle: TextStyle(
-                    fontSize: 18.sp,
-                    fontWeight: FontWeight.bold,
+              SizedBox(height: 20.h),
+              Center(
+                child: ElevatedButton(
+                  onPressed: () {
+                    Navigator.pop(context, _conditionsController.text);
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: ColorManager.primaryColor,
+                    padding:
+                        EdgeInsets.symmetric(horizontal: 32.w, vertical: 12.h),
+                    textStyle: TextStyle(
+                      fontSize: 18.sp,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  child: Text(
+                    'Save Conditions',
+                    style: Theme.of(context).textTheme.titleSmall,
                   ),
                 ),
-                child: Text(
-                  'Save Conditions',
-                  style: Theme.of(context).textTheme.titleSmall,
-                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

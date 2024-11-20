@@ -247,6 +247,7 @@ class _SitesScreenState extends State<SitesScreen>
                                 itemBuilder: (context, index) {
                                   return SiteInfoItem(
                                     site: bloc.userSites[index],
+                                    onDelete: (){},
                                   );
                                 }),
                           ),

@@ -9,7 +9,8 @@ import '../../../reports/domain/entities/site_entity.dart';
 
 class SiteInfoItem extends StatelessWidget {
   SiteEntity site;
-  SiteInfoItem({required this.site});
+  Function onDelete;
+  SiteInfoItem({required this.site,required this.onDelete});
 
   @override
   Widget build(BuildContext context) {

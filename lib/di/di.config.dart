@@ -158,12 +158,6 @@ extension GetItInjectableX on _i174.GetIt {
         () => _i290.ForgetPasswordDataSourceImpl());
     gh.factory<_i1010.InventoryRepo>(() => _i663.InventoryRepoImpl(
         inventoryDataSource: gh<_i208.InventoryDataSource>()));
-    gh.factory<_i720.FetchUsersDataUseCase>(() => _i720.FetchUsersDataUseCase(
-        siteRepository: gh<_i311.SiteRepository>()));
-    gh.factory<_i891.FetchSiteDataUseCase>(() =>
-        _i891.FetchSiteDataUseCase(siteRepository: gh<_i311.SiteRepository>()));
-    gh.factory<_i855.AddSiteUserCase>(() =>
-        _i855.AddSiteUserCase(siteRepository: gh<_i311.SiteRepository>()));
     gh.factory<_i855.AddSiteUserCase>(() =>
         _i855.AddSiteUserCase(siteRepository: gh<_i311.SiteRepository>()));
     gh.factory<_i999.DeleteSitesUseCase>(() =>
@@ -179,19 +173,14 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i969.RegisterDataSource>(() => _i1056.RegisterDataSourceImpl());
     gh.factory<_i44.GetUsersDataSource>(() => _i285.GetUsersDataSourceImpl());
     gh.factory<_i585.ReportDataSource>(() => _i1035.ReportDataSourceImpl());
-    gh.factory<_i869.SiteViewModel>(() => _i869.SiteViewModel(
-          addSiteUserCase: gh<_i855.AddSiteUserCase>(),
-          fetchSiteDataUseCase: gh<_i891.FetchSiteDataUseCase>(),
-          fetchUsersDataUseCase: gh<_i720.FetchUsersDataUseCase>(),
-        ));
     gh.factory<_i917.AddedMaterailUseCase>(() =>
         _i917.AddedMaterailUseCase(inventoryRepo: gh<_i1010.InventoryRepo>()));
-    gh.factory<_i276.UpdateMaterialUseCase>(() =>
-        _i276.UpdateMaterialUseCase(inventoryRepo: gh<_i1010.InventoryRepo>()));
     gh.factory<_i635.DeleteMaterialUseCase>(() =>
         _i635.DeleteMaterialUseCase(inventoryRepo: gh<_i1010.InventoryRepo>()));
     gh.factory<_i730.GetMaterailUseCase>(() =>
         _i730.GetMaterailUseCase(inventoryRepo: gh<_i1010.InventoryRepo>()));
+    gh.factory<_i276.UpdateMaterialUseCase>(() =>
+        _i276.UpdateMaterialUseCase(inventoryRepo: gh<_i1010.InventoryRepo>()));
     gh.factory<_i98.ReportRepository>(
         () => _i432.ReportRepositoryImpl(gh<_i585.ReportDataSource>()));
     gh.factory<_i115.GetSitesOfUserRepo>(() => _i372.GetSitesOfUserRepoImpl(
@@ -214,20 +203,20 @@ extension GetItInjectableX on _i174.GetIt {
         ));
     gh.factory<_i78.CategoryRepo>(() => _i781.CategoryRepoImpl(
         categoryDataSource: gh<_i903.CategoryDataSource>()));
-    gh.factory<_i225.FetchReportsUseCase>(
-        () => _i225.FetchReportsUseCase(gh<_i98.ReportRepository>()));
-    gh.factory<_i403.CreateReportUseCase>(
-        () => _i403.CreateReportUseCase(gh<_i98.ReportRepository>()));
-    gh.factory<_i721.ReportViewModel>(() => _i721.ReportViewModel(
-          gh<_i403.CreateReportUseCase>(),
-          gh<_i225.FetchReportsUseCase>(),
-        ));
     gh.factory<_i136.ChatRepo>(
         () => _i634.ChatRepoImpl(chatDataSource: gh<_i451.ChatDataSource>()));
     gh.factory<_i925.GetMessageUseCase>(
         () => _i925.GetMessageUseCase(chatRepo: gh<_i136.ChatRepo>()));
     gh.factory<_i928.SendMessageUseCase>(
         () => _i928.SendMessageUseCase(chatRepo: gh<_i136.ChatRepo>()));
+    gh.factory<_i403.CreateReportUseCase>(
+        () => _i403.CreateReportUseCase(gh<_i98.ReportRepository>()));
+    gh.factory<_i225.FetchReportsUseCase>(
+        () => _i225.FetchReportsUseCase(gh<_i98.ReportRepository>()));
+    gh.factory<_i721.ReportViewModel>(() => _i721.ReportViewModel(
+          gh<_i403.CreateReportUseCase>(),
+          gh<_i225.FetchReportsUseCase>(),
+        ));
     gh.factory<_i58.ForgetPasswordRepository>(() =>
         _i657.ForgetPasswordRepositoryImpl(
             forgetPasswordDataSource: gh<_i134.ForgetPasswordDataSource>()));
@@ -248,11 +237,11 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i43.EditImageInFireStoreUseCase>(() =>
         _i43.EditImageInFireStoreUseCase(
             categoryRepo: gh<_i78.CategoryRepo>()));
+    gh.factory<_i706.EditUserDataUserCase>(() =>
+        _i706.EditUserDataUserCase(categoryRepo: gh<_i78.CategoryRepo>()));
     gh.factory<_i899.ReadUserOrAdminFromFireStoreUseCase>(() =>
         _i899.ReadUserOrAdminFromFireStoreUseCase(
             categoryRepo: gh<_i78.CategoryRepo>()));
-    gh.factory<_i706.EditUserDataUserCase>(() =>
-        _i706.EditUserDataUserCase(categoryRepo: gh<_i78.CategoryRepo>()));
     gh.factory<_i111.AllUsersScreenViewModel>(() =>
         _i111.AllUsersScreenViewModel(
             getUsersUseCase: gh<_i808.GetUsersUseCase>()));

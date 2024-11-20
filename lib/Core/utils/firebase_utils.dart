@@ -5,6 +5,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:pesticides/Features/chat/data/models/message_dto.dart';
 import 'package:pesticides/Features/reports/domain/entities/site_entity.dart';
+import 'package:pesticides/Features/site_report/data/models/report_dto.dart';
 import '../../Features/inventory/data/models/materail_model_dto.dart';
 import '../../Features/register/data/models/user_model_dto.dart';
 import '../../Features/reports/data/models/site_dto.dart';
@@ -30,8 +31,14 @@ class FirebaseUtils {
           fromFirestore: (snapshot, options) {
             return MaterailModelDto.fromFireStore(snapshot.data()!);
           },
-          toFirestore: (user, options) => user.toFirestore(),
+          toFirestore: (material, options) => material.toFirestore(),
         );
+  }
+
+  static Future<List<MaterailModelDto>> fetchAllMaterials() async {
+    var materialCollection = getMaterailCollection();
+    var materialsSnapshot = await materialCollection.get();
+    return materialsSnapshot.docs.map((doc) => doc.data()).toList();
   }
 
   static Future<Either<Failure, String>> addImageToFirebaseStorage(
@@ -66,18 +73,6 @@ class FirebaseUtils {
     return users.docs
         .map((doc) => UserAndAdminModelDto.fromFireStore(doc.data()))
         .toList();
-//todo ================= Another Way to do it ===============
-    /*  var users = await getUserCollection('user')
-        .where('id')
-        .withConverter<UserAndAdminModelDto>(
-            fromFirestore: (snapshot, _) =>
-                UserAndAdminModelDto.fromFireStore(snapshot.data()!),
-            toFirestore: (users, _) => users.toFireStore())
-        .get();
-
-    for (var doc in users.docs) {
-      list.add(doc.data());
-    }*/
   }
 
   static CollectionReference<SiteDto> getSiteCollection({required String uId}) {
@@ -94,7 +89,7 @@ class FirebaseUtils {
       {required SiteDto site, required String uId}) {
     var siteCollection = getSiteCollection(uId: uId);
     var siteDocRef = siteCollection.doc();
-    site.siteId = siteDocRef.id; // this make an auto Id;
+    site.siteId = siteDocRef.id;
     return siteDocRef.set(site);
   }
 
@@ -161,6 +156,42 @@ class FirebaseUtils {
     return siteDoc.docs.map((doc) => doc.data()).toList();
   }
 
+  //todo============*( REPORTS FIREBASE )*=================
+
+  static CollectionReference<Map<String, dynamic>> getReportCollection() {
+    return FirebaseFirestore.instance.collection('reports');
+  }
+
+  static Future<void> addReportToUsersFireStore({required ReportModel report}) {
+    var reportCollection = getReportCollection();
+    var reportDocRef = reportCollection.doc();
+    report.id = reportDocRef.id;
+    return reportDocRef.set(report.toJson());
+  }
+
+  static Future<List<ReportModel>> fetchAllReportsAcrossAllUsers() async {
+    List<ReportModel> allReports = [];
+    var reportCollection = getReportCollection();
+    var reportsSnapshot = await reportCollection.get();
+    for (var reportDoc in reportsSnapshot.docs) {
+      allReports.add(ReportModel.fromJson(reportDoc.data()));
+    }
+    return allReports;
+  }
+
+  //todo============*( MATERIALS FIREBASE )*=================
+
+  static Future<void> updateMaterialQuantity(
+      String materialId, int quantity) async {
+    var materialCollection = getMaterailCollection();
+    var materialDocRef = materialCollection.doc(materialId);
+    var materialSnapshot = await materialDocRef.get();
+    if (materialSnapshot.exists) {
+      var material = materialSnapshot.data()!;
+      material.quantity = (material.quantity ?? 0) + quantity;
+      await materialDocRef.set(material);
+    }
+  }
   static Future<void> deleteSites(SiteDto site) async {
     return FirebaseUtils.getUserCollection('user')
         .doc(site.userId)

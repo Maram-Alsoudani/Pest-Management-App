@@ -24,13 +24,16 @@ class MyTheme {
         fontSize: 15.sp,
         color: ColorManager.whiteColor,
       ),
-
-      bodyLarge:  GoogleFonts.poppins(
+      titleMedium: GoogleFonts.poppins(
+        fontSize: 15.sp,
+        color: ColorManager.blackColor,
+      ),
+      bodyLarge: GoogleFonts.poppins(
         fontSize: 21.sp,
         fontWeight: FontWeight.w700,
         color: ColorManager.blackColor,
       ),
-      bodyMedium:  GoogleFonts.poppins(
+      bodyMedium: GoogleFonts.poppins(
         fontSize: 14.sp,
         color: ColorManager.blackColor,
       ),

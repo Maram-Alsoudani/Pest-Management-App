@@ -1,11 +1,9 @@
 import 'dart:typed_data';
-
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pesticides/Core/utils/colors.dart';
-import 'package:pesticides/Features/signatures/presentation/manager/states.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:pesticides/Features/site_report/presentation/manager/report_view_model.dart';
 
-import '../manager/signatures_view_model.dart';
 import 'signature_pad.dart';
 
 class SignaturesScreen extends StatefulWidget {
@@ -16,110 +14,150 @@ class SignaturesScreen extends StatefulWidget {
 }
 
 class _SignaturesScreenState extends State<SignaturesScreen> {
-  SignaturesViewModel viewModel = SignaturesViewModel();
+  List<Uint8List> signaturesList = [];
+  List<int> selectedIndices = [];
+  bool isMultiSelectMode = false;
 
-  Future<void> addNewSignature(BuildContext context) async {
-    var result = await Navigator.push(
+  @override
+  void initState() {
+    super.initState();
+    final reportViewModel = context.read<ReportViewModel>();
+    signaturesList = reportViewModel.signatures
+        .map((e) => Uint8List.fromList(e.codeUnits))
+        .toList();
+  }
+
+  Future<void> addNewSignature() async {
+    clearAllSelected();
+    final result = await Navigator.push(
       context,
       PullFromButtonPageRoute(page: SignaturePad()),
     );
-    if (result != null && result is Uint8List) {
-      viewModel.addNewSignature(result);
+    if (result != null) {
+      setState(() {
+        signaturesList.add(result);
+      });
     }
+  }
+
+  void deleteSelected() {
+    setState(() {
+      selectedIndices.sort((a, b) => b.compareTo(a));
+      for (var index in selectedIndices) {
+        signaturesList.removeAt(index);
+      }
+      selectedIndices.clear();
+      isMultiSelectMode = false;
+    });
+  }
+
+  void selectAll() {
+    for (int i = 0; i <= signaturesList.length; i++) {
+      selectedIndices.add(i);
+    }
+    setState(() {});
+  }
+
+  void clearAllSelected() {
+    setState(() {
+      selectedIndices.clear();
+    });
+  }
+
+  void toggleSelection(int index) {
+    setState(() {
+      if (selectedIndices.contains(index)) {
+        selectedIndices.remove(index);
+      } else {
+        selectedIndices.add(index);
+      }
+      isMultiSelectMode = selectedIndices.isNotEmpty;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => viewModel,
-      child: BlocBuilder<SignaturesViewModel, SignaturesState>(
-        builder: (context, state) {
-          return Scaffold(
-            appBar: AppBar(
-              title: Text(viewModel.isMultiSelectMode
-                  ? '${viewModel.selectedIndices.length} Selected'
-                  : 'Signatures'),
-              actions: viewModel.isMultiSelectMode
-                  ? [
-                      IconButton(
-                          icon: Icon(Icons.select_all),
-                          onPressed: viewModel.selectAll),
-                      IconButton(
-                          icon: Icon(Icons.delete),
-                          onPressed: viewModel.deleteSelected),
-                      IconButton(
-                          icon: Icon(Icons.close),
-                          onPressed: viewModel.clearAllSelected),
-                    ]
-                  : null,
-            ),
-            body: viewModel.signaturesList.isEmpty
-                ? Center(
-                    child: Text(
+    final reportViewModel = context.read<ReportViewModel>();
+
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(isMultiSelectMode
+            ? '${selectedIndices.length} Selected'
+            : 'Signatures'),
+        actions: isMultiSelectMode
+            ? [
+                IconButton(icon: Icon(Icons.select_all), onPressed: selectAll),
+                IconButton(
+                  icon: Icon(Icons.delete),
+                  onPressed: deleteSelected,
+                ),
+                IconButton(
+                  icon: Icon(Icons.close),
+                  onPressed: clearAllSelected,
+                ),
+              ]
+            : [
+                IconButton(
+                  icon: const Icon(Icons.save, color: ColorManager.whiteColor),
+                  onPressed: () {
+                    reportViewModel.updateSignatures(signaturesList
+                        .map((e) => String.fromCharCodes(e))
+                        .toList());
+                    Navigator.pop(context);
+                  },
+                ),
+              ],
+      ),
+      body: signaturesList.isEmpty
+          ? Center(
+              child: Text(
                 "No signatures added yet",
                 style: TextStyle(color: Colors.white),
                 textAlign: TextAlign.center,
               ),
             )
-                : GridView.builder(
-                    itemCount: viewModel.signaturesList.length,
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          : GridView.builder(
+              itemCount: signaturesList.length,
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,
                 crossAxisSpacing: 5,
                 mainAxisSpacing: 5,
               ),
               itemBuilder: (context, index) {
-                      final isSelected =
-                          viewModel.selectedIndices.contains(index);
-                      return GestureDetector(
-                  onLongPress: () {
-                          viewModel.toggleSelection(index);
-                        },
+                final isSelected = selectedIndices.contains(index);
+                return GestureDetector(
                   onTap: () {
-                          if (viewModel.isMultiSelectMode) {
-                            viewModel.toggleSelection(index);
-                          }
+                    if (isMultiSelectMode) {
+                      toggleSelection(index);
+                    }
                   },
-                  child: Stack(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Container(
-                          decoration: BoxDecoration(
-                            border: isSelected
-                                      ? Border.all(
-                                          color: ColorManager.primaryColor,
-                                          width: 3)
-                                      : null,
-                          ),
-                          child: Image.memory(
-                                  viewModel.signaturesList[index].imageData
-                                      as Uint8List,
-                                  fit: BoxFit.fill,
-                          ),
-                        ),
+                  onLongPress: () {
+                    toggleSelection(index);
+                  },
+                  child: Container(
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                        color: isSelected
+                            ? ColorManager.primaryColor
+                            : Colors.transparent,
+                        width: 3,
                       ),
-                      if (isSelected)
-                        Positioned(
-                          top: 10,
-                          right: 10,
-                          child: Icon(
-                            Icons.check_circle,
-                            color: ColorManager.primaryColor,
-                          ),
-                        ),
-                    ],
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Image.memory(signaturesList[index]),
                   ),
                 );
               },
             ),
-            floatingActionButton: FloatingActionButton(
-              onPressed: () => addNewSignature(context),
-              child: Icon(Icons.add, color: ColorManager.whiteColor, size: 30),
-              backgroundColor: ColorManager.primaryColor,
-            ),
-          );
-        },
+      floatingActionButton: FloatingActionButton(
+        child: Icon(
+          Icons.add,
+          color: ColorManager.whiteColor,
+          size: 30,
+        ),
+        backgroundColor: ColorManager.primaryColor,
+        shape: CircleBorder(),
+        onPressed: addNewSignature,
       ),
     );
   }
@@ -136,8 +174,9 @@ class PullFromButtonPageRoute extends PageRouteBuilder {
             const end = Offset.zero;
             const curve = Curves.easeInOut;
 
-            var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
-      var offsetAnimation = animation.drive(tween);
+            var tween =
+                Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+            var offsetAnimation = animation.drive(tween);
 
             return SlideTransition(
               position: offsetAnimation,

@@ -3,21 +3,24 @@ import 'package:pesticides/Features/category/presentation/pages/category_screen.
 import 'package:pesticides/Features/chat/presentation/pages/chat_screen.dart';
 import 'package:pesticides/Features/device_inspection/presentation/pages/device_inspection.dart';
 import 'package:pesticides/Features/forgotPassword/presentation/pages/forgot_pass_screen.dart';
-import 'package:pesticides/Features/material_usage/presentation/pages/material_usage_screen.dart';
-import 'package:pesticides/Features/photos/presentation/pages/add_photos_screen.dart';
 import 'package:pesticides/Features/preview_report/presentation/pages/preview_report_screen.dart';
-import 'package:pesticides/Features/recommendations/presentation/pages/recommendations_screen.dart';
 import 'package:pesticides/Features/register/presentation/pages/register_screen.dart';
 import 'package:pesticides/Features/reports/presentation/pages/sites_of_user.dart';
 import 'package:pesticides/Features/signatures/presentation/pages/signatures_screen.dart';
 import 'package:pesticides/Features/site_report/presentation/pages/site_report_screen.dart';
-
 import '../../Features/category/profile/presentation/pages/profile_screen.dart';
 import '../../Features/conditions/presentation/pages/conditions_screen.dart';
+import '../../Features/material_usage/presentation/pages/material_usage_screen.dart';
+import '../../Features/notes/presentation/pages/notes_screen.dart';
+import '../../Features/photos/presentation/pages/add_photos_screen.dart';
+import '../../Features/recommendations/presentation/pages/recommendations_screen.dart';
+import '../../Features/signatures/presentation/pages/signatures_screen.dart';
 import '../../Features/device/presentation/pages/devcie_screen.dart';
 import '../../Features/eng_owner_screen/presentation/pages/eng_owner_screen.dart';
 import '../../Features/inventory/presentation/pages/inventory_screen.dart';
 import '../../Features/login/presentation/pages/login_screen.dart';
+import '../../Features/inventory/presentation/pages/inventory_screen.dart';
+import '../../Features/site/presentation/pages/sites_screen.dart';
 import '../../Features/notes/presentation/pages/notes_screen.dart';
 import '../../Features/reports/presentation/pages/all_users.dart';
 import '../../Features/site/presentation/pages/sites_screen.dart';
@@ -31,7 +34,7 @@ class RoutesManger {
     routeNameSiteReportScreen: (context) => const SiteReportScreen(),
     routeNameNotesScreen: (context) => NotesScreen(),
     routeNameConditionsScreen: (context) => ConditionsScreen(),
-    routeNameSites: (context) =>  SitesScreen(),
+    routeNameSites: (context) => SitesScreen(),
     routeNameProfile: (context) => ProfileScreen(),
     routeNameMaterialUsageScreen: (context) => MaterialUsageScreen(),
     routeNameDevice: (context) => DeviceScreen(),

@@ -1,36 +1,24 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:pesticides/Core/component/text_feild_custom.dart';
 import 'package:pesticides/Core/utils/colors.dart';
 import 'package:pesticides/Core/utils/strings.dart';
+import 'package:pesticides/Core/utils/firebase_utils.dart';
+import 'package:pesticides/Features/inventory/data/models/materail_model_dto.dart';
 
-class SearchMaterialScreen extends StatefulWidget {
+import '../../../../../Core/component/text_feild_custom.dart';
+
+class SearchMaterialUsageScreen extends StatefulWidget {
   @override
   _SearchMaterialScreenState createState() => _SearchMaterialScreenState();
 }
 
-class _SearchMaterialScreenState extends State<SearchMaterialScreen> with SingleTickerProviderStateMixin{
-  List<String> materials = [
-    'Bleach',
-    'Chlorine',
-    'Sulfuric Acid',
-    'Hydrochloric Acid',
-    'Nitric Acid',
-    'Funnel Trap',
-    'Pyrethroids',
-    'Neonicotinoids',
-    'Insect Growth Regulators (IGRs)',
-    'Boric Acid',
-    'Diatomaceous Earth',
-    'Glue Traps',
-    'Rodent Bait Stations',
-    'Insect Light Traps (ILTs)',
-    'Pheromone Traps',
-    'Termite Bait Systems',
-  ];
-
-  List<String> filteredMaterials = [];
+class _SearchMaterialScreenState extends State<SearchMaterialUsageScreen>
+    with SingleTickerProviderStateMixin {
+  List<MaterailModelDto> materials = [];
+  List<MaterailModelDto> filteredMaterials = [];
+  Map<String, int> selectedQuantities = {};
+  Map<String, int> availableQuantities = {};
   TextEditingController searchController = TextEditingController();
   double _opacity = 0.0;
   late AnimationController _animationController;
@@ -39,18 +27,18 @@ class _SearchMaterialScreenState extends State<SearchMaterialScreen> with Single
   @override
   void initState() {
     super.initState();
-    filteredMaterials = materials;
+    fetchMaterials();
     searchController.addListener(filterList);
     _animationController =
         AnimationController(vsync: this, duration: Duration(seconds: 1));
 
     _slideAnimation =
         Tween<Offset>(begin: Offset(-1.w, 0), end: Offset(0, 0)).animate(
-          CurvedAnimation(
-            parent: _animationController,
-            curve: Curves.easeInOut,
-          ),
-        );
+      CurvedAnimation(
+        parent: _animationController,
+        curve: Curves.easeInOut,
+      ),
+    );
 
     Future.delayed(Duration(milliseconds: 300), () {
       setState(() {
@@ -58,6 +46,22 @@ class _SearchMaterialScreenState extends State<SearchMaterialScreen> with Single
       });
       _animationController.forward();
     });
+  }
+
+  Future<void> fetchMaterials() async {
+    try {
+      final materialsList = await FirebaseUtils.fetchAllMaterials();
+      setState(() {
+        materials = materialsList;
+        filteredMaterials = materials;
+        availableQuantities = {
+          for (var material in materialsList) material.name!: material.quantity!
+        };
+      });
+      print('Materials fetched: ${materials.length}');
+    } catch (e) {
+      print('Error fetching materials: $e');
+    }
   }
 
   @override
@@ -69,18 +73,28 @@ class _SearchMaterialScreenState extends State<SearchMaterialScreen> with Single
   }
 
   void filterList() {
-    List<String> results = [];
+    List<MaterailModelDto> results = [];
     if (searchController.text.isEmpty) {
       results = materials;
     } else {
       results = materials
-          .where((material) => material
+          .where((material) => material.name!
               .toLowerCase()
               .contains(searchController.text.toLowerCase()))
           .toList();
     }
     setState(() {
       filteredMaterials = results;
+    });
+  }
+
+  void updateQuantity(String materialName, int change) {
+    setState(() {
+      final currentQuantity = selectedQuantities[materialName] ?? 0;
+      final newQuantity = currentQuantity + change;
+      if (newQuantity >= 0) {
+        selectedQuantities[materialName] = newQuantity;
+      }
     });
   }
 
@@ -94,6 +108,17 @@ class _SearchMaterialScreenState extends State<SearchMaterialScreen> with Single
           style:
               Theme.of(context).textTheme.titleSmall!.copyWith(fontSize: 25.sp),
         ),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.save, color: ColorManager.whiteColor),
+            onPressed: () {
+              Navigator.pop(context, {
+                'selectedQuantities': selectedQuantities,
+                'availableQuantities': availableQuantities,
+              });
+            },
+          ),
+        ],
       ),
       body: Column(
         children: [
@@ -115,6 +140,11 @@ class _SearchMaterialScreenState extends State<SearchMaterialScreen> with Single
             child: ListView.separated(
               itemCount: filteredMaterials.length,
               itemBuilder: (context, index) {
+                final material = filteredMaterials[index];
+                final materialName = material.name!;
+                final availableQuantity = material.quantity!;
+                final selectedQuantity = selectedQuantities[materialName] ?? 0;
+
                 return Padding(
                   padding:
                       EdgeInsets.symmetric(horizontal: 16.0.r, vertical: 4.0.r),
@@ -125,19 +155,80 @@ class _SearchMaterialScreenState extends State<SearchMaterialScreen> with Single
                     elevation: 2,
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(16.0.r),
-                      child: InkWell(
-                        borderRadius: BorderRadius.circular(16.0.r),
-                        splashColor: Colors.transparent,
-                        highlightColor: Colors.transparent,
-                        onTap: () {
-                          Navigator.pop(context, filteredMaterials[index]);
-                        },
+                      child: Container(
+                        color: availableQuantity == 0
+                            ? ColorManager.greyShade4
+                            : ColorManager.whiteColor,
                         child: ListTile(
-                          leading: const Icon(CupertinoIcons.drop_triangle,
-                              color: ColorManager.primaryColor),
-                          title: Text(filteredMaterials[index]),
-                          trailing: const Icon(Icons.add_circle_outline_rounded,
-                              color: ColorManager.primaryColor),
+                          leading: Icon(
+                            availableQuantity == 0
+                                ? CupertinoIcons.nosign
+                                : CupertinoIcons.drop_triangle,
+                            color: ColorManager.primaryColor,
+                          ),
+                          title: Text(
+                            materialName,
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleSmall!
+                                .copyWith(
+                                  color: ColorManager.blackColor,
+                                  decoration: availableQuantity == 0
+                                      ? TextDecoration.lineThrough
+                                      : TextDecoration.none,
+                                ),
+                          ),
+                          subtitle: Text(
+                            'Available: $availableQuantity',
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleSmall!
+                                .copyWith(color: Colors.grey),
+                          ),
+                          trailing: availableQuantity > 0
+                              ? Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Visibility(
+                                      visible: selectedQuantity > 0,
+                                      maintainSize: true,
+                                      maintainAnimation: true,
+                                      maintainState: true,
+                                      child: IconButton(
+                                        icon: Icon(Icons.remove_circle,
+                                            size: 20.sp,
+                                            color: ColorManager.primaryColor),
+                                        onPressed: () {
+                                          updateQuantity(materialName, -1);
+                                        },
+                                      ),
+                                    ),
+                                    Text(
+                                      '$selectedQuantity',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .titleSmall!
+                                          .copyWith(
+                                              color: ColorManager.blackColor),
+                                    ),
+                                    Visibility(
+                                      visible:
+                                          selectedQuantity < availableQuantity,
+                                      maintainSize: true,
+                                      maintainAnimation: true,
+                                      maintainState: true,
+                                      child: IconButton(
+                                        icon: Icon(Icons.add_circle,
+                                            size: 20.sp,
+                                            color: ColorManager.primaryColor),
+                                        onPressed: () {
+                                          updateQuantity(materialName, 1);
+                                        },
+                                      ),
+                                    ),
+                                  ],
+                                )
+                              : null,
                         ),
                       ),
                     ),

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:signature/signature.dart';
 
-import '../../../../Core/utils/colors.dart';
+import '../../../../../Core/utils/colors.dart';
 
 class SignaturePad extends StatefulWidget {
   SignaturePad({super.key});

@@ -77,16 +77,14 @@ class RequestScreen extends StatelessWidget {
                 backgroundColor: Colors.transparent,
                 body: viewModel.requests.isEmpty
                     ? Center(
-                      child: Text(
-                        "No Request Found",
-                        style: Theme.of(context)
-                            .textTheme
-                            .bodyMedium!
-                            .copyWith(
-                              color: ColorManager.whiteColor,
-                            ),
-                      ),
-                    )
+                        child: Text(
+                          "No Request Found",
+                          style:
+                              Theme.of(context).textTheme.bodyMedium!.copyWith(
+                                    color: ColorManager.whiteColor,
+                                  ),
+                        ),
+                      )
                     : Column(
                         children: [
                           Expanded(

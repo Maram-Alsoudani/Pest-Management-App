@@ -2,7 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 import 'package:pesticides/Features/reports/domain/use_cases/get_sites_of_user_use_case.dart';
-import 'package:pesticides/Features/reports/presentation/manager/get_sites_states.dart';
+
+import '../../domain/entities/site_entity.dart';
+import 'get_sites_states.dart';
 
 @injectable
 class GetSitesOfUsersViewModel extends Cubit<GetSitesState> {
@@ -10,8 +12,11 @@ class GetSitesOfUsersViewModel extends Cubit<GetSitesState> {
 
   GetSitesOfUsersViewModel({required this.getSitesOfUserUseCase})
       : super(GetSitesLoadingState());
-
+  List<SiteEntity> originalSitesList = [];
+  List<SiteEntity> allSites = [];
+  List<SiteEntity> queryMatchList = [];
   bool isLoading = false;
+  double opacity = 1.0;
 
   late AnimationController animationController;
   late Animation<Offset> slideAnimation;
@@ -41,10 +46,40 @@ class GetSitesOfUsersViewModel extends Cubit<GetSitesState> {
       },
       (sites) {
         isLoading = false;
+        originalSitesList = sites;
+        allSites = sites;
         emit(GetSitesSuccessState(sitesList: sites));
-
-        animationController.forward(from: 0);
+        opacity = 1.0;
+        emit(GetAllUsersAnimationState());
+        animationController.forward();
       },
     );
+  }
+
+  void searchSites(String query) {
+    if (query.isEmpty) {
+      allSites = originalSitesList;
+      emit(GetSitesSuccessState(sitesList: allSites));
+    } else {
+      queryMatchList = allSites
+          .where((site) =>
+              site.siteName?.toLowerCase().contains(query.toLowerCase()) ??
+              false)
+          .toList();
+
+      if (queryMatchList.isEmpty) {
+        emit(NoSearchResultsState());
+      } else {
+        allSites = queryMatchList;
+        emit(GetSitesSuccessState(sitesList: allSites));
+      }
+    }
+  }
+
+  @override
+  Future<void> close() {
+    // TODO: implement close
+
+    return super.close();
   }
 }

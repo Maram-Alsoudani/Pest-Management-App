@@ -167,19 +167,17 @@ class _InventoryScreenState extends State<InventoryScreen>
                     ),
                   ),
                   SizedBox(height: 6.0.h),
-                  bloc.filteredItems.isEmpty
+                  state is InventoryNoSearchResultMaterail
                       ? Expanded(
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Text(
-                                "Materail Not Found",
+                                StringManager.noMaterialFound,
                                 style: Theme.of(context)
                                     .textTheme
-                                    .titleMedium!
-                                    .copyWith(
-                                        fontSize: 2.sp,
-                                        color: ColorManager.greyShade4),
+                                    .bodyMedium!
+                                    .copyWith(color: ColorManager.greyShade4),
                               ),
                             ],
                           ),
@@ -276,7 +274,9 @@ class _InventoryScreenState extends State<InventoryScreen>
                                                   SlidableAction(
                                                     onPressed: (context) {
                                                       bloc.deleteMaterails(
-                                                          item.id);
+                                                          item.id,index);
+
+
                                                       bloc.getMaterails();
                                                     },
                                                     backgroundColor:

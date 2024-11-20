@@ -7,6 +7,7 @@ import 'package:pesticides/Core/component/error_widget.dart';
 import 'package:pesticides/Core/my_bloc_observer.dart';
 import 'package:pesticides/Core/utils/strings.dart';
 import 'package:pesticides/Features/category/presentation/manager/category_cubit.dart';
+import 'package:pesticides/Features/chat/presentation/manager/chat_view_model_cubit.dart';
 import 'package:pesticides/Features/forgotPassword/presentation/manager/forget_password_view_model.dart';
 import 'package:pesticides/Features/inventory/presentation/manager/inventory_view_model_cubit.dart';
 import 'package:pesticides/Features/login/presentation/manager/cubit/login_screen_view_model.dart';
@@ -69,6 +70,9 @@ void main() async {
         ),
         BlocProvider(
           create: (context) => getIt<ReportViewModel>(),
+          ),
+        BlocProvider(
+          create: (context) => getIt<ChatViewModelCubit>(),
         ),
       ],
       child: MyApp(

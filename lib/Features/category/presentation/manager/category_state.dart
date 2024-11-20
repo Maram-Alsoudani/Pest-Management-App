@@ -13,4 +13,5 @@ final class CategoryFaluireState extends CategoryState {
   CategoryFaluireState({required this.error});
 }
 final class CategoryLoadingState extends CategoryState {}
+final class CategoryAnimationState extends CategoryState {}
 

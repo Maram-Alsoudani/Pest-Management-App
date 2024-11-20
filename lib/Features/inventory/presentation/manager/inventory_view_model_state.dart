@@ -20,6 +20,7 @@ class InventoryGetMaterailError extends InventoryViewModelState {
 }
 
 class InventorySearchMaterail extends InventoryViewModelState {}
+class InventoryNoSearchResultMaterail extends InventoryViewModelState {}
 
 class InventoryAddedMaterailLoading extends InventoryViewModelState {}
 

@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
+import 'package:pesticides/Features/chat/data/models/message_dto.dart';
 import 'package:pesticides/Features/reports/domain/entities/site_entity.dart';
 import 'package:pesticides/Features/site_report/data/models/report_dto.dart';
 import '../../Features/inventory/data/models/materail_model_dto.dart';
@@ -105,6 +106,34 @@ class FirebaseUtils {
       var siteCollection = userDoc.reference
           .collection(SiteEntity.collectionName)
           .withConverter<SiteDto>(
+            fromFirestore: (snapshot, _) => SiteDto.fromFireStore(
+              snapshot.data()!,
+            ), // Pass userId here
+            toFirestore: (site, _) => site.toFireStore(),
+          );
+
+      // Step 3: Retrieve all sites in this user's subcollection
+      var sitesSnapshot = await siteCollection.get();
+      var userSites = sitesSnapshot.docs.map((doc) => doc.data()).toList();
+
+      // Step 4: Add these sites to the allSites list
+      allSites.addAll(userSites);
+    }
+
+    return allSites;
+
+    /* List<SiteDto> allSites = [];
+    var userCollection = FirebaseUtils.getUserCollection('user');
+
+    // Step 1: Get all user documents
+    var usersSnapshot = await userCollection.get();
+
+    // Step 2: For each user, get sites from their subcollection
+    for (var userDoc in usersSnapshot.docs) {
+      var userId = userDoc.id;
+      var siteCollection = userDoc.reference
+          .collection(SiteEntity.collectionName)
+          .withConverter<SiteDto>(
             fromFirestore: (snapshot, _) =>
                 SiteDto.fromFireStore(snapshot.data()!),
             toFirestore: (site, _) => site.toFireStore(),
@@ -118,7 +147,13 @@ class FirebaseUtils {
       allSites.addAll(userSites);
     }
 
-    return allSites;
+    return allSites;*/
+  }
+
+  static Future<List<SiteDto>> getUserSite(String uId) async {
+    var sites = FirebaseUtils.getSiteCollection(uId: uId);
+    var siteDoc = await sites.get();
+    return siteDoc.docs.map((doc) => doc.data()).toList();
   }
 
   //todo============*( REPORTS FIREBASE )*=================
@@ -157,4 +192,32 @@ class FirebaseUtils {
       await materialDocRef.set(material);
     }
   }
+  static Future<void> deleteSites(SiteDto site) async {
+    return FirebaseUtils.getUserCollection('user')
+        .doc(site.userId)
+        .collection('site')
+        .doc(site.siteId)
+        .delete();
+  }
+
+//todo============*( Chat Feature )*=================
+  static CollectionReference<MessageDto> getMessageCollection() {
+    return FirebaseFirestore.instance.collection(MessageDto.messageCollection)
+        .withConverter<MessageDto>(
+      fromFirestore: (snapshot, options) =>
+          MessageDto.fromJson(snapshot.data()!),
+      toFirestore: (value, options) => value.toJson(),
+    );
+  }
+  static Stream<QuerySnapshot<MessageDto>> getMessageFromFireStore(){
+    return getMessageCollection().orderBy("dateTime" ).snapshots();
+
+  }
+static Future<void> insertMessage(MessageDto message) async {
+  var messageCollection = getMessageCollection();
+  var docRef = messageCollection.doc();
+  message.id = docRef.id;
+  return await docRef.set(message);
+}
+
 }

@@ -10,5 +10,8 @@ abstract class AddSiteDataSource {
 
   Future<Either<Failure, List<SiteEntity>>> fetchSiteData();
   Future<Either<Failure, List<UserAndAdminModelEntity>>> fetchUserData();
+  Future<Either<Failure, List<SiteEntity>>> fetchUserSites(String uId);
+  Future<Either<Failure, void>> deleteSite(SiteEntity site);
+
 
 }

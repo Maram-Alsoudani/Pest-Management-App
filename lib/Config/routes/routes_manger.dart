@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:pesticides/Features/category/presentation/pages/category_screen.dart';
+import 'package:pesticides/Features/chat/presentation/pages/chat_screen.dart';
 import 'package:pesticides/Features/device_inspection/presentation/pages/device_inspection.dart';
 import 'package:pesticides/Features/forgotPassword/presentation/pages/forgot_pass_screen.dart';
 import 'package:pesticides/Features/preview_report/presentation/pages/preview_report_screen.dart';
 import 'package:pesticides/Features/register/presentation/pages/register_screen.dart';
 import 'package:pesticides/Features/reports/presentation/pages/sites_of_user.dart';
+import 'package:pesticides/Features/signatures/presentation/pages/signatures_screen.dart';
 import 'package:pesticides/Features/site_report/presentation/pages/site_report_screen.dart';
-
 import '../../Features/category/profile/presentation/pages/profile_screen.dart';
 import '../../Features/conditions/presentation/pages/conditions_screen.dart';
 import '../../Features/material_usage/presentation/pages/material_usage_screen.dart';
@@ -20,7 +21,9 @@ import '../../Features/inventory/presentation/pages/inventory_screen.dart';
 import '../../Features/login/presentation/pages/login_screen.dart';
 import '../../Features/inventory/presentation/pages/inventory_screen.dart';
 import '../../Features/site/presentation/pages/sites_screen.dart';
+import '../../Features/notes/presentation/pages/notes_screen.dart';
 import '../../Features/reports/presentation/pages/all_users.dart';
+import '../../Features/site/presentation/pages/sites_screen.dart';
 
 class RoutesManger {
   static Map<String, Widget Function(BuildContext)> route = {
@@ -41,9 +44,10 @@ class RoutesManger {
     routeNamePreviewReport: (context) => PreviewReportScreen(),
     routeNameDeviceInspectionScreen: (context) => DeviceInspection(),
     routeNameInventory: (context) => InventoryScreen(),
-    routeNameReports: (context) => AllUsers(),
-    routeNameSitesOfUser: (context) => SitesOFUser(),
+    routeNameReportsOfAllUsersForAdmin: (context) => AllUsers(),
+    routeNameSitesOfUserForAdmin: (context) => SitesOFUser(),
     routeNameSignature: (context) => SignaturesScreen(),
+    routeNameChat: (context) => ChatScreen(),
   };
 
   static const String routeNameEngOwnerScreen = "EngOwnerScreen";
@@ -63,7 +67,8 @@ class RoutesManger {
   static const String routeNamePreviewReport = "previewReport";
   static const String routeNameDeviceInspectionScreen = "device inespection";
   static const String routeNameInventory = "inventory";
-  static const String routeNameReports = "reports";
-  static const String routeNameSitesOfUser = "sites of user";
+  static const String routeNameReportsOfAllUsersForAdmin = "reports";
+  static const String routeNameSitesOfUserForAdmin = "sites of user";
   static const String routeNameSignature = "signature";
+  static const String routeNameChat = "chat";
 }

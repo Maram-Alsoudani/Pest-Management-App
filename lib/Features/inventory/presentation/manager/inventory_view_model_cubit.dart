@@ -31,7 +31,7 @@ class InventoryViewModelCubit extends Cubit<InventoryViewModelState> {
   }) : super(InventoryViewModelInitial());
   static InventoryViewModelCubit get(context, [bool? listen]) =>
       BlocProvider.of(context, listen: listen ?? false);
-  late UserAndAdminModelEntity user;
+
   bool isLoading = false;
   TextEditingController nameController = TextEditingController();
   TextEditingController quantityController = TextEditingController();
@@ -42,7 +42,7 @@ class InventoryViewModelCubit extends Cubit<InventoryViewModelState> {
   double opacity = 0.0;
   List<MaterailEntity> materails = [];
   List<MaterailEntity> filteredItems = [];
-
+  late UserAndAdminModelEntity user;
   UserAndAdminModelEntity? getUser() {
     var user = SharedPrefsLocal.getData(key: StringManager.keyUserAdmin);
     return user;
@@ -60,7 +60,6 @@ class InventoryViewModelCubit extends Cubit<InventoryViewModelState> {
         curve: Curves.easeInOut,
       ),
     );
-
   }
 
   void searchMethod() {
@@ -69,7 +68,11 @@ class InventoryViewModelCubit extends Cubit<InventoryViewModelState> {
       return name is String &&
           name.toLowerCase().contains(searchController.text.toLowerCase());
     }).toList();
-    emit(InventorySearchMaterail());
+    if (filteredItems.isEmpty) {
+      emit(InventoryNoSearchResultMaterail());
+    } else {
+      emit(InventorySearchMaterail());
+    }
   }
 
   void addedMaterails() async {
@@ -114,7 +117,7 @@ class InventoryViewModelCubit extends Cubit<InventoryViewModelState> {
 
   void getMaterails() async {
     isLoading = true;
-    opacity=0.0;
+    opacity = 0.0;
     emit(InventoryGetMaterailLoading());
     var data = await getMaterailUseCase.fetchMaterialsList();
     data.fold(
@@ -123,20 +126,27 @@ class InventoryViewModelCubit extends Cubit<InventoryViewModelState> {
         emit(InventoryGetMaterailError(error: f));
       },
       (r) {
-        isLoading = false;
-        materails = r;
-        filteredItems = materails;
-        emit(InventoryGetMaterailSuccess(data: r));
-        WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (r.isNotEmpty) {
+          materails = r;
+          filteredItems = materails;
+          isLoading = false;
+          emit(InventoryGetMaterailSuccess(data: r));
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            opacity = 1.0;
+            emit(InventoryAnimationMaterailSuccess());
+            animationController.forward();
+          });
+        } else {
           opacity = 1.0;
           emit(InventoryAnimationMaterailSuccess());
-          animationController.forward();
-        });
+          isLoading = false;
+          emit(InventoryNoSearchResultMaterail());
+        }
       },
     );
   }
 
-  void deleteMaterails(String key) async {
+  void deleteMaterails(String key,int index) async {
     isLoading = true;
     emit(InventoryDeleteMaterailLoading());
     var data = await deleteMaterailUseCase.invoke(key);
@@ -147,7 +157,13 @@ class InventoryViewModelCubit extends Cubit<InventoryViewModelState> {
       },
       (r) {
         isLoading = false;
+        filteredItems.removeAt(index);
         emit(InventoryDeleteMaterailSuccess());
+        if(filteredItems.isEmpty){
+          emit(InventoryNoSearchResultMaterail());
+
+        }
+
       },
     );
   }

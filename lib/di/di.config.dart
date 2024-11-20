@@ -25,6 +25,15 @@ import '../Features/category/domin/use_case/read_user_or_admin_from_fireStore_us
 import '../Features/category/presentation/manager/category_cubit.dart' as _i386;
 import '../Features/category/profile/presentation/manager/profile_cubit.dart'
     as _i833;
+import '../Features/chat/data/data_sources/chat_data_source.dart' as _i451;
+import '../Features/chat/data/data_sources/impl/chat_data_source_impl.dart'
+    as _i585;
+import '../Features/chat/data/repositories/chat_repo_impl.dart' as _i634;
+import '../Features/chat/domain/repositories/chat_repo.dart' as _i136;
+import '../Features/chat/domain/use_cases/get_message_use_case.dart' as _i925;
+import '../Features/chat/domain/use_cases/send_message_use_case.dart' as _i928;
+import '../Features/chat/presentation/manager/chat_view_model_cubit.dart'
+    as _i532;
 import '../Features/forgotPassword/data/data_sources/forget_password_data_source.dart'
     as _i134;
 import '../Features/forgotPassword/data/data_sources/forget_password_data_source_impl.dart'
@@ -103,10 +112,13 @@ import '../Features/site/data/repositories/add_site_repository_impl.dart'
     as _i9;
 import '../Features/site/domain/repositories/site_repository.dart' as _i311;
 import '../Features/site/domain/use_cases/add_site_user_case.dart' as _i855;
+import '../Features/site/domain/use_cases/delete_sites_user_case.dart' as _i999;
 import '../Features/site/domain/use_cases/fetch_site_data_use_case.dart'
     as _i891;
 import '../Features/site/domain/use_cases/fetch_user_data_user_case.dart'
     as _i720;
+import '../Features/site/domain/use_cases/fetch_user_sites_user_case.dart'
+    as _i166;
 import '../Features/site/presentation/manager/site_view_model.dart' as _i869;
 import '../Features/site_report/data/data_sources/report_data_source.dart'
     as _i585;
@@ -152,7 +164,18 @@ extension GetItInjectableX on _i174.GetIt {
         _i891.FetchSiteDataUseCase(siteRepository: gh<_i311.SiteRepository>()));
     gh.factory<_i855.AddSiteUserCase>(() =>
         _i855.AddSiteUserCase(siteRepository: gh<_i311.SiteRepository>()));
+    gh.factory<_i855.AddSiteUserCase>(() =>
+        _i855.AddSiteUserCase(siteRepository: gh<_i311.SiteRepository>()));
+    gh.factory<_i999.DeleteSitesUseCase>(() =>
+        _i999.DeleteSitesUseCase(siteRepository: gh<_i311.SiteRepository>()));
+    gh.factory<_i891.FetchSiteDataUseCase>(() =>
+        _i891.FetchSiteDataUseCase(siteRepository: gh<_i311.SiteRepository>()));
+    gh.factory<_i720.FetchUsersDataUseCase>(() => _i720.FetchUsersDataUseCase(
+        siteRepository: gh<_i311.SiteRepository>()));
+    gh.factory<_i166.FetchUsersSitesUseCase>(() => _i166.FetchUsersSitesUseCase(
+        siteRepository: gh<_i311.SiteRepository>()));
     gh.factory<_i121.LoginDataSource>(() => _i535.LoginDataSourceImpl());
+    gh.factory<_i451.ChatDataSource>(() => _i585.ChatDataSourceImpl());
     gh.factory<_i969.RegisterDataSource>(() => _i1056.RegisterDataSourceImpl());
     gh.factory<_i44.GetUsersDataSource>(() => _i285.GetUsersDataSourceImpl());
     gh.factory<_i585.ReportDataSource>(() => _i1035.ReportDataSourceImpl());
@@ -182,6 +205,13 @@ extension GetItInjectableX on _i174.GetIt {
               deleteMaterailUseCase: gh<_i635.DeleteMaterialUseCase>(),
               updateMaterailUseCase: gh<_i276.UpdateMaterialUseCase>(),
             ));
+    gh.factory<_i869.SiteViewModel>(() => _i869.SiteViewModel(
+          addSiteUserCase: gh<_i855.AddSiteUserCase>(),
+          fetchSiteDataUseCase: gh<_i891.FetchSiteDataUseCase>(),
+          fetchUsersDataUseCase: gh<_i720.FetchUsersDataUseCase>(),
+          fetchUsersSitesUseCase: gh<_i166.FetchUsersSitesUseCase>(),
+          deleteSitesUseCase: gh<_i999.DeleteSitesUseCase>(),
+        ));
     gh.factory<_i78.CategoryRepo>(() => _i781.CategoryRepoImpl(
         categoryDataSource: gh<_i903.CategoryDataSource>()));
     gh.factory<_i225.FetchReportsUseCase>(
@@ -192,11 +222,21 @@ extension GetItInjectableX on _i174.GetIt {
           gh<_i403.CreateReportUseCase>(),
           gh<_i225.FetchReportsUseCase>(),
         ));
+    gh.factory<_i136.ChatRepo>(
+        () => _i634.ChatRepoImpl(chatDataSource: gh<_i451.ChatDataSource>()));
+    gh.factory<_i925.GetMessageUseCase>(
+        () => _i925.GetMessageUseCase(chatRepo: gh<_i136.ChatRepo>()));
+    gh.factory<_i928.SendMessageUseCase>(
+        () => _i928.SendMessageUseCase(chatRepo: gh<_i136.ChatRepo>()));
     gh.factory<_i58.ForgetPasswordRepository>(() =>
         _i657.ForgetPasswordRepositoryImpl(
             forgetPasswordDataSource: gh<_i134.ForgetPasswordDataSource>()));
     gh.factory<_i886.GetSitesOfUserUseCase>(() => _i886.GetSitesOfUserUseCase(
         getSitesOfUser: gh<_i115.GetSitesOfUserRepo>()));
+    gh.factory<_i532.ChatViewModelCubit>(() => _i532.ChatViewModelCubit(
+          getMessageUseCase: gh<_i925.GetMessageUseCase>(),
+          sendMessageUseCase: gh<_i928.SendMessageUseCase>(),
+        ));
     gh.factory<_i20.RegisterRepo>(() => _i391.RegisterRepoImpl(
         registerDataSource: gh<_i969.RegisterDataSource>()));
     gh.factory<_i558.LoginRepository>(() => _i313.LoginRepositoryImpl(

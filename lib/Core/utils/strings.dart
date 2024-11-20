@@ -86,10 +86,13 @@ class StringManager {
   static const String somethingWentWrong = "Something went wrong";
   static const String view = "View  ";
   static const String noUsersFound = "No Users Found";
-  static const String noSitesFound = 'No sites found for this user';
+  static const String noSitesFound = 'No sites found.';
+
+  static const String noMaterialFound = 'No material found';
   static const String updateSuccessfully = "Updated Successfully";
   static const String deletedSuccessfully = "Deleted Successfully";
   static const String addedSuccessfully = "Added Successfully";
+  static const String siteDeleteSuccessfully = "Site Deleted Successfully";
   static const String savedSuccessfully = "Saved Successfully";
   static const String add = "Add";
   static const String someThingWentWrong = "Some Thing Went Wrong";
@@ -107,4 +110,9 @@ class StringManager {
   static const String noPhotos = "no photos";
   static const String signaturesRequired = "Signatures are required";
   static const String noDevices = "no devices";
+  static const String reports = "Reports";
+  static const String addAccount = "Add Account";
+  static const String theCompanyGroup = "The Company Group";
+  static const String sendMessage = "Send";
+  static const String typeYourMessage = "Type your message...";
 }

@@ -22,6 +22,8 @@ import 'package:pesticides/Features/category/profile/presentation/widgets/pick_i
 import 'package:pesticides/Core/component/custom_dialog.dart';
 import 'package:pesticides/Features/category/presentation/manager/category_cubit.dart';
 
+import '../../../../register/data/models/user_model_dto.dart';
+
 class ProfileScreen extends StatefulWidget {
   ProfileScreen({super.key});
 
@@ -34,6 +36,8 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
   void initState() {
     ProfileCubit.get(context).getUserData();
     ProfileCubit.get(context).doAnimation(this);
+    ProfileCubit.get(context).getUser();
+    print(ProfileCubit.get(context).user!.type);
     super.initState();
   }
 
@@ -86,101 +90,115 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
                   ),
                 ),
                 SafeArea(
-                  child: SingleChildScrollView(
-                    child: BlocBuilder<CategoryCubit, CategoryState>(
-                      builder: (context, state) {
-                        return Form(
-                          key: ProfileCubit.get(context).fromKey,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: [
-                              SizedBox(height: 65.h),
-                              AnimatedOpacity(
-                                duration: const Duration(seconds: 2),
-                                opacity: ProfileCubit.get(context).opacity,
-                                curve: Curves.easeIn,
-                                child: Stack(
-                                  alignment: Alignment.center,
+                  child: BlocBuilder<CategoryCubit, CategoryState>(
+                    builder: (context, state) {
+                      return Form(
+                        key: ProfileCubit.get(context).fromKey,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            SizedBox(height: 65.h),
+                            AnimatedOpacity(
+                              duration: const Duration(seconds: 2),
+                              opacity: ProfileCubit.get(context).opacity,
+                              curve: Curves.easeIn,
+                              child: Stack(
+                                alignment: Alignment.center,
+                                children: [
+                                  PickImageWidget(
+                                    icon: Icons.add_a_photo,
+                                    imageUrl: ProfileCubit.get(context)
+                                                .userProfileImage
+                                                ?.isNotEmpty ==
+                                            true
+                                        ? ProfileCubit.get(context)
+                                            .userProfileImage
+                                        : 'path_to_fallback_image', // Handle empty or null URL
+                                    imagePath:
+                                        ProfileCubit.get(context).image,
+                                    onImagePicked:
+                                        ProfileCubit.get(context).pickImage,
+                                  ),
+                                ],
+                              ),
+                            ),
+                            SizedBox(height: 35.h),
+                            SlideTransition(
+                              position:ProfileCubit.get(context).slideAnimation ,
+                              child: Container(
+                                height:
+                                    MediaQuery.of(context).size.height * 0.6,
+                                child: ListView(
+                                  shrinkWrap: true,
+                                  physics: const NeverScrollableScrollPhysics(),
                                   children: [
-                                    PickImageWidget(
-                                      icon: Icons.add_a_photo,
-                                      imageUrl: ProfileCubit.get(context)
-                                                  .userProfileImage
-                                                  ?.isNotEmpty ==
-                                              true
-                                          ? ProfileCubit.get(context)
-                                              .userProfileImage
-                                          : 'path_to_fallback_image', // Handle empty or null URL
-                                      imagePath:
-                                          ProfileCubit.get(context).image,
-                                      onImagePicked:
-                                          ProfileCubit.get(context).pickImage,
+                                    BuildInfoCard(
+                                      title: StringManager.role,
+                                      value: ProfileCubit.get(context)
+                                          .typeController
+                                          .text,
                                     ),
+                                    BuildInfoCard(
+                                      title: StringManager.userName,
+                                      value: ProfileCubit.get(context)
+                                          .userNameController
+                                          .text,
+                                    ),
+                                    BuildInfoCard(
+                                      title: StringManager.phone,
+                                      value: ProfileCubit.get(context)
+                                          .phoneController
+                                          .text,
+                                    ),
+                                    BuildInfoCard(
+                                      title: StringManager.email,
+                                      value: ProfileCubit.get(context)
+                                          .emailController
+                                          .text,
+                                    ),
+                                    Padding(
+                                      padding: EdgeInsets.symmetric(
+                                          horizontal: 13.w, vertical: 2.h),
+                                      child: ButtonCustom(
+                                          buttonName: StringManager.edit,
+                                          onTap: () {
+                                            if (ProfileCubit.get(context)
+                                                .fromKey
+                                                .currentState!
+                                                .validate()) {
+                                              showDialog(
+                                                  context: context,
+                                                  builder: (context) {
+                                                    return EditProfileDialog();
+                                                  });
+                                            }
+                                          }),
+                                    ),
+                                  ProfileCubit.get(context).user!.type==UserAndAdminModelDto.admin?
+                                    Padding(
+                                      padding: EdgeInsets.symmetric(
+                                          horizontal: 13.w, vertical: 2.h),
+                                      child: ButtonCustom(
+                                          buttonName: StringManager.addAccount,
+                                          onTap: () {
+                                            if (ProfileCubit.get(context)
+                                                .fromKey
+                                                .currentState!
+                                                .validate()) {
+                                            Navigator.pushNamed(context, RoutesManger.routeNameRegister);
+                                            }
+                                          }),
+                                    ):SizedBox(
+                                    height: 10,
+                                  )
                                   ],
                                 ),
                               ),
-                              SizedBox(height: 35.h),
-                              SlideTransition(
-
-                                position:ProfileCubit.get(context).slideAnimation ,
-                                child: Container(
-                                  height:
-                                      MediaQuery.of(context).size.height * 0.6,
-                                  child: ListView(
-                                    shrinkWrap: true,
-                                    physics: const NeverScrollableScrollPhysics(),
-                                    children: [
-                                      BuildInfoCard(
-                                        title: StringManager.role,
-                                        value: ProfileCubit.get(context)
-                                            .typeController
-                                            .text,
-                                      ),
-                                      BuildInfoCard(
-                                        title: StringManager.userName,
-                                        value: ProfileCubit.get(context)
-                                            .userNameController
-                                            .text,
-                                      ),
-                                      BuildInfoCard(
-                                        title: StringManager.phone,
-                                        value: ProfileCubit.get(context)
-                                            .phoneController
-                                            .text,
-                                      ),
-                                      BuildInfoCard(
-                                        title: StringManager.email,
-                                        value: ProfileCubit.get(context)
-                                            .emailController
-                                            .text,
-                                      ),
-                                      Padding(
-                                        padding: EdgeInsets.symmetric(
-                                            horizontal: 13.w, vertical: 10.h),
-                                        child: ButtonCustom(
-                                            buttonName: StringManager.edit,
-                                            onTap: () {
-                                              if (ProfileCubit.get(context)
-                                                  .fromKey
-                                                  .currentState!
-                                                  .validate()) {
-                                                showDialog(
-                                                    context: context,
-                                                    builder: (context) {
-                                                      return EditProfileDialog();
-                                                    });
-                                              }
-                                            }),
-                                      )
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        );
-                      },
-                    ),
+                            ),
+                          ],
+                        ),
+                      );
+                    },
                   ),
                 ),
                 Positioned(

@@ -24,15 +24,19 @@ class FirebaseUtils {
         );
   }
   static CollectionReference<UserRequestAccountDto> getUserRequestAccountCollection(
-      String type) {
+      String name) {
     return FirebaseFirestore.instance
-        .collection(type)
+        .collection(name)
         .withConverter<UserRequestAccountDto>(
           fromFirestore: (snapshot, options) {
             return UserRequestAccountDto.fromFireStore(snapshot.data()!);
           },
           toFirestore: (user, options) => user.toFireStore(),
         );
+  }
+  static Stream<QuerySnapshot<UserRequestAccountDto>> getRequestFromFireStore(){
+    return getUserRequestAccountCollection(UserRequestAccountDto.requests).orderBy("dateTime",descending: true ).snapshots();
+
   }
 
   static CollectionReference<MaterailModelDto> getMaterailCollection() {

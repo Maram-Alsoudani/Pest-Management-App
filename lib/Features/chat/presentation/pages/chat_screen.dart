@@ -17,6 +17,7 @@ class ChatScreen extends StatelessWidget {
     var bloc = BlocProvider.of<ChatViewModelCubit>(context);
     WidgetsBinding.instance.addPostFrameCallback((_) => bloc.getMessage());
     bloc.user = bloc.getUser()!;
+
     return Stack(
       children: [
         Container(
@@ -83,48 +84,33 @@ class ChatScreen extends StatelessWidget {
                               style: Theme.of(context).textTheme.bodyMedium,
                             ),
                           );
-                        } else if (state is ChatViewModelGetMessage &&
-                                bloc.streamMessage != null ||
+                        } else if (state is ChatViewModelGetMessage ||
                             state is ChatViewModelAddMessage ||
                             state is ChatViewModelButtonState) {
-                          return StreamBuilder(
-                            stream: bloc.streamMessage,
-                            builder: (context, snapshot) {
-                              if (snapshot.connectionState ==
-                                  ConnectionState.waiting) {
-                                return const Center(
-                                  child: CircularProgressIndicator(),
-                                );
-                              } else if (!snapshot.hasData ||
-                                  snapshot.data!.docs.isEmpty) {
-                                return const Center(
-                                  child: Text("No messages yet."),
-                                );
-                              } else {
-                                var messages = snapshot.data!.docs
-                                    .map((doc) => doc.data())
-                                    .toList();
+                           ;
 
-                                for (var date in messages) {
-                                  bloc.dateTime =
-                                      bloc.formatDateTime(date.dateTime);
-                                }
-                                bloc.scrollToBottom();
-                                return ListView.builder(
-                                  controller: bloc.scrollController,
-                                  itemCount: messages.length,
-                                  itemBuilder: (context, index) {
-                                    return MessageWidget(
-                                      message: messages[index],
-                                      userId: bloc.user.id ?? "",
-                                      dateTime: bloc.dateTime,
-                                    );
-                                  },
-                                );
-                              }
+                          if (bloc.messages.isEmpty) {
+                            return const Center(
+                              child: Text("No messages yet."),
+                            );
+                          }
+
+
+
+
+                          return ListView.builder(
+                            controller: bloc.scrollController,
+                            itemCount: bloc.messages.length,
+                            itemBuilder: (context, index) {
+                              return MessageWidget(
+                                message: bloc.messages[index],
+                                userId: bloc.user.id ?? "",
+                                dateTime: bloc.dateTime,
+                              );
                             },
                           );
                         }
+
                         return SizedBox();
                       },
                     ),

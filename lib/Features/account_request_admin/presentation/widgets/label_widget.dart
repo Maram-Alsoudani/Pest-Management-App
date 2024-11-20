@@ -5,19 +5,23 @@ import 'package:pesticides/Core/utils/colors.dart';
 
 class LabelText extends StatelessWidget {
   final String label;
-
-  const LabelText({
+  double? fontSize;
+  Color? color;
+   LabelText({
     Key? key,
     required this.label,
+    this.fontSize,
+     this.color
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Text(
       label,
+      overflow: TextOverflow.ellipsis,
       style: Theme.of(context).textTheme.titleSmall!.copyWith(
-        color: ColorManager.blackColor,
-        fontSize: 21.sp,
+        color:color?? ColorManager.blackColor,
+        fontSize: fontSize??20.sp,
       ),
     );
   }

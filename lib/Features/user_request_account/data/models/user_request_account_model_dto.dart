@@ -13,6 +13,8 @@ class UserRequestAccountDto extends UserRequestAccountEntity {
     required super.phone,
     required super.email,
     required super.password,
+    required super.dateTime,
+    super.status
   });
 
   UserRequestAccountDto.fromFireStore(Map<String, dynamic> data)
@@ -24,6 +26,8 @@ class UserRequestAccountDto extends UserRequestAccountEntity {
     phone: data["phone"] as String,
     email: data["email"] as String,
     password: data["password"] as String,
+    status: data["status"] as String?,
+    dateTime:DateTime.fromMillisecondsSinceEpoch(data["dateTime"] ) as DateTime,
   );
 
   Map<String, dynamic> toFireStore() {
@@ -35,6 +39,8 @@ class UserRequestAccountDto extends UserRequestAccountEntity {
       "phone": phone,
       "email": email,
       "password": password,
+      "status": status,
+      "dateTime": dateTime.millisecondsSinceEpoch,
     };
   }
 }

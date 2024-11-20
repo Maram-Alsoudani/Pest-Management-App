@@ -46,7 +46,8 @@ class UserRequestAccountDataSourceImpl implements UserRequestAccountDataSource {
           userName: userName,
           phone: phone,
           email: email,
-          password: password
+          password: password,
+        dateTime: DateTime.now()
           );
 
       var userRequestAccounFireStore = await addUserRequestAccountToFireStore(userRequestAccountDto);

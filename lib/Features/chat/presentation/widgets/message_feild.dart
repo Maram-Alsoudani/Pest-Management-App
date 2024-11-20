@@ -26,6 +26,7 @@ class MessageTextFeild extends StatelessWidget {
             borderRadius: BorderRadius.circular(10.r),
           ),
         ),
+        controller: bloc.clearMessageController,
         onChanged: (text) {
           bloc.funcButton(text);
         },

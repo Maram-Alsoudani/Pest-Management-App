@@ -7,6 +7,8 @@ class UserRequestAccountEntity {
   String? phone;
   String? email;
   String?password;
+  String?status;
+  DateTime dateTime;
 
   UserRequestAccountEntity({
      this.id="",
@@ -16,6 +18,8 @@ class UserRequestAccountEntity {
     required this.phone,
     required this.email,
     required this.password,
+    required this.dateTime,
+    this.status
   });
 
 

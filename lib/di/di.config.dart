@@ -11,6 +11,20 @@
 import 'package:get_it/get_it.dart' as _i174;
 import 'package:injectable/injectable.dart' as _i526;
 
+import '../Features/account_request_admin/data/data_sources/account_resuest_date_source.dart'
+    as _i874;
+import '../Features/account_request_admin/data/data_sources/impl/account_resuest_date_source_impl.dart'
+    as _i737;
+import '../Features/account_request_admin/data/repositories/account_request_repo_impl.dart'
+    as _i151;
+import '../Features/account_request_admin/domain/repositories/account_request_repo.dart'
+    as _i645;
+import '../Features/account_request_admin/domain/use_cases/accept_requests_user_case.dart'
+    as _i630;
+import '../Features/account_request_admin/domain/use_cases/get_requests_user_case.dart'
+    as _i323;
+import '../Features/account_request_admin/presentation/manager/requests_screen_viewmodel_cubit.dart'
+    as _i178;
 import '../Features/category/data/data_source/category_data_source.dart'
     as _i903;
 import '../Features/category/data/data_source/impl/category_data_source_impl.dart'
@@ -150,6 +164,8 @@ extension GetItInjectableX on _i174.GetIt {
         () => _i868.InventoryDataSourceImpl());
     gh.factory<_i311.SiteRepository>(() => _i9.AddSiteRepositoryImpl(
         addSiteDataSource: gh<_i998.AddSiteDataSource>()));
+    gh.factory<_i874.AccountRequestDataSource>(
+        () => _i737.AccountRequestDataSourceImpl());
     gh.factory<_i924.GetSitesOfUserDataSource>(
         () => _i803.GetSitesOfUserDataSourceImpl());
     gh.factory<_i134.ForgetPasswordDataSource>(
@@ -206,6 +222,8 @@ extension GetItInjectableX on _i174.GetIt {
         categoryDataSource: gh<_i903.CategoryDataSource>()));
     gh.factory<_i136.ChatRepo>(
         () => _i634.ChatRepoImpl(chatDataSource: gh<_i451.ChatDataSource>()));
+    gh.factory<_i645.AccountRequestRepo>(() => _i151.AccountRequestRepoImpl(
+        accountRequestDataSource: gh<_i874.AccountRequestDataSource>()));
     gh.factory<_i925.GetMessageUseCase>(
         () => _i925.GetMessageUseCase(chatRepo: gh<_i136.ChatRepo>()));
     gh.factory<_i928.SendMessageUseCase>(
@@ -238,6 +256,10 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i899.ReadUserOrAdminFromFireStoreUseCase>(() =>
         _i899.ReadUserOrAdminFromFireStoreUseCase(
             categoryRepo: gh<_i78.CategoryRepo>()));
+    gh.factory<_i323.GetRequestsUseCase>(() => _i323.GetRequestsUseCase(
+        accountRequests: gh<_i645.AccountRequestRepo>()));
+    gh.factory<_i630.AcceptRequestsUseCase>(() => _i630.AcceptRequestsUseCase(
+        accountRequests: gh<_i645.AccountRequestRepo>()));
     gh.factory<_i111.AllUsersScreenViewModel>(() =>
         _i111.AllUsersScreenViewModel(
             getUsersUseCase: gh<_i808.GetUsersUseCase>()));
@@ -265,6 +287,11 @@ extension GetItInjectableX on _i174.GetIt {
         () => _i203.LoginUseCase(loginRepository: gh<_i558.LoginRepository>()));
     gh.factory<_i1073.LoginScreenViewModel>(() =>
         _i1073.LoginScreenViewModel(loginUseCase: gh<_i203.LoginUseCase>()));
+    gh.factory<_i178.RequestsScreenViewmodelCubit>(
+        () => _i178.RequestsScreenViewmodelCubit(
+              getRequestsUseCase: gh<_i323.GetRequestsUseCase>(),
+              acceptRequestsUseCase: gh<_i630.AcceptRequestsUseCase>(),
+            ));
     gh.factory<_i451.RegisterViewModelCubit>(() => _i451.RegisterViewModelCubit(
         registerUseCase: gh<_i841.RegisterUseCase>()));
     return this;

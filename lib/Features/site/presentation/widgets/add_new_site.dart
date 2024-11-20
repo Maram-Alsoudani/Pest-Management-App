@@ -22,6 +22,7 @@ class AddNewSite extends StatefulWidget {
 class _AddNewSiteState extends State<AddNewSite>
     with SingleTickerProviderStateMixin {
   late SiteViewModel bloc;
+
   @override
   void initState() {
     bloc = SiteViewModel.get(context);
@@ -48,8 +49,7 @@ class _AddNewSiteState extends State<AddNewSite>
             CustomTextFormField(
                 hint: StringManager.siteLocation,
                 validator: (val) => AppValidators.validateSite(val),
-                controller:
-                    SiteViewModel.get(context).siteLocationController),
+                controller: SiteViewModel.get(context).siteLocationController),
             SizedBox(width: 232.w, child: UserDropdown()),
             ButtonCustom(
               onTap: () async {

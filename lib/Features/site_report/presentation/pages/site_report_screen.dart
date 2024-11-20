@@ -161,7 +161,7 @@ class _SiteReportScreenState extends State<SiteReportScreen>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        surfaceTintColor: CupertinoColors.transparent,
+        surfaceTintColor: Colors.transparent,
         title: Text(siteName ?? StringManager.siteReports),
         actions: [
           Padding(

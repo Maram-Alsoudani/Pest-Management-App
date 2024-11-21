@@ -15,6 +15,7 @@ class CustomTextFormField extends StatefulWidget {
   final Color? disabledBorderColor;
   final Color? focusedBorderColor;
   final Color? errorBorderColor;
+  final Function(String)? onChanged;
 
   CustomTextFormField({
     required this.hint,
@@ -29,6 +30,7 @@ class CustomTextFormField extends StatefulWidget {
     this.disabledBorderColor,
     this.focusedBorderColor,
     this.errorBorderColor,
+    this.onChanged,
   });
 
   @override
@@ -56,21 +58,22 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
         obscureText: _isSecured,
         cursorColor: ColorManager.blueColor,
         style: TextStyle(color: ColorManager.whiteColor),
+        onChanged: widget.onChanged,
         decoration: InputDecoration(
           hintText: widget.hint,
           hintStyle: Theme.of(context).textTheme.titleSmall,
           suffixIcon: widget.isSecured == true
               ? IconButton(
-            onPressed: () {
-              setState(() {
-                _isSecured = !_isSecured;
-              });
-            },
-            icon: Icon(
-              _isSecured ? Icons.visibility_off : Icons.visibility,
-              color: ColorManager.greyShade1,
-            ),
-          )
+                  onPressed: () {
+                    setState(() {
+                      _isSecured = !_isSecured;
+                    });
+                  },
+                  icon: Icon(
+                    _isSecured ? Icons.visibility_off : Icons.visibility,
+                    color: ColorManager.greyShade1,
+                  ),
+                )
               : widget.suffixIcon,
           enabledBorder: OutlineInputBorder(
             borderRadius: widget.borderRadius ?? BorderRadius.circular(8.r),

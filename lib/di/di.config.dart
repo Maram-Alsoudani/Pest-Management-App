@@ -150,6 +150,20 @@ import '../Features/user_request_account/domain/use_cases/user_request_account_u
     as _i704;
 import '../Features/user_request_account/presentation/manager/user_request_account_view_model_cubit.dart'
     as _i384;
+import '../Features/site_report/data/data_sources/report_data_source.dart'
+    as _i585;
+import '../Features/site_report/data/data_sources/report_data_source_impl.dart'
+    as _i1035;
+import '../Features/site_report/data/repositories/report_repository_impl.dart'
+    as _i432;
+import '../Features/site_report/domain/repositories/report_repository.dart'
+    as _i98;
+import '../Features/site_report/domain/use_cases/create_report_use_case.dart'
+    as _i403;
+import '../Features/site_report/domain/use_cases/fetch_reports_use_case.dart'
+    as _i225;
+import '../Features/site_report/presentation/manager/report_view_model.dart'
+    as _i721;
 
 extension GetItInjectableX on _i174.GetIt {
 // initializes the registration of main-scope dependencies inside of GetIt
@@ -196,6 +210,7 @@ extension GetItInjectableX on _i174.GetIt {
         _i662.UserRequestAccountRepoImpl(
             userRequestAccountDataSource:
                 gh<_i226.UserRequestAccountDataSource>()));
+    gh.factory<_i585.ReportDataSource>(() => _i1035.ReportDataSourceImpl());
     gh.factory<_i917.AddedMaterailUseCase>(() =>
         _i917.AddedMaterailUseCase(inventoryRepo: gh<_i1010.InventoryRepo>()));
     gh.factory<_i635.DeleteMaterialUseCase>(() =>
@@ -204,6 +219,8 @@ extension GetItInjectableX on _i174.GetIt {
         _i730.GetMaterailUseCase(inventoryRepo: gh<_i1010.InventoryRepo>()));
     gh.factory<_i276.UpdateMaterialUseCase>(() =>
         _i276.UpdateMaterialUseCase(inventoryRepo: gh<_i1010.InventoryRepo>()));
+    gh.factory<_i98.ReportRepository>(
+        () => _i432.ReportRepositoryImpl(gh<_i585.ReportDataSource>()));
     gh.factory<_i115.GetSitesOfUserRepo>(() => _i372.GetSitesOfUserRepoImpl(
         getSitesOfUserDataSource: gh<_i924.GetSitesOfUserDataSource>()));
     gh.factory<_i1014.GetUsersRepo>(() => _i294.GetUsersRepoImpl(
@@ -232,6 +249,14 @@ extension GetItInjectableX on _i174.GetIt {
         () => _i925.GetMessageUseCase(chatRepo: gh<_i136.ChatRepo>()));
     gh.factory<_i928.SendMessageUseCase>(
         () => _i928.SendMessageUseCase(chatRepo: gh<_i136.ChatRepo>()));
+    gh.factory<_i403.CreateReportUseCase>(
+        () => _i403.CreateReportUseCase(gh<_i98.ReportRepository>()));
+    gh.factory<_i225.FetchReportsUseCase>(
+        () => _i225.FetchReportsUseCase(gh<_i98.ReportRepository>()));
+    gh.factory<_i721.ReportViewModel>(() => _i721.ReportViewModel(
+          gh<_i403.CreateReportUseCase>(),
+          gh<_i225.FetchReportsUseCase>(),
+        ));
     gh.factory<_i58.ForgetPasswordRepository>(() =>
         _i657.ForgetPasswordRepositoryImpl(
             forgetPasswordDataSource: gh<_i134.ForgetPasswordDataSource>()));

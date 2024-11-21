@@ -4,7 +4,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pesticides/Config/theme/theming.dart';
 import 'package:pesticides/Core/utils/strings.dart';
 import 'package:pesticides/Features/site/presentation/manager/site_state.dart';
-
 import '../../../../Core/component/button_custom.dart';
 import '../../../../Core/component/text_feild_custom.dart';
 import '../../../../Core/component/validators.dart';
@@ -23,6 +22,7 @@ class AddNewSite extends StatefulWidget {
 class _AddNewSiteState extends State<AddNewSite>
     with SingleTickerProviderStateMixin {
   late SiteViewModel bloc;
+
   @override
   void initState() {
     bloc = SiteViewModel.get(context);
@@ -49,8 +49,7 @@ class _AddNewSiteState extends State<AddNewSite>
             CustomTextFormField(
                 hint: StringManager.siteLocation,
                 validator: (val) => AppValidators.validateSite(val),
-                controller:
-                    SiteViewModel.get(context).siteLocationController),
+                controller: SiteViewModel.get(context).siteLocationController),
             SizedBox(width: 232.w, child: UserDropdown()),
             ButtonCustom(
               onTap: () async {

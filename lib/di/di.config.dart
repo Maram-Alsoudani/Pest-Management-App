@@ -21,6 +21,10 @@ import '../Features/account_request_admin/domain/repositories/account_request_re
     as _i645;
 import '../Features/account_request_admin/domain/use_cases/accept_requests_user_case.dart'
     as _i630;
+import '../Features/account_request_admin/domain/use_cases/decline_requests_user_case%20copy.dart'
+    as _i300;
+import '../Features/account_request_admin/domain/use_cases/delete_requests_user_case%20copy%202.dart'
+    as _i687;
 import '../Features/account_request_admin/domain/use_cases/get_requests_user_case.dart'
     as _i323;
 import '../Features/account_request_admin/presentation/manager/requests_screen_viewmodel_cubit.dart'
@@ -256,9 +260,13 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i899.ReadUserOrAdminFromFireStoreUseCase>(() =>
         _i899.ReadUserOrAdminFromFireStoreUseCase(
             categoryRepo: gh<_i78.CategoryRepo>()));
+    gh.factory<_i630.AcceptRequestsUseCase>(() => _i630.AcceptRequestsUseCase(
+        accountRequests: gh<_i645.AccountRequestRepo>()));
     gh.factory<_i323.GetRequestsUseCase>(() => _i323.GetRequestsUseCase(
         accountRequests: gh<_i645.AccountRequestRepo>()));
-    gh.factory<_i630.AcceptRequestsUseCase>(() => _i630.AcceptRequestsUseCase(
+    gh.factory<_i300.DeclineRequestsUseCase>(() => _i300.DeclineRequestsUseCase(
+        accountRequests: gh<_i645.AccountRequestRepo>()));
+    gh.factory<_i687.DeleteRequestsUseCase>(() => _i687.DeleteRequestsUseCase(
         accountRequests: gh<_i645.AccountRequestRepo>()));
     gh.factory<_i111.AllUsersScreenViewModel>(() =>
         _i111.AllUsersScreenViewModel(
@@ -283,15 +291,17 @@ extension GetItInjectableX on _i174.GetIt {
             userRequestAccountUseCase: gh<_i704.UserRequestAccountUseCase>()));
     gh.factory<_i841.RegisterUseCase>(
         () => _i841.RegisterUseCase(registerRepo: gh<_i20.RegisterRepo>()));
-    gh.factory<_i203.LoginUseCase>(
-        () => _i203.LoginUseCase(loginRepository: gh<_i558.LoginRepository>()));
-    gh.factory<_i1073.LoginScreenViewModel>(() =>
-        _i1073.LoginScreenViewModel(loginUseCase: gh<_i203.LoginUseCase>()));
     gh.factory<_i178.RequestsScreenViewmodelCubit>(
         () => _i178.RequestsScreenViewmodelCubit(
               getRequestsUseCase: gh<_i323.GetRequestsUseCase>(),
               acceptRequestsUseCase: gh<_i630.AcceptRequestsUseCase>(),
+              deleteRequestsUseCase: gh<_i687.DeleteRequestsUseCase>(),
+              declineRequestsUseCase: gh<_i300.DeclineRequestsUseCase>(),
             ));
+    gh.factory<_i203.LoginUseCase>(
+        () => _i203.LoginUseCase(loginRepository: gh<_i558.LoginRepository>()));
+    gh.factory<_i1073.LoginScreenViewModel>(() =>
+        _i1073.LoginScreenViewModel(loginUseCase: gh<_i203.LoginUseCase>()));
     gh.factory<_i451.RegisterViewModelCubit>(() => _i451.RegisterViewModelCubit(
         registerUseCase: gh<_i841.RegisterUseCase>()));
     return this;

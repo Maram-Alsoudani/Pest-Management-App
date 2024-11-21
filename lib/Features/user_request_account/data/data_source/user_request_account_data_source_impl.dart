@@ -8,16 +8,32 @@ import 'package:injectable/injectable.dart';
 import 'package:pesticides/Core/errors/failures.dart';
 import 'package:pesticides/Core/utils/firebase_utils.dart';
 import 'package:pesticides/Core/utils/strings.dart';
+import 'package:pesticides/Features/register/data/models/user_model_dto.dart';
 import 'package:pesticides/Features/user_request_account/data/data_source/data/user_request_account_data_source.dart';
 import 'package:pesticides/Features/user_request_account/data/models/user_request_account_model_dto.dart';
 
 @Injectable(as: UserRequestAccountDataSource)
 class UserRequestAccountDataSourceImpl implements UserRequestAccountDataSource {
-  static Future<void> addUserRequestAccountToFireStore(UserRequestAccountDto user) async {
-    var collection = FirebaseUtils.getUserRequestAccountCollection(UserRequestAccountDto.requests);
+  static Future<void> addUserRequestAccountToFireStore(
+      UserRequestAccountDto user) async {
+    var collection = FirebaseUtils.getUserRequestAccountCollection(
+        UserRequestAccountDto.requests);
     var docs = collection.doc();
     user.id = docs.id;
     return docs.set(user);
+  }
+
+  Future<bool> doesEmailExist(String email, String collectionName) async {
+    try {
+      var userCollection = FirebaseFirestore.instance.collection(
+          collectionName); 
+      var querySnapshot =
+          await userCollection.where('email', isEqualTo: email).get();
+
+      return querySnapshot.docs.isNotEmpty;
+    } catch (e) {
+      return false;
+    }
   }
 
   @override
@@ -30,29 +46,34 @@ class UserRequestAccountDataSourceImpl implements UserRequestAccountDataSource {
     String password,
   ) async {
     try {
-      String imageUrl = "";
-
-      if (imagePath != null && imagePath.isNotEmpty) {
-        final result =
-            await FirebaseUtils.addImageToFirebaseStorage(File(imagePath));
-        result.fold(
-          (_) {},
-          (url) => imageUrl = url,
-        );
-      }
-      UserRequestAccountDto userRequestAccountDto = UserRequestAccountDto(
-          image: imageUrl,
-          type: type,
-          userName: userName,
-          phone: phone,
-          email: email,
-          password: password,
-        dateTime: DateTime.now()
+      bool checkEmailInUsers =
+          await doesEmailExist(email, UserAndAdminModelDto.user);
+      bool checkEmailInAdmins =
+          await doesEmailExist(email, UserAndAdminModelDto.admin);
+      if (checkEmailInUsers == false && checkEmailInAdmins == false) {
+        String imageUrl = "";
+        if (imagePath != null && imagePath.isNotEmpty) {
+          final result =
+              await FirebaseUtils.addImageToFirebaseStorage(File(imagePath));
+          result.fold(
+            (_) {},
+            (url) => imageUrl = url,
           );
+        }
+        UserRequestAccountDto userRequestAccountDto = UserRequestAccountDto(
+            image: imageUrl,
+            type: type,
+            userName: userName,
+            phone: phone,
+            email: email,
+            password: password,
+            dateTime: DateTime.now());
 
-      var userRequestAccounFireStore = await addUserRequestAccountToFireStore(userRequestAccountDto);
-
-   
+        var userRequestAccounFireStore =
+            await addUserRequestAccountToFireStore(userRequestAccountDto);
+      }else{
+         return Left(Failure(errorMessage: StringManager.emailAlreadyInUse));
+      }
 
       return Right(null);
     } on FirebaseAuthException catch (e) {

@@ -1,17 +1,12 @@
 import 'dart:io';
-
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_storage/firebase_storage.dart';
-import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:injectable/injectable.dart';
 import 'package:pesticides/Core/errors/failures.dart';
 import 'package:pesticides/Core/utils/firebase_utils.dart';
 import 'package:pesticides/Core/utils/SharedPrefsLocal.dart';
 import 'package:pesticides/Core/utils/strings.dart';
 import 'package:pesticides/Features/register/data/models/user_model_dto.dart';
-
 import 'data/register_data_source.dart';
 
 @Injectable(as: RegisterDataSource)

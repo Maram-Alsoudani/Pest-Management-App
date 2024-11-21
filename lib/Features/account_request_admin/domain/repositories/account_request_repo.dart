@@ -6,4 +6,6 @@ import 'package:pesticides/Features/user_request_account/domain/entities/user_re
 abstract class AccountRequestRepo{
   Future<Either<Failure,Stream<QuerySnapshot<UserRequestAccountEntity>>>>getRequests();
   Future<Either<Failure,void>>acceptRequests(UserRequestAccountEntity user);
+  Future<Either<Failure,void>>declineRequests(UserRequestAccountEntity user);
+  Future<Either<Failure,void>>deleteRequests(String id);
 }

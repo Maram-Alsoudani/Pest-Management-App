@@ -20,3 +20,21 @@ final class AcceptRequestsScreenViewmodelError extends RequestsScreenViewmodelSt
 }
 final class AcceptRequestsScreenViewmodelSuccess extends RequestsScreenViewmodelState {}
 
+
+final class DeclineRequestsScreenViewmodelLoading extends RequestsScreenViewmodelState {}
+final class DeclineRequestsScreenViewmodelError extends RequestsScreenViewmodelState {
+  final Failure error;
+
+  DeclineRequestsScreenViewmodelError({required this.error});
+}
+final class DeclineRequestsScreenViewmodelSuccess extends RequestsScreenViewmodelState {}
+
+
+final class DeleteRequestsScreenViewmodelLoading extends RequestsScreenViewmodelState {}
+final class DeleteRequestsScreenViewmodelError extends RequestsScreenViewmodelState {
+  final Failure error;
+
+  DeleteRequestsScreenViewmodelError({required this.error});
+}
+final class DeleteRequestsScreenViewmodelSuccess extends RequestsScreenViewmodelState {}
+

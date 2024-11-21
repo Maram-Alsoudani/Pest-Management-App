@@ -147,9 +147,12 @@ class _CategoryScreenState extends State<CategoryScreen>
                                         ],
                                       ),
                                       Spacer(),
+                                      if(state.userAndAdminModelEntity.type=="admin")
                                       IconButton(onPressed: (){
                                         Navigator.pushNamed(context, RoutesManger.routeNameRequiest);
-                                      }, icon: Icon(Icons.attribution,size: 28.sp,)),
+                                      }, icon: Icon(Icons.attribution,size: 28.sp,))
+                                      else
+                                      SizedBox(),
                                       IconButton(onPressed: (){
                                         Navigator.pushNamed(context, RoutesManger.routeNameChat);
                                       }, icon: Icon(Icons.message)),

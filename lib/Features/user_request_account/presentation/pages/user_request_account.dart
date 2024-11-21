@@ -15,6 +15,7 @@ import 'package:pesticides/Core/utils/colors.dart';
 import 'package:pesticides/Core/utils/images.dart';
 import 'package:pesticides/Core/utils/strings.dart';
 import 'package:pesticides/Core/component/show_model_picker_image.dart';
+import 'package:pesticides/Features/user_request_account/data/data_source/user_request_account_data_source_impl.dart';
 
 import '../../../../Core/component/drop_down_menu_widget.dart';
 import '../../../../Core/component/text_feild_custom.dart';
@@ -182,9 +183,10 @@ class _UserRequestAccountState extends State<UserRequestAccount>
                             buttonName: StringManager.requestAccount,
                             onTap: () async{
                               if (bloc.fromKey.currentState!.validate()) {
+                                
                                 bloc.userRequestAccount();
                               }
-                              final signInMethods = await FirebaseAuth.instance.fetchSignInMethodsForEmail("ahmed2@gmail.com");
+                              
                      
             
                             },

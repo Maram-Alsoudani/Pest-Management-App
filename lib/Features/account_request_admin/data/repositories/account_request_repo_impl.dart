@@ -20,5 +20,17 @@ class AccountRequestRepoImpl implements AccountRequestRepo{
     var either= await accountRequestDataSource.acceptRequests(user);
     return either.fold((l) => Left(l), (r) => Right(r),);
   }
+  
+  @override
+  Future<Either<Failure, void>> declineRequests(UserRequestAccountEntity user) async{
+      var either= await accountRequestDataSource.declineRequests(user);
+    return either.fold((l) => Left(l), (r) => Right(r),);
+  }
+  
+  @override
+  Future<Either<Failure, void>> deleteRequests(String id) async{
+    var either= await accountRequestDataSource.deleteRequests(id);
+    return either.fold((l) => Left(l), (r) => Right(r),);
+  }
 
 }

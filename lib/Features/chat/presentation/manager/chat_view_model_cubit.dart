@@ -26,21 +26,32 @@ class ChatViewModelCubit extends Cubit<ChatViewModelState> {
     required this.sendMessageUseCase,
   }) : super(ChatViewModelInitial());
   String messageController="";
+  TextEditingController clearMessageController=TextEditingController();
   final ScrollController scrollController = ScrollController();
-  Stream<QuerySnapshot<MessageEntity>>? streamMessage;
+  List<MessageEntity>messages=[];
   void getMessage() async {
     var fold = await getMessageUseCase.invoke();
     fold.fold((l) {
       emit(ChatViewModelFailGetMessage(error: l));
-    }, (r) {
-      streamMessage = r;
-      emit(ChatViewModelGetMessage());
+    }, (stream) {
+      stream.listen((message){
+        scrollToBottom();
+        messages = message.docs.map((e) {
+          dateTime= formatDateTime(e.data().dateTime);
+          return e.data();
+        }).toList();
+
+
+
+        emit(ChatViewModelGetMessage());
+      });
     });
   }
 
  void funcButton(String text){
     messageController=text;
     emit(ChatViewModelButtonState());
+
   }
 
 
@@ -50,12 +61,14 @@ class ChatViewModelCubit extends Cubit<ChatViewModelState> {
         senderId: user.id??"",
         senderName: user.userName??"",
         dateTime: DateTime.now());
+    messageController="";
+    clearMessageController.clear();
     var fold = await sendMessageUseCase.invoke(message);
     fold.fold((l) {
       emit(ChatViewModelFailAddMessage(error: l));
     }, (r) {
-
       emit(ChatViewModelAddMessage());
+
     });
   }
 

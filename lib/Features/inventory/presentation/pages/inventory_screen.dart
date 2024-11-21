@@ -289,6 +289,8 @@ class _InventoryScreenState extends State<InventoryScreen>
                                                   ),
                                                 ],
                                               ),
+                                            
+                                            
                                               child: MaterailItem(
                                                 isUnavailable: isUnavailable,
                                                 item: item,

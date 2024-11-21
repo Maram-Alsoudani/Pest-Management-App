@@ -223,6 +223,8 @@ class _LoginScreenState extends State<LoginScreen>
                                       ),
                                     ),
                                   ),
+                                  
+                                  
                                   SizedBox(height: 20.h),
                                   SlideTransition(
                                     position: viewModel.slideAnimation,
@@ -241,6 +243,31 @@ class _LoginScreenState extends State<LoginScreen>
                                       },
                                     ),
                                   ),
+                                  SizedBox(height: 50.h),
+                                 AnimatedOpacity(
+                                    duration: Duration(seconds: 2),
+                                    opacity: viewModel.opacity,
+                                    curve: Curves.easeIn,
+                                    child: Center(
+                                      child: TextButton(
+                                        onPressed: () {
+                                          Navigator.pushNamed(
+                                              context,
+                                              RoutesManger
+                                                  .routeNameUserRequestAccount);
+                                        },
+                                        child: Text(
+                                          "User Request Account?",
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .titleSmall,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  
+                                  
+                                
                                 ],
                               ),
                             ],

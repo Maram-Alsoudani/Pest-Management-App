@@ -88,7 +88,7 @@ class _PreviewReportScreenState extends State<PreviewReportScreen>
         ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
     final siteName = args?['siteName'] ?? 'Site Name';
     final userId = args?['userId'] ?? 'userId';
-
+    final siteId = args?['siteId'] ?? 'siteId';
     if (userId == null || userId.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('User ID is missing.')),
@@ -98,6 +98,7 @@ class _PreviewReportScreenState extends State<PreviewReportScreen>
 
     final report = ReportEntity(
       id: '',
+      siteId: siteId,
       siteName: siteName,
       notes:
           reportViewModel.notes.isNotEmpty ? reportViewModel.notes : 'No notes',

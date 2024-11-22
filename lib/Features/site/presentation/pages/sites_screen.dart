@@ -145,23 +145,37 @@ class _SitesScreenState extends State<SitesScreen>
                                   ),
                                 )
                               : Flexible(
-                                  child: SlideTransition(
-                                    position: bloc.slideAnimation,
-                                    child: ListView.builder(
-                                        itemCount: SiteViewModel.get(context)
-                                            .searchedSites
-                                            .length,
-                                        itemBuilder: (context, index) {
-                                          return SiteInfoItem(
-                                            site: bloc.searchedSites[index],
-                                            onDelete: () {
-                                              bloc.deleteSite(
-                                                  bloc.sites[index]);
-                                              bloc.fetchSite();
+                                  child: state is NoResultSearchSiteSuccessState
+                                      ? Center(
+                                          child: Text(
+                                            StringManager.noUsersFound,
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .bodyMedium!
+                                                .copyWith(
+                                                    color: ColorManager
+                                                        .greyShade4),
+                                          ),
+                                        )
+                                      : SlideTransition(
+                                          position: bloc.slideAnimation,
+                                          child: ListView.builder(
+                                            itemCount:
+                                                SiteViewModel.get(context)
+                                                    .searchedSites
+                                                    .length,
+                                            itemBuilder: (context, index) {
+                                              return SiteInfoItem(
+                                                site: bloc.searchedSites[index],
+                                                onDelete: () {
+                                                  bloc.deleteSite(
+                                                      bloc.sites[index]);
+                                                  bloc.fetchSite();
+                                                },
+                                              );
                                             },
-                                          );
-                                        }),
-                                  ),
+                                          ),
+                                        ),
                                 ),
                         ]),
                   ),

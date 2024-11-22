@@ -52,6 +52,7 @@ class _SiteReportScreenState extends State<SiteReportScreen>
 
   Map<String, dynamic> reportData = {};
   String? siteName;
+  String? siteId;
   String? userId;
 
   @override
@@ -88,6 +89,7 @@ class _SiteReportScreenState extends State<SiteReportScreen>
         ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
     if (args != null) {
       siteName = args['siteName'];
+      siteId = args['siteId'];
     }
   }
 
@@ -128,6 +130,7 @@ class _SiteReportScreenState extends State<SiteReportScreen>
 
     final report = ReportEntity(
       id: '',
+      siteId: siteId ?? '',
       siteName: siteName ?? '',
       notes:
           reportViewModel.notes.isNotEmpty ? reportViewModel.notes : 'No notes',

@@ -35,7 +35,7 @@ class SiteInfoItem extends StatelessWidget {
             Navigator.pushNamed(
               context,
               RoutesManger.routeNameSiteReportScreen,
-              arguments: {'siteName': site.siteName},
+              arguments: {'siteName': site.siteName, 'siteId': site.siteId},
             );
           },
         ));

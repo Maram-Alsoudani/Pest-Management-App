@@ -1,6 +1,7 @@
 class ReportEntity {
   String id;
   final String siteName;
+  final String siteId;
   final String notes;
   final String conditions;
   final List<String> recommendations;
@@ -14,6 +15,7 @@ class ReportEntity {
   ReportEntity({
     required this.id,
     this.siteName = 'Unknown',
+    required this.siteId,
     this.notes = 'No notes',
     this.conditions = 'No conditions',
     this.recommendations = const ['No recommendations'],

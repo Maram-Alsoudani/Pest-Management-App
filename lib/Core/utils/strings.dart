@@ -120,4 +120,5 @@ class StringManager {
   static const String accountRequests = "Account Requests";
   static const String requestAccount = "Request Account";
   static const String sentRequestSuccssfully = "Sent Request Successfully";
+  static const String noReportFound = "No Report found for this site. ";
 }

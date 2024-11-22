@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
+import 'package:pesticides/Config/routes/routes_manger.dart';
 import 'package:pesticides/Core/utils/strings.dart';
 import 'package:pesticides/Features/reports/presentation/widgets/site_widget.dart';
 import 'package:pesticides/di/di.dart';
@@ -52,7 +53,6 @@ class _SitesOFUserState extends State<SitesOFUser>
         ),
         body: BlocBuilder<GetSitesOfUsersViewModel, GetSitesState>(
           bloc: viewModel,
-          // Ensure the ViewModel is correctly passed to the BlocBuilder
           builder: (context, state) {
             return Column(
               children: [
@@ -102,9 +102,18 @@ class _SitesOFUserState extends State<SitesOFUser>
                               itemBuilder: (context, index) {
                                 final site = viewModel.allSites[index];
 
-                                return SiteWidget(
-                                  siteName: site.siteName ?? "",
-                                  siteLocation: site.siteLocation ?? "",
+                                return InkWell(
+                                  onTap: () {
+                                    Navigator.pushNamed(
+                                        context,
+                                        RoutesManger
+                                            .routeNameReportOfSiteScreen,
+                                        arguments: site.siteId);
+                                  },
+                                  child: SiteWidget(
+                                    siteName: site.siteName ?? "",
+                                    siteLocation: site.siteLocation ?? "",
+                                  ),
                                 );
                               },
                             ),

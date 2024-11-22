@@ -59,6 +59,14 @@ class SiteInfoItem extends StatelessWidget {
               },
             ),
           ),
+          onTap: () {
+            Navigator.pushNamed(
+              context,
+              RoutesManger.routeNameSiteReportScreen,
+              arguments: {'siteName': site.siteName, 'siteId': site.siteId},
+            );
+          },
+        ));
         ),
       ),
     );

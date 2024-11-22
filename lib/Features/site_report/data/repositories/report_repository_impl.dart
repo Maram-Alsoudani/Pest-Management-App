@@ -16,6 +16,7 @@ class ReportRepositoryImpl implements ReportRepository {
   Future<Either<Failure, void>> createReport(ReportEntity report) async {
     return await dataSource.createReport(ReportModel(
       id: report.id,
+      siteId: report.siteId,
       siteName: report.siteName.isNotEmpty ? report.siteName : 'Unknown',
       notes: report.notes.isNotEmpty ? report.notes : 'No notes',
       conditions:
@@ -45,6 +46,7 @@ class ReportRepositoryImpl implements ReportRepository {
           .map((report) => ReportEntity(
                 id: report.id,
                 siteName: report.siteName,
+                siteId: report.siteId,
                 notes: report.notes,
                 conditions: report.conditions,
                 recommendations: report.recommendations,

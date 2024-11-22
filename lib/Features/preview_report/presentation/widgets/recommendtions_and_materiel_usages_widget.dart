@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 import 'title_divider_widget.dart';
 
 class MaterialUsagesAndRecommendtions extends StatelessWidget {
@@ -18,6 +19,25 @@ class MaterialUsagesAndRecommendtions extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (materials.isEmpty) {
+      return Padding(
+        padding: EdgeInsets.symmetric(vertical: 12.r),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SectionTitleWithDivider(title: title),
+            SizedBox(
+              height: 100.h,
+              child: Center(
+                child: Text("No materials available",
+                    style: Theme.of(context).textTheme.titleMedium),
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 12.r),
       child: Column(
@@ -28,20 +48,30 @@ class MaterialUsagesAndRecommendtions extends StatelessWidget {
             height: 100.h,
             child: SlideTransition(
               position: position,
-              child: ListView.builder(
-                padding: EdgeInsets.zero,
-                itemCount: materials.length,
-                itemBuilder: (context, index) {
-                  final materialName = materials.keys.elementAt(index);
-                  final quantity = materials[materialName]!;
-                  return Text("${index + 1}- $materialName: $quantity",
-                      style: Theme.of(context).textTheme.titleMedium);
-                },
+              child: Opacity(
+                opacity: opacity,
+                child: ListView.builder(
+                  padding: EdgeInsets.zero,
+                  itemCount: materials.length,
+                  itemBuilder: (context, index) {
+                    final materialName = materials.keys.elementAt(index);
+                    final quantity = materials[materialName]!;
+                    return Padding(
+                      padding: EdgeInsets.symmetric(vertical: 4.h),
+                      child: Text(
+                        "${index + 1}- $materialName: $quantity",
+                        style: Theme.of(context).textTheme.titleMedium,
+                      ),
+                    );
+                  },
+                ),
               ),
             ),
           )
         ],
       ),
     );
+    ;
+    ;
   }
 }

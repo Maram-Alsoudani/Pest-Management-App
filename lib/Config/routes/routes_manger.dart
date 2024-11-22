@@ -5,6 +5,7 @@ import 'package:pesticides/Features/device_inspection/presentation/pages/device_
 import 'package:pesticides/Features/forgotPassword/presentation/pages/forgot_pass_screen.dart';
 import 'package:pesticides/Features/preview_report/presentation/pages/preview_report_screen.dart';
 import 'package:pesticides/Features/register/presentation/pages/register_screen.dart';
+import 'package:pesticides/Features/reports/presentation/pages/report_of_site.dart';
 import 'package:pesticides/Features/reports/presentation/pages/sites_of_user.dart';
 import 'package:pesticides/Features/account_request_admin/presentation/pages/request_screen.dart';
 import 'package:pesticides/Features/signatures/presentation/pages/signatures_screen.dart';
@@ -53,6 +54,7 @@ class RoutesManger {
     routeNameChat: (context) => const ChatScreen(),
     routeNameRequiest: (context) => const RequestScreen(),
     routeNameUserRequestAccount: (context) =>  UserRequestAccount(),
+    routeNameReportOfSiteScreen: (context) => ReportOfSite()
   };
 
   static const String routeNameEngOwnerScreen = "EngOwnerScreen";
@@ -78,4 +80,5 @@ class RoutesManger {
   static const String routeNameChat = "chat";
   static const String routeNameRequiest = "requiest";
   static const String routeNameUserRequestAccount = "userRequestAccount";
+  static const String routeNameReportOfSiteScreen = "report of site screen";
 }

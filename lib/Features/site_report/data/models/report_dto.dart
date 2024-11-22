@@ -5,6 +5,7 @@ class ReportModel extends ReportEntity {
   ReportModel({
     required super.id,
     super.siteName = 'Unknown',
+    required super.siteId,
     super.notes = 'No notes',
     super.conditions = 'No conditions',
     super.recommendations = const ['No recommendations'],
@@ -20,6 +21,7 @@ class ReportModel extends ReportEntity {
     return ReportModel(
       id: json['id'] ?? '',
       siteName: json['siteName'] ?? 'Unknown',
+      siteId: json['siteId'] ?? 'site id not found',
       notes: json['notes'] ?? 'No notes',
       conditions: json['conditions'] ?? 'No conditions',
       recommendations:
@@ -38,6 +40,7 @@ class ReportModel extends ReportEntity {
     return {
       'id': id,
       'siteName': siteName,
+      'siteId': siteId,
       'notes': notes,
       'conditions': conditions,
       'recommendations': recommendations,

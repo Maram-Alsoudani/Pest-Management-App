@@ -30,10 +30,8 @@ class DeviceWidget extends StatelessWidget {
                     );
                   }).toList(),
                 )
-              : Center(
-                  child: Text(StringManager.noDevices,
-                      style: Theme.of(context).textTheme.titleMedium),
-                ),
+              : Text(StringManager.noDevices,
+                  style: Theme.of(context).textTheme.titleMedium),
         ),
       ],
     );

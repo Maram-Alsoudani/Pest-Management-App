@@ -150,6 +150,23 @@ class _SitesScreenState extends State<SitesScreen>
                                     ),
                                   ),
                                 )
+                              : Flexible(
+                                  child: state is NoResultSearchSiteSuccessState
+                                      ? Center(
+                                          child: Text(
+                                            StringManager.noUsersFound,
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .bodyMedium!
+                                                .copyWith(
+                                                    color: ColorManager
+                                                        .greyShade4),
+                                          ),
+                                        )
+                                      : SlideTransition(
+                                          position: bloc.slideAnimation,
+                                          child: ListView.builder(
+
                               : bloc.user.type == UserAndAdminModelDto.admin
                                   ? Flexible(
                                       child: SlideTransition(
@@ -168,6 +185,10 @@ class _SitesScreenState extends State<SitesScreen>
                                                   bloc.fetchSite();
                                                 },
                                               );
+                                            },
+                                          ),
+                                        ),
+                                ),
                                             }),
                                       ),
                                     )

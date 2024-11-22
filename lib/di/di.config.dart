@@ -101,6 +101,10 @@ import '../Features/register/domain/repositories/register_repo.dart' as _i20;
 import '../Features/register/domain/use_cases/register_use_case.dart' as _i841;
 import '../Features/register/presentation/manager/register_view_model_cubit.dart'
     as _i451;
+import '../Features/reports/data/data_sources/get_report_of_site_data_source.dart'
+    as _i329;
+import '../Features/reports/data/data_sources/get_report_of_site_dataSource_impl.dart'
+    as _i624;
 import '../Features/reports/data/data_sources/get_sites_of_user_data_source.dart'
     as _i924;
 import '../Features/reports/data/data_sources/get_sites_of_user_data_source_impl.dart'
@@ -109,13 +113,18 @@ import '../Features/reports/data/data_sources/get_users_data_source.dart'
     as _i44;
 import '../Features/reports/data/data_sources/get_users_data_source_impl.dart'
     as _i285;
+import '../Features/reports/data/repositories/get_report_of_site_repo_impl.dart'
+    as _i848;
 import '../Features/reports/data/repositories/get_sites_of_user_repo_impl.dart'
     as _i372;
 import '../Features/reports/data/repositories/get_users_repo_impl.dart'
     as _i294;
+import '../Features/reports/domain/repositories/get_report_of_site_repo.dart'
+    as _i121;
 import '../Features/reports/domain/repositories/get_sites_of_user_repo.dart'
     as _i115;
 import '../Features/reports/domain/repositories/get_users_repo.dart' as _i1014;
+import '../Features/reports/domain/use_cases/get_report_of_site.dart' as _i354;
 import '../Features/reports/domain/use_cases/get_sites_of_user_use_case.dart'
     as _i886;
 import '../Features/reports/domain/use_cases/get_users_use_case.dart' as _i808;
@@ -123,6 +132,8 @@ import '../Features/reports/presentation/manager/all_users_screen_view_model.dar
     as _i111;
 import '../Features/reports/presentation/manager/get_sites_of_user_view_model.dart'
     as _i1037;
+import '../Features/reports/presentation/manager/report_of_site_view_model.dart'
+    as _i1020;
 import '../Features/site/data/data_sources/add_site_data_source.dart' as _i998;
 import '../Features/site/data/data_sources/add_site_data_source_impl.dart'
     as _i610;
@@ -138,18 +149,6 @@ import '../Features/site/domain/use_cases/fetch_user_data_user_case.dart'
 import '../Features/site/domain/use_cases/fetch_user_sites_user_case.dart'
     as _i166;
 import '../Features/site/presentation/manager/site_view_model.dart' as _i869;
-import '../Features/user_request_account/data/data_source/data/user_request_account_data_source.dart'
-    as _i226;
-import '../Features/user_request_account/data/data_source/user_request_account_data_source_impl.dart'
-    as _i736;
-import '../Features/user_request_account/data/repositories/user_request_account_repo_impl.dart'
-    as _i662;
-import '../Features/user_request_account/domain/repositories/user_request_account_repo.dart'
-    as _i513;
-import '../Features/user_request_account/domain/use_cases/user_request_account_use_case.dart'
-    as _i704;
-import '../Features/user_request_account/presentation/manager/user_request_account_view_model_cubit.dart'
-    as _i384;
 import '../Features/site_report/data/data_sources/report_data_source.dart'
     as _i585;
 import '../Features/site_report/data/data_sources/report_data_source_impl.dart'
@@ -164,6 +163,18 @@ import '../Features/site_report/domain/use_cases/fetch_reports_use_case.dart'
     as _i225;
 import '../Features/site_report/presentation/manager/report_view_model.dart'
     as _i721;
+import '../Features/user_request_account/data/data_source/data/user_request_account_data_source.dart'
+    as _i226;
+import '../Features/user_request_account/data/data_source/user_request_account_data_source_impl.dart'
+    as _i736;
+import '../Features/user_request_account/data/repositories/user_request_account_repo_impl.dart'
+    as _i662;
+import '../Features/user_request_account/domain/repositories/user_request_account_repo.dart'
+    as _i513;
+import '../Features/user_request_account/domain/use_cases/user_request_account_use_case.dart'
+    as _i704;
+import '../Features/user_request_account/presentation/manager/user_request_account_view_model_cubit.dart'
+    as _i384;
 
 extension GetItInjectableX on _i174.GetIt {
 // initializes the registration of main-scope dependencies inside of GetIt
@@ -178,6 +189,8 @@ extension GetItInjectableX on _i174.GetIt {
     );
     gh.factory<_i998.AddSiteDataSource>(() => _i610.AddSiteDataSourceImpl());
     gh.factory<_i903.CategoryDataSource>(() => _i53.CategoryDataSourceImpl());
+    gh.factory<_i329.GetReportOfSiteDataSource>(
+        () => _i624.GetReportOfSiteDataSourceImpl());
     gh.factory<_i208.InventoryDataSource>(
         () => _i868.InventoryDataSourceImpl());
     gh.factory<_i311.SiteRepository>(() => _i9.AddSiteRepositoryImpl(
@@ -204,13 +217,13 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i451.ChatDataSource>(() => _i585.ChatDataSourceImpl());
     gh.factory<_i969.RegisterDataSource>(() => _i1056.RegisterDataSourceImpl());
     gh.factory<_i44.GetUsersDataSource>(() => _i285.GetUsersDataSourceImpl());
+    gh.factory<_i585.ReportDataSource>(() => _i1035.ReportDataSourceImpl());
     gh.factory<_i226.UserRequestAccountDataSource>(
         () => _i736.UserRequestAccountDataSourceImpl());
     gh.factory<_i513.UserRequestAccountRepo>(() =>
         _i662.UserRequestAccountRepoImpl(
             userRequestAccountDataSource:
                 gh<_i226.UserRequestAccountDataSource>()));
-    gh.factory<_i585.ReportDataSource>(() => _i1035.ReportDataSourceImpl());
     gh.factory<_i917.AddedMaterailUseCase>(() =>
         _i917.AddedMaterailUseCase(inventoryRepo: gh<_i1010.InventoryRepo>()));
     gh.factory<_i635.DeleteMaterialUseCase>(() =>
@@ -225,6 +238,8 @@ extension GetItInjectableX on _i174.GetIt {
         getSitesOfUserDataSource: gh<_i924.GetSitesOfUserDataSource>()));
     gh.factory<_i1014.GetUsersRepo>(() => _i294.GetUsersRepoImpl(
         getUsersDataSource: gh<_i44.GetUsersDataSource>()));
+    gh.factory<_i121.GetReportOfSiteRepo>(() => _i848.GetReportOfSiteRepoImpl(
+        getReportOfSiteDataSource: gh<_i329.GetReportOfSiteDataSource>()));
     gh.factory<_i118.InventoryViewModelCubit>(
         () => _i118.InventoryViewModelCubit(
               addedMaterailUseCase: gh<_i917.AddedMaterailUseCase>(),
@@ -243,6 +258,8 @@ extension GetItInjectableX on _i174.GetIt {
         categoryDataSource: gh<_i903.CategoryDataSource>()));
     gh.factory<_i136.ChatRepo>(
         () => _i634.ChatRepoImpl(chatDataSource: gh<_i451.ChatDataSource>()));
+    gh.factory<_i354.GetReportOfSiteUseCase>(() => _i354.GetReportOfSiteUseCase(
+        getReportOfSiteRepo: gh<_i121.GetReportOfSiteRepo>()));
     gh.factory<_i645.AccountRequestRepo>(() => _i151.AccountRequestRepoImpl(
         accountRequestDataSource: gh<_i874.AccountRequestDataSource>()));
     gh.factory<_i925.GetMessageUseCase>(
@@ -287,11 +304,11 @@ extension GetItInjectableX on _i174.GetIt {
             categoryRepo: gh<_i78.CategoryRepo>()));
     gh.factory<_i630.AcceptRequestsUseCase>(() => _i630.AcceptRequestsUseCase(
         accountRequests: gh<_i645.AccountRequestRepo>()));
-    gh.factory<_i323.GetRequestsUseCase>(() => _i323.GetRequestsUseCase(
-        accountRequests: gh<_i645.AccountRequestRepo>()));
     gh.factory<_i300.DeclineRequestsUseCase>(() => _i300.DeclineRequestsUseCase(
         accountRequests: gh<_i645.AccountRequestRepo>()));
     gh.factory<_i687.DeleteRequestsUseCase>(() => _i687.DeleteRequestsUseCase(
+        accountRequests: gh<_i645.AccountRequestRepo>()));
+    gh.factory<_i323.GetRequestsUseCase>(() => _i323.GetRequestsUseCase(
         accountRequests: gh<_i645.AccountRequestRepo>()));
     gh.factory<_i111.AllUsersScreenViewModel>(() =>
         _i111.AllUsersScreenViewModel(
@@ -308,6 +325,8 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i386.CategoryCubit>(() => _i386.CategoryCubit(
         readUserOrAdminFromFireStoreUseCase:
             gh<_i899.ReadUserOrAdminFromFireStoreUseCase>()));
+    gh.factory<_i1020.ReportOfSiteViewModel>(() => _i1020.ReportOfSiteViewModel(
+        useCase: gh<_i354.GetReportOfSiteUseCase>()));
     gh.factory<_i1037.ForgetPasswordViewModel>(() =>
         _i1037.ForgetPasswordViewModel(
             forgetPasswordUseCase: gh<_i513.ForgetPasswordUserCase>()));

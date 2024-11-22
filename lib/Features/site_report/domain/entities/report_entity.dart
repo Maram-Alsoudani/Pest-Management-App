@@ -24,4 +24,32 @@ class ReportEntity {
     required this.userId,
     required this.createdAt,
   });
+
+  ReportEntity copyWith({
+    String? id,
+    String? siteName,
+    String? notes,
+    String? conditions,
+    List<String>? recommendations,
+    Map<String, int>? materialUsages,
+    List<String>? photos,
+    List<String>? devices,
+    List<String>? signatures,
+    String? userId,
+    DateTime? createdAt,
+  }) {
+    return ReportEntity(
+      id: id ?? this.id,
+      siteName: siteName ?? this.siteName,
+      notes: notes ?? this.notes,
+      conditions: conditions ?? this.conditions,
+      recommendations: recommendations ?? this.recommendations,
+      materialUsages: materialUsages ?? this.materialUsages,
+      photos: photos ?? this.photos,
+      devices: devices ?? this.devices,
+      signatures: signatures ?? this.signatures,
+      userId: userId ?? this.userId,
+      createdAt: createdAt ?? this.createdAt,
+    );
+  }
 }

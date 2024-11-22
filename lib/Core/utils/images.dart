@@ -15,4 +15,5 @@ class ImageManager {
   static const String avatar = "assets/images/avatar.png";
 
   static const String loadingLottie = "assets/animations/loading2.json";
+  static const String sendingLottie = "assets/animations/sending.json";
 }

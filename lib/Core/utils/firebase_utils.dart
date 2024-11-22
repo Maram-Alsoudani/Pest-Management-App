@@ -1,4 +1,5 @@
 import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -6,6 +7,7 @@ import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:pesticides/Features/chat/data/models/message_dto.dart';
 import 'package:pesticides/Features/reports/domain/entities/site_entity.dart';
 import 'package:pesticides/Features/site_report/data/models/report_dto.dart';
+
 import '../../Features/inventory/data/models/materail_model_dto.dart';
 import '../../Features/register/data/models/user_model_dto.dart';
 import '../../Features/reports/data/models/site_dto.dart';
@@ -192,6 +194,9 @@ class FirebaseUtils {
       await materialDocRef.set(material);
     }
   }
+
+  //todo============*( delete Feature )*=================
+
   static Future<void> deleteSites(SiteDto site) async {
     return FirebaseUtils.getUserCollection('user')
         .doc(site.userId)
@@ -202,22 +207,23 @@ class FirebaseUtils {
 
 //todo============*( Chat Feature )*=================
   static CollectionReference<MessageDto> getMessageCollection() {
-    return FirebaseFirestore.instance.collection(MessageDto.messageCollection)
+    return FirebaseFirestore.instance
+        .collection(MessageDto.messageCollection)
         .withConverter<MessageDto>(
-      fromFirestore: (snapshot, options) =>
-          MessageDto.fromJson(snapshot.data()!),
-      toFirestore: (value, options) => value.toJson(),
-    );
+          fromFirestore: (snapshot, options) =>
+              MessageDto.fromJson(snapshot.data()!),
+          toFirestore: (value, options) => value.toJson(),
+        );
   }
-  static Stream<QuerySnapshot<MessageDto>> getMessageFromFireStore(){
-    return getMessageCollection().orderBy("dateTime" ).snapshots();
 
+  static Stream<QuerySnapshot<MessageDto>> getMessageFromFireStore() {
+    return getMessageCollection().orderBy("dateTime").snapshots();
   }
-static Future<void> insertMessage(MessageDto message) async {
-  var messageCollection = getMessageCollection();
-  var docRef = messageCollection.doc();
-  message.id = docRef.id;
-  return await docRef.set(message);
-}
 
+  static Future<void> insertMessage(MessageDto message) async {
+    var messageCollection = getMessageCollection();
+    var docRef = messageCollection.doc();
+    message.id = docRef.id;
+    return await docRef.set(message);
+  }
 }

@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 import 'package:pesticides/Features/register/domain/entities/user_model_entity.dart';
 import 'package:pesticides/Features/site/presentation/manager/site_state.dart';
+
 import '../../../../Core/utils/SharedPrefsLocal.dart';
 import '../../../../Core/utils/strings.dart';
 import '../../../reports/domain/entities/site_entity.dart';
@@ -79,6 +80,7 @@ class SiteViewModel extends Cubit<SiteState> {
       emit(UsersSiteSuccessState());
     });
   }
+
 //todo ============= Get Sites from firebase =================
 
   Future<void> fetchSite() async {
@@ -89,17 +91,15 @@ class SiteViewModel extends Cubit<SiteState> {
       isLoading = false;
       emit(SiteErrorState(failure: l));
     }, (r) {
-      if(r.isNotEmpty){
+      if (r.isNotEmpty) {
         sites = r;
         searchedSites = sites;
         isLoading = false;
         emit(SiteSuccessState());
-      }else{
+      } else {
         isLoading = false;
         emit(NoResultSearchSiteSuccessState());
       }
-
-
     });
   }
 
@@ -125,6 +125,7 @@ class SiteViewModel extends Cubit<SiteState> {
       emit(GetUserSiteSuccessState());
     });
   }
+
 //todo ========================= Delete Sites ============
 
   Future<void> deleteSite(SiteEntity site) async {
@@ -177,12 +178,10 @@ class SiteViewModel extends Cubit<SiteState> {
               site.siteName!.toLowerCase().contains(query.toLowerCase()))
           .toList();
     }
-    if(searchedSites.isEmpty){
+    if (searchedSites.isEmpty) {
       emit(NoResultSearchSiteSuccessState());
-
-    }else{
+    } else {
       emit(SearchSiteSuccessState());
-
     }
   }
 }

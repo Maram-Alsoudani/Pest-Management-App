@@ -22,7 +22,8 @@ class LoginScreenViewModel extends Cubit<LoginStates> {
   double opacity = 0.0;
   late AnimationController animationController;
   late Animation<Offset> slideAnimation;
-
+  late AnimationController shakeController;
+  late Animation<double> shakeAnimation;
   // initialize animations
   void initializeAnimations(SingleTickerProviderStateMixin single) {
     animationController =

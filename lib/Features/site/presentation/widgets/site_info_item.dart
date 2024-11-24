@@ -6,7 +6,9 @@ import 'package:pesticides/Config/routes/routes_manger.dart';
 import 'package:pesticides/Core/utils/colors.dart';
 import 'package:pesticides/Core/utils/strings.dart';
 
+import '../../../register/data/models/user_model_dto.dart';
 import '../../../reports/domain/entities/site_entity.dart';
+import '../manager/site_view_model.dart';
 
 class SiteInfoItem extends StatelessWidget {
   SiteEntity site;
@@ -51,14 +53,19 @@ class SiteInfoItem extends StatelessWidget {
                     style: const TextStyle(fontWeight: FontWeight.bold),
                   ),
                   onTap: () {
-                    Navigator.pushNamed(
-                      context,
-                      RoutesManger.routeNameSiteReportScreen,
-                      arguments: {
-                        'siteName': site.siteName,
-                        'siteId': site.siteId
-                      },
-                    );
+                    SiteViewModel.get(context).user.type ==
+                            UserAndAdminModelDto.user
+                        ? Navigator.pushNamed(
+                            context,
+                            RoutesManger.routeNameSiteReportScreen,
+                            arguments: {
+                              'siteName': site.siteName,
+                              'siteId': site.siteId
+                            },
+                          )
+                        : Navigator.pushNamed(
+                            context, RoutesManger.routeNameReportOfSiteScreen,
+                            arguments: site.siteId);
                   },
                 ),
               ),

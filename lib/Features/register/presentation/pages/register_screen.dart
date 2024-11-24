@@ -49,10 +49,7 @@ class _RegisterScreenState extends State<RegisterScreen>
               title: StringManager.success,
               message: StringManager.registerSuccessfully,
               posActionTitle: StringManager.ok,
-              posAction: () {
-                Navigator.pushNamedAndRemoveUntil(context,
-                    RoutesManger.routeNameCategoryScreen, (route) => false);
-              });
+           );
         } else if (state is RegisterViewModelError) {
           DialogUtils.showAlertDialog(
             context: context,
@@ -62,6 +59,7 @@ class _RegisterScreenState extends State<RegisterScreen>
           );
         }
       },
+
       builder: (context, state) {
         return ModalProgressHUD(
           opacity: 0.4,

@@ -37,7 +37,6 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
     ProfileCubit.get(context).getUserData();
     ProfileCubit.get(context).doAnimation(this);
     ProfileCubit.get(context).getUser();
-    print(ProfileCubit.get(context).user!.type);
     super.initState();
   }
 
@@ -122,7 +121,7 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
                                             true
                                         ? ProfileCubit.get(context)
                                             .userProfileImage
-                                        : 'path_to_fallback_image', // Handle empty or null URL
+                                        : '',
                                     imagePath:
                                         ProfileCubit.get(context).image,
                                     onImagePicked:

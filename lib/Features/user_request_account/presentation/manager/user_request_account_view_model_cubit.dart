@@ -90,6 +90,7 @@ class UserRequestAccountCubit extends Cubit<UserRequestAccountState> {
         passwordController.text);
     either.fold((error) {
       isLoaded = false;
+      print(error.errorMessage.toString());
       emit(UserRequestAccountViewModelError(failure: error));
     }, (response) {
       isLoaded = false;

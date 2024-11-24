@@ -34,11 +34,6 @@ class _CategoryScreenState extends State<CategoryScreen>
     super.initState();
     bloc = BlocProvider.of<CategoryCubit>(context);
     bloc.getUserData();
-    var adminData =
-    SharedPrefsLocal.getData(key: StringManager.keyUserAdmin);
-    print(adminData!.userName??"");
-    print(adminData.fcmToken??"");
-    print(adminData.type??"");
 
     bloc.doAnimation(this);
   }

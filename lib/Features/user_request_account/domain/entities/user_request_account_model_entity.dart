@@ -19,7 +19,7 @@ class UserRequestAccountEntity {
     required this.email,
     required this.password,
     required this.dateTime,
-    this.status
+    this.status,
   });
 
 

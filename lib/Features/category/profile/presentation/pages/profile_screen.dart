@@ -53,7 +53,16 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
             message: state.error.errorMessage,
             posActionTitle: StringManager.ok,
           );
-        } else if (state is ProfileUpdateSuccess) {
+        }else if (state is ProfileLogOutError) {
+          DialogUtils.showAlertDialog(
+            context: context,
+            title: StringManager.failed,
+            message: state.error.errorMessage,
+            posActionTitle: StringManager.ok,
+          );
+        }
+
+        else if (state is ProfileUpdateSuccess) {
           DialogUtils.showAlertDialog(
             context: context,
             title: StringManager.success,
@@ -228,15 +237,16 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
                               message: StringManager.logoutMessage,
                               posActionTitle: StringManager.yes,
                               negActionTitle: StringManager.no,
-                              posAction: () {
+                              posAction: () async {
                                 Navigator.pushNamedAndRemoveUntil(
                                   context,
                                   RoutesManger.routeNameLogin,
                                   (route) => false,
                                 );
-                                SharedPrefsLocal.prefs.clear();
-                                FirebaseAuth.instance.signOut();
-                                ProfileCubit.get(context).clearData();
+                               await ProfileCubit.get(context).removeFcmUser();
+
+
+
                               },
                             );
                           },

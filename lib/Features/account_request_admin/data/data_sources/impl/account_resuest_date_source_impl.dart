@@ -5,9 +5,12 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:injectable/injectable.dart';
 import 'package:mailer/mailer.dart';
 import 'package:mailer/smtp_server/gmail.dart';
+import 'package:pesticides/Config/routes/routes_manger.dart';
 import 'package:pesticides/Core/errors/failures.dart';
 import 'package:pesticides/Core/utils/SharedPrefsLocal.dart';
+import 'package:pesticides/Core/utils/fcm_helper.dart';
 import 'package:pesticides/Core/utils/firebase_utils.dart';
+import 'package:pesticides/Core/utils/notification_model.dart';
 import 'package:pesticides/Core/utils/strings.dart';
 import 'package:pesticides/Features/account_request_admin/data/data_sources/account_resuest_date_source.dart';
 import 'package:pesticides/Features/register/data/models/user_model_dto.dart';
@@ -61,7 +64,7 @@ class AccountRequestDataSourceImpl implements AccountRequestDataSource {
     const password = 'lcqs adlk qstk fxrz';
     final smtpServer = gmail(username, password);
     final message = Message()
-      ..from = Address(username)
+      ..from = const Address(username)
       ..recipients.add(email)
       ..subject = subject
       ..text = body;
@@ -85,8 +88,8 @@ class AccountRequestDataSourceImpl implements AccountRequestDataSource {
           connectivityResult.contains(ConnectivityResult.mobile)) {
         final credential =
             await FirebaseAuth.instance.createUserWithEmailAndPassword(
-          email: user.email ?? "",
-          password: user.password ?? "",
+          email: user.email!.trim()  ,
+          password: user.password!.trim(),
         );
 
         UserAndAdminModelDto userAndAdminModelDto = UserAndAdminModelDto(
@@ -101,11 +104,14 @@ class AccountRequestDataSourceImpl implements AccountRequestDataSource {
         var userFireStore = await addUserFireStore(userAndAdminModelDto);
         var adminData =
             SharedPrefsLocal.getData(key: StringManager.keyUserAdmin);
+
         await sendEmail(
             user.email ?? "",
             "Pest Control Company Accepted Your Account Request ",
             "Welcome ${user.userName} In Company (${adminData!.userName ?? ""})");
-        return Right(null);
+
+        await handleNotification(adminData, user, "Accepted");
+        return const Right(null);
       } else {
         return Left(Failure(errorMessage: StringManager.networkError));
       }
@@ -120,9 +126,31 @@ class AccountRequestDataSourceImpl implements AccountRequestDataSource {
         return Left(Failure(errorMessage: StringManager.someThingWentWrong));
       }
     } catch (e) {
-      print("===========================================${e.toString()}");
       return Left(Failure(errorMessage: StringManager.someThingWentWrong));
     }
+  }
+
+  Future<void> handleNotification(UserAndAdminModelDto adminData,
+      UserRequestAccountEntity user, String status) async {
+    String title = "Request Account Action";
+    String body =
+        "Admin (${adminData.userName ?? ""}) is $status Account Request to (${user.userName})";
+    List<UserAndAdminModelDto> adminList = await FirebaseUtils.getAdminTokenFromFireStore();
+    NotificationModel notificationModel = NotificationModel(
+        route: RoutesManger.routeNameRequiest,
+        title: title, body: body, dateTime: DateTime.now(), to: "admin");
+
+    for (var i in adminList) {
+      if (i.fcmToken == adminData.fcmToken ) {
+        continue;
+      }
+      if(i.fcmToken != null){
+        await NotificationService.sendNotification(i.fcmToken??"", title, body);
+      }
+      await FirebaseUtils.saveNotification(notificationModel,UserAndAdminModelDto.admin,i.id!);
+    }
+
+
   }
 
   @override
@@ -141,7 +169,9 @@ class AccountRequestDataSourceImpl implements AccountRequestDataSource {
             "Pest Control Company Rejected Your Account Request ",
             "Sorry ${user.userName} Rejected Your Account \nManager:(${adminData!.userName ?? ""})");
 
-        return Right(null);
+        await handleNotification(adminData, user, "Rejected");
+
+        return const Right(null);
       } else {
         return Left(Failure(errorMessage: StringManager.networkError));
       }
@@ -156,7 +186,7 @@ class AccountRequestDataSourceImpl implements AccountRequestDataSource {
         return Left(Failure(errorMessage: StringManager.someThingWentWrong));
       }
     } catch (e) {
-      print("===========================================${e.toString()}");
+      print(e.toString());
       return Left(Failure(errorMessage: StringManager.someThingWentWrong));
     }
   }
@@ -168,7 +198,7 @@ class AccountRequestDataSourceImpl implements AccountRequestDataSource {
       if (connectivityResult.contains(ConnectivityResult.wifi) ||
           connectivityResult.contains(ConnectivityResult.mobile)) {
         await deleteRequestFireStore(id);
-        return Right(null);
+        return const Right(null);
       } else {
         return Left(Failure(errorMessage: StringManager.networkError));
       }
@@ -183,7 +213,6 @@ class AccountRequestDataSourceImpl implements AccountRequestDataSource {
         return Left(Failure(errorMessage: StringManager.someThingWentWrong));
       }
     } catch (e) {
-      print("===========================================${e.toString()}");
       return Left(Failure(errorMessage: StringManager.someThingWentWrong));
     }
   }

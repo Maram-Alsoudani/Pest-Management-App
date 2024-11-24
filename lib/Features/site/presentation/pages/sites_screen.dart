@@ -36,6 +36,7 @@ class _SitesScreenState extends State<SitesScreen>
   }
 
   @override
+  @override
   Widget build(BuildContext context) {
     return BlocConsumer<SiteViewModel, SiteState>(
       listener: (context, state) {
@@ -95,141 +96,122 @@ class _SitesScreenState extends State<SitesScreen>
           inAsyncCall: bloc.isLoading,
           progressIndicator: const Center(child: LottieLoadingWidget()),
           child: SafeArea(
-              child: Scaffold(
-                  appBar: AppBar(
-                    title: Text(StringManager.sites,
-                        style: Theme.of(context)
-                            .textTheme
-                            .titleSmall!
-                            .copyWith(fontSize: 25.sp)),
-                    actions: [
-                      Padding(
-                        padding: EdgeInsets.all(15.r),
-                        child: Icon(
-                          Icons.maps_home_work_rounded,
-                          color: ColorManager.primaryColor,
+            child: Scaffold(
+              appBar: AppBar(
+                title: Text(
+                  StringManager.sites,
+                  style: Theme.of(context).textTheme.titleSmall!.copyWith(
+                        fontSize: 25.sp,
+                      ),
+                ),
+                actions: [
+                  Padding(
+                    padding: EdgeInsets.all(15.r),
+                    child: Icon(
+                      Icons.maps_home_work_rounded,
+                      color: ColorManager.primaryColor,
+                    ),
+                  ),
+                ],
+              ),
+              body: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    AnimatedOpacity(
+                      duration: const Duration(seconds: 2),
+                      opacity: bloc.opacity,
+                      curve: Curves.easeIn,
+                      child: TextField(
+                        controller: bloc.searchController,
+                        onChanged: (query) => bloc.filterSites(query),
+                        style: const TextStyle(color: ColorManager.whiteColor),
+                        decoration: InputDecoration(
+                          hintText: StringManager.searchHint,
+                          hintStyle:
+                              const TextStyle(color: ColorManager.whiteColor),
+                          prefixIcon: const Icon(Icons.search),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(26.r),
+                          ),
                         ),
                       ),
-                    ],
-                  ),
-                  body: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          AnimatedOpacity(
-                            duration: const Duration(seconds: 2),
-                            opacity: bloc.opacity,
-                            curve: Curves.easeIn,
-                            child: TextField(
-                              controller: bloc.searchController,
-                              onChanged: (query) => bloc.filterSites(query),
-                              style: const TextStyle(
-                                  color: ColorManager.whiteColor),
-                              decoration: InputDecoration(
-                                hintText: StringManager.searchHint,
-                                hintStyle: const TextStyle(
-                                    color: ColorManager.whiteColor),
-                                prefixIcon: const Icon(Icons.search),
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(26.r),
-                                ),
+                    ),
+                    state is NoResultSearchSiteSuccessState
+                        ? Expanded(
+                            child: Center(
+                              child: Text(
+                                StringManager.noUsersFound,
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyMedium!
+                                    .copyWith(color: ColorManager.greyShade4),
                               ),
                             ),
-                          ),
-                          state is NoResultSearchSiteSuccessState
-                              ? Expanded(
-                                  child: Center(
-                                    child: Text(
-                                      StringManager.noUsersFound,
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodyMedium!
-                                          .copyWith(
-                                              color: ColorManager.greyShade4),
-                                    ),
+                          )
+                        : bloc.user.type == UserAndAdminModelDto.admin
+                            ? Flexible(
+                                child: SlideTransition(
+                                  position: bloc.slideAnimation,
+                                  child: ListView.builder(
+                                    itemCount: SiteViewModel.get(context)
+                                        .searchedSites
+                                        .length,
+                                    itemBuilder: (context, index) {
+                                      return SiteInfoItem(
+                                        site: bloc.searchedSites[index],
+                                        onDelete: () {
+                                          bloc.deleteSite(bloc.sites[index]);
+                                          bloc.fetchSite();
+                                        },
+                                      );
+                                    },
                                   ),
-                                )
-                              : Flexible(
-                                  child: state is NoResultSearchSiteSuccessState
-                                      ? Center(
-                                          child: Text(
-                                            StringManager.noUsersFound,
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .bodyMedium!
-                                                .copyWith(
-                                                    color: ColorManager
-                                                        .greyShade4),
-                                          ),
-                                        )
-                                      : SlideTransition(
-                                          position: bloc.slideAnimation,
-                                          child: ListView.builder(
-
-                              : bloc.user.type == UserAndAdminModelDto.admin
-                                  ? Flexible(
-                                      child: SlideTransition(
-                                        position: bloc.slideAnimation,
-                                        child: ListView.builder(
-                                            itemCount:
-                                                SiteViewModel.get(context)
-                                                    .searchedSites
-                                                    .length,
-                                            itemBuilder: (context, index) {
-                                              return SiteInfoItem(
-                                                site: bloc.searchedSites[index],
-                                                onDelete: () {
-                                                  bloc.deleteSite(
-                                                      bloc.sites[index]);
-                                                  bloc.fetchSite();
-                                                },
-                                              );
-                                            },
-                                          ),
-                                        ),
                                 ),
-                                            }),
-                                      ),
-                                    )
-                                  : Flexible(
-                                      child: ListView.builder(
-                                          itemCount: SiteViewModel.get(context)
-                                              .userSites
-                                              .length,
-                                          itemBuilder: (context, index) {
-                                            return SiteInfoItem(
-                                              site: bloc.userSites[index],
-                                              onDelete: () {},
-                                            );
-                                          }),
-                                    ),
-                        ]),
-                  ),
-                  floatingActionButtonLocation:
-                      FloatingActionButtonLocation.endFloat,
-                  floatingActionButton:
-                      bloc.user.type == UserAndAdminModelDto.admin
-                          ? AnimatedOpacity(
-                              duration: const Duration(seconds: 2),
-                              opacity: bloc.opacity,
-                              curve: Curves.easeIn,
-                              child: FloatingActionButton(
-                                backgroundColor: ColorManager.primaryColor,
-                                onPressed: () {
-                                  showDialog(
-                                      context: context,
-                                      builder: (context) {
-                                        return const AddNewSite();
-                                      });
-                                },
-                                child: const Icon(
-                                  Icons.add,
-                                  color: ColorManager.whiteColor,
+                              )
+                            : Flexible(
+                                child: ListView.builder(
+                                  itemCount: SiteViewModel.get(context)
+                                      .userSites
+                                      .length,
+                                  itemBuilder: (context, index) {
+                                    return SiteInfoItem(
+                                      site: bloc.userSites[index],
+                                      onDelete: () {},
+                                    );
+                                  },
                                 ),
                               ),
-                            )
-                          : null)),
+                  ],
+                ),
+              ),
+              floatingActionButtonLocation:
+                  FloatingActionButtonLocation.endFloat,
+              floatingActionButton: bloc.user.type == UserAndAdminModelDto.admin
+                  ? AnimatedOpacity(
+                      duration: const Duration(seconds: 2),
+                      opacity: bloc.opacity,
+                      curve: Curves.easeIn,
+                      child: FloatingActionButton(
+                        backgroundColor: ColorManager.primaryColor,
+                        onPressed: () {
+                          showDialog(
+                            context: context,
+                            builder: (context) {
+                              return const AddNewSite();
+                            },
+                          );
+                        },
+                        child: const Icon(
+                          Icons.add,
+                          color: ColorManager.whiteColor,
+                        ),
+                      ),
+                    )
+                  : null,
+            ),
+          ),
         );
       },
     );

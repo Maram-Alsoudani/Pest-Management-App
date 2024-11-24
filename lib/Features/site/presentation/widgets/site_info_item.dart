@@ -17,58 +17,51 @@ class SiteInfoItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(15.r),
-        child: Slidable(
-          dragStartBehavior: DragStartBehavior.down,
-          endActionPane: ActionPane(
-            dragDismissible: false,
-            motion: const BehindMotion(),
-            extentRatio: .25,
-            children: [
-              SlidableAction(
-                onPressed: (context) {
-                  onDelete!();
-                },
-                backgroundColor: ColorManager.primaryColor,
-                foregroundColor: ColorManager.whiteColor,
-                icon: Icons.delete,
-                label: StringManager.delete,
-              )
-            ],
-          ),
-          child: Container(
-            decoration: BoxDecoration(color: ColorManager.greyShade1),
-            child: ListTile(
-              leading: const Icon(Icons.location_on),
-              title: Text(
-                site.siteName.toString(),
-                style: const TextStyle(color: ColorManager.primaryColor),
+        padding: const EdgeInsets.all(8.0),
+        child: ClipRRect(
+            borderRadius: BorderRadius.circular(15.r),
+            child: Slidable(
+              dragStartBehavior: DragStartBehavior.down,
+              endActionPane: ActionPane(
+                dragDismissible: false,
+                motion: const BehindMotion(),
+                extentRatio: .25,
+                children: [
+                  SlidableAction(
+                    onPressed: (context) {
+                      onDelete!();
+                    },
+                    backgroundColor: ColorManager.primaryColor,
+                    foregroundColor: ColorManager.whiteColor,
+                    icon: Icons.delete,
+                    label: StringManager.delete,
+                  )
+                ],
               ),
-              subtitle: Text(
-                '${StringManager.siteLocation} ${site.siteLocation.toString()}',
-                style: const TextStyle(fontWeight: FontWeight.bold),
+              child: Container(
+                decoration: BoxDecoration(color: ColorManager.greyShade1),
+                child: ListTile(
+                  leading: const Icon(Icons.location_on),
+                  title: Text(
+                    site.siteName.toString(),
+                    style: const TextStyle(color: ColorManager.primaryColor),
+                  ),
+                  subtitle: Text(
+                    '${StringManager.siteLocation} ${site.siteLocation.toString()}',
+                    style: const TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  onTap: () {
+                    Navigator.pushNamed(
+                      context,
+                      RoutesManger.routeNameSiteReportScreen,
+                      arguments: {
+                        'siteName': site.siteName,
+                        'siteId': site.siteId
+                      },
+                    );
+                  },
+                ),
               ),
-              onTap: () {
-                Navigator.pushNamed(
-                  context,
-                  RoutesManger.routeNameSiteReportScreen,
-                  arguments: {'siteName': site.siteName},
-                );
-              },
-            ),
-          ),
-          onTap: () {
-            Navigator.pushNamed(
-              context,
-              RoutesManger.routeNameSiteReportScreen,
-              arguments: {'siteName': site.siteName, 'siteId': site.siteId},
-            );
-          },
-        ));
-        ),
-      ),
-    );
+            )));
   }
 }

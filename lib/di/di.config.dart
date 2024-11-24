@@ -40,6 +40,7 @@ import '../Features/category/domin/use_case/edit_user_data_use_case.dart'
     as _i706;
 import '../Features/category/domin/use_case/read_user_or_admin_from_fireStore_use_case.dart'
     as _i899;
+import '../Features/category/domin/use_case/removeFcm.dart' as _i665;
 import '../Features/category/presentation/manager/category_cubit.dart' as _i386;
 import '../Features/category/profile/presentation/manager/profile_cubit.dart'
     as _i833;
@@ -302,6 +303,8 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i899.ReadUserOrAdminFromFireStoreUseCase>(() =>
         _i899.ReadUserOrAdminFromFireStoreUseCase(
             categoryRepo: gh<_i78.CategoryRepo>()));
+    gh.factory<_i665.RemoveFcmFromFireStore>(() =>
+        _i665.RemoveFcmFromFireStore(categoryRepo: gh<_i78.CategoryRepo>()));
     gh.factory<_i630.AcceptRequestsUseCase>(() => _i630.AcceptRequestsUseCase(
         accountRequests: gh<_i645.AccountRequestRepo>()));
     gh.factory<_i300.DeclineRequestsUseCase>(() => _i300.DeclineRequestsUseCase(
@@ -316,12 +319,6 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i1037.GetSitesOfUsersViewModel>(() =>
         _i1037.GetSitesOfUsersViewModel(
             getSitesOfUserUseCase: gh<_i886.GetSitesOfUserUseCase>()));
-    gh.factory<_i833.ProfileCubit>(() => _i833.ProfileCubit(
-          readUserOrAdminFromFireStoreUseCase:
-              gh<_i899.ReadUserOrAdminFromFireStoreUseCase>(),
-          editUserDataUserCase: gh<_i706.EditUserDataUserCase>(),
-          editImageInFireStoreUseCase: gh<_i43.EditImageInFireStoreUseCase>(),
-        ));
     gh.factory<_i386.CategoryCubit>(() => _i386.CategoryCubit(
         readUserOrAdminFromFireStoreUseCase:
             gh<_i899.ReadUserOrAdminFromFireStoreUseCase>()));
@@ -348,6 +345,13 @@ extension GetItInjectableX on _i174.GetIt {
         _i1073.LoginScreenViewModel(loginUseCase: gh<_i203.LoginUseCase>()));
     gh.factory<_i451.RegisterViewModelCubit>(() => _i451.RegisterViewModelCubit(
         registerUseCase: gh<_i841.RegisterUseCase>()));
+    gh.factory<_i833.ProfileCubit>(() => _i833.ProfileCubit(
+          readUserOrAdminFromFireStoreUseCase:
+              gh<_i899.ReadUserOrAdminFromFireStoreUseCase>(),
+          editUserDataUserCase: gh<_i706.EditUserDataUserCase>(),
+          editImageInFireStoreUseCase: gh<_i43.EditImageInFireStoreUseCase>(),
+          removeFcmFromFireStore: gh<_i665.RemoveFcmFromFireStore>(),
+        ));
     return this;
   }
 }

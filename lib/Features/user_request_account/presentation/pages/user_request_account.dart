@@ -12,6 +12,7 @@ import 'package:pesticides/Core/component/button_custom.dart';
 import 'package:pesticides/Core/component/custom_dialog.dart';
 import 'package:pesticides/Core/component/lottie_loading_widget.dart';
 import 'package:pesticides/Core/utils/colors.dart';
+import 'package:pesticides/Core/utils/fcm_helper.dart';
 import 'package:pesticides/Core/utils/images.dart';
 import 'package:pesticides/Core/utils/strings.dart';
 import 'package:pesticides/Core/component/show_model_picker_image.dart';
@@ -186,7 +187,7 @@ class _UserRequestAccountState extends State<UserRequestAccount>
                                 
                                 bloc.userRequestAccount();
                               }
-                              
+
                      
             
                             },

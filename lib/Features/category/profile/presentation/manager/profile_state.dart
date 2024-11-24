@@ -34,5 +34,16 @@ class ProfileUpdateError extends ProfileState {
 
   ProfileUpdateError({required this.error});
 }
+class ProfileLogOutSuccess extends ProfileState {
+
+
+}
+
+class ProfileLogOutLoading extends ProfileState {}
+class ProfileLogOutError extends ProfileState {
+  final Failure error;
+
+  ProfileLogOutError({required this.error});
+}
 
 

@@ -119,7 +119,7 @@ class RequestScreen extends StatelessWidget {
                                       endActionPane: ActionPane(
                                         dragDismissible: false,
                                         motion: const BehindMotion(),
-                                        extentRatio: 0.25,
+                                        extentRatio: 0.27,
                                         children: [
                                           SlidableAction(
                                             onPressed: (context) {
@@ -132,6 +132,8 @@ class RequestScreen extends StatelessWidget {
                                                 ColorManager.whiteColor,
                                             icon: Icons.delete,
                                             label: StringManager.delete,
+
+
                                           ),
                                         ],
                                       ),
@@ -267,7 +269,7 @@ class RequestScreen extends StatelessWidget {
                                                   LabelText(
                                                     label:
                                                         "Waiting for the operation",
-                                                    fontSize: 15,
+                                                    fontSize: 12,
                                                     color: ColorManager
                                                         .yellowColor,
                                                   )
@@ -278,7 +280,7 @@ class RequestScreen extends StatelessWidget {
                                                       LabelText(
                                                         label:
                                                             "Accepted Account Request",
-                                                        fontSize: 15,
+                                                        fontSize: 12,
                                                         color: ColorManager
                                                             .dialogGreenColor,
                                                       ),
@@ -290,13 +292,13 @@ class RequestScreen extends StatelessWidget {
                                                   LabelText(
                                                     label:
                                                         "Rejected Account Request",
-                                                    fontSize: 15,
+                                                    fontSize: 12,
                                                     color:
                                                         ColorManager.redColor,
                                                   ),
                                                 LabelText(
                                                   label: viewModel.dateTime,
-                                                  fontSize: 15,
+                                                  fontSize: 12,
                                                 ),
                                               ],
                                             ),

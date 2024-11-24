@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
+import 'package:pesticides/Core/utils/notification_model.dart';
 import 'package:pesticides/Features/chat/data/models/message_dto.dart';
 import 'package:pesticides/Features/reports/domain/entities/site_entity.dart';
 import 'package:pesticides/Features/user_request_account/data/models/user_request_account_model_dto.dart';
@@ -242,4 +243,34 @@ class FirebaseUtils {
     message.id = docRef.id;
     return await docRef.set(message);
   }
+
+  static CollectionReference<NotificationModel> getNotificationCollection(String type,String uid) {
+    return getUserCollection(type).doc(uid)
+        .collection(NotificationModel.notification)
+        .withConverter<NotificationModel>(
+      fromFirestore: (snapshot, options) {
+        return NotificationModel.fromFireStore(snapshot.data()!);
+      },
+      toFirestore: (user, options) => user.toFireStore(),
+    );
+  }
+  static Future<void> saveNotification(NotificationModel notification , String type,String uid) async {
+    var notificationCollection = getNotificationCollection(type, uid);
+    var docRef = notificationCollection.doc();
+    notification.id = docRef.id;
+    return await docRef.set(notification);
+  }
+
+
+  static Future<List<UserAndAdminModelDto>> getAdminTokenFromFireStore() async {
+    var docSnapshot = await FirebaseUtils.getUserCollection(UserAndAdminModelDto.admin).get();
+    var data = docSnapshot.docs;
+
+    List<UserAndAdminModelDto> list = data.map((e) {
+      return e.data();
+    }).toList();
+    return list;
+  }
+
+
 }

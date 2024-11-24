@@ -8,6 +8,7 @@ import 'package:pesticides/Core/component/button_custom.dart';
 import 'package:pesticides/Core/component/lottie_loading_widget.dart';
 import 'package:pesticides/Core/component/text_feild_custom.dart';
 import 'package:pesticides/Core/component/validators.dart';
+import 'package:pesticides/Core/utils/fcm_helper.dart';
 import 'package:pesticides/Features/login/presentation/manager/cubit/login_screen_view_model.dart';
 import 'package:pesticides/Features/login/presentation/manager/states/login_states.dart';
 import '../../../../Core/component/custom_dialog.dart';
@@ -34,9 +35,6 @@ class _LoginScreenState extends State<LoginScreen>
     viewModel.initializeAnimations(this);
   }
 
-
-
-
   @override
   Widget build(BuildContext context) {
     String? type = ModalRoute.of(context)?.settings.arguments as String?;
@@ -61,7 +59,7 @@ class _LoginScreenState extends State<LoginScreen>
                 posActionTitle: StringManager.ok,
                 posAction: () {
                   viewModel.dialogShown = false;
-                  viewModel.opacity=0.0;
+                  viewModel.opacity = 0.0;
 
                   Navigator.pushNamedAndRemoveUntil(context,
                       RoutesManger.routeNameCategoryScreen, (route) => false);
@@ -135,8 +133,7 @@ class _LoginScreenState extends State<LoginScreen>
                                               context,
                                               RoutesManger
                                                   .routeNameEngOwnerScreen);
-                                          viewModel.opacity=0.0;
-
+                                          viewModel.opacity = 0.0;
                                         },
                                         child: Column(
                                           children: [
@@ -223,8 +220,6 @@ class _LoginScreenState extends State<LoginScreen>
                                       ),
                                     ),
                                   ),
-                                  
-                                  
                                   SizedBox(height: 20.h),
                                   SlideTransition(
                                     position: viewModel.slideAnimation,
@@ -238,13 +233,11 @@ class _LoginScreenState extends State<LoginScreen>
                                           viewModel.login(type);
                                         }
 
-                                        // Navigator.pushReplacementNamed(context,
-                                        //     RoutesManger.routeNameCategoryScreen);
                                       },
                                     ),
                                   ),
                                   SizedBox(height: 50.h),
-                                 AnimatedOpacity(
+                                  AnimatedOpacity(
                                     duration: Duration(seconds: 2),
                                     opacity: viewModel.opacity,
                                     curve: Curves.easeIn,
@@ -265,9 +258,6 @@ class _LoginScreenState extends State<LoginScreen>
                                       ),
                                     ),
                                   ),
-                                  
-                                  
-                                
                                 ],
                               ),
                             ],

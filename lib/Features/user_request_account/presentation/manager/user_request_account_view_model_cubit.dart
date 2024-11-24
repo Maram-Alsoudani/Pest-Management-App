@@ -27,11 +27,11 @@ class UserRequestAccountCubit extends Cubit<UserRequestAccountState> {
   String? selectedValue;
   bool isLoaded = false;
   var fromKey = GlobalKey<FormState>();
-  TextEditingController userNameController = TextEditingController();
-  TextEditingController phoneController = TextEditingController();
-  TextEditingController emailController = TextEditingController();
-  TextEditingController passwordController = TextEditingController();
-  TextEditingController confirmPasswordController = TextEditingController();
+  TextEditingController userNameController = TextEditingController(text: "pops");
+  TextEditingController phoneController = TextEditingController(text: "01212442793");
+  TextEditingController emailController = TextEditingController(text: "pops@gmail.com");
+  TextEditingController passwordController = TextEditingController(text: "Mm#123456");
+  TextEditingController confirmPasswordController = TextEditingController(text: "Mm#123456");
 
   //===============Image Profile Handle===================
   final ImagePicker picker = ImagePicker();

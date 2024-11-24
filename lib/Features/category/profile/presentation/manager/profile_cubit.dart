@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
@@ -9,6 +10,7 @@ import 'package:pesticides/Core/utils/strings.dart';
 import 'package:pesticides/Features/category/domin/use_case/edit_image.dart';
 import 'package:pesticides/Features/category/domin/use_case/edit_user_data_use_case.dart';
 import 'package:pesticides/Features/category/domin/use_case/read_user_or_admin_from_fireStore_use_case.dart';
+import 'package:pesticides/Features/category/domin/use_case/removeFcm.dart';
 import 'package:pesticides/Features/register/data/models/user_model_dto.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:pesticides/Features/register/domain/entities/user_model_entity.dart';
@@ -20,26 +22,48 @@ class ProfileCubit extends Cubit<ProfileState> {
   ReadUserOrAdminFromFireStoreUseCase readUserOrAdminFromFireStoreUseCase;
   EditUserDataUserCase editUserDataUserCase;
   EditImageInFireStoreUseCase editImageInFireStoreUseCase;
+  RemoveFcmFromFireStore removeFcmFromFireStore;
 
-  ProfileCubit(
-      {required this.readUserOrAdminFromFireStoreUseCase,
-      required this.editUserDataUserCase,
-      required this.editImageInFireStoreUseCase})
-      : super(ProfileInitial()) ;
+  ProfileCubit({
+    required this.readUserOrAdminFromFireStoreUseCase,
+    required this.editUserDataUserCase,
+    required this.editImageInFireStoreUseCase,
+    required this.removeFcmFromFireStore,
+  }) : super(ProfileInitial());
 
-
-  UserAndAdminModelDto?user;
+  UserAndAdminModelDto? user;
 
   UserAndAdminModelEntity? getUser() {
-     user = SharedPrefsLocal.getData(key: StringManager.keyUserAdmin);
+    user = SharedPrefsLocal.getData(key: StringManager.keyUserAdmin);
     return user;
   }
+
   TextEditingController userNameController = TextEditingController();
   TextEditingController phoneController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController typeController = TextEditingController();
   bool isLoading = false;
   String? userProfileImage;
+
+  Future<void> removeFcmUser() async {
+    isLoading = true;
+    emit(ProfileLogOutLoading());
+
+    var either = await removeFcmFromFireStore.invoke();
+    either.fold(
+      (f) {
+        isLoading = false;
+        emit(ProfileLogOutError(error: f));
+      },
+      (_) {
+        isLoading = false;
+        SharedPrefsLocal.prefs.clear();
+        FirebaseAuth.instance.signOut();
+        clearData();
+        emit(ProfileLogOutSuccess());
+      },
+    );
+  }
 
   //todo====================Added by mohamed ali =======================
   static ProfileCubit get(context) => BlocProvider.of<ProfileCubit>(context);
@@ -140,7 +164,6 @@ class ProfileCubit extends Cubit<ProfileState> {
       editDataImage();
       emit(ProfileChangeImage());
     } else {
-      print('error');
       image = null;
       emit(ProfileChangeImage());
     }

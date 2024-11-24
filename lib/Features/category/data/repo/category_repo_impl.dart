@@ -29,9 +29,16 @@ class CategoryRepoImpl implements CategoryRepo{
 
   @override
   Future<Either<Failure, void>> editImage(String? image)async {
-    // TODO: implement editImage
     var either=await categoryDataSource.editImage(image);
 
     return either.fold((l) => Left(l), (r) => Right(r),);
+  }
+
+  @override
+  Future<Either<Failure, void>> removeFcm() async{
+    var either=await categoryDataSource.removeFcm();
+
+    return either.fold((l) => Left(l), (r) => Right(r),);
+
   }
 }

@@ -5,8 +5,11 @@ import 'package:dartz/dartz.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:injectable/injectable.dart';
+import 'package:pesticides/Config/routes/routes_manger.dart';
 import 'package:pesticides/Core/errors/failures.dart';
+import 'package:pesticides/Core/utils/fcm_helper.dart';
 import 'package:pesticides/Core/utils/firebase_utils.dart';
+import 'package:pesticides/Core/utils/notification_model.dart';
 import 'package:pesticides/Core/utils/strings.dart';
 import 'package:pesticides/Features/register/data/models/user_model_dto.dart';
 import 'package:pesticides/Features/user_request_account/data/data_source/data/user_request_account_data_source.dart';
@@ -35,6 +38,15 @@ class UserRequestAccountDataSourceImpl implements UserRequestAccountDataSource {
       return false;
     }
   }
+  Future<List<String?>> getAdminTokenFromFireStore() async {
+      var docSnapshot = await FirebaseUtils.getUserCollection(UserAndAdminModelDto.admin).get();
+      var data = docSnapshot.docs;
+
+      List<String?> list = data.map((e) {
+        return e.data().fcmToken;
+      }).toList();
+      return list;
+  }
 
   @override
   Future<Either<Failure, void>> userRequestAccountAuth(
@@ -49,8 +61,10 @@ class UserRequestAccountDataSourceImpl implements UserRequestAccountDataSource {
       bool checkEmailInUsers =
           await doesEmailExist(email, UserAndAdminModelDto.user);
       bool checkEmailInAdmins =
-          await doesEmailExist(email, UserAndAdminModelDto.admin);
-      if (checkEmailInUsers == false && checkEmailInAdmins == false) {
+      await doesEmailExist(email, UserAndAdminModelDto.admin);
+      bool checkEmailInRequests =
+      await doesEmailExist(email, UserRequestAccountDto.requests);
+      if (checkEmailInUsers == false && checkEmailInAdmins == false &&checkEmailInRequests == false) {
         String imageUrl = "";
         if (imagePath != null && imagePath.isNotEmpty) {
           final result =
@@ -71,6 +85,24 @@ class UserRequestAccountDataSourceImpl implements UserRequestAccountDataSource {
 
         var userRequestAccounFireStore =
             await addUserRequestAccountToFireStore(userRequestAccountDto);
+        String title="New Request Account Available";
+        String body="(${userRequestAccountDto.userName}) is Send Account Request to Admins Check Your Request Screen";
+        List<UserAndAdminModelDto> adminList=await FirebaseUtils.getAdminTokenFromFireStore();
+        NotificationModel notificationModel=NotificationModel(
+            route: RoutesManger.routeNameRequiest,
+
+            title: title, body: body, dateTime: DateTime.now(), to: "admin");
+        for(var admin in adminList){
+          if(admin.fcmToken != null){
+           await NotificationService.sendNotification(admin.fcmToken!, title, body);
+          }
+          await FirebaseUtils.saveNotification(notificationModel,UserAndAdminModelDto.admin,admin.id!);
+        }
+
+
+
+
+
       }else{
          return Left(Failure(errorMessage: StringManager.emailAlreadyInUse));
       }

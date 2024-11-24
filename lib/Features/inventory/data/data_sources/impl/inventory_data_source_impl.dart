@@ -75,7 +75,6 @@ class InventoryDataSourceImpl implements InventoryDataSource {
           connectivityResult.contains(ConnectivityResult.mobile)) {
         var docSnapshot = await FirebaseUtils.getMaterailCollection().get();
         var data = docSnapshot.docs;
-
         List<MaterailModelDto> list = data.map((e) => e.data()).toList();
         return Right(list);
       } else {

@@ -34,6 +34,12 @@ class _CategoryScreenState extends State<CategoryScreen>
     super.initState();
     bloc = BlocProvider.of<CategoryCubit>(context);
     bloc.getUserData();
+    var adminData =
+    SharedPrefsLocal.getData(key: StringManager.keyUserAdmin);
+    print(adminData!.userName??"");
+    print(adminData.fcmToken??"");
+    print(adminData.type??"");
+
     bloc.doAnimation(this);
   }
 
@@ -146,56 +152,40 @@ class _CategoryScreenState extends State<CategoryScreen>
                                           ),
                                         ],
                                       ),
-                                      Spacer(),
-                                      if(state.userAndAdminModelEntity.type=="admin")
-                                      IconButton(onPressed: (){
-                                        Navigator.pushNamed(context, RoutesManger.routeNameRequiest);
-                                      }, icon: Icon(Icons.attribution,size: 28.sp,))
-                                      else
-                                      SizedBox(),
-                                      IconButton(onPressed: (){
-                                        Navigator.pushNamed(context, RoutesManger.routeNameChat);
-                                      }, icon: Icon(Icons.message)),
-                                      PopupMenuButton<String>(
-                                        icon: Icon(Icons.more_vert, size: 38.r),
-                                        onSelected: (String choice) {
-                                          if (choice == StringManager.profile) {
-                                            Navigator.pushNamed(context,
-                                                RoutesManger.routeNameProfile);
-                                          } else if (choice ==
-                                              StringManager.logout) {
-                                            DialogUtils.showAlertDialog(
-                                              context: context,
-                                              title: StringManager.logout,
-                                              message:
-                                                  StringManager.logoutMessage,
-                                              posActionTitle: StringManager.yes,
-                                              negActionTitle: StringManager.no,
-                                              posAction: () {
-                                                Navigator
-                                                    .pushNamedAndRemoveUntil(
+                                      const Spacer(),
+                                      if (state.userAndAdminModelEntity.type ==
+                                          "admin")
+                                        IconButton(
+                                            onPressed: () {
+                                              Navigator.pushNamed(
                                                   context,
-                                                  RoutesManger.routeNameLogin,
-                                                  (route) => false,
-                                                );
-                                                FirebaseAuth.instance.signOut();
-                                                SharedPrefsLocal.prefs.clear();
-                                              },
+                                                  RoutesManger
+                                                      .routeNameRequiest);
+                                            },
+                                            icon: Icon(
+                                              Icons.attribution,
+                                              size: 28.sp,
+                                            ))
+                                      else
+                                        const SizedBox(),
+                                      IconButton(
+                                          onPressed: () {
+                                            Navigator.pushNamed(context,
+                                                RoutesManger.routeNameChat);
+                                          },
+                                          icon: const Icon(Icons.message)),
+
+                                      IconButton(
+                                          onPressed: () {
+                                            Navigator.pushReplacementNamed(
+                                              context,
+                                              RoutesManger.routeNameProfile,
                                             );
-                                          }
-                                        },
-                                        itemBuilder: (BuildContext context) {
-                                          return [
-                                            StringManager.profile,
-                                            StringManager.logout
-                                          ].map((String choice) {
-                                            return PopupMenuItem<String>(
-                                              value: choice,
-                                              child: Text(choice),
-                                            );
-                                          }).toList();
-                                        },
-                                      ),
+                                          },
+                                          icon: Icon(
+                                            Icons.account_circle,
+                                            size: 28.sp,
+                                          ))
                                     ],
                                   ),
                                 ),
@@ -263,7 +253,7 @@ class _CategoryScreenState extends State<CategoryScreen>
                                 ),
                               ],
                             )
-                          : SizedBox()),
+                          : const SizedBox()),
                 ),
               ),
             ],

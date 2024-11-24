@@ -121,4 +121,28 @@ class CategoryDataSourceImpl implements CategoryDataSource {
     }
   }
 
+  @override
+  Future<Either<Failure, void>> removeFcm() async{
+    try {
+      var connectivityResult = await Connectivity().checkConnectivity();
+      if (connectivityResult.contains(ConnectivityResult.wifi) ||
+          connectivityResult.contains(ConnectivityResult.mobile)) {
+        var user = SharedPrefsLocal.getData(key: StringManager.keyUserAdmin);
+        print("=============================${user?.id ?? ""} empty");
+        await FirebaseUtils.getUserCollection(user?.type ?? "")
+            .doc(user?.id??"")
+            .update({
+          "fcmToken": null,
+        });
+
+        return Right(null);
+      } else {
+        return Left(Failure(errorMessage: StringManager.networkError));
+      }
+    } catch (e) {
+      print(e.toString());
+      return Left(Failure(errorMessage: StringManager.someThingWentWrong));
+    }
+  }
+
 }

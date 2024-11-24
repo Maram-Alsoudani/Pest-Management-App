@@ -5,6 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pesticides/Config/routes/routes_manger.dart';
 import 'package:pesticides/Core/component/error_widget.dart';
 import 'package:pesticides/Core/my_bloc_observer.dart';
+import 'package:pesticides/Core/utils/FCM.dart';
 import 'package:pesticides/Core/utils/strings.dart';
 import 'package:pesticides/Features/account_request_admin/presentation/manager/requests_screen_viewmodel_cubit.dart';
 import 'package:pesticides/Features/category/presentation/manager/category_cubit.dart';
@@ -25,10 +26,13 @@ import 'firebase_options.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  FCM.fcmInit();
+  var token=await FCM.getToken();
+  print(token);
+
   Bloc.observer = MyBlocObserver();
 
   await SharedPrefsLocal.init();

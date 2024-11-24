@@ -53,6 +53,7 @@ class SiteInfoItem extends StatelessWidget {
                     style: const TextStyle(fontWeight: FontWeight.bold),
                   ),
                   onTap: () {
+
                     SiteViewModel.get(context).user.type ==
                             UserAndAdminModelDto.user
                         ? Navigator.pushNamed(

@@ -274,8 +274,7 @@ class _InventoryScreenState extends State<InventoryScreen>
                                                   SlidableAction(
                                                     onPressed: (context) {
                                                       bloc.deleteMaterails(
-                                                          item.id,index);
-
+                                                          item.id, index);
 
                                                       bloc.getMaterails();
                                                     },
@@ -289,8 +288,6 @@ class _InventoryScreenState extends State<InventoryScreen>
                                                   ),
                                                 ],
                                               ),
-                                            
-                                            
                                               child: MaterailItem(
                                                 isUnavailable: isUnavailable,
                                                 item: item,

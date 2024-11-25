@@ -15,7 +15,7 @@ class ReportEntity {
   ReportEntity({
     required this.id,
     this.siteName = 'Unknown',
-    required this.siteId,
+    this.siteId = 'Unknown',
     this.notes = 'No notes',
     this.conditions = 'No conditions',
     this.recommendations = const ['No recommendations'],
@@ -30,6 +30,7 @@ class ReportEntity {
   ReportEntity copyWith({
     String? id,
     String? siteName,
+    String? siteId,
     String? notes,
     String? conditions,
     List<String>? recommendations,
@@ -52,6 +53,7 @@ class ReportEntity {
       signatures: signatures ?? this.signatures,
       userId: userId ?? this.userId,
       createdAt: createdAt ?? this.createdAt,
+      siteId: siteId ?? this.siteId,
     );
   }
 }

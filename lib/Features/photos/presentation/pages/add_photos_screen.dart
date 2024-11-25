@@ -31,6 +31,8 @@ class _AddPhotosScreenState extends State<AddPhotosScreen> {
       setState(() {
         images.add(File(pickedFile.path));
       });
+      final reportViewModel = context.read<ReportViewModel>();
+      reportViewModel.updatePhotos(images.map((e) => e.path).toList());
     }
   }
 

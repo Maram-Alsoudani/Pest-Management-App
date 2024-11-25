@@ -105,7 +105,6 @@ class ProfileCubit extends Cubit<ProfileState> {
         phoneController.text = user.phone ?? 'N/A';
         emailController.text = user.email ?? 'N/A';
         userProfileImage = user.image ?? '';
-
         WidgetsBinding.instance.addPostFrameCallback((_) {
           opacity = 1;
           emit(ProfileAnimationSuccess());

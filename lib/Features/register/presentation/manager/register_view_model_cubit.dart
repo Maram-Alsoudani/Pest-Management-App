@@ -108,8 +108,6 @@ class RegisterViewModelCubit extends Cubit<RegisterViewModelState> {
     emailController.clear();
     passwordController.clear();
     confirmPasswordController.clear();
-    // animationController.dispose();
-    opacity=0.0;
     image = null;
   }
 //   @override

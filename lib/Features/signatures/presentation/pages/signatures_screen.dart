@@ -1,5 +1,7 @@
+import 'dart:io';
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:pesticides/Core/utils/colors.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pesticides/Features/site_report/presentation/manager/report_view_model.dart';
@@ -14,7 +16,7 @@ class SignaturesScreen extends StatefulWidget {
 }
 
 class _SignaturesScreenState extends State<SignaturesScreen> {
-  List<Uint8List> signaturesList = [];
+  List<File> signaturesList = [];
   List<int> selectedIndices = [];
   bool isMultiSelectMode = false;
 
@@ -22,9 +24,8 @@ class _SignaturesScreenState extends State<SignaturesScreen> {
   void initState() {
     super.initState();
     final reportViewModel = context.read<ReportViewModel>();
-    signaturesList = reportViewModel.signatures
-        .map((e) => Uint8List.fromList(e.codeUnits))
-        .toList();
+    signaturesList =
+        reportViewModel.signatures.map((path) => File(path)).toList();
   }
 
   Future<void> addNewSignature() async {
@@ -33,11 +34,22 @@ class _SignaturesScreenState extends State<SignaturesScreen> {
       context,
       PullFromButtonPageRoute(page: SignaturePad()),
     );
-    if (result != null) {
+    if (result != null && result is Uint8List) {
+      final file = await saveSignature(result);
       setState(() {
-        signaturesList.add(result);
+        signaturesList.add(file);
       });
+      final reportViewModel = context.read<ReportViewModel>();
+      reportViewModel
+          .updateSignatures(signaturesList.map((e) => e.path).toList());
     }
+  }
+
+  Future<File> saveSignature(Uint8List data) async {
+    final directory = await getApplicationDocumentsDirectory();
+    final file = File(
+        '${directory.path}/signature_${DateTime.now().millisecondsSinceEpoch}.png');
+    return file.writeAsBytes(data);
   }
 
   void deleteSelected() {
@@ -100,9 +112,8 @@ class _SignaturesScreenState extends State<SignaturesScreen> {
                 IconButton(
                   icon: const Icon(Icons.save, color: ColorManager.whiteColor),
                   onPressed: () {
-                    reportViewModel.updateSignatures(signaturesList
-                        .map((e) => String.fromCharCodes(e))
-                        .toList());
+                    reportViewModel.updateSignatures(
+                        signaturesList.map((e) => e.path).toList());
                     Navigator.pop(context);
                   },
                 ),
@@ -144,7 +155,7 @@ class _SignaturesScreenState extends State<SignaturesScreen> {
                       ),
                       borderRadius: BorderRadius.circular(8),
                     ),
-                    child: Image.memory(signaturesList[index]),
+                    child: Image.file(signaturesList[index]),
                   ),
                 );
               },

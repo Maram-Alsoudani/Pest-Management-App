@@ -51,10 +51,9 @@ class RegisterDataSourceImpl implements RegisterDataSource {
           userName: userName,
           phone: phone,
           email: email);
-      var userFireStore = await addUserFireStore(userAndAdminModelDto);
+       await addUserFireStore(userAndAdminModelDto);
 
-      SharedPrefsLocal.saveData(
-          key: StringManager.keyUserAdmin, model: userAndAdminModelDto);
+
 
       return Right(null);
     } on FirebaseAuthException catch (e) {

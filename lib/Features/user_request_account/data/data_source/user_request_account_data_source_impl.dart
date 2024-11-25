@@ -119,6 +119,7 @@ class UserRequestAccountDataSourceImpl implements UserRequestAccountDataSource {
         return Left(Failure(errorMessage: StringManager.someThingWentWrong));
       }
     } catch (e) {
+      print(e.toString());
       return Left(Failure(errorMessage: e.toString()));
     }
   }

@@ -34,10 +34,6 @@ class _CategoryScreenState extends State<CategoryScreen>
     super.initState();
     bloc = BlocProvider.of<CategoryCubit>(context);
     bloc.getUserData();
-    var adminData = SharedPrefsLocal.getData(key: StringManager.keyUserAdmin);
-    print(adminData!.userName ?? "");
-    print(adminData.fcmToken ?? "");
-    print(adminData.type ?? "");
 
     bloc.doAnimation(this);
   }
@@ -122,40 +118,36 @@ class _CategoryScreenState extends State<CategoryScreen>
                                                     ImageProfile(radius: 40.r),
                                               ),
                                             )
-                                          : ImageProfile(radius: 40.r),
-                                      // Replace with your fallback widget
+                                          : ImageProfile(
+                                              radius: 40
+                                                  .r), // Replace with your fallback widget
 
-                                      SizedBox(width: 10.w),
-                                      Expanded(
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              state.userAndAdminModelEntity
-                                                      .userName ??
-                                                  "",
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .titleSmall!
-                                                  .copyWith(
-                                                      fontSize:
-                                                          FontSize.s22.sp),
-                                            ),
-                                            Text(
-                                              state.userAndAdminModelEntity
-                                                      .type ??
-                                                  "",
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .titleSmall,
-                                            ),
-                                          ],
-                                        ),
+                                      SizedBox(width: 20.w),
+                                      Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            state.userAndAdminModelEntity
+                                                    .userName ??
+                                                "",
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .titleSmall!
+                                                .copyWith(
+                                                    fontSize: FontSize.s24.sp),
+                                          ),
+                                          Text(
+                                            state.userAndAdminModelEntity
+                                                    .type ??
+                                                "",
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .titleSmall,
+                                          ),
+                                        ],
                                       ),
-                                      SizedBox(
-                                        width: 8.h,
-                                      ),
+                                      const Spacer(),
                                       if (state.userAndAdminModelEntity.type ==
                                           "admin")
                                         IconButton(

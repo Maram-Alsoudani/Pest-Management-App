@@ -1,8 +1,10 @@
+import 'dart:io';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 import 'package:pesticides/Features/site_report/presentation/manager/report_state.dart';
 import 'package:flutter/material.dart';
 import '../../../../Core/component/custom_dialog.dart';
+import '../../../../Core/utils/firebase_utils.dart';
 import '../../domain/entities/report_entity.dart';
 import '../../domain/use_cases/create_report_use_case.dart';
 import '../../domain/use_cases/fetch_reports_use_case.dart';
@@ -26,7 +28,28 @@ class ReportViewModel extends Cubit<ReportState> {
 
   Future<void> createReport(ReportEntity report, BuildContext context) async {
     emit(ReportLoading());
-    final result = await createReportUseCase(report);
+
+    // Upload photos and signatures to Firebase Storage
+    final photoUrls = await Future.wait(_photos.map((path) async {
+      final result = await FirebaseUtils.addImageToFirebaseStorage(File(path));
+      return result.fold((failure) => null, (url) => url);
+    }).toList());
+
+    final signatureUrls = await Future.wait(_signatures.map((path) async {
+      final result = await FirebaseUtils.addImageToFirebaseStorage(File(path));
+      return result.fold((failure) => null, (url) => url);
+    }).toList());
+
+    // Filter out null values
+    final nonNullPhotoUrls = photoUrls.whereType<String>().toList();
+    final nonNullSignatureUrls = signatureUrls.whereType<String>().toList();
+
+    final updatedReport = report.copyWith(
+      photos: nonNullPhotoUrls,
+      signatures: nonNullSignatureUrls,
+    );
+
+    final result = await createReportUseCase(updatedReport);
     result.fold(
       (failure) {
         emit(ReportError(failure.errorMessage));

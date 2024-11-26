@@ -15,10 +15,10 @@ import '../../../../Core/utils/SharedPrefsLocal.dart';
 
 @Injectable(as: LoginDataSource)
 class LoginDataSourceImpl implements LoginDataSource {
-  Future<void> editUserOrAdmin(String fcmToken, String userId,String type) async {
+  Future<void> editUserOrAdmin(List<String> fcmToken, String userId,String type) async {
     var taskCollection = FirebaseUtils.getUserCollection(type);
     return taskCollection.doc(userId).update({
-      'fcmToken': fcmToken,
+      'fcmToken': FieldValue.arrayUnion(fcmToken),
     });
   }
   @override
@@ -39,14 +39,13 @@ class LoginDataSourceImpl implements LoginDataSource {
         var userCredential = await FirebaseAuth.instance
             .signInWithEmailAndPassword(email: email, password: password);
         var fcmToken=await FCM.getToken();
-        await editUserOrAdmin(fcmToken??"",userCredential.user!.uid,type??"");
+        await editUserOrAdmin([fcmToken!],userCredential.user!.uid,type??"");
         if (userCredential.user != null) {
           var userData = querySnapshot.docs.first.data();
           var user = UserAndAdminModelDto.fromFireStore(userData);
-          user.fcmToken=fcmToken;
+          user.fcmToken=[fcmToken];
           SharedPrefsLocal.saveData(
               key: StringManager.keyUserAdmin, model: user);
-
 
 
           return Right(user);

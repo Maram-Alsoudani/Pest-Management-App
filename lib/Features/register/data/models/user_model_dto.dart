@@ -12,7 +12,7 @@ class UserAndAdminModelDto extends UserAndAdminModelEntity {
     required super.userName,
     required super.phone,
     required super.email,
-     super.fcmToken,
+    super.fcmToken,
   });
 
   UserAndAdminModelDto.fromFireStore(Map<String, dynamic> data)
@@ -23,7 +23,9 @@ class UserAndAdminModelDto extends UserAndAdminModelEntity {
     userName: data["userName"] as String,
     phone: data["phone"] as String,
     email: data["email"] as String,
-    fcmToken: data["fcmToken"] as String?,
+    fcmToken: (data['fcmToken'] as List<dynamic>?)
+        ?.map((e) => e.toString())
+      .toList(),
   );
 
   Map<String, dynamic> toFireStore() {

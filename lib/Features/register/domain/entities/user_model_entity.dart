@@ -6,7 +6,8 @@ class UserAndAdminModelEntity {
   String? userName;
   String? phone;
   String? email;
-  String?fcmToken;
+  List<String>?fcmToken;
+
 
   UserAndAdminModelEntity({
      this.id="",

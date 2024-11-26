@@ -29,8 +29,8 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  FCM.fcmInit();
-  var token=await FCM.getToken();
+  await FCM.fcmInit();
+  var token = await FCM.getToken();
   print(token);
 
   Bloc.observer = MyBlocObserver();
@@ -76,11 +76,10 @@ void main() async {
         ),
         BlocProvider(
           create: (context) => getIt<ReportViewModel>(),
-          ),
+        ),
         BlocProvider(
           create: (context) => getIt<ChatViewModelCubit>(),
         ),
-
         BlocProvider(
           create: (context) => getIt<UserRequestAccountCubit>(),
         ),

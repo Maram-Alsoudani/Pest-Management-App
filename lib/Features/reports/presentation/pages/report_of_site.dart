@@ -35,6 +35,17 @@ class _ReportOfSiteState extends State<ReportOfSite>
     );
   }
 
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+  }
+
+  @override
+  void dispose() {
+    viewModel.animationController.dispose();
+    super.dispose();
+  }
+
   void _viewFileImage(File image) {
     showDialog(
       context: context,
@@ -173,77 +184,77 @@ class _ReportOfSiteState extends State<ReportOfSite>
                                 const SectionTitleWithDivider(
                                     title: StringManager.photos),
                                 SizedBox(height: 8.h),
-                                SizedBox(
-                                  height: 80.h,
-                                  // Set the height for the horizontal ListView
-                                  child: SlideTransition(
-                                    position: viewModel.slideAnimation,
-                                    child: state.siteReport.photos.isNotEmpty
-                                        ? ListView.builder(
-                                            scrollDirection: Axis.horizontal,
-                                            itemCount:
-                                                state.siteReport.photos.length,
-                                            itemBuilder: (context, index) {
-                                              final photoPath = state
-                                                  .siteReport.photos[index];
-                                              if (File(photoPath)
-                                                  .existsSync()) {
-                                                return GestureDetector(
-                                                  onTap: () => _viewFileImage(
-                                                      File(photoPath)),
-                                                  child: Padding(
-                                                    padding:
-                                                        EdgeInsets.symmetric(
-                                                            horizontal: 8.0.w),
-                                                    child: ClipRRect(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              8.r),
-                                                      child: Container(
-                                                        width: 80.w,
-                                                        height: 80.h,
-                                                        decoration:
-                                                            BoxDecoration(
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(
-                                                                      8.r),
-                                                        ),
-                                                        child: Image.file(
-                                                          File(photoPath),
-                                                          fit: BoxFit.cover,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                );
-                                              } else {
-                                                return Center(
-                                                  child: Text(
-                                                    'Invalid photo path: $photoPath',
-                                                    style: Theme.of(context)
-                                                        .textTheme
-                                                        .bodyMedium!
-                                                        .copyWith(
-                                                            color: Colors.red),
-                                                  ),
-                                                );
-                                              }
-                                            },
-                                          )
-                                        : Center(
-                                            child: Text(
-                                              StringManager.noPhotos,
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .bodyMedium!
-                                                  .copyWith(
-                                                      color: ColorManager
-                                                          .blackColor),
-                                            ),
-                                          ),
-                                  ),
-                                ),
+                                // SizedBox(
+                                //   height: 80.h,
+                                //   // Set the height for the horizontal ListView
+                                //   child: SlideTransition(
+                                //     position: viewModel.slideAnimation,
+                                //     child: state.siteReport.photos.isNotEmpty
+                                //         ? ListView.builder(
+                                //             scrollDirection: Axis.horizontal,
+                                //             itemCount:
+                                //                 state.siteReport.photos.length,
+                                //             itemBuilder: (context, index) {
+                                //               final photoPath = state
+                                //                   .siteReport.photos[index];
+                                //               if (File(photoPath)
+                                //                   .existsSync()) {
+                                //                 return GestureDetector(
+                                //                   onTap: () => _viewFileImage(
+                                //                       File(photoPath)),
+                                //                   child: Padding(
+                                //                     padding:
+                                //                         EdgeInsets.symmetric(
+                                //                             horizontal: 8.0.w),
+                                //                     child: ClipRRect(
+                                //                       borderRadius:
+                                //                           BorderRadius.circular(
+                                //                               8.r),
+                                //                       child: Container(
+                                //                         width: 80.w,
+                                //                         height: 80.h,
+                                //                         decoration:
+                                //                             BoxDecoration(
+                                //                           borderRadius:
+                                //                               BorderRadius
+                                //                                   .circular(
+                                //                                       8.r),
+                                //                         ),
+                                //                         child: Image.file(
+                                //                           File(photoPath),
+                                //                           fit: BoxFit.cover,
+                                //                         ),
+                                //                       ),
+                                //                     ),
+                                //                   ),
+                                //                 );
+                                //               } else {
+                                //                 return Center(
+                                //                   child: Text(
+                                //                     'Invalid photo path: $photoPath',
+                                //                     style: Theme.of(context)
+                                //                         .textTheme
+                                //                         .bodyMedium!
+                                //                         .copyWith(
+                                //                             color: Colors.red),
+                                //                   ),
+                                //                 );
+                                //               }
+                                //             },
+                                //           )
+                                //         : Center(
+                                //             child: Text(
+                                //               StringManager.noPhotos,
+                                //               style: Theme.of(context)
+                                //                   .textTheme
+                                //                   .bodyMedium!
+                                //                   .copyWith(
+                                //                       color: ColorManager
+                                //                           .blackColor),
+                                //             ),
+                                //           ),
+                                //   ),
+                                // ),
                                 SizedBox(height: 16.h),
 
                                 // Display Devices
@@ -257,37 +268,37 @@ class _ReportOfSiteState extends State<ReportOfSite>
                                 const SectionTitleWithDivider(
                                     title: StringManager.signatures),
                                 SizedBox(height: 8.h),
-                                Wrap(
-                                  spacing: 8.w,
-                                  runSpacing: 8.h,
-                                  children: state.siteReport.signatures
-                                      .map((signature) {
-                                    return GestureDetector(
-                                      onTap: () => _viewImage(
-                                          Uint8List.fromList(
-                                              signature.codeUnits)),
-                                      child: Container(
-                                        width: 80.w,
-                                        height: 80.h,
-                                        decoration: BoxDecoration(
-                                          border: Border.all(
-                                              color: ColorManager.primaryColor),
-                                          borderRadius:
-                                              BorderRadius.circular(8.r),
-                                        ),
-                                        child: ClipRRect(
-                                          borderRadius:
-                                              BorderRadius.circular(8.r),
-                                          child: Image.memory(
-                                            Uint8List.fromList(
-                                                signature.codeUnits),
-                                            fit: BoxFit.cover,
-                                          ),
-                                        ),
-                                      ),
-                                    );
-                                  }).toList(),
-                                ),
+                                // Wrap(
+                                //   spacing: 8.w,
+                                //   runSpacing: 8.h,
+                                //   children: state.siteReport.signatures
+                                //       .map((signature) {
+                                //     return GestureDetector(
+                                //       onTap: () => _viewImage(
+                                //           Uint8List.fromList(
+                                //               signature.codeUnits)),
+                                //       child: Container(
+                                //         width: 80.w,
+                                //         height: 80.h,
+                                //         decoration: BoxDecoration(
+                                //           border: Border.all(
+                                //               color: ColorManager.primaryColor),
+                                //           borderRadius:
+                                //               BorderRadius.circular(8.r),
+                                //         ),
+                                //         child: ClipRRect(
+                                //           borderRadius:
+                                //               BorderRadius.circular(8.r),
+                                //           child: Image.memory(
+                                //             Uint8List.fromList(
+                                //                 signature.codeUnits),
+                                //             fit: BoxFit.cover,
+                                //           ),
+                                //         ),
+                                //       ),
+                                //     );
+                                //   }).toList(),
+                                // ),
                                 if (state.siteReport.signatures.isEmpty)
                                   Text(
                                     StringManager.signaturesRequired,

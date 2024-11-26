@@ -21,7 +21,7 @@ class ReportOfSiteViewModel extends Cubit<GetReportOfSiteState> {
     animationController = AnimationController(
         vsync: single, duration: const Duration(seconds: 1));
 
-    slideAnimation = slideAnimation =
+    slideAnimation =
         Tween<Offset>(begin: Offset(-1.w, 0), end: const Offset(0, 0)).animate(
       CurvedAnimation(
         parent: animationController,
@@ -46,8 +46,7 @@ class ReportOfSiteViewModel extends Cubit<GetReportOfSiteState> {
 
   @override
   Future<void> close() {
-    // TODO: implement close
-
+    animationController.dispose();
     return super.close();
   }
 }

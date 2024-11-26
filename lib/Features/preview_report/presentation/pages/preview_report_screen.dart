@@ -10,8 +10,11 @@ import 'package:pesticides/Features/site_report/presentation/manager/report_view
 import 'package:pesticides/Features/preview_report/presentation/widgets/device_widget.dart';
 import 'package:pesticides/Features/preview_report/presentation/widgets/recommendtions_and_materiel_usages_widget.dart';
 import '../../../site_report/domain/entities/report_entity.dart';
+import '../../../site_report/presentation/manager/report_state.dart';
+import '../../../site_report/presentation/widgets/lottie_send_loading.dart';
 import '../widgets/image_viewer_widget.dart';
 import '../widgets/title_divider_widget.dart';
+import '../../../../Core/component/custom_dialog.dart';
 
 class PreviewReportScreen extends StatefulWidget {
   PreviewReportScreen({super.key});
@@ -43,11 +46,13 @@ class _PreviewReportScreenState extends State<PreviewReportScreen>
 
     // Trigger the slide animation after the page loads
     Future.delayed(const Duration(milliseconds: 300), () {
-      setState(() {
-        _opacity = 1.0;
-      });
+      if (mounted) {
+        setState(() {
+          _opacity = 1.0;
+        });
 
-      _animationController.forward();
+        _animationController.forward();
+      }
     });
   }
 
@@ -78,20 +83,26 @@ class _PreviewReportScreenState extends State<PreviewReportScreen>
   void _submitReport() async {
     final reportViewModel = context.read<ReportViewModel>();
     if (reportViewModel.signatures.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text(StringManager.signaturesRequired)),
+      DialogUtils.showAlertDialog(
+        context: context,
+        title: StringManager.error,
+        message: StringManager.signaturesRequired,
+        posActionTitle: StringManager.ok,
       );
       return;
     }
 
     final args =
         ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
-    final siteName = args?['siteName'] ?? 'Site Name';
-    final userId = args?['userId'] ?? 'userId';
-    final siteId = args?['siteId'] ?? 'siteId';
+    final siteName = args?['siteName'] ?? StringManager.siteName;
+    final userId = args?['userId'] ?? StringManager.userIdRequired;
+    final siteId = args?['siteId'] ?? StringManager.siteName;
     if (userId == null || userId.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('User ID is missing.')),
+      DialogUtils.showAlertDialog(
+        context: context,
+        title: StringManager.error,
+        message: StringManager.userIdRequired,
+        posActionTitle: StringManager.ok,
       );
       return;
     }
@@ -100,23 +111,24 @@ class _PreviewReportScreenState extends State<PreviewReportScreen>
       id: '',
       siteId: siteId,
       siteName: siteName,
-      notes:
-          reportViewModel.notes.isNotEmpty ? reportViewModel.notes : 'No notes',
+      notes: reportViewModel.notes.isNotEmpty
+          ? reportViewModel.notes
+          : StringManager.noNotes,
       conditions: reportViewModel.conditions.isNotEmpty
           ? reportViewModel.conditions
-          : 'No conditions',
+          : StringManager.noConditions,
       recommendations: reportViewModel.recommendations.isNotEmpty
           ? reportViewModel.recommendations
-          : ['No recommendations'],
+          : [StringManager.noRecommendations],
       materialUsages: reportViewModel.materials.isNotEmpty
           ? reportViewModel.materials
-          : {'No material usages': 0},
+          : {StringManager.noMaterialUsages: 0},
       photos: reportViewModel.photos.isNotEmpty
           ? reportViewModel.photos
-          : ['No photos'],
+          : [StringManager.noPhotos],
       devices: reportViewModel.devices.isNotEmpty
           ? reportViewModel.devices
-          : ['No devices'],
+          : [StringManager.noDevices],
       signatures: reportViewModel.signatures,
       userId: userId,
       createdAt: DateTime.now(),
@@ -147,165 +159,200 @@ class _PreviewReportScreenState extends State<PreviewReportScreen>
             )
           ],
         ),
-        body: Container(
-          width: 500.w,
-          margin: EdgeInsets.all(15.r),
-          padding: EdgeInsets.all(12.r),
-          decoration: BoxDecoration(
-            color: ColorManager.whiteColor,
-            borderRadius: BorderRadius.circular(15.r),
-          ),
-          child: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+        body: BlocConsumer<ReportViewModel, ReportState>(
+          listener: (context, state) {
+            if (state is ReportError) {
+              DialogUtils.showAlertDialog(
+                context: context,
+                title: StringManager.error,
+                message: state.message,
+                posActionTitle: StringManager.ok,
+              );
+            }
+          },
+          builder: (context, state) {
+            return Stack(
               children: [
-                // Display Notes
-                const SectionTitleWithDivider(title: StringManager.notes),
-                SizedBox(height: 8.h),
-                Text(
-                  reportViewModel.notes.isNotEmpty
-                      ? reportViewModel.notes
-                      : StringManager.noNotes,
-                  style: Theme.of(context)
-                      .textTheme
-                      .bodyMedium!
-                      .copyWith(color: ColorManager.blackColor),
-                ),
-                SizedBox(height: 16.h),
+                Container(
+                  width: 500.w,
+                  margin: EdgeInsets.all(15.r),
+                  padding: EdgeInsets.all(12.r),
+                  decoration: BoxDecoration(
+                    color: ColorManager.whiteColor,
+                    borderRadius: BorderRadius.circular(15.r),
+                  ),
+                  child: SingleChildScrollView(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        // Display Notes
+                        const SectionTitleWithDivider(
+                            title: StringManager.notes),
+                        SizedBox(height: 8.h),
+                        Text(
+                          reportViewModel.notes.isNotEmpty
+                              ? reportViewModel.notes
+                              : StringManager.noNotes,
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodyMedium!
+                              .copyWith(color: ColorManager.blackColor),
+                        ),
+                        SizedBox(height: 16.h),
 
-                // Display Conditions
-                const SectionTitleWithDivider(title: StringManager.conditions),
-                SizedBox(height: 8.h),
-                Text(
-                  reportViewModel.conditions.isNotEmpty
-                      ? reportViewModel.conditions
-                      : StringManager.noConditions,
-                  style: Theme.of(context)
-                      .textTheme
-                      .bodyMedium!
-                      .copyWith(color: ColorManager.blackColor),
-                ),
-                SizedBox(height: 16.h),
+                        // Display Conditions
+                        const SectionTitleWithDivider(
+                            title: StringManager.conditions),
+                        SizedBox(height: 8.h),
+                        Text(
+                          reportViewModel.conditions.isNotEmpty
+                              ? reportViewModel.conditions
+                              : StringManager.noConditions,
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodyMedium!
+                              .copyWith(color: ColorManager.blackColor),
+                        ),
+                        SizedBox(height: 16.h),
 
-                // Display Recommendations
-                MaterialUsagesAndRecommendtions(
-                  title: StringManager.recommendations,
-                  materials: reportViewModel.recommendations.isNotEmpty
-                      ? {
-                          for (var item in reportViewModel.recommendations)
-                            item: 1
-                        }
-                      : {StringManager.noRecommendations: 0},
-                  opacity: _opacity,
-                  position: _slideAnimation,
-                ),
-                SizedBox(height: 16.h),
+                        // Display Recommendations
+                        MaterialUsagesAndRecommendtions(
+                          title: StringManager.recommendations,
+                          materials: reportViewModel.recommendations.isNotEmpty
+                              ? {
+                                  for (var item
+                                      in reportViewModel.recommendations)
+                                    item: 1
+                                }
+                              : {StringManager.noRecommendations: 0},
+                          opacity: _opacity,
+                          position: _slideAnimation,
+                        ),
+                        SizedBox(height: 16.h),
 
-                // Display Material Usages
-                MaterialUsagesAndRecommendtions(
-                  title: StringManager.materialUsages,
-                  materials: reportViewModel.materials.isNotEmpty
-                      ? reportViewModel.materials
-                      : {StringManager.noMaterialUsages: 0},
-                  opacity: _opacity,
-                  position: _slideAnimation,
-                ),
-                SizedBox(height: 16.h),
+                        // Display Material Usages
+                        MaterialUsagesAndRecommendtions(
+                          title: StringManager.materialUsages,
+                          materials: reportViewModel.materials.isNotEmpty
+                              ? reportViewModel.materials
+                              : {StringManager.noMaterialUsages: 0},
+                          opacity: _opacity,
+                          position: _slideAnimation,
+                        ),
+                        SizedBox(height: 16.h),
 
-                // Display Photos
-                const SectionTitleWithDivider(title: StringManager.photos),
-                SizedBox(height: 8.h),
-                SizedBox(
-                  height: 80.h, // Set the height for the horizontal ListView
-                  child: SlideTransition(
-                    position: _slideAnimation,
-                    child: reportViewModel.photos.isNotEmpty
-                        ? ListView.builder(
-                            scrollDirection: Axis.horizontal,
-                            itemCount: reportViewModel.photos.length,
-                            itemBuilder: (context, index) {
-                              return GestureDetector(
-                                onTap: () => _viewFileImage(
-                                    File(reportViewModel.photos[index])),
-                                child: Padding(
-                                  padding:
-                                      EdgeInsets.symmetric(horizontal: 8.0.w),
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(8.r),
-                                    child: Container(
-                                      width: 80.w,
-                                      height: 80.h,
-                                      decoration: BoxDecoration(
-                                        borderRadius:
-                                            BorderRadius.circular(8.r),
-                                      ),
-                                      child: Image.file(
-                                        File(reportViewModel.photos[index]),
-                                        fit: BoxFit.cover,
-                                      ),
+                        // Display Photos
+                        const SectionTitleWithDivider(
+                            title: StringManager.photos),
+                        SizedBox(height: 8.h),
+                        SizedBox(
+                          height: 80.h,
+                          child: SlideTransition(
+                            position: _slideAnimation,
+                            child: reportViewModel.photos.isNotEmpty
+                                ? ListView.builder(
+                                    scrollDirection: Axis.horizontal,
+                                    itemCount: reportViewModel.photos.length,
+                                    itemBuilder: (context, index) {
+                                      final photoPath =
+                                          reportViewModel.photos[index];
+                                      final file = File(photoPath);
+                                      return GestureDetector(
+                                        onTap: () => _viewFileImage(file),
+                                        child: Padding(
+                                          padding: EdgeInsets.symmetric(
+                                              horizontal: 8.0.w),
+                                          child: ClipRRect(
+                                            borderRadius:
+                                                BorderRadius.circular(8.r),
+                                            child: Container(
+                                              width: 80.w,
+                                              height: 80.h,
+                                              decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(8.r),
+                                              ),
+                                              child: Image.file(
+                                                file,
+                                                fit: BoxFit.cover,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                  )
+                                : Center(
+                                    child: Text(
+                                      StringManager.noPhotos,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyMedium!
+                                          .copyWith(
+                                              color: ColorManager.blackColor),
                                     ),
                                   ),
+                          ),
+                        ),
+                        SizedBox(height: 16.h),
+
+                        // Display Devices
+                        DeviceWidget(
+                          opacity: _opacity,
+                          position: _slideAnimation,
+                        ),
+                        SizedBox(height: 16.h),
+
+                        // Display Signatures
+                        const SectionTitleWithDivider(
+                            title: StringManager.signatures),
+                        SizedBox(height: 8.h),
+                        Wrap(
+                          spacing: 8.w,
+                          runSpacing: 8.h,
+                          children: reportViewModel.signatures.map((signature) {
+                            final file = File(signature);
+                            return GestureDetector(
+                              onTap: () => _viewFileImage(file),
+                              child: Container(
+                                width: 80.w,
+                                height: 80.h,
+                                decoration: BoxDecoration(
+                                  border: Border.all(
+                                      color: ColorManager.primaryColor),
+                                  borderRadius: BorderRadius.circular(8.r),
                                 ),
-                              );
-                            },
-                          )
-                        : Center(
-                            child: Text(
-                              StringManager.noPhotos,
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(8.r),
+                                  child: Image.file(
+                                    file,
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                              ),
+                            );
+                          }).toList(),
+                        ),
+                        if (reportViewModel.signatures.isEmpty)
+                          Text(StringManager.signaturesRequired,
                               style: Theme.of(context)
                                   .textTheme
                                   .bodyMedium!
-                                  .copyWith(color: ColorManager.blackColor),
-                            ),
-                          ),
+                                  .copyWith(color: ColorManager.redColor)),
+                      ],
+                    ),
                   ),
                 ),
-                SizedBox(height: 16.h),
-
-                // Display Devices
-                DeviceWidget(
-                  opacity: _opacity,
-                  position: _slideAnimation,
-                ),
-                SizedBox(height: 16.h),
-
-                // Display Signatures
-                const SectionTitleWithDivider(title: StringManager.signatures),
-                SizedBox(height: 8.h),
-                Wrap(
-                  spacing: 8.w,
-                  runSpacing: 8.h,
-                  children: reportViewModel.signatures.map((signature) {
-                    return GestureDetector(
-                      onTap: () =>
-                          _viewImage(Uint8List.fromList(signature.codeUnits)),
-                      child: Container(
-                        width: 80.w,
-                        height: 80.h,
-                        decoration: BoxDecoration(
-                          border: Border.all(color: ColorManager.primaryColor),
-                          borderRadius: BorderRadius.circular(8.r),
-                        ),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(8.r),
-                          child: Image.memory(
-                            Uint8List.fromList(signature.codeUnits),
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                      ),
-                    );
-                  }).toList(),
-                ),
-                if (reportViewModel.signatures.isEmpty)
-                  Text(StringManager.signaturesRequired,
-                      style: Theme.of(context)
-                          .textTheme
-                          .bodyMedium!
-                          .copyWith(color: Colors.red)),
+                if (state is ReportLoading)
+                  Container(
+                    color: Colors.black.withOpacity(0.5),
+                    child: const Center(
+                      child: LottieSendingWidget(),
+                    ),
+                  ),
               ],
-            ),
-          ),
+            );
+          },
         ),
       ),
     );

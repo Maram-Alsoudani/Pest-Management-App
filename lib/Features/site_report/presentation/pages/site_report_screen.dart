@@ -10,8 +10,11 @@ import 'package:pesticides/Core/utils/SharedPrefsLocal.dart';
 import 'package:pesticides/Features/site_report/data/models/report_dto.dart';
 import 'package:pesticides/Features/site_report/presentation/manager/report_view_model.dart';
 import 'package:pesticides/Core/utils/firebase_utils.dart';
+import 'package:pesticides/Core/component/custom_dialog.dart';
 
 import '../../domain/entities/report_entity.dart';
+import '../manager/report_state.dart';
+import '../widgets/lottie_send_loading.dart';
 
 class SiteReportScreen extends StatefulWidget {
   const SiteReportScreen({Key? key}) : super(key: key);
@@ -115,15 +118,21 @@ class _SiteReportScreenState extends State<SiteReportScreen>
   void submitReport() async {
     final reportViewModel = context.read<ReportViewModel>();
     if (reportViewModel.signatures.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text(StringManager.signaturesRequired)),
+      DialogUtils.showAlertDialog(
+        context: context,
+        title: 'Error',
+        message: StringManager.signaturesRequired,
+        posActionTitle: 'OK',
       );
       return;
     }
 
     if (userId == null || userId!.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('User ID is missing.')),
+      DialogUtils.showAlertDialog(
+        context: context,
+        title: 'Error',
+        message: 'User ID is missing.',
+        posActionTitle: 'OK',
       );
       return;
     }
@@ -183,50 +192,87 @@ class _SiteReportScreenState extends State<SiteReportScreen>
           ),
         ],
       ),
-      body: Column(
-        children: [
-          Expanded(
-            child: ListView.builder(
-              itemCount: sections.length,
-              itemBuilder: (context, index) {
-                return SlideTransition(
-                  position: _slideAnimations[index],
-                  child: SiteReportItemContainer(
-                    title: sections[index]['title'],
-                    onClicked: () => navigateToSection(
-                        sections[index]['screen'], sections[index]['title']),
-                  ),
-                );
+      body: BlocConsumer<ReportViewModel, ReportState>(
+        listener: (context, state) {
+          if (state is ReportCreated) {
+            DialogUtils.showAlertDialog(
+              context: context,
+              title: 'Success',
+              message: StringManager.reportSubmittedSuccessfully,
+              posActionTitle: 'OK',
+              posAction: () {
+                Navigator.pushNamed(
+                    context, RoutesManger.routeNameCategoryScreen);
               },
-            ),
-          ),
-          Padding(
-            padding:
-                const EdgeInsets.symmetric(horizontal: 16.0, vertical: 36.0),
-            child: Center(
-              child: ElevatedButton(
-                onPressed: submitReport,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: ColorManager.primaryColor,
-                  foregroundColor: ColorManager.whiteColor,
-                  padding:
-                      EdgeInsets.symmetric(horizontal: 30.w, vertical: 15.h),
-                ),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      StringManager.submit,
-                      style: Theme.of(context).textTheme.titleSmall,
+            );
+          } else if (state is ReportError) {
+            DialogUtils.showAlertDialog(
+              context: context,
+              title: 'Error',
+              message: state.message,
+              posActionTitle: 'OK',
+            );
+          }
+        },
+        builder: (context, state) {
+          return Stack(
+            children: [
+              Column(
+                children: [
+                  Expanded(
+                    child: ListView.builder(
+                      itemCount: sections.length,
+                      itemBuilder: (context, index) {
+                        return SlideTransition(
+                          position: _slideAnimations[index],
+                          child: SiteReportItemContainer(
+                            title: sections[index]['title'],
+                            onClicked: () => navigateToSection(
+                                sections[index]['screen'],
+                                sections[index]['title']),
+                          ),
+                        );
+                      },
                     ),
-                    SizedBox(width: 8),
-                    Icon(CupertinoIcons.paperplane_fill),
-                  ],
-                ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 16.0, vertical: 36.0),
+                    child: Center(
+                      child: ElevatedButton(
+                        onPressed: submitReport,
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: ColorManager.primaryColor,
+                          foregroundColor: ColorManager.whiteColor,
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 30.w, vertical: 15.h),
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Text(
+                              StringManager.submit,
+                              style: Theme.of(context).textTheme.titleSmall,
+                            ),
+                            const SizedBox(width: 8),
+                            const Icon(CupertinoIcons.paperplane_fill),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
-            ),
-          ),
-        ],
+              if (state is ReportLoading)
+                Container(
+                  color: Colors.black.withOpacity(0.5),
+                  child: const Center(
+                    child: LottieSendingWidget(),
+                  ),
+                ),
+            ],
+          );
+        },
       ),
     );
   }

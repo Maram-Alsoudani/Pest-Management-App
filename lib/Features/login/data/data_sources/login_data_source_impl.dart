@@ -15,12 +15,14 @@ import '../../../../Core/utils/SharedPrefsLocal.dart';
 
 @Injectable(as: LoginDataSource)
 class LoginDataSourceImpl implements LoginDataSource {
-  Future<void> editUserOrAdmin(List<String> fcmToken, String userId,String type) async {
+  Future<void> editUserOrAdmin(
+      List<String> fcmToken, String userId, String type) async {
     var taskCollection = FirebaseUtils.getUserCollection(type);
     return taskCollection.doc(userId).update({
       'fcmToken': FieldValue.arrayUnion(fcmToken),
     });
   }
+
   @override
   Future<Either<Failure, UserAndAdminModelDto?>> login(
       String email, String password, String? type) async {
@@ -38,15 +40,17 @@ class LoginDataSourceImpl implements LoginDataSource {
 
         var userCredential = await FirebaseAuth.instance
             .signInWithEmailAndPassword(email: email, password: password);
-        var fcmToken=await FCM.getToken();
-        await editUserOrAdmin([fcmToken!],userCredential.user!.uid,type??"");
+        var fcmToken = await FCM.getToken();
+        if (fcmToken != null) {
+          await editUserOrAdmin(
+              [fcmToken], userCredential.user!.uid, type ?? "");
+        }
         if (userCredential.user != null) {
           var userData = querySnapshot.docs.first.data();
           var user = UserAndAdminModelDto.fromFireStore(userData);
-          user.fcmToken=[fcmToken];
+          user.fcmToken = fcmToken != null ? [fcmToken] : [];
           SharedPrefsLocal.saveData(
               key: StringManager.keyUserAdmin, model: user);
-
 
           return Right(user);
         } else {
@@ -60,7 +64,6 @@ class LoginDataSourceImpl implements LoginDataSource {
         }
       } catch (e) {
         return Left(Failure(errorMessage: " ${e.toString()}"));
-
       }
     } else {
       return Left(Failure(errorMessage: StringManager.networkError));

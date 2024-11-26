@@ -141,7 +141,7 @@ class AccountRequestDataSourceImpl implements AccountRequestDataSource {
         title: title, body: body, dateTime: DateTime.now(), to: "admin");
 
     for (var admin in adminList) {
-      if (admin.userName == adminData.userName) {
+      if (admin.email == adminData.email) {
         continue;
       }
       if(admin.fcmToken != null){

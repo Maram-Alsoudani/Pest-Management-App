@@ -140,14 +140,18 @@ class AccountRequestDataSourceImpl implements AccountRequestDataSource {
         route: RoutesManger.routeNameRequiest,
         title: title, body: body, dateTime: DateTime.now(), to: "admin");
 
-    for (var i in adminList) {
-      if (i.fcmToken == adminData.fcmToken ) {
+    for (var admin in adminList) {
+      if (admin.userName == adminData.userName) {
         continue;
       }
-      if(i.fcmToken != null){
-        await NotificationService.sendNotification(i.fcmToken??"", title, body);
+      if(admin.fcmToken != null){
+        var tokens=admin.fcmToken;
+        for(var token in tokens!){
+          await NotificationService.sendNotification(token, title, body);
+        }
+
       }
-      await FirebaseUtils.saveNotification(notificationModel,UserAndAdminModelDto.admin,i.id!);
+      await FirebaseUtils.saveNotification(notificationModel,UserAndAdminModelDto.admin,admin.id!);
     }
 
 

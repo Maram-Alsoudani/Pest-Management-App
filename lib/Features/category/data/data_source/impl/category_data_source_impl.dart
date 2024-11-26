@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:dartz/dartz.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -128,11 +129,10 @@ class CategoryDataSourceImpl implements CategoryDataSource {
       if (connectivityResult.contains(ConnectivityResult.wifi) ||
           connectivityResult.contains(ConnectivityResult.mobile)) {
         var user = SharedPrefsLocal.getData(key: StringManager.keyUserAdmin);
-        print("=============================${user?.id ?? ""} empty");
         await FirebaseUtils.getUserCollection(user?.type ?? "")
             .doc(user?.id??"")
             .update({
-          "fcmToken": null,
+          "fcmToken": FieldValue.arrayRemove([user!.fcmToken![0]]),
         });
 
         return Right(null);

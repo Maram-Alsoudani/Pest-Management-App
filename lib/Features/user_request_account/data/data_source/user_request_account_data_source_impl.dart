@@ -7,6 +7,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:injectable/injectable.dart';
 import 'package:pesticides/Config/routes/routes_manger.dart';
 import 'package:pesticides/Core/errors/failures.dart';
+import 'package:pesticides/Core/utils/SharedPrefsLocal.dart';
 import 'package:pesticides/Core/utils/fcm_helper.dart';
 import 'package:pesticides/Core/utils/firebase_utils.dart';
 import 'package:pesticides/Core/utils/notification_model.dart';
@@ -28,8 +29,8 @@ class UserRequestAccountDataSourceImpl implements UserRequestAccountDataSource {
 
   Future<bool> doesEmailExist(String email, String collectionName) async {
     try {
-      var userCollection = FirebaseFirestore.instance.collection(
-          collectionName); 
+      var userCollection =
+          FirebaseFirestore.instance.collection(collectionName);
       var querySnapshot =
           await userCollection.where('email', isEqualTo: email).get();
 
@@ -38,14 +39,16 @@ class UserRequestAccountDataSourceImpl implements UserRequestAccountDataSource {
       return false;
     }
   }
-  Future<List<String?>> getAdminTokenFromFireStore() async {
-      var docSnapshot = await FirebaseUtils.getUserCollection(UserAndAdminModelDto.admin).get();
-      var data = docSnapshot.docs;
 
-      List<String?> list = data.map((e) {
-        return e.data().fcmToken;
-      }).toList();
-      return list;
+  static Future<List<List<String>?>> getAdminTokenFromFireStore() async {
+    var docSnapshot =
+        await FirebaseUtils.getUserCollection(UserAndAdminModelDto.admin).get();
+    var data = docSnapshot.docs;
+
+    List<List<String>?> list = data.map((e) {
+      return e.data().fcmToken;
+    }).toList();
+    return list;
   }
 
   @override
@@ -61,10 +64,12 @@ class UserRequestAccountDataSourceImpl implements UserRequestAccountDataSource {
       bool checkEmailInUsers =
           await doesEmailExist(email, UserAndAdminModelDto.user);
       bool checkEmailInAdmins =
-      await doesEmailExist(email, UserAndAdminModelDto.admin);
+          await doesEmailExist(email, UserAndAdminModelDto.admin);
       bool checkEmailInRequests =
-      await doesEmailExist(email, UserRequestAccountDto.requests);
-      if (checkEmailInUsers == false && checkEmailInAdmins == false &&checkEmailInRequests == false) {
+          await doesEmailExist(email, UserRequestAccountDto.requests);
+      if (checkEmailInUsers == false &&
+          checkEmailInAdmins == false &&
+          checkEmailInRequests == false) {
         String imageUrl = "";
         if (imagePath != null && imagePath.isNotEmpty) {
           final result =
@@ -85,26 +90,34 @@ class UserRequestAccountDataSourceImpl implements UserRequestAccountDataSource {
 
         var userRequestAccounFireStore =
             await addUserRequestAccountToFireStore(userRequestAccountDto);
-        String title="New Request Account Available";
-        String body="(${userRequestAccountDto.userName}) is Send Account Request to Admins Check Your Request Screen";
-        List<UserAndAdminModelDto> adminList=await FirebaseUtils.getAdminTokenFromFireStore();
-        NotificationModel notificationModel=NotificationModel(
+        String title = "New Request Account Available";
+        String body =
+            "(${userRequestAccountDto.userName}) is Send Account Request to Admins Check Your Request Screen";
+        List<UserAndAdminModelDto> adminList =
+            await FirebaseUtils.getAdminTokenFromFireStore();
+        NotificationModel notificationModel = NotificationModel(
             route: RoutesManger.routeNameRequiest,
+            title: title,
+            body: body,
+            dateTime: DateTime.now(),
+            to: "admin");
 
-            title: title, body: body, dateTime: DateTime.now(), to: "admin");
-        for(var admin in adminList){
-          if(admin.fcmToken != null){
-           await NotificationService.sendNotification(admin.fcmToken!, title, body);
+        // var localToken= SharedPrefsLocal.getData(key: StringManager.keyUserAdmin);
+        for (var admin in adminList) {
+          if (admin.fcmToken != null) {
+            var tokens = admin.fcmToken;
+            for (var token in tokens!) {
+              if (token.isNotEmpty) {
+                await NotificationService.sendNotification(token, title, body);
+              }
+            }
           }
-          await FirebaseUtils.saveNotification(notificationModel,UserAndAdminModelDto.admin,admin.id!);
+
+          await FirebaseUtils.saveNotification(
+              notificationModel, UserAndAdminModelDto.admin, admin.id!);
         }
-
-
-
-
-
-      }else{
-         return Left(Failure(errorMessage: StringManager.emailAlreadyInUse));
+      } else {
+        return Left(Failure(errorMessage: StringManager.emailAlreadyInUse));
       }
 
       return Right(null);

@@ -17,7 +17,8 @@ import '../category_data_source.dart';
 @Injectable(as: CategoryDataSource)
 class CategoryDataSourceImpl implements CategoryDataSource {
   @override
-  Future<Either<Failure, UserAndAdminModelDto>> readUserOrAdminFromFireStore() async {
+  Future<Either<Failure, UserAndAdminModelDto>>
+      readUserOrAdminFromFireStore() async {
     try {
       var connectivityResult = await Connectivity().checkConnectivity();
       if (connectivityResult.contains(ConnectivityResult.wifi) ||
@@ -29,8 +30,7 @@ class CategoryDataSourceImpl implements CategoryDataSource {
               .get();
           return Right(dataUser.data()!);
         } else {
-          return Left(Failure(
-              errorMessage: StringManager.someThingWentWrong));
+          return Left(Failure(errorMessage: StringManager.someThingWentWrong));
         }
       } else {
         return Left(Failure(errorMessage: StringManager.networkError));
@@ -77,9 +77,9 @@ class CategoryDataSourceImpl implements CategoryDataSource {
           connectivityResult.contains(ConnectivityResult.mobile)) {
         var user = SharedPrefsLocal.getData(key: StringManager.keyUserAdmin);
         var dataUserCollection =
-        await FirebaseUtils.getUserCollection(user?.type ?? "")
-            .doc(user!.id)
-            .get();
+            await FirebaseUtils.getUserCollection(user?.type ?? "")
+                .doc(user!.id)
+                .get();
 
         String currentImageUrl = dataUserCollection.data()?.image ?? "";
 
@@ -99,12 +99,12 @@ class CategoryDataSourceImpl implements CategoryDataSource {
         // Proceed to upload the new image
         String imageUrl = "";
         var userLocal =
-        SharedPrefsLocal.getData(key: StringManager.keyUserAdmin);
+            SharedPrefsLocal.getData(key: StringManager.keyUserAdmin);
         final result =
-        await FirebaseUtils.addImageToFirebaseStorage(File(image!));
+            await FirebaseUtils.addImageToFirebaseStorage(File(image!));
         result.fold(
-              (_) {},
-              (url) => imageUrl = url,
+          (_) {},
+          (url) => imageUrl = url,
         );
 
         await FirebaseUtils.getUserCollection(userLocal?.type ?? "")
@@ -123,14 +123,18 @@ class CategoryDataSourceImpl implements CategoryDataSource {
   }
 
   @override
-  Future<Either<Failure, void>> removeFcm() async{
+  Future<Either<Failure, void>> removeFcm() async {
+    if (!Platform.isAndroid) {
+      return Right(null);
+    }
+
     try {
       var connectivityResult = await Connectivity().checkConnectivity();
       if (connectivityResult.contains(ConnectivityResult.wifi) ||
           connectivityResult.contains(ConnectivityResult.mobile)) {
         var user = SharedPrefsLocal.getData(key: StringManager.keyUserAdmin);
         await FirebaseUtils.getUserCollection(user?.type ?? "")
-            .doc(user?.id??"")
+            .doc(user?.id ?? "")
             .update({
           "fcmToken": FieldValue.arrayRemove([user!.fcmToken![0]]),
         });
@@ -144,5 +148,4 @@ class CategoryDataSourceImpl implements CategoryDataSource {
       return Left(Failure(errorMessage: StringManager.someThingWentWrong));
     }
   }
-
 }

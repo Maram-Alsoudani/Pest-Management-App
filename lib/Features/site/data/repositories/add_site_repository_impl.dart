@@ -13,8 +13,8 @@ class AddSiteRepositoryImpl implements SiteRepository {
   AddSiteRepositoryImpl({required this.addSiteDataSource});
   @override
   Future<Either<Failure, void>> addSite(
-      String siteName, String siteLocation, String uId) async {
-    var either = await addSiteDataSource.addSite(siteName, siteLocation, uId);
+      String siteName, String siteLocation, String uId,String userNameSite) async {
+    var either = await addSiteDataSource.addSite(siteName, siteLocation, uId,userNameSite);
     return either.fold((error) => Left(error), (response) => Right(response));
   }
 

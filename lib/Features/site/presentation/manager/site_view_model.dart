@@ -56,7 +56,7 @@ class SiteViewModel extends Cubit<SiteState> {
   void addSite() async {
     emit(AddSiteLoadingState());
     var either = await addSiteUserCase.invoke(siteNameController.text,
-        siteLocationController.text, selectedValue!.id ?? "");
+        siteLocationController.text, selectedValue!.id ?? "",selectedValue!.userName??"");
 
     either.fold((l) {
       emit(AddSiteErrorState(failure: l));

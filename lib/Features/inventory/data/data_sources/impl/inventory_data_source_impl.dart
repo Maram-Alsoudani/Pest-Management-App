@@ -1,13 +1,21 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:dartz/dartz.dart';
 import 'package:injectable/injectable.dart';
+import 'package:pesticides/Config/routes/routes_manger.dart';
 import 'package:pesticides/Core/errors/failures.dart';
+import 'package:pesticides/Core/utils/SharedPrefsLocal.dart';
+import 'package:pesticides/Core/utils/fcm_helper.dart';
 import 'package:pesticides/Core/utils/firebase_utils.dart';
+import 'package:pesticides/Core/utils/notification_model.dart';
 import 'package:pesticides/Core/utils/strings.dart';
 import 'package:pesticides/Features/inventory/data/data_sources/impl/inventory_data_source_impl.dart';
 import 'package:pesticides/Features/inventory/data/data_sources/inventory_data_source.dart';
 import 'package:pesticides/Features/inventory/data/models/materail_model_dto.dart';
+import 'package:pesticides/Features/register/data/models/user_model_dto.dart';
+import 'package:pesticides/Features/user_request_account/domain/entities/user_request_account_model_entity.dart';
 
 import '../../../domain/entities/materail_enitiy.dart';
 
@@ -32,6 +40,56 @@ class InventoryDataSourceImpl implements InventoryDataSource {
     return FirebaseUtils.getMaterailCollection().doc(id).delete();
   }
 
+  Future<void> handleNotification(UserAndAdminModelDto adminData) async {
+    String title = "Materail Added Action";
+    String body = "Admin (${adminData.userName ?? ""}) is Added New Materail";
+
+    List<UserAndAdminModelDto> adminList =
+        await FirebaseUtils.getAdminOrUserTokenFromFireStore(
+            UserAndAdminModelDto.admin);
+    List<UserAndAdminModelDto> userList =
+        await FirebaseUtils.getAdminOrUserTokenFromFireStore(
+            UserAndAdminModelDto.user);
+
+    NotificationModel notificationModel = NotificationModel(
+        route: RoutesManger.routeNameInventory,
+        title: title,
+        body: body,
+        dateTime: DateTime.now(),
+        to: "All");
+
+    for (var admin in adminList) {
+      if (admin.email == adminData.email) {
+        continue;
+      }
+      if (admin.fcmToken != null) {
+        var tokens = admin.fcmToken;
+        for (var token in tokens!) {
+          await NotificationService.sendNotification(token, title, body);
+        }
+      }
+      await FirebaseUtils.saveNotification(
+          notificationModel, UserAndAdminModelDto.admin, admin.id!);
+    }
+
+    for (var user in userList) {
+      if (user.email == adminData.email) {
+        continue;
+      }
+      if (user.fcmToken != null) {
+        var tokens = user.fcmToken;
+        for (var token in tokens!) {
+          await NotificationService.sendNotification(token, title, body);
+        }
+      }
+      await FirebaseUtils.saveNotification(
+          notificationModel, UserAndAdminModelDto.user, user.id!);
+    }
+  }
+
+
+
+
   @override
   Future<Either<Failure, void>> addedMaterail(MaterailEntity materail) async {
     try {
@@ -41,6 +99,10 @@ class InventoryDataSourceImpl implements InventoryDataSource {
         MaterailModelDto materails =
             MaterailModelDto(name: materail.name, quantity: materail.quantity);
         await addMaterailsFireStore(materails);
+       if(Platform.isAndroid){
+         var admin = SharedPrefsLocal.getData(key: StringManager.keyUserAdmin);
+        await handleNotification(admin!);
+       }
         return const Right(null);
       } else {
         return Left(Failure(errorMessage: StringManager.networkError));

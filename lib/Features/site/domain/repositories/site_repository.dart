@@ -5,7 +5,7 @@ import '../../../reports/domain/entities/site_entity.dart';
 
 abstract class SiteRepository {
   Future<Either<Failure, void>> addSite(
-      String siteName, String siteLocation, String uId);
+      String siteName, String siteLocation, String uId,String userNameSite);
 
   Future<Either<Failure, List<SiteEntity>>> fetchSiteData();
   Future<Either<Failure, List<UserAndAdminModelEntity>>> fetchUserData();

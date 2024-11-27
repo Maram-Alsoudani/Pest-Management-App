@@ -135,7 +135,7 @@ class AccountRequestDataSourceImpl implements AccountRequestDataSource {
     String title = "Request Account Action";
     String body =
         "Admin (${adminData.userName ?? ""}) is $status Account Request to (${user.userName})";
-    List<UserAndAdminModelDto> adminList = await FirebaseUtils.getAdminTokenFromFireStore();
+    List<UserAndAdminModelDto> adminList = await FirebaseUtils.getAdminOrUserTokenFromFireStore(UserAndAdminModelDto.admin);
     NotificationModel notificationModel = NotificationModel(
         route: RoutesManger.routeNameRequiest,
         title: title, body: body, dateTime: DateTime.now(), to: "admin");

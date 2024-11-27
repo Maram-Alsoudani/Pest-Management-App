@@ -2,9 +2,12 @@ import 'dart:io';
 import 'package:dartz/dartz.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:injectable/injectable.dart';
+import 'package:pesticides/Config/routes/routes_manger.dart';
 import 'package:pesticides/Core/errors/failures.dart';
+import 'package:pesticides/Core/utils/fcm_helper.dart';
 import 'package:pesticides/Core/utils/firebase_utils.dart';
 import 'package:pesticides/Core/utils/SharedPrefsLocal.dart';
+import 'package:pesticides/Core/utils/notification_model.dart';
 import 'package:pesticides/Core/utils/strings.dart';
 import 'package:pesticides/Features/register/data/models/user_model_dto.dart';
 import 'data/register_data_source.dart';
@@ -15,6 +18,39 @@ class RegisterDataSourceImpl implements RegisterDataSource {
     return FirebaseUtils.getUserCollection(user.type ?? "")
         .doc(user.id)
         .set(user);
+  }
+
+   Future<void> handleNotification(UserAndAdminModelDto adminData,String userAdded) async {
+    String title = "Add New Account";
+    String body = "Admin (${adminData.userName ?? ""}) is Added New Account To ($userAdded)";
+
+    List<UserAndAdminModelDto> adminList =
+        await FirebaseUtils.getAdminOrUserTokenFromFireStore(
+            UserAndAdminModelDto.admin);
+   
+
+    NotificationModel notificationModel = NotificationModel(
+        route: RoutesManger.routeNameChat,
+        title: title,
+        body: body,
+        dateTime: DateTime.now(),
+        to: "admin");
+
+    for (var admin in adminList) {
+      if (admin.email == adminData.email) {
+        continue;
+      }
+      if (admin.fcmToken != null) {
+        var tokens = admin.fcmToken;
+        for (var token in tokens!) {
+          await NotificationService.sendNotification(token, title, body);
+        }
+      }
+      await FirebaseUtils.saveNotification(
+          notificationModel, UserAndAdminModelDto.admin, admin.id!);
+    }
+
+   
   }
 
   @override
@@ -52,6 +88,10 @@ class RegisterDataSourceImpl implements RegisterDataSource {
           phone: phone,
           email: email);
        await addUserFireStore(userAndAdminModelDto);
+          if(Platform.isAndroid){
+           var data=  SharedPrefsLocal.getData(key: StringManager.keyUserAdmin);
+           await handleNotification(data!,userName);
+         }
 
 
 

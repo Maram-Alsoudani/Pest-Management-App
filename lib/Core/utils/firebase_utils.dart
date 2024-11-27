@@ -262,8 +262,8 @@ class FirebaseUtils {
   }
 
 
-  static Future<List<UserAndAdminModelDto>> getAdminTokenFromFireStore() async {
-    var docSnapshot = await FirebaseUtils.getUserCollection(UserAndAdminModelDto.admin).get();
+  static Future<List<UserAndAdminModelDto>> getAdminOrUserTokenFromFireStore(String type) async {
+    var docSnapshot = await FirebaseUtils.getUserCollection(type).get();
     var data = docSnapshot.docs;
 
     List<UserAndAdminModelDto> list = data.map((e) {

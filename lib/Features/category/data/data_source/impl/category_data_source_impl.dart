@@ -17,8 +17,7 @@ import '../category_data_source.dart';
 @Injectable(as: CategoryDataSource)
 class CategoryDataSourceImpl implements CategoryDataSource {
   @override
-  Future<Either<Failure, UserAndAdminModelDto>>
-      readUserOrAdminFromFireStore() async {
+  Future<Either<Failure, UserAndAdminModelDto>>readUserOrAdminFromFireStore() async {
     try {
       var connectivityResult = await Connectivity().checkConnectivity();
       if (connectivityResult.contains(ConnectivityResult.wifi) ||
@@ -133,6 +132,7 @@ class CategoryDataSourceImpl implements CategoryDataSource {
       if (connectivityResult.contains(ConnectivityResult.wifi) ||
           connectivityResult.contains(ConnectivityResult.mobile)) {
         var user = SharedPrefsLocal.getData(key: StringManager.keyUserAdmin);
+
         await FirebaseUtils.getUserCollection(user?.type ?? "")
             .doc(user?.id ?? "")
             .update({

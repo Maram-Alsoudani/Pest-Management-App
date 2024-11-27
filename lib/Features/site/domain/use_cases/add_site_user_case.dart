@@ -10,7 +10,7 @@ class AddSiteUserCase {
   AddSiteUserCase({required this.siteRepository});
 
   Future<Either<Failure, void>> invoke(
-      String siteName, String siteLocation ,String uId) {
-    return siteRepository.addSite(siteName, siteLocation, uId);
+      String siteName, String siteLocation ,String uId,String userNameSite) {
+    return siteRepository.addSite(siteName, siteLocation, uId,userNameSite);
   }
 }

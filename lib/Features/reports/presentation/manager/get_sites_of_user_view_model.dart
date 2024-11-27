@@ -76,10 +76,5 @@ class GetSitesOfUsersViewModel extends Cubit<GetSitesState> {
     }
   }
 
-  @override
-  Future<void> close() {
-    // TODO: implement close
 
-    return super.close();
-  }
 }

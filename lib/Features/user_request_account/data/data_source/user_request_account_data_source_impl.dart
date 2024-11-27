@@ -94,7 +94,7 @@ class UserRequestAccountDataSourceImpl implements UserRequestAccountDataSource {
         String body =
             "(${userRequestAccountDto.userName}) is Send Account Request to Admins Check Your Request Screen";
         List<UserAndAdminModelDto> adminList =
-            await FirebaseUtils.getAdminTokenFromFireStore();
+            await FirebaseUtils. getAdminOrUserTokenFromFireStore(UserAndAdminModelDto.admin);
         NotificationModel notificationModel = NotificationModel(
             route: RoutesManger.routeNameRequiest,
             title: title,

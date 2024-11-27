@@ -5,7 +5,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:injectable/injectable.dart';
 import 'package:pesticides/Core/errors/failures.dart';
 import 'package:pesticides/Core/utils/FCM.dart';
-
 import 'package:pesticides/Core/utils/firebase_utils.dart';
 import 'package:pesticides/Core/utils/strings.dart';
 import 'package:pesticides/Features/login/data/data_sources/login_data_source.dart';
@@ -15,11 +14,26 @@ import '../../../../Core/utils/SharedPrefsLocal.dart';
 
 @Injectable(as: LoginDataSource)
 class LoginDataSourceImpl implements LoginDataSource {
-  Future<void> editUserOrAdmin(
-      List<String> fcmToken, String userId, String type) async {
+  Future<void> editUserOrAdmin(List<String> fcmTokens, String userId,
+      String type) async {
     var taskCollection = FirebaseUtils.getUserCollection(type);
-    return taskCollection.doc(userId).update({
-      'fcmToken': FieldValue.arrayUnion(fcmToken),
+
+    var userDoc = await taskCollection.doc(userId).get();
+
+    List<dynamic> existingTokens = userDoc.data()?.fcmToken ?? [];
+
+    existingTokens = existingTokens.toSet().toList();
+
+    existingTokens.addAll(fcmTokens);
+
+    existingTokens = existingTokens.toSet().toList();
+
+    if (existingTokens.length > 4) {
+      existingTokens = existingTokens.sublist(existingTokens.length - 4);
+    }
+
+    await taskCollection.doc(userId).update({
+      'fcmToken': existingTokens,
     });
   }
 
@@ -40,15 +54,36 @@ class LoginDataSourceImpl implements LoginDataSource {
 
         var userCredential = await FirebaseAuth.instance
             .signInWithEmailAndPassword(email: email, password: password);
+
         var fcmToken = await FCM.getToken();
-        if (fcmToken != null) {
-          await editUserOrAdmin(
-              [fcmToken], userCredential.user!.uid, type ?? "");
+        if (fcmToken == null) {
+          return Left(
+              Failure(errorMessage: StringManager.failedToRetrieveToken));
         }
+
+        // get the current tokens
+        var userDoc = await collection.doc(userCredential.user!.uid).get();
+        List<dynamic> existingTokens = userDoc.data()?['fcmToken'] ?? [];
+
+        // check the devices number
+        if (existingTokens.length >= 4 && !existingTokens.contains(fcmToken)) {
+          return Left(Failure(errorMessage: StringManager.canNotLogin));
+        }
+
+        // update the FCM token
+        await editUserOrAdmin([fcmToken], userCredential.user!.uid, type ?? "");
+
         if (userCredential.user != null) {
           var userData = querySnapshot.docs.first.data();
           var user = UserAndAdminModelDto.fromFireStore(userData);
-          user.fcmToken = fcmToken != null ? [fcmToken] : [];
+
+          // add updated tokens to the user
+          user.fcmToken = await FirebaseFirestore.instance
+              .collection(type ?? '')
+              .doc(userCredential.user!.uid)
+              .get()
+              .then((doc) => List<String>.from(doc.data()?['fcmToken'] ?? []));
+
           SharedPrefsLocal.saveData(
               key: StringManager.keyUserAdmin, model: user);
 

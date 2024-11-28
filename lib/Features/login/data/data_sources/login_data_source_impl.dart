@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:dartz/dartz.dart';
@@ -14,8 +16,8 @@ import '../../../../Core/utils/SharedPrefsLocal.dart';
 
 @Injectable(as: LoginDataSource)
 class LoginDataSourceImpl implements LoginDataSource {
-  Future<void> editUserOrAdmin(List<String> fcmTokens, String userId,
-      String type) async {
+  Future<void> editUserOrAdmin(
+      List<String> fcmTokens, String userId, String type) async {
     var taskCollection = FirebaseUtils.getUserCollection(type);
 
     var userDoc = await taskCollection.doc(userId).get();
@@ -54,35 +56,41 @@ class LoginDataSourceImpl implements LoginDataSource {
 
         var userCredential = await FirebaseAuth.instance
             .signInWithEmailAndPassword(email: email, password: password);
+        if (Platform.isAndroid) {
+          var fcmToken = await FCM.getToken();
+          if (fcmToken == null) {
+            return Left(
+                Failure(errorMessage: StringManager.failedToRetrieveToken));
+          }
 
-        var fcmToken = await FCM.getToken();
-        if (fcmToken == null) {
-          return Left(
-              Failure(errorMessage: StringManager.failedToRetrieveToken));
+          // get the current tokens
+          var userDoc = await collection.doc(userCredential.user!.uid).get();
+          List<dynamic> existingTokens = userDoc.data()?['fcmToken'] ?? [];
+
+          // check the devices number
+          if (existingTokens.length >= 4 &&
+              !existingTokens.contains(fcmToken)) {
+            return Left(Failure(errorMessage: StringManager.canNotLogin));
+          }
+
+          // update the FCM token
+          await editUserOrAdmin(
+              [fcmToken], userCredential.user!.uid, type ?? "");
         }
-
-        // get the current tokens
-        var userDoc = await collection.doc(userCredential.user!.uid).get();
-        List<dynamic> existingTokens = userDoc.data()?['fcmToken'] ?? [];
-
-        // check the devices number
-        if (existingTokens.length >= 4 && !existingTokens.contains(fcmToken)) {
-          return Left(Failure(errorMessage: StringManager.canNotLogin));
-        }
-
-        // update the FCM token
-        await editUserOrAdmin([fcmToken], userCredential.user!.uid, type ?? "");
 
         if (userCredential.user != null) {
           var userData = querySnapshot.docs.first.data();
           var user = UserAndAdminModelDto.fromFireStore(userData);
 
-          // add updated tokens to the user
-          user.fcmToken = await FirebaseFirestore.instance
-              .collection(type ?? '')
-              .doc(userCredential.user!.uid)
-              .get()
-              .then((doc) => List<String>.from(doc.data()?['fcmToken'] ?? []));
+          if (Platform.isAndroid) {
+            // add updated tokens to the user
+            user.fcmToken = await FirebaseFirestore.instance
+                .collection(type ?? '')
+                .doc(userCredential.user!.uid)
+                .get()
+                .then(
+                    (doc) => List<String>.from(doc.data()?['fcmToken'] ?? []));
+          }
 
           SharedPrefsLocal.saveData(
               key: StringManager.keyUserAdmin, model: user);

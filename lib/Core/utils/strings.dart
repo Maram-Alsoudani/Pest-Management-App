@@ -122,4 +122,7 @@ class StringManager {
   static const String sentRequestSuccssfully = "Sent Request Successfully";
   static const String noReportFound = "No Report found for this site. ";
   static const String userIdRequired = "User ID is required";
+  static const String failedToRetrieveToken = "Failed to retrieve token.";
+  static const String canNotLogin =
+      "You can't login from more then 4 devices. Please log out from another device.";
 }

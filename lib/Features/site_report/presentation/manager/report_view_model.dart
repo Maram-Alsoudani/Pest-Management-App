@@ -5,6 +5,7 @@ import 'package:pesticides/Features/site_report/presentation/manager/report_stat
 import 'package:flutter/material.dart';
 import '../../../../Core/component/custom_dialog.dart';
 import '../../../../Core/utils/firebase_utils.dart';
+import '../../../../Core/utils/strings.dart';
 import '../../domain/entities/report_entity.dart';
 import '../../domain/use_cases/create_report_use_case.dart';
 import '../../domain/use_cases/fetch_reports_use_case.dart';
@@ -55,19 +56,36 @@ class ReportViewModel extends Cubit<ReportState> {
         emit(ReportError(failure.errorMessage));
         DialogUtils.showAlertDialog(
           context: context,
-          title: 'Error',
+          title: StringManager.error,
           message: failure.errorMessage,
-          posActionTitle: 'OK',
+          posActionTitle: StringManager.ok,
         );
       },
-      (_) {
+      (_) async {
+        // Subtract material quantities from inventory
+        for (var entry in _materials.entries) {
+          try {
+            await FirebaseUtils.updateMaterialQuantityByName(
+                entry.key, -entry.value);
+          } catch (e) {
+            print("Error updating material quantity for name ${entry.key}: $e");
+            DialogUtils.showAlertDialog(
+              context: context,
+              title: StringManager.error,
+              message:
+                  "Error updating material quantity for name ${entry.key}: $e",
+              posActionTitle: StringManager.ok,
+            );
+          }
+        }
+
         emit(ReportCreated());
         clearForm();
         DialogUtils.showAlertDialog(
           context: context,
-          title: 'Success',
-          message: 'Report submitted successfully.',
-          posActionTitle: 'OK',
+          title: StringManager.success,
+          message: StringManager.reportSubmittedSuccessfully,
+          posActionTitle: StringManager.ok,
           posAction: () {
             Navigator.popUntil(context,
                 ModalRoute.withName(RoutesManger.routeNameCategoryScreen));

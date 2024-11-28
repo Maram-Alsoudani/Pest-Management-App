@@ -27,8 +27,9 @@ class FirebaseUtils {
           toFirestore: (user, options) => user.toFireStore(),
         );
   }
-  static CollectionReference<UserRequestAccountDto> getUserRequestAccountCollection(
-      String name) {
+
+  static CollectionReference<UserRequestAccountDto>
+      getUserRequestAccountCollection(String name) {
     return FirebaseFirestore.instance
         .collection(name)
         .withConverter<UserRequestAccountDto>(
@@ -38,9 +39,12 @@ class FirebaseUtils {
           toFirestore: (user, options) => user.toFireStore(),
         );
   }
-  static Stream<QuerySnapshot<UserRequestAccountDto>> getRequestFromFireStore(){
-    return getUserRequestAccountCollection(UserRequestAccountDto.requests).orderBy("dateTime",descending: true ).snapshots();
 
+  static Stream<QuerySnapshot<UserRequestAccountDto>>
+      getRequestFromFireStore() {
+    return getUserRequestAccountCollection(UserRequestAccountDto.requests)
+        .orderBy("dateTime", descending: true)
+        .snapshots();
   }
 
   static CollectionReference<MaterailModelDto> getMaterailCollection() {
@@ -140,33 +144,6 @@ class FirebaseUtils {
     }
 
     return allSites;
-
-    /* List<SiteDto> allSites = [];
-    var userCollection = FirebaseUtils.getUserCollection('user');
-
-    // Step 1: Get all user documents
-    var usersSnapshot = await userCollection.get();
-
-    // Step 2: For each user, get sites from their subcollection
-    for (var userDoc in usersSnapshot.docs) {
-      var userId = userDoc.id;
-      var siteCollection = userDoc.reference
-          .collection(SiteEntity.collectionName)
-          .withConverter<SiteDto>(
-            fromFirestore: (snapshot, _) =>
-                SiteDto.fromFireStore(snapshot.data()!),
-            toFirestore: (site, _) => site.toFireStore(),
-          );
-
-      // Step 3: Retrieve all sites in this user's subcollection
-      var sitesSnapshot = await siteCollection.get();
-      var userSites = sitesSnapshot.docs.map((doc) => doc.data()).toList();
-
-      // Step 4: Add these sites to the allSites list
-      allSites.addAll(userSites);
-    }
-
-    return allSites;*/
   }
 
   static Future<List<SiteDto>> getUserSite(String uId) async {
@@ -200,16 +177,24 @@ class FirebaseUtils {
 
   //todo============*( MATERIALS FIREBASE )*=================
 
-  static Future<void> updateMaterialQuantity(
-      String materialId, int quantity) async {
+  static Future<void> updateMaterialQuantityByName(
+      String materialName, int change) async {
     var materialCollection = getMaterailCollection();
-    var materialDocRef = materialCollection.doc(materialId);
-    var materialSnapshot = await materialDocRef.get();
-    if (materialSnapshot.exists) {
-      var material = materialSnapshot.data()!;
-      material.quantity = (material.quantity ?? 0) + quantity;
-      await materialDocRef.set(material);
+    var querySnapshot =
+        await materialCollection.where('name', isEqualTo: materialName).get();
+    if (querySnapshot.docs.isEmpty) {
+      throw Exception("Material with name $materialName does not exist!");
     }
+    var materialDoc = querySnapshot.docs.first.reference;
+    await FirebaseFirestore.instance.runTransaction((transaction) async {
+      var snapshot = await transaction.get(materialDoc);
+      var newQuantity = (snapshot.data()!.quantity ?? 0) + change;
+      if (newQuantity < 0) {
+        throw Exception(
+            "Insufficient quantity for material with name $materialName!");
+      }
+      transaction.update(materialDoc, {'quantity': newQuantity});
+    });
   }
 
   //todo============*( delete Feature )*=================
@@ -222,7 +207,7 @@ class FirebaseUtils {
         .delete();
   }
 
-//todo============*( Chat Feature )*=================
+  //todo============*( Chat Feature )*=================
   static CollectionReference<MessageDto> getMessageCollection() {
     return FirebaseFirestore.instance
         .collection(MessageDto.messageCollection)
@@ -244,25 +229,29 @@ class FirebaseUtils {
     return await docRef.set(message);
   }
 
-  static CollectionReference<NotificationModel> getNotificationCollection(String type,String uid) {
-    return getUserCollection(type).doc(uid)
+  static CollectionReference<NotificationModel> getNotificationCollection(
+      String type, String uid) {
+    return getUserCollection(type)
+        .doc(uid)
         .collection(NotificationModel.notification)
         .withConverter<NotificationModel>(
-      fromFirestore: (snapshot, options) {
-        return NotificationModel.fromFireStore(snapshot.data()!);
-      },
-      toFirestore: (user, options) => user.toFireStore(),
-    );
+          fromFirestore: (snapshot, options) {
+            return NotificationModel.fromFireStore(snapshot.data()!);
+          },
+          toFirestore: (user, options) => user.toFireStore(),
+        );
   }
-  static Future<void> saveNotification(NotificationModel notification , String type,String uid) async {
+
+  static Future<void> saveNotification(
+      NotificationModel notification, String type, String uid) async {
     var notificationCollection = getNotificationCollection(type, uid);
     var docRef = notificationCollection.doc();
     notification.id = docRef.id;
     return await docRef.set(notification);
   }
 
-
-  static Future<List<UserAndAdminModelDto>> getAdminOrUserTokenFromFireStore(String type) async {
+  static Future<List<UserAndAdminModelDto>> getAdminOrUserTokenFromFireStore(
+      String type) async {
     var docSnapshot = await FirebaseUtils.getUserCollection(type).get();
     var data = docSnapshot.docs;
 
@@ -271,6 +260,4 @@ class FirebaseUtils {
     }).toList();
     return list;
   }
-
-
 }

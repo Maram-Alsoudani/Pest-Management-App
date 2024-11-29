@@ -146,15 +146,14 @@ class _SearchMaterialScreenState extends State<SearchMaterialUsageScreen>
                 final selectedQuantity = selectedQuantities[materialName] ?? 0;
 
                 return Padding(
-                  padding:
-                      EdgeInsets.symmetric(horizontal: 16.0.r, vertical: 4.0.r),
+                  padding: EdgeInsets.symmetric(horizontal: 8.0.r),
                   child: Card(
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16.0.r),
+                      borderRadius: BorderRadius.circular(22.0.r),
                     ),
                     elevation: 2,
                     child: ClipRRect(
-                      borderRadius: BorderRadius.circular(16.0.r),
+                      borderRadius: BorderRadius.circular(22.0.r),
                       child: Container(
                         color: availableQuantity == 0
                             ? ColorManager.greyShade4

@@ -125,4 +125,5 @@ class StringManager {
   static const String failedToRetrieveToken = "Failed to retrieve token.";
   static const String canNotLogin =
       "You can't login from more then 4 devices. Please log out from another device.";
+  static const String noResultsFound = "No results found";
 }

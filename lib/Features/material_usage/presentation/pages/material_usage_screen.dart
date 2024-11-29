@@ -68,10 +68,10 @@ class _MaterialUsageScreenState extends State<MaterialUsageScreen>
     super.initState();
 
     _animationController =
-        AnimationController(vsync: this, duration: Duration(seconds: 1));
+        AnimationController(vsync: this, duration: const Duration(seconds: 1));
 
     _slideAnimation =
-        Tween<Offset>(begin: Offset(-1.w, 0), end: Offset(0, 0)).animate(
+        Tween<Offset>(begin: Offset(-1.w, 0), end: const Offset(0, 0)).animate(
       CurvedAnimation(
         parent: _animationController,
         curve: Curves.easeInOut,
@@ -148,21 +148,20 @@ class _MaterialUsageScreenState extends State<MaterialUsageScreen>
                             endActionPane: ActionPane(
                               dragDismissible: false,
                               motion: const BehindMotion(),
-                              extentRatio: 0.25,
+                              extentRatio: 0.20,
                               children: [
                                 SlidableAction(
                                   onPressed: (context) {
                                     showDeleteConfirmationDialog(material);
                                   },
-                                  backgroundColor: ColorManager.redColor,
+                                  backgroundColor: ColorManager.primaryColor,
                                   foregroundColor: ColorManager.whiteColor,
                                   icon: Icons.delete,
-                                  label: StringManager.remove,
                                 ),
                               ],
                             ),
                             child: ListTile(
-                              leading: Icon(Icons.inventory,
+                              leading: const Icon(Icons.inventory,
                                   color: ColorManager.primaryColor),
                               title: Text(
                                 material,
@@ -187,7 +186,7 @@ class _MaterialUsageScreenState extends State<MaterialUsageScreen>
                                     maintainAnimation: true,
                                     maintainState: true,
                                     child: IconButton(
-                                      icon: Icon(Icons.remove_circle,
+                                      icon: const Icon(Icons.remove_circle,
                                           color: ColorManager.primaryColor),
                                       onPressed: () {
                                         updateQuantity(material, -1);
@@ -208,7 +207,7 @@ class _MaterialUsageScreenState extends State<MaterialUsageScreen>
                                     maintainAnimation: true,
                                     maintainState: true,
                                     child: IconButton(
-                                      icon: Icon(Icons.add_circle,
+                                      icon: const Icon(Icons.add_circle,
                                           color: ColorManager.primaryColor),
                                       onPressed: () {
                                         updateQuantity(material, 1);

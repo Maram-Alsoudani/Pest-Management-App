@@ -1,6 +1,3 @@
-import 'dart:io';
-import 'dart:typed_data';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -67,6 +64,19 @@ class _ReportOfSiteState extends State<ReportOfSite>
                 .titleSmall!
                 .copyWith(fontSize: 25.sp),
           ),
+          actions: [
+            IconButton(
+              icon: Icon(Icons.download),
+              onPressed: () async {
+                if (viewModel.state is GetReportOfSiteSuccessState) {
+                  final report =
+                      (viewModel.state as GetReportOfSiteSuccessState)
+                          .siteReport;
+                  await viewModel.generateAndDownloadPdf(report);
+                }
+              },
+            ),
+          ],
         ),
         body: BlocBuilder<ReportOfSiteViewModel, GetReportOfSiteState>(
           bloc: viewModel,
@@ -77,185 +87,205 @@ class _ReportOfSiteState extends State<ReportOfSite>
               inAsyncCall: viewModel.isLoading,
               progressIndicator: const Center(child: LottieLoadingWidget()),
               child: state is GetReportOfSiteSuccessState
-                  ? Container(
-                      width: 500.w,
-                      margin: EdgeInsets.all(15.r),
-                      padding: EdgeInsets.all(12.r),
-                      decoration: BoxDecoration(
-                        color: ColorManager.whiteColor,
-                        borderRadius: BorderRadius.circular(15.r),
-                      ),
-                      child: SingleChildScrollView(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            // Display Notes
-                            const SectionTitleWithDivider(
-                                title: StringManager.notes),
-                            SizedBox(height: 8.h),
-                            Text(
-                              state.siteReport.notes.isNotEmpty
-                                  ? state.siteReport.notes
-                                  : StringManager.noNotes,
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyMedium!
-                                  .copyWith(color: ColorManager.blackColor),
-                            ),
-                            SizedBox(height: 16.h),
+                  ? SingleChildScrollView(
+                      child: Padding(
+                        padding: EdgeInsets.all(15.r),
+                        child: Container(
+                          color: ColorManager.whiteColor,
+                          padding: EdgeInsets.all(12.r),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              // Display Notes
+                              const SectionTitleWithDivider(
+                                  title: StringManager.notes),
+                              SizedBox(height: 8.h),
+                              Text(
+                                state.siteReport.notes.isNotEmpty
+                                    ? state.siteReport.notes
+                                    : StringManager.noNotes,
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyMedium!
+                                    .copyWith(color: ColorManager.blackColor),
+                              ),
+                              SizedBox(height: 16.h),
 
-                            // Display Conditions
-                            const SectionTitleWithDivider(
-                                title: StringManager.conditions),
-                            SizedBox(height: 8.h),
-                            Text(
-                              state.siteReport.conditions.isNotEmpty
-                                  ? state.siteReport.conditions
-                                  : StringManager.noConditions,
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyMedium!
-                                  .copyWith(color: ColorManager.blackColor),
-                            ),
-                            SizedBox(height: 16.h),
+                              // Display Conditions
+                              const SectionTitleWithDivider(
+                                  title: StringManager.conditions),
+                              SizedBox(height: 8.h),
+                              Text(
+                                state.siteReport.conditions.isNotEmpty
+                                    ? state.siteReport.conditions
+                                    : StringManager.noConditions,
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyMedium!
+                                    .copyWith(color: ColorManager.blackColor),
+                              ),
+                              SizedBox(height: 16.h),
 
-                            // Display Recommendations
-                            MaterialUsagesAndRecommendtions(
-                              title: StringManager.recommendations,
-                              materials: state
-                                      .siteReport.recommendations.isNotEmpty
-                                  ? {
-                                      for (var item
-                                          in state.siteReport.recommendations)
-                                        item: 1
-                                    }
-                                  : {StringManager.noRecommendations: 0},
-                              opacity: viewModel.opacity,
-                              position: viewModel.slideAnimation,
-                            ),
-                            SizedBox(height: 16.h),
-
-                            // Display Material Usages
-                            MaterialUsagesAndRecommendtions(
-                              title: StringManager.materialUsages,
-                              materials:
-                                  state.siteReport.materialUsages.isNotEmpty
-                                      ? state.siteReport.materialUsages
-                                      : {StringManager.noMaterialUsages: 0},
-                              opacity: viewModel.opacity,
-                              position: viewModel.slideAnimation,
-                            ),
-                            SizedBox(height: 16.h),
-
-                            // Display Photos
-                            const SectionTitleWithDivider(
-                                title: StringManager.photos),
-                            SizedBox(height: 8.h),
-                            SizedBox(
-                              height: 80.h,
-                              child: SlideTransition(
+                              // Display Recommendations
+                              MaterialUsagesAndRecommendtions(
+                                title: StringManager.recommendations,
+                                materials: state
+                                        .siteReport.recommendations.isNotEmpty
+                                    ? {
+                                        for (var item
+                                            in state.siteReport.recommendations)
+                                          item: 1
+                                      }
+                                    : {StringManager.noRecommendations: 0},
+                                opacity: viewModel.opacity,
                                 position: viewModel.slideAnimation,
-                                child: state.siteReport.photos.isNotEmpty
-                                    ? ListView.builder(
-                                        scrollDirection: Axis.horizontal,
-                                        itemCount:
-                                            state.siteReport.photos.length,
-                                        itemBuilder: (context, index) {
-                                          return GestureDetector(
-                                            onTap: () => _viewImage(
-                                                state.siteReport.photos[index]),
-                                            child: Padding(
-                                              padding: EdgeInsets.symmetric(
-                                                  horizontal: 8.0.w),
-                                              child: ClipRRect(
-                                                borderRadius:
-                                                    BorderRadius.circular(8.r),
-                                                child: Container(
-                                                  width: 80.w,
-                                                  height: 80.h,
-                                                  decoration: BoxDecoration(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            8.r),
-                                                  ),
-                                                  child: CachedNetworkImage(
-                                                    imageUrl: state.siteReport
-                                                        .photos[index],
-                                                    placeholder: (context,
-                                                            url) =>
-                                                        const LottieLoadingWidget(),
-                                                    errorWidget: (context, url,
-                                                            error) =>
-                                                        const Icon(Icons.error),
-                                                    fit: BoxFit.cover,
+                              ),
+                              SizedBox(height: 16.h),
+
+                              // Display Material Usages
+                              MaterialUsagesAndRecommendtions(
+                                title: StringManager.materialUsages,
+                                materials:
+                                    state.siteReport.materialUsages.isNotEmpty
+                                        ? state.siteReport.materialUsages
+                                        : {StringManager.noMaterialUsages: 0},
+                                opacity: viewModel.opacity,
+                                position: viewModel.slideAnimation,
+                              ),
+                              SizedBox(height: 16.h),
+
+                              // Display Photos
+                              const SectionTitleWithDivider(
+                                  title: StringManager.photos),
+                              SizedBox(height: 8.h),
+                              SizedBox(
+                                height: 80.h,
+                                child: SlideTransition(
+                                  position: viewModel.slideAnimation,
+                                  child: state.siteReport.photos.isNotEmpty
+                                      ? ListView.builder(
+                                          scrollDirection: Axis.horizontal,
+                                          itemCount:
+                                              state.siteReport.photos.length,
+                                          itemBuilder: (context, index) {
+                                            final photoPath =
+                                                state.siteReport.photos[index];
+                                            return GestureDetector(
+                                              onTap: () =>
+                                                  _viewImage(photoPath),
+                                              child: Padding(
+                                                padding: EdgeInsets.symmetric(
+                                                    horizontal: 8.0.w),
+                                                child: ClipRRect(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          8.r),
+                                                  child: Container(
+                                                    width: 80.w,
+                                                    height: 80.h,
+                                                    decoration: BoxDecoration(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              8.r),
+                                                    ),
+                                                    child: CachedNetworkImage(
+                                                      imageUrl: photoPath,
+                                                      fit: BoxFit.cover,
+                                                      placeholder: (context,
+                                                              url) =>
+                                                          const LottieLoadingWidget(),
+                                                      errorWidget: (context,
+                                                              url, error) =>
+                                                          const Icon(
+                                                              Icons.error),
+                                                    ),
                                                   ),
                                                 ),
                                               ),
-                                            ),
-                                          );
-                                        },
-                                      )
-                                    : Center(
-                                        child: Text(
-                                          StringManager.noPhotos,
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .bodyMedium!
-                                              .copyWith(
-                                                  color:
-                                                      ColorManager.blackColor),
+                                            );
+                                          },
+                                        )
+                                      : Center(
+                                          child: Text(
+                                            StringManager.noPhotos,
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .bodyMedium!
+                                                .copyWith(
+                                                    color: ColorManager
+                                                        .blackColor),
+                                          ),
+                                        ),
+                                ),
+                              ),
+                              SizedBox(height: 16.h),
+
+                              // Display Devices
+                              DeviceWidget(
+                                opacity: viewModel.opacity,
+                                position: viewModel.slideAnimation,
+                              ),
+                              SizedBox(height: 16.h),
+
+                              // Display Signatures
+                              const SectionTitleWithDivider(
+                                  title: StringManager.signatures),
+                              SizedBox(height: 8.h),
+                              Wrap(
+                                spacing: 8.w,
+                                runSpacing: 8.h,
+                                children: state.siteReport.signatures
+                                    .map((signature) {
+                                  return GestureDetector(
+                                    onTap: () => _viewImage(signature),
+                                    child: Container(
+                                      width: 80.w,
+                                      height: 80.h,
+                                      decoration: BoxDecoration(
+                                        border: Border.all(
+                                            color: ColorManager.primaryColor),
+                                        borderRadius:
+                                            BorderRadius.circular(8.r),
+                                      ),
+                                      child: ClipRRect(
+                                        borderRadius:
+                                            BorderRadius.circular(8.r),
+                                        child: CachedNetworkImage(
+                                          imageUrl: signature,
+                                          fit: BoxFit.cover,
+                                          placeholder: (context, url) =>
+                                              const LottieLoadingWidget(),
+                                          errorWidget: (context, url, error) =>
+                                              const Icon(Icons.error),
                                         ),
                                       ),
+                                    ),
+                                  );
+                                }).toList(),
                               ),
-                            ),
-                            SizedBox(height: 16.h),
-
-                            // Display Devices
-                            DeviceWidget(
-                              opacity: viewModel.opacity,
-                              position: viewModel.slideAnimation,
-                            ),
-                            SizedBox(height: 16.h),
-
-                            // Display Signatures
-                            const SectionTitleWithDivider(
-                                title: StringManager.signatures),
-                            SizedBox(height: 8.h),
-                            Wrap(
-                              spacing: 8.w,
-                              runSpacing: 8.h,
-                              children:
-                                  state.siteReport.signatures.map((signature) {
-                                return GestureDetector(
-                                  onTap: () => _viewImage(signature),
-                                  child: Container(
-                                    width: 80.w,
-                                    height: 80.h,
-                                    decoration: BoxDecoration(
-                                      border: Border.all(
-                                          color: ColorManager.primaryColor),
-                                      borderRadius: BorderRadius.circular(8.r),
-                                    ),
-                                    child: ClipRRect(
-                                      borderRadius: BorderRadius.circular(8.r),
-                                      child: CachedNetworkImage(
-                                        imageUrl: signature,
-                                        placeholder: (context, url) =>
-                                            const LottieLoadingWidget(),
-                                        errorWidget: (context, url, error) =>
-                                            const Icon(Icons.error),
-                                        fit: BoxFit.cover,
-                                      ),
-                                    ),
-                                  ),
-                                );
-                              }).toList(),
-                            ),
-                          ],
+                              if (state.siteReport.signatures.isEmpty)
+                                Text(StringManager.signaturesRequired,
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodyMedium!
+                                        .copyWith(
+                                            color: ColorManager.redColor)),
+                            ],
+                          ),
                         ),
                       ),
                     )
-                  : Container(),
+                  : Center(
+                      child: Text(
+                        state is GetReportOfSiteErrorState
+                            ? state.errorMessage
+                            : StringManager.noReportFound,
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodyMedium!
+                            .copyWith(color: ColorManager.whiteColor),
+                      ),
+                    ),
             );
           },
         ),

@@ -1,11 +1,14 @@
 import 'dart:io';
+import 'dart:typed_data';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 import 'package:pesticides/Features/site_report/presentation/manager/report_state.dart';
 import 'package:flutter/material.dart';
+import 'package:printing/printing.dart';
 import '../../../../Core/component/custom_dialog.dart';
 import '../../../../Core/utils/firebase_utils.dart';
 import '../../../../Core/utils/strings.dart';
+import '../../../../Core/utils/pdf_utils.dart';
 import '../../domain/entities/report_entity.dart';
 import '../../domain/use_cases/create_report_use_case.dart';
 import '../../domain/use_cases/fetch_reports_use_case.dart';
@@ -93,6 +96,38 @@ class ReportViewModel extends Cubit<ReportState> {
         );
       },
     );
+  }
+
+  Future<void> generateAndDownloadPdf(ReportEntity report) async {
+    // Read photos and signatures as bytes
+    final photoBytes = await Future.wait(report.photos.map((path) async {
+      final file = File(path);
+      return await file.readAsBytes();
+    }).toList());
+
+    final signatureBytes =
+        await Future.wait(report.signatures.map((path) async {
+      final file = File(path);
+      return await file.readAsBytes();
+    }).toList());
+
+    // Generate PDF report
+    final pdfData = await PdfUtils.generatePdfReport(
+      title: report.siteName,
+      notes: report.notes,
+      conditions: report.conditions,
+      recommendations: report.recommendations,
+      materialUsages: report.materialUsages,
+      photos: photoBytes,
+      devices: report.devices,
+      signatures: signatureBytes,
+    );
+
+    // Generate PDF file name
+    final pdfFileName = PdfUtils.generatePdfFileName(report.siteName);
+
+    // Share or download the PDF
+    await Printing.sharePdf(bytes: pdfData, filename: pdfFileName);
   }
 
   void fetchReports(String userId) async {

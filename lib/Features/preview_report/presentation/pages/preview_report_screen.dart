@@ -150,13 +150,45 @@ class _PreviewReportScreenState extends State<PreviewReportScreen>
                   .titleSmall!
                   .copyWith(fontSize: 25.sp)),
           actions: [
-            Padding(
-              padding: EdgeInsets.all(15.r),
-              child: IconButton(
-                icon: const Icon(Icons.send, color: ColorManager.whiteColor),
-                onPressed: _submitReport,
-              ),
-            )
+            IconButton(
+              icon: Icon(Icons.download),
+              onPressed: () async {
+                final args = ModalRoute.of(context)?.settings.arguments
+                    as Map<String, dynamic>?;
+                final siteName = args?['siteName'] ?? StringManager.siteName;
+                final userId = args?['userId'] ?? StringManager.userIdRequired;
+                final siteId = args?['siteId'] ?? StringManager.siteName;
+
+                final report = ReportEntity(
+                  id: '',
+                  siteId: siteId,
+                  siteName: siteName,
+                  notes: reportViewModel.notes.isNotEmpty
+                      ? reportViewModel.notes
+                      : StringManager.noNotes,
+                  conditions: reportViewModel.conditions.isNotEmpty
+                      ? reportViewModel.conditions
+                      : StringManager.noConditions,
+                  recommendations: reportViewModel.recommendations.isNotEmpty
+                      ? reportViewModel.recommendations
+                      : [StringManager.noRecommendations],
+                  materialUsages: reportViewModel.materials.isNotEmpty
+                      ? reportViewModel.materials
+                      : {StringManager.noMaterialUsages: 0},
+                  photos: reportViewModel.photos.isNotEmpty
+                      ? reportViewModel.photos
+                      : [StringManager.noPhotos],
+                  devices: reportViewModel.devices.isNotEmpty
+                      ? reportViewModel.devices
+                      : [StringManager.noDevices],
+                  signatures: reportViewModel.signatures,
+                  userId: userId,
+                  createdAt: DateTime.now(),
+                );
+
+                await reportViewModel.generateAndDownloadPdf(report);
+              },
+            ),
           ],
         ),
         body: BlocConsumer<ReportViewModel, ReportState>(

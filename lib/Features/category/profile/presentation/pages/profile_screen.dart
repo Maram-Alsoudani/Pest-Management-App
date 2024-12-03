@@ -31,13 +31,14 @@ class ProfileScreen extends StatefulWidget {
   State<ProfileScreen> createState() => _ProfileScreenState();
 }
 
-class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProviderStateMixin {
+class _ProfileScreenState extends State<ProfileScreen>
+    with SingleTickerProviderStateMixin {
   @override
   void initState() {
     ProfileCubit.get(context).getUserData();
     ProfileCubit.get(context).doAnimation(this);
     ProfileCubit.get(context).getUser();
-    ProfileCubit.get(context).opacity=0.0;
+    ProfileCubit.get(context).opacity = 0.0;
 
     super.initState();
   }
@@ -53,16 +54,14 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
             message: state.error.errorMessage,
             posActionTitle: StringManager.ok,
           );
-        }else if (state is ProfileLogOutError) {
+        } else if (state is ProfileLogOutError) {
           DialogUtils.showAlertDialog(
             context: context,
             title: StringManager.failed,
             message: state.error.errorMessage,
             posActionTitle: StringManager.ok,
           );
-        }
-
-        else if (state is ProfileUpdateSuccess) {
+        } else if (state is ProfileUpdateSuccess) {
           DialogUtils.showAlertDialog(
             context: context,
             title: StringManager.success,
@@ -134,13 +133,15 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
                               ),
                               SizedBox(height: 35.h),
                               SlideTransition(
-                                position:ProfileCubit.get(context).slideAnimation ,
+                                position:
+                                    ProfileCubit.get(context).slideAnimation,
                                 child: Container(
                                   height:
                                       MediaQuery.of(context).size.height * 0.6,
                                   child: ListView(
                                     shrinkWrap: true,
-                                    physics: const NeverScrollableScrollPhysics(),
+                                    physics:
+                                        const NeverScrollableScrollPhysics(),
                                     children: [
                                       BuildInfoCard(
                                         title: StringManager.role,
@@ -184,23 +185,31 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
                                               }
                                             }),
                                       ),
-                                    ProfileCubit.get(context).user!.type==UserAndAdminModelDto.admin?
-                                      Padding(
-                                        padding: EdgeInsets.symmetric(
-                                            horizontal: 13.w, vertical: 2.h),
-                                        child: ButtonCustom(
-                                            buttonName: StringManager.addAccount,
-                                            onTap: () {
-                                              if (ProfileCubit.get(context)
-                                                  .fromKey
-                                                  .currentState!
-                                                  .validate()) {
-                                              Navigator.pushNamed(context, RoutesManger.routeNameRegister);
-                                              }
-                                            }),
-                                      ):SizedBox(
-                                      height: 10,
-                                    )
+                                      ProfileCubit.get(context).user!.type ==
+                                              UserAndAdminModelDto.admin
+                                          ? Padding(
+                                              padding: EdgeInsets.symmetric(
+                                                  horizontal: 13.w,
+                                                  vertical: 2.h),
+                                              child: ButtonCustom(
+                                                  buttonName:
+                                                      StringManager.addAccount,
+                                                  onTap: () {
+                                                    if (ProfileCubit.get(
+                                                            context)
+                                                        .fromKey
+                                                        .currentState!
+                                                        .validate()) {
+                                                      Navigator.pushNamed(
+                                                          context,
+                                                          RoutesManger
+                                                              .routeNameRegister);
+                                                    }
+                                                  }),
+                                            )
+                                          : SizedBox(
+                                              height: 10,
+                                            )
                                     ],
                                   ),
                                 ),
@@ -242,13 +251,10 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
                               posAction: () async {
                                 Navigator.pushNamedAndRemoveUntil(
                                   context,
-                                  RoutesManger.routeNameLogin,
+                                  RoutesManger.routeNameEngOwnerScreen,
                                   (route) => false,
                                 );
-                               await ProfileCubit.get(context).removeFcmUser();
-
-
-
+                                await ProfileCubit.get(context).removeFcmUser();
                               },
                             );
                           },

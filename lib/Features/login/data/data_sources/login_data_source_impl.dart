@@ -70,7 +70,7 @@ class LoginDataSourceImpl implements LoginDataSource {
           // check the devices number
           if (existingTokens.length >= 4 &&
               !existingTokens.contains(fcmToken)) {
-            return Left(Failure(errorMessage: StringManager.canNotLogin));
+            return Left(Failure(errorMessage: StringManager.cannotLogin));
           }
 
           // update the FCM token

@@ -89,7 +89,7 @@ class _ConditionsScreenState extends State<ConditionsScreen>
                   decoration: InputDecoration(
                     filled: true,
                     fillColor: ColorManager.whiteColor,
-                    hintText: StringManager.enter_conditions,
+                    hintText: StringManager.enterConditions,
                     hintStyle: Theme.of(context)
                         .textTheme
                         .titleMedium!

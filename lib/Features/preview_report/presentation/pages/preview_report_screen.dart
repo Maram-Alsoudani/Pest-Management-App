@@ -15,6 +15,8 @@ import '../../../site_report/presentation/widgets/lottie_send_loading.dart';
 import '../widgets/image_viewer_widget.dart';
 import '../widgets/title_divider_widget.dart';
 import '../../../../Core/component/custom_dialog.dart';
+import '../../../../Core/utils/SharedPrefsLocal.dart';
+import '../../../register/data/models/user_model_dto.dart';
 
 class PreviewReportScreen extends StatefulWidget {
   PreviewReportScreen({super.key});
@@ -107,6 +109,11 @@ class _PreviewReportScreenState extends State<PreviewReportScreen>
       return;
     }
 
+    // Get the current user's information
+    UserAndAdminModelDto? currentUser =
+        SharedPrefsLocal.getData(key: 'currentUser');
+    String createdBy = currentUser?.userName ?? 'Unknown User';
+
     final report = ReportEntity(
       id: '',
       siteId: siteId,
@@ -131,6 +138,7 @@ class _PreviewReportScreenState extends State<PreviewReportScreen>
           : [StringManager.noDevices],
       signatures: reportViewModel.signatures,
       userId: userId,
+      createdBy: createdBy,
       createdAt: DateTime.now(),
     );
 
@@ -159,6 +167,11 @@ class _PreviewReportScreenState extends State<PreviewReportScreen>
                 final userId = args?['userId'] ?? StringManager.userIdRequired;
                 final siteId = args?['siteId'] ?? StringManager.siteName;
 
+                // Get the current user's information
+                var createdBy =
+                    SharedPrefsLocal.getData(key: StringManager.keyUserAdmin)
+                        ?.userName;
+
                 final report = ReportEntity(
                   id: '',
                   siteId: siteId,
@@ -183,6 +196,7 @@ class _PreviewReportScreenState extends State<PreviewReportScreen>
                       : [StringManager.noDevices],
                   signatures: reportViewModel.signatures,
                   userId: userId,
+                  createdBy: createdBy ?? 'Unknown User',
                   createdAt: DateTime.now(),
                 );
 

@@ -89,7 +89,7 @@ class _NotesScreenState extends State<NotesScreen>
                   decoration: InputDecoration(
                     filled: true,
                     fillColor: ColorManager.whiteColor,
-                    hintText: StringManager.enter_notes,
+                    hintText: StringManager.enterNotes,
                     hintStyle: Theme.of(context)
                         .textTheme
                         .titleMedium!

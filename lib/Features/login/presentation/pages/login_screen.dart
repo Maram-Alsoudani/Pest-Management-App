@@ -113,11 +113,15 @@ class _LoginScreenState extends State<LoginScreen>
                                     opacity: viewModel.opacity,
                                     duration: Duration(seconds: 2),
                                     curve: Curves.easeIn,
-                                    child: Image.asset(
-                                      ImageManager.logoTeam,
-                                      height: 220.h,
-                                      width: 400.w,
-                                      fit: BoxFit.fill,
+                                    child: Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 26.0),
+                                      child: Image.asset(
+                                        ImageManager.logoTeam,
+                                        height: 200.h,
+                                        width: 180.w,
+                                        fit: BoxFit.contain,
+                                      ),
                                     ),
                                   ),
                                   SizedBox(height: 10.h),
@@ -139,10 +143,10 @@ class _LoginScreenState extends State<LoginScreen>
                                           children: [
                                             Text(
                                               type == null
-                                                  ? "Please choose a role to login"
+                                                  ? StringManager.selectUser
                                                   : (type == "admin"
-                                                      ? "Login as an $type"
-                                                      : "Login as a $type"),
+                                                      ? "${StringManager.login} as a ${StringManager.manager}"
+                                                      : "${StringManager.login} as an ${StringManager.eng}"),
                                               style: Theme.of(context)
                                                   .textTheme
                                                   .titleSmall!
@@ -158,7 +162,7 @@ class _LoginScreenState extends State<LoginScreen>
                                             if (type != null) ...[
                                               SizedBox(height: 8.h),
                                               Text(
-                                                "Change",
+                                                StringManager.change,
                                                 style: Theme.of(context)
                                                     .textTheme
                                                     .titleSmall!
@@ -181,7 +185,7 @@ class _LoginScreenState extends State<LoginScreen>
                                     position: viewModel.slideAnimation,
                                     child: CustomTextFormField(
                                       enable: type == null ? false : true,
-                                      hint: "Email",
+                                      hint: StringManager.email,
                                       validator: (val) =>
                                           AppValidators.validateEmail(val),
                                       controller: viewModel.emailController,
@@ -192,7 +196,7 @@ class _LoginScreenState extends State<LoginScreen>
                                     position: viewModel.slideAnimation,
                                     child: CustomTextFormField(
                                       enable: type == null ? false : true,
-                                      hint: "Password",
+                                      hint: StringManager.password,
                                       validator: (val) =>
                                           AppValidators.validatePassword(val),
                                       controller: viewModel.passwordController,
@@ -212,7 +216,7 @@ class _LoginScreenState extends State<LoginScreen>
                                                   .routeNameForgotPassScreen);
                                         },
                                         child: Text(
-                                          "Forgot Password?",
+                                          StringManager.forgotPass,
                                           style: Theme.of(context)
                                               .textTheme
                                               .titleSmall,
@@ -224,7 +228,7 @@ class _LoginScreenState extends State<LoginScreen>
                                   SlideTransition(
                                     position: viewModel.slideAnimation,
                                     child: ButtonCustom(
-                                      buttonName: "Login",
+                                      buttonName: StringManager.login,
                                       enable: type == null ? false : true,
                                       onTap: () {
                                         if (_loginFormKey.currentState!
@@ -232,7 +236,6 @@ class _LoginScreenState extends State<LoginScreen>
                                             true) {
                                           viewModel.login(type);
                                         }
-
                                       },
                                     ),
                                   ),
@@ -250,7 +253,7 @@ class _LoginScreenState extends State<LoginScreen>
                                                   .routeNameUserRequestAccount);
                                         },
                                         child: Text(
-                                          "User Request Account?",
+                                          StringManager.requestAccount,
                                           style: Theme.of(context)
                                               .textTheme
                                               .titleSmall,

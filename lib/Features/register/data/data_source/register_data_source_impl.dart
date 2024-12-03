@@ -20,14 +20,15 @@ class RegisterDataSourceImpl implements RegisterDataSource {
         .set(user);
   }
 
-   Future<void> handleNotification(UserAndAdminModelDto adminData,String userAdded) async {
+  Future<void> handleNotification(
+      UserAndAdminModelDto adminData, String userAdded) async {
     String title = "Add New Account";
-    String body = "Admin (${adminData.userName ?? ""}) is Added New Account To ($userAdded)";
+    String body =
+        "Admin (${adminData.userName ?? ""}) is Added New Account To ($userAdded)";
 
     List<UserAndAdminModelDto> adminList =
         await FirebaseUtils.getAdminOrUserTokenFromFireStore(
             UserAndAdminModelDto.admin);
-   
 
     NotificationModel notificationModel = NotificationModel(
         route: RoutesManger.routeNameChat,
@@ -49,8 +50,6 @@ class RegisterDataSourceImpl implements RegisterDataSource {
       await FirebaseUtils.saveNotification(
           notificationModel, UserAndAdminModelDto.admin, admin.id!);
     }
-
-   
   }
 
   @override
@@ -87,13 +86,11 @@ class RegisterDataSourceImpl implements RegisterDataSource {
           userName: userName,
           phone: phone,
           email: email);
-       await addUserFireStore(userAndAdminModelDto);
-          if(Platform.isAndroid){
-           var data=  SharedPrefsLocal.getData(key: StringManager.keyUserAdmin);
-           await handleNotification(data!,userName);
-         }
-
-
+      await addUserFireStore(userAndAdminModelDto);
+      if (Platform.isAndroid) {
+        var data = SharedPrefsLocal.getData(key: StringManager.keyUserAdmin);
+        await handleNotification(data!, userName);
+      }
 
       return Right(null);
     } on FirebaseAuthException catch (e) {
@@ -104,7 +101,7 @@ class RegisterDataSourceImpl implements RegisterDataSource {
       } else if (e.code == 'network-request-failed') {
         return Left(Failure(errorMessage: StringManager.networkError));
       } else {
-        return Left(Failure(errorMessage: StringManager.someThingWentWrong));
+        return Left(Failure(errorMessage: StringManager.somethingWentWrong));
       }
     } catch (e) {
       return Left(Failure(errorMessage: e.toString()));

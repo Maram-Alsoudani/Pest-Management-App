@@ -94,7 +94,8 @@ class UserRequestAccountDataSourceImpl implements UserRequestAccountDataSource {
         String body =
             "(${userRequestAccountDto.userName}) is Send Account Request to Admins Check Your Request Screen";
         List<UserAndAdminModelDto> adminList =
-            await FirebaseUtils. getAdminOrUserTokenFromFireStore(UserAndAdminModelDto.admin);
+            await FirebaseUtils.getAdminOrUserTokenFromFireStore(
+                UserAndAdminModelDto.admin);
         NotificationModel notificationModel = NotificationModel(
             route: RoutesManger.routeNameRequiest,
             title: title,
@@ -129,7 +130,7 @@ class UserRequestAccountDataSourceImpl implements UserRequestAccountDataSource {
       } else if (e.code == 'network-request-failed') {
         return Left(Failure(errorMessage: StringManager.networkError));
       } else {
-        return Left(Failure(errorMessage: StringManager.someThingWentWrong));
+        return Left(Failure(errorMessage: StringManager.somethingWentWrong));
       }
     } catch (e) {
       print(e.toString());

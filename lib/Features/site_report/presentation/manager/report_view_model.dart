@@ -4,11 +4,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 import 'package:pesticides/Features/site_report/presentation/manager/report_state.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 import 'package:printing/printing.dart';
 import '../../../../Core/component/custom_dialog.dart';
+import '../../../../Core/utils/SharedPrefsLocal.dart';
 import '../../../../Core/utils/firebase_utils.dart';
 import '../../../../Core/utils/strings.dart';
 import '../../../../Core/utils/pdf_utils.dart';
+import '../../../register/data/models/user_model_dto.dart';
 import '../../domain/entities/report_entity.dart';
 import '../../domain/use_cases/create_report_use_case.dart';
 import '../../domain/use_cases/fetch_reports_use_case.dart';
@@ -26,12 +29,17 @@ class ReportViewModel extends Cubit<ReportState> {
   List<String> _devices = [];
   List<String> _photos = [];
   List<String> _signatures = [];
+  String? userName;
 
   ReportViewModel(this.createReportUseCase, this.fetchReportsUseCase)
       : super(ReportInitial());
 
   Future<void> createReport(ReportEntity report, BuildContext context) async {
     emit(ReportLoading());
+
+    // Get the current user's information
+    userName =
+        SharedPrefsLocal.getData(key: StringManager.keyUserAdmin)?.userName;
 
     // Upload photos and signatures to Firebase Storage
     final photoUrls = await Future.wait(_photos.map((path) async {
@@ -51,6 +59,7 @@ class ReportViewModel extends Cubit<ReportState> {
     final updatedReport = report.copyWith(
       photos: nonNullPhotoUrls,
       signatures: nonNullSignatureUrls,
+      createdBy: userName,
     );
 
     final result = await createReportUseCase(updatedReport);
@@ -101,14 +110,20 @@ class ReportViewModel extends Cubit<ReportState> {
   Future<void> generateAndDownloadPdf(ReportEntity report) async {
     // Read photos and signatures as bytes
     final photoBytes = await Future.wait(report.photos.map((path) async {
-      final file = File(path);
-      return await file.readAsBytes();
+      if (path != 'No photos') {
+        final file = File(path);
+        return await file.readAsBytes();
+      }
+      return Uint8List(0);
     }).toList());
 
     final signatureBytes =
         await Future.wait(report.signatures.map((path) async {
-      final file = File(path);
-      return await file.readAsBytes();
+      if (path != 'No signatures') {
+        final file = File(path);
+        return await file.readAsBytes();
+      }
+      return Uint8List(0);
     }).toList());
 
     // Generate PDF report
@@ -118,9 +133,10 @@ class ReportViewModel extends Cubit<ReportState> {
       conditions: report.conditions,
       recommendations: report.recommendations,
       materialUsages: report.materialUsages,
-      photos: photoBytes,
+      photos: photoBytes.where((bytes) => bytes.isNotEmpty).toList(),
       devices: report.devices,
-      signatures: signatureBytes,
+      signatures: signatureBytes.where((bytes) => bytes.isNotEmpty).toList(),
+      submittedBy: report.createdBy,
     );
 
     // Generate PDF file name

@@ -27,7 +27,7 @@ class ImageProfile extends StatelessWidget {
         return FileImage(File(imageUrl!));
       }
     } else {
-      return const AssetImage(ImageManager.image_profile);
+      return const AssetImage(ImageManager.avatar);
     }
   }
 }

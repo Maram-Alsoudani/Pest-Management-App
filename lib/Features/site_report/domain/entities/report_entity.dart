@@ -10,6 +10,7 @@ class ReportEntity {
   final List<String> devices;
   final List<String> signatures;
   final String userId;
+  final String createdBy;
   final DateTime createdAt;
 
   ReportEntity({
@@ -24,6 +25,7 @@ class ReportEntity {
     this.devices = const ['No devices'],
     this.signatures = const ['No signatures'],
     required this.userId,
+    required this.createdBy,
     required this.createdAt,
   });
 
@@ -39,11 +41,13 @@ class ReportEntity {
     List<String>? devices,
     List<String>? signatures,
     String? userId,
+    String? createdBy,
     DateTime? createdAt,
   }) {
     return ReportEntity(
       id: id ?? this.id,
       siteName: siteName ?? this.siteName,
+      siteId: siteId ?? this.siteId,
       notes: notes ?? this.notes,
       conditions: conditions ?? this.conditions,
       recommendations: recommendations ?? this.recommendations,
@@ -52,8 +56,8 @@ class ReportEntity {
       devices: devices ?? this.devices,
       signatures: signatures ?? this.signatures,
       userId: userId ?? this.userId,
+      createdBy: createdBy ?? this.createdBy,
       createdAt: createdAt ?? this.createdAt,
-      siteId: siteId ?? this.siteId,
     );
   }
 }

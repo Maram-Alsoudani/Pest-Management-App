@@ -16,6 +16,8 @@ class AddPhotosScreen extends StatefulWidget {
 
 class _AddPhotosScreenState extends State<AddPhotosScreen> {
   List<File> images = [];
+  List<int> selectedIndices = [];
+  bool isMultiSelectMode = false;
   final ImagePicker _picker = ImagePicker();
 
   @override
@@ -78,6 +80,44 @@ class _AddPhotosScreenState extends State<AddPhotosScreen> {
     );
   }
 
+  void toggleSelection(int index) {
+    setState(() {
+      if (selectedIndices.contains(index)) {
+        selectedIndices.remove(index);
+      } else {
+        selectedIndices.add(index);
+      }
+      isMultiSelectMode = selectedIndices.isNotEmpty;
+    });
+  }
+
+  void deleteSelected() {
+    setState(() {
+      selectedIndices.sort((a, b) => b.compareTo(a));
+      for (var index in selectedIndices) {
+        images.removeAt(index);
+      }
+      selectedIndices.clear();
+      isMultiSelectMode = false;
+    });
+    final reportViewModel = context.read<ReportViewModel>();
+    reportViewModel.updatePhotos(images.map((e) => e.path).toList());
+  }
+
+  void selectAll() {
+    setState(() {
+      selectedIndices = List.generate(images.length, (index) => index);
+      isMultiSelectMode = true;
+    });
+  }
+
+  void clearAllSelected() {
+    setState(() {
+      selectedIndices.clear();
+      isMultiSelectMode = false;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final reportViewModel = context.read<ReportViewModel>();
@@ -86,19 +126,34 @@ class _AddPhotosScreenState extends State<AddPhotosScreen> {
       appBar: AppBar(
         surfaceTintColor: Colors.transparent,
         title: Text(
-          StringManager.addPhotos,
+          isMultiSelectMode
+              ? '${selectedIndices.length} Selected'
+              : StringManager.addPhotos,
           style:
               Theme.of(context).textTheme.titleSmall!.copyWith(fontSize: 25.sp),
         ),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.save, color: ColorManager.whiteColor),
-            onPressed: () {
-              reportViewModel.updatePhotos(images.map((e) => e.path).toList());
-              Navigator.pop(context);
-            },
-          ),
-        ],
+        actions: isMultiSelectMode
+            ? [
+                IconButton(icon: Icon(Icons.select_all), onPressed: selectAll),
+                IconButton(
+                  icon: Icon(Icons.delete),
+                  onPressed: deleteSelected,
+                ),
+                IconButton(
+                  icon: Icon(Icons.close),
+                  onPressed: clearAllSelected,
+                ),
+              ]
+            : [
+                IconButton(
+                  icon: const Icon(Icons.save, color: ColorManager.whiteColor),
+                  onPressed: () {
+                    reportViewModel
+                        .updatePhotos(images.map((e) => e.path).toList());
+                    Navigator.pop(context);
+                  },
+                ),
+              ],
       ),
       body: Padding(
         padding: EdgeInsets.all(16.0.r),
@@ -129,15 +184,35 @@ class _AddPhotosScreenState extends State<AddPhotosScreen> {
                       ),
                     );
                   } else {
+                    final isSelected = selectedIndices.contains(index);
                     return GestureDetector(
-                      onTap: () => _viewImage(images[index]),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(16.r),
-                        child: Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(16.r),
+                      onTap: () {
+                        if (isMultiSelectMode) {
+                          toggleSelection(index);
+                        } else {
+                          _viewImage(images[index]);
+                        }
+                      },
+                      onLongPress: () {
+                        toggleSelection(index);
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            color: isSelected
+                                ? ColorManager.primaryColor
+                                : Colors.transparent,
+                            width: 3,
                           ),
-                          child: Image.file(images[index], fit: BoxFit.cover),
+                          borderRadius: BorderRadius.circular(16.r),
+                        ),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(13
+                              .r), // Slightly smaller radius to ensure border visibility
+                          child: Image.file(
+                            images[index],
+                            fit: BoxFit.cover,
+                          ),
                         ),
                       ),
                     );

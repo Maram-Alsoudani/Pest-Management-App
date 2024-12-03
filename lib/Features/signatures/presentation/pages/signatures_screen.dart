@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:pesticides/Core/utils/colors.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:pesticides/Core/utils/strings.dart';
 import 'package:pesticides/Features/site_report/presentation/manager/report_view_model.dart';
 
 import 'signature_pad.dart';
@@ -61,18 +62,22 @@ class _SignaturesScreenState extends State<SignaturesScreen> {
       selectedIndices.clear();
       isMultiSelectMode = false;
     });
+    final reportViewModel = context.read<ReportViewModel>();
+    reportViewModel
+        .updateSignatures(signaturesList.map((e) => e.path).toList());
   }
 
   void selectAll() {
-    for (int i = 0; i <= signaturesList.length; i++) {
-      selectedIndices.add(i);
-    }
-    setState(() {});
+    setState(() {
+      selectedIndices = List.generate(signaturesList.length, (index) => index);
+      isMultiSelectMode = true;
+    });
   }
 
   void clearAllSelected() {
     setState(() {
       selectedIndices.clear();
+      isMultiSelectMode = false;
     });
   }
 
@@ -94,8 +99,8 @@ class _SignaturesScreenState extends State<SignaturesScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(isMultiSelectMode
-            ? '${selectedIndices.length} Selected'
-            : 'Signatures'),
+            ? '${selectedIndices.length} ${StringManager.selected}'
+            : StringManager.signatures),
         actions: isMultiSelectMode
             ? [
                 IconButton(icon: Icon(Icons.select_all), onPressed: selectAll),
@@ -122,7 +127,7 @@ class _SignaturesScreenState extends State<SignaturesScreen> {
       body: signaturesList.isEmpty
           ? Center(
               child: Text(
-                "No signatures added yet",
+                StringManager.noSignaturesAddedYet,
                 style: TextStyle(color: Colors.white),
                 textAlign: TextAlign.center,
               ),
@@ -153,7 +158,7 @@ class _SignaturesScreenState extends State<SignaturesScreen> {
                             : Colors.transparent,
                         width: 3,
                       ),
-                      borderRadius: BorderRadius.circular(8),
+                      borderRadius: BorderRadius.circular(30),
                     ),
                     child: Image.file(signaturesList[index]),
                   ),

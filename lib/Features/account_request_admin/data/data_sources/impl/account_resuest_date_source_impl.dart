@@ -34,7 +34,7 @@ class AccountRequestDataSourceImpl implements AccountRequestDataSource {
         return Left(Failure(errorMessage: StringManager.networkError));
       }
     } catch (e) {
-      return Left(Failure(errorMessage: StringManager.someThingWentWrong));
+      return Left(Failure(errorMessage: StringManager.somethingWentWrong));
     }
   }
 
@@ -88,7 +88,7 @@ class AccountRequestDataSourceImpl implements AccountRequestDataSource {
           connectivityResult.contains(ConnectivityResult.mobile)) {
         final credential =
             await FirebaseAuth.instance.createUserWithEmailAndPassword(
-          email: user.email!.trim()  ,
+          email: user.email!.trim(),
           password: user.password!.trim(),
         );
 
@@ -123,10 +123,10 @@ class AccountRequestDataSourceImpl implements AccountRequestDataSource {
       } else if (e.code == 'network-request-failed') {
         return Left(Failure(errorMessage: StringManager.networkError));
       } else {
-        return Left(Failure(errorMessage: StringManager.someThingWentWrong));
+        return Left(Failure(errorMessage: StringManager.somethingWentWrong));
       }
     } catch (e) {
-      return Left(Failure(errorMessage: StringManager.someThingWentWrong));
+      return Left(Failure(errorMessage: StringManager.somethingWentWrong));
     }
   }
 
@@ -135,26 +135,29 @@ class AccountRequestDataSourceImpl implements AccountRequestDataSource {
     String title = "Request Account Action";
     String body =
         "Admin (${adminData.userName ?? ""}) is $status Account Request to (${user.userName})";
-    List<UserAndAdminModelDto> adminList = await FirebaseUtils.getAdminOrUserTokenFromFireStore(UserAndAdminModelDto.admin);
+    List<UserAndAdminModelDto> adminList =
+        await FirebaseUtils.getAdminOrUserTokenFromFireStore(
+            UserAndAdminModelDto.admin);
     NotificationModel notificationModel = NotificationModel(
         route: RoutesManger.routeNameRequiest,
-        title: title, body: body, dateTime: DateTime.now(), to: "admin");
+        title: title,
+        body: body,
+        dateTime: DateTime.now(),
+        to: "admin");
 
     for (var admin in adminList) {
       if (admin.email == adminData.email) {
         continue;
       }
-      if(admin.fcmToken != null){
-        var tokens=admin.fcmToken;
-        for(var token in tokens!){
+      if (admin.fcmToken != null) {
+        var tokens = admin.fcmToken;
+        for (var token in tokens!) {
           await NotificationService.sendNotification(token, title, body);
         }
-
       }
-      await FirebaseUtils.saveNotification(notificationModel,UserAndAdminModelDto.admin,admin.id!);
+      await FirebaseUtils.saveNotification(
+          notificationModel, UserAndAdminModelDto.admin, admin.id!);
     }
-
-
   }
 
   @override
@@ -187,11 +190,11 @@ class AccountRequestDataSourceImpl implements AccountRequestDataSource {
       } else if (e.code == 'network-request-failed') {
         return Left(Failure(errorMessage: StringManager.networkError));
       } else {
-        return Left(Failure(errorMessage: StringManager.someThingWentWrong));
+        return Left(Failure(errorMessage: StringManager.somethingWentWrong));
       }
     } catch (e) {
       print(e.toString());
-      return Left(Failure(errorMessage: StringManager.someThingWentWrong));
+      return Left(Failure(errorMessage: StringManager.somethingWentWrong));
     }
   }
 
@@ -214,10 +217,10 @@ class AccountRequestDataSourceImpl implements AccountRequestDataSource {
       } else if (e.code == 'network-request-failed') {
         return Left(Failure(errorMessage: StringManager.networkError));
       } else {
-        return Left(Failure(errorMessage: StringManager.someThingWentWrong));
+        return Left(Failure(errorMessage: StringManager.somethingWentWrong));
       }
     } catch (e) {
-      return Left(Failure(errorMessage: StringManager.someThingWentWrong));
+      return Left(Failure(errorMessage: StringManager.somethingWentWrong));
     }
   }
 }

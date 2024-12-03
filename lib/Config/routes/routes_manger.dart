@@ -20,7 +20,7 @@ import '../../Features/photos/presentation/pages/add_photos_screen.dart';
 import '../../Features/recommendations/presentation/pages/recommendations_screen.dart';
 import '../../Features/signatures/presentation/pages/signatures_screen.dart';
 import '../../Features/device/presentation/pages/devcie_screen.dart';
-import '../../Features/eng_owner_screen/presentation/pages/eng_owner_screen.dart';
+import '../../Features/eng_manager_screen/presentation/pages/eng_manager_screen.dart';
 import '../../Features/inventory/presentation/pages/inventory_screen.dart';
 import '../../Features/login/presentation/pages/login_screen.dart';
 import '../../Features/inventory/presentation/pages/inventory_screen.dart';
@@ -32,12 +32,12 @@ import '../../Features/site/presentation/pages/sites_screen.dart';
 class RoutesManger {
   static Map<String, Widget Function(BuildContext)> route = {
     routeNameRegister: (context) => RegisterScreen(),
-    routeNameEngOwnerScreen: (context) => EngOwnerScreen(),
+    routeNameEngOwnerScreen: (context) => EngManagerScreen(),
     routeNameLogin: (context) => const LoginScreen(),
     routeNameCategoryScreen: (context) => const CategoryScreen(),
     routeNameSiteReportScreen: (context) => const SiteReportScreen(),
-    routeNameNotesScreen: (context) => NotesScreen(),
-    routeNameConditionsScreen: (context) => ConditionsScreen(),
+    routeNameNotesScreen: (context) => const NotesScreen(),
+    routeNameConditionsScreen: (context) => const ConditionsScreen(),
     routeNameSites: (context) => SitesScreen(),
     routeNameProfile: (context) => ProfileScreen(),
     routeNameMaterialUsageScreen: (context) => MaterialUsageScreen(),
@@ -53,8 +53,8 @@ class RoutesManger {
     routeNameSignature: (context) => SignaturesScreen(),
     routeNameChat: (context) => const ChatScreen(),
     routeNameRequiest: (context) => const RequestScreen(),
-    routeNameUserRequestAccount: (context) =>  UserRequestAccount(),
-    routeNameReportOfSiteScreen: (context) => ReportOfSite()
+    routeNameUserRequestAccount: (context) => UserRequestAccount(),
+    routeNameReportOfSiteScreen: (context) => const ReportOfSite()
   };
 
   static const String routeNameEngOwnerScreen = "EngOwnerScreen";

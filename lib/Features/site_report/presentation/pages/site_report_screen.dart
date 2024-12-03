@@ -57,6 +57,7 @@ class _SiteReportScreenState extends State<SiteReportScreen>
   String? siteName;
   String? siteId;
   String? userId;
+  String? userName;
 
   @override
   void initState() {
@@ -83,6 +84,9 @@ class _SiteReportScreenState extends State<SiteReportScreen>
 
     // Get the current user ID
     userId = SharedPrefsLocal.getData(key: StringManager.keyUserAdmin)?.id;
+    // Get the current user name
+    userName =
+        SharedPrefsLocal.getData(key: StringManager.keyUserAdmin)?.userName;
   }
 
   @override
@@ -160,13 +164,14 @@ class _SiteReportScreenState extends State<SiteReportScreen>
           : ['No devices'],
       signatures: reportViewModel.signatures,
       userId: userId!,
+      createdBy: userName!,
       createdAt: DateTime.now(),
     );
 
     await reportViewModel.createReport(report, context);
 
     // Clear the form after successful submission
-    reportViewModel.clearForm();
+    reportViewModel.close();
   }
 
   @override

@@ -1,16 +1,16 @@
 class StringManager {
   static const String addMaterial = "Add Material";
   static const String addPhotos = "Add Photos";
-  static const String already_have_an_account = "Already have an account?";
+  static const String alreadyHaveAnAccount = "Already have an account?";
   static const String badFormat = "The email address is badly formatted.";
   static const String cancel = "Cancel";
   static const String chooseFromGallery = "Choose from Gallery";
   static const String close = "Close";
-  static const String conditions = "CONDITIONS";
+  static const String conditions = "Conditions";
   static const String confirmPassword = "Confirm Password";
   static const String delete = "Delete";
   static const String device = "Device";
-  static const String deviceID = "DeviceID";
+  static const String deviceID = "Device ID";
   static const String deviceInspection = "Device Inspection";
   static const String deviceInspectionAddMaterial = "Add Material";
   static const String deviceInspectionAddPest = "Add Pest";
@@ -23,12 +23,12 @@ class StringManager {
   static const String deviceLastScanDate = "Date";
   static const String deviceLastScanTime = "Time";
   static const String deviceNewScan = "New Scan";
-  static const String devices = "DEVICES";
+  static const String devices = "Devices";
   static const String email = "Email";
   static const String enterEmailForResetPass =
       "Enter your email and we will send you a password reset link";
-  static const String enter_conditions = "Enter Conditions";
-  static const String enter_notes = "Enter Your Notes Here";
+  static const String enterConditions = "Enter Conditions";
+  static const String enterNotes = "Enter Your Notes Here";
   static const String enterQuantity = "Enter Quantity";
   static const String error = "Error";
   static const String errorOccurred = "An Error Occurred";
@@ -36,27 +36,27 @@ class StringManager {
   static const String errorTitle = "Error";
   static const String failed = "Failed";
   static const String failedToLogin = "Failed to login. Please try again.";
-  static const String forgotPass = "Forgot password";
+  static const String forgotPass = "Forgot Password";
   static const String inventory = "Inventory";
-  static const String invalidCredential = "invalid-credential";
-  static const String keyUserAdmin = "user_admin";
+  static const String invalidCredential = "Invalid Credential";
+  static const String keyUserAdmin = "User Admin";
   static const String login = "Login";
   static const String loginSuccessfully = "Login Successfully.";
   static const String logout = "Logout";
   static const String logoutMessage = "Are you sure you want to logout?";
-  static const String materialUsages = "MATERIAL USAGES";
+  static const String materialUsages = "Material Usages";
   static const String networkError = "Network connection is lost.";
-  static const String notes = "NOTES";
+  static const String notes = "Notes";
   static const String no = "No";
   static const String ok = "Ok";
   static const String password = "Password";
-  static const String passwordRestSuccessfully =
-      "Password Rest Successfully, Check your E-mail";
+  static const String passwordResetSuccessfully =
+      "Password Reset Successfully, Check your E-mail";
   static const String phone = "Phone";
-  static const String photos = "PHOTOS";
+  static const String photos = "Photos";
   static const String previewReport = "Preview Report";
   static const String profile = "Profile";
-  static const String recommendations = "RECOMMENDATIONS";
+  static const String recommendations = "Recommendations";
   static const String recommendationsScreenName = "Recommendations";
   static const String register = "Register";
   static const String registerSuccessfully = "Register Successfully.";
@@ -66,12 +66,12 @@ class StringManager {
   static const String searchHint = "Search";
   static const String searchMaterial = "Search Material";
   static const String send = "Send";
-  static const String signatures = "SIGNATURES";
+  static const String signatures = "Signatures";
   static const String sites = "Sites";
   static const String submit = "Submit";
   static const String success = "Success";
   static const String takePhoto = "Take a Photo";
-  static const String userName = "UserName";
+  static const String userName = "Username";
   static const String userNotFound =
       "User not found. Please register and choose the right user type for you.";
   static const String wrongPassword = "Wrong password provided for that user.";
@@ -79,15 +79,14 @@ class StringManager {
   static const String yes = "Yes";
   static const String editProfile = "Edit Profile";
   static const String edit = "Edit";
-  static const String siteAddSuccessfully = "Site Add Successfully";
+  static const String siteAddSuccessfully = "Site Added Successfully";
   static const String siteLocation = "Site Location:";
-  static const String selectUser = "Select User";
+  static const String selectUser = "Please choose a role to login";
   static const String reportsSubmittedBy = "Reports submitted by:";
   static const String somethingWentWrong = "Something went wrong";
-  static const String view = "View  ";
+  static const String view = "View";
   static const String noUsersFound = "No Users Found";
   static const String noSitesFound = 'No sites found.';
-
   static const String noMaterialFound = 'No material found';
   static const String updateSuccessfully = "Updated Successfully";
   static const String deletedSuccessfully = "Deleted Successfully";
@@ -95,21 +94,20 @@ class StringManager {
   static const String siteDeleteSuccessfully = "Site Deleted Successfully";
   static const String savedSuccessfully = "Saved Successfully";
   static const String add = "Add";
-  static const String someThingWentWrong = "Some Thing Went Wrong";
-  static const String emailAlreadyInUse = "Email Already InUse";
+  static const String emailAlreadyInUse = "Email Already In Use";
   static const String addSite = "Add Site";
   static const String siteName = "Site Name";
-  static const String requiredField = "This filed is required";
+  static const String requiredField = "This field is required";
   static const String siteReports = "Site Reports";
   static const String reportSubmittedSuccessfully =
       "Report submitted successfully";
-  static const String noNotes = "no notes";
-  static const String noConditions = "no conditions";
-  static const String noRecommendations = "no recommendations";
-  static const String noMaterialUsages = "no material usages";
-  static const String noPhotos = "no photos";
+  static const String noNotes = "No notes";
+  static const String noConditions = "No conditions";
+  static const String noRecommendations = "No recommendations";
+  static const String noMaterialUsages = "No material usages";
+  static const String noPhotos = "No photos";
   static const String signaturesRequired = "Signatures are required";
-  static const String noDevices = "no devices";
+  static const String noDevices = "No devices";
   static const String reports = "Reports";
   static const String addAccount = "Add Account";
   static const String theCompanyGroup = "The Company Group";
@@ -119,11 +117,16 @@ class StringManager {
   static const String decline = "Decline";
   static const String accountRequests = "Account Requests";
   static const String requestAccount = "Request Account";
-  static const String sentRequestSuccssfully = "Sent Request Successfully";
-  static const String noReportFound = "No Report found for this site. ";
+  static const String sentRequestSuccessfully = "Sent Request Successfully";
+  static const String noReportFound = "No Report found for this site.";
   static const String userIdRequired = "User ID is required";
   static const String failedToRetrieveToken = "Failed to retrieve token.";
-  static const String canNotLogin =
-      "You can't login from more then 4 devices. Please log out from another device.";
+  static const String cannotLogin =
+      "You can't login from more than 4 devices. Please log out from another device.";
   static const String noResultsFound = "No results found";
+  static const String manager = "Manager";
+  static const String eng = "Engineer";
+  static const String change = "Change";
+  static const String selected = "Selected";
+  static const String noSignaturesAddedYet = "No signatures added yet";
 }

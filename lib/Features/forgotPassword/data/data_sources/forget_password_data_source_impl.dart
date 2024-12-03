@@ -23,14 +23,12 @@ class ForgetPasswordDataSourceImpl implements ForgetPasswordDataSource {
           return Left(Failure(errorMessage: StringManager.errorOccurred));
         }
         if (e.code == 'invalid-email') {
-          return Left(
-              Failure(errorMessage: StringManager.badFormat));
+          return Left(Failure(errorMessage: StringManager.badFormat));
         }
-        return Left(Failure(errorMessage: StringManager.someThingWentWrong));
+        return Left(Failure(errorMessage: StringManager.somethingWentWrong));
       }
     } else {
-      return Left(NetworkFailure(
-          errorMessage: StringManager.networkError));
+      return Left(NetworkFailure(errorMessage: StringManager.networkError));
     }
   }
 }

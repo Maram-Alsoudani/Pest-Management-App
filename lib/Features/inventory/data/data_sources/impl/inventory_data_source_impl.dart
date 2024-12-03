@@ -87,9 +87,6 @@ class InventoryDataSourceImpl implements InventoryDataSource {
     }
   }
 
-
-
-
   @override
   Future<Either<Failure, void>> addedMaterail(MaterailEntity materail) async {
     try {
@@ -99,16 +96,16 @@ class InventoryDataSourceImpl implements InventoryDataSource {
         MaterailModelDto materails =
             MaterailModelDto(name: materail.name, quantity: materail.quantity);
         await addMaterailsFireStore(materails);
-       if(Platform.isAndroid){
-         var admin = SharedPrefsLocal.getData(key: StringManager.keyUserAdmin);
-        await handleNotification(admin!);
-       }
+        if (Platform.isAndroid) {
+          var admin = SharedPrefsLocal.getData(key: StringManager.keyUserAdmin);
+          await handleNotification(admin!);
+        }
         return const Right(null);
       } else {
         return Left(Failure(errorMessage: StringManager.networkError));
       }
     } catch (e) {
-      return Left(Failure(errorMessage: StringManager.someThingWentWrong));
+      return Left(Failure(errorMessage: StringManager.somethingWentWrong));
     }
   }
 
@@ -125,7 +122,7 @@ class InventoryDataSourceImpl implements InventoryDataSource {
       }
     } catch (e) {
       print(e);
-      return Left(Failure(errorMessage: StringManager.someThingWentWrong));
+      return Left(Failure(errorMessage: StringManager.somethingWentWrong));
     }
   }
 
@@ -143,7 +140,7 @@ class InventoryDataSourceImpl implements InventoryDataSource {
         return Left(Failure(errorMessage: StringManager.networkError));
       }
     } catch (e) {
-      return Left(Failure(errorMessage: StringManager.someThingWentWrong));
+      return Left(Failure(errorMessage: StringManager.somethingWentWrong));
     }
   }
 
@@ -164,7 +161,7 @@ class InventoryDataSourceImpl implements InventoryDataSource {
         return Left(Failure(errorMessage: StringManager.networkError));
       }
     } catch (e) {
-      return Left(Failure(errorMessage: StringManager.someThingWentWrong));
+      return Left(Failure(errorMessage: StringManager.somethingWentWrong));
     }
   }
 }

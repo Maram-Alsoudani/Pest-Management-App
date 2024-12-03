@@ -15,28 +15,30 @@ import 'package:pesticides/Features/chat/data/data_sources/chat_data_source.dart
 import 'package:pesticides/Features/chat/data/models/message_dto.dart';
 import 'package:pesticides/Features/chat/domain/entities/message_entity.dart';
 import 'package:pesticides/Features/register/data/models/user_model_dto.dart';
+
 @Injectable(as: ChatDataSource)
-class ChatDataSourceImpl implements ChatDataSource{
+class ChatDataSourceImpl implements ChatDataSource {
   @override
-  Future<Either<Failure, Stream<QuerySnapshot<MessageDto>>>> getMessage()async {
+  Future<Either<Failure, Stream<QuerySnapshot<MessageDto>>>>
+      getMessage() async {
     try {
       var connectivityResult = await Connectivity().checkConnectivity();
       if (connectivityResult.contains(ConnectivityResult.wifi) ||
           connectivityResult.contains(ConnectivityResult.mobile)) {
+        Stream<QuerySnapshot<MessageDto>> streamMessage =
+            FirebaseUtils.getMessageFromFireStore();
 
-         Stream<QuerySnapshot<MessageDto>> streamMessage= FirebaseUtils.getMessageFromFireStore();
-
-         return Right(streamMessage);
+        return Right(streamMessage);
       } else {
         return Left(Failure(errorMessage: StringManager.networkError));
       }
     } catch (e) {
-      return Left(Failure(errorMessage: StringManager.someThingWentWrong));
+      return Left(Failure(errorMessage: StringManager.somethingWentWrong));
     }
   }
 
-
-   Future<void> handleNotification(UserAndAdminModelDto adminData,String bodyMessage) async {
+  Future<void> handleNotification(
+      UserAndAdminModelDto adminData, String bodyMessage) async {
     String title = "${adminData.userName ?? ""}";
     String body = "$bodyMessage";
 
@@ -83,30 +85,24 @@ class ChatDataSourceImpl implements ChatDataSource{
     }
   }
 
-
-
-
   @override
-  Future<Either<Failure, void>> sendMessage(MessageDto message) async{
+  Future<Either<Failure, void>> sendMessage(MessageDto message) async {
     try {
       var connectivityResult = await Connectivity().checkConnectivity();
       if (connectivityResult.contains(ConnectivityResult.wifi) ||
           connectivityResult.contains(ConnectivityResult.mobile)) {
+        var result = await FirebaseUtils.insertMessage(message);
+        if (Platform.isAndroid) {
+          var data = SharedPrefsLocal.getData(key: StringManager.keyUserAdmin);
+          await handleNotification(data!, message.content);
+        }
 
-
-    var result = await FirebaseUtils.insertMessage(message);
-    if(Platform.isAndroid){
-    var data=SharedPrefsLocal.getData(key: StringManager.keyUserAdmin);
-    await handleNotification(data!, message.content);
-
-    }
-
-      return Right(null);
+        return Right(null);
       } else {
         return Left(Failure(errorMessage: StringManager.networkError));
       }
     } catch (e) {
-      return Left(Failure(errorMessage: StringManager.someThingWentWrong));
+      return Left(Failure(errorMessage: StringManager.somethingWentWrong));
     }
   }
 }

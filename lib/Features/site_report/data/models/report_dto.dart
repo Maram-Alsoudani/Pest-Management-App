@@ -9,11 +9,12 @@ class ReportModel extends ReportEntity {
     super.notes = 'No notes',
     super.conditions = 'No conditions',
     super.recommendations = const ['No recommendations'],
-    super.materialUsages = const {'No material usages': 0}, // Default value
+    super.materialUsages = const {'No material usages': 0},
     super.photos = const ['No photos'],
     super.devices = const ['No devices'],
     super.signatures = const ['No signatures'],
     required super.userId,
+    required super.createdBy,
     required super.createdAt,
   });
 
@@ -32,6 +33,7 @@ class ReportModel extends ReportEntity {
       devices: List<String>.from(json['devices'] ?? ['No devices']),
       signatures: List<String>.from(json['signatures'] ?? ['No signatures']),
       userId: json['userId'] ?? '',
+      createdBy: json['createdBy'] ?? 'Unknown',
       createdAt: (json['createdAt'] as Timestamp).toDate(),
     );
   }
@@ -49,6 +51,7 @@ class ReportModel extends ReportEntity {
       'devices': devices,
       'signatures': signatures,
       'userId': userId,
+      'createdBy': createdBy,
       'createdAt': createdAt,
     };
   }

@@ -32,6 +32,7 @@ class ReportRepositoryImpl implements ReportRepository {
       signatures:
           report.signatures.isNotEmpty ? report.signatures : ['No signatures'],
       userId: report.userId,
+      createdBy: report.createdBy,
       createdAt: report.createdAt,
     ));
   }
@@ -55,6 +56,7 @@ class ReportRepositoryImpl implements ReportRepository {
                 devices: report.devices,
                 signatures: report.signatures,
                 userId: report.userId,
+                createdBy: report.createdBy,
                 createdAt: report.createdAt,
               ))
           .toList()),

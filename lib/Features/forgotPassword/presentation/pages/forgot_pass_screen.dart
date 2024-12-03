@@ -25,7 +25,6 @@ class ForgotPassScreen extends StatefulWidget {
 
 class _ForgotPassScreenState extends State<ForgotPassScreen>
     with SingleTickerProviderStateMixin {
-
   @override
   void initState() {
     super.initState();
@@ -35,7 +34,7 @@ class _ForgotPassScreenState extends State<ForgotPassScreen>
 
   @override
   Widget build(BuildContext context) {
-    ForgetPasswordViewModel.get(context).opacity=0.0;
+    ForgetPasswordViewModel.get(context).opacity = 0.0;
     return BlocConsumer<ForgetPasswordViewModel, ForgetPasswordState>(
       listener: (context, state) {
         if (state is ForgetPasswordErrorState) {
@@ -48,7 +47,7 @@ class _ForgotPassScreenState extends State<ForgotPassScreen>
           DialogUtils.showAlertDialog(
               context: context,
               title: StringManager.success,
-              message: StringManager.passwordRestSuccessfully,
+              message: StringManager.passwordResetSuccessfully,
               posActionTitle: StringManager.ok);
         }
       },
@@ -68,15 +67,16 @@ class _ForgotPassScreenState extends State<ForgotPassScreen>
             ModalProgressHUD(
               opacity: 0.4,
               color: ColorManager.greyShade3,
-              inAsyncCall:  ForgetPasswordViewModel.get(context).isLoading,
+              inAsyncCall: ForgetPasswordViewModel.get(context).isLoading,
               progressIndicator: const LottieLoadingWidget(),
               child: Scaffold(
                 backgroundColor: Colors.transparent,
                 appBar: AppBar(
-                  backgroundColor:Colors.transparent,
+                  backgroundColor: Colors.transparent,
                 ),
                 body: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 30),
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 20.0, vertical: 30),
                   child: SingleChildScrollView(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -97,7 +97,8 @@ class _ForgotPassScreenState extends State<ForgotPassScreen>
                                     .textTheme
                                     .titleLarge!
                                     .copyWith(
-                                        color: ColorManager.whiteColor, fontSize: 30),
+                                        color: ColorManager.whiteColor,
+                                        fontSize: 30),
                               ),
                               SizedBox(
                                 height: 15,
@@ -116,8 +117,8 @@ class _ForgotPassScreenState extends State<ForgotPassScreen>
                           height: 80.h,
                         ),
                         SlideTransition(
-                          position:
-                              ForgetPasswordViewModel.get(context).slideAnimation,
+                          position: ForgetPasswordViewModel.get(context)
+                              .slideAnimation,
                           child: Form(
                             key: ForgetPasswordViewModel.get(context)
                                 .forgetPasswordFormKey,
@@ -125,14 +126,15 @@ class _ForgotPassScreenState extends State<ForgotPassScreen>
                               crossAxisAlignment: CrossAxisAlignment.stretch,
                               children: [
                                 Padding(
-                                    padding:
-                                        const EdgeInsets.symmetric(vertical: 8.0),
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 8.0),
                                     child: CustomTextFormField(
                                       hint: StringManager.email,
                                       validator: (val) =>
                                           AppValidators.validateEmail(val),
-                                      controller: ForgetPasswordViewModel.get(context)
-                                          .emailController,
+                                      controller:
+                                          ForgetPasswordViewModel.get(context)
+                                              .emailController,
                                     )),
                                 ButtonCustom(
                                   buttonName: StringManager.send,
@@ -163,7 +165,7 @@ class _ForgotPassScreenState extends State<ForgotPassScreen>
                                 Navigator.pop(context);
                               },
                               child: Text(
-                                  "${StringManager.already_have_an_account} ${StringManager.login} ",
+                                  "${StringManager.alreadyHaveAnAccount} ${StringManager.login} ",
                                   style: Theme.of(context)
                                       .textTheme
                                       .titleSmall!

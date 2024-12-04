@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
-import 'package:pesticides/Features/register/domain/entities/user_model_entity.dart';
-import 'package:pesticides/Features/reports/domain/use_cases/get_users_use_case.dart';
+import 'package:bug_away/Features/register/domain/entities/user_model_entity.dart';
+import 'package:bug_away/Features/reports/domain/use_cases/get_users_use_case.dart';
 
 import 'get_all_users_states.dart';
 

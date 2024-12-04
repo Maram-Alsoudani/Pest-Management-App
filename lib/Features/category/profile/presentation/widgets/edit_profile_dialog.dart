@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:pesticides/Features/category/profile/presentation/manager/profile_cubit.dart';
+import 'package:bug_away/Features/category/profile/presentation/manager/profile_cubit.dart';
 
 import '../../../../../Core/component/button_custom.dart';
 import '../../../../../Core/component/text_feild_custom.dart';

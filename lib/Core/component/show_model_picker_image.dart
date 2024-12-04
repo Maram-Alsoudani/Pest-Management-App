@@ -2,8 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:pesticides/Core/utils/colors.dart';
-import 'package:pesticides/Core/utils/strings.dart';
+import 'package:bug_away/Core/utils/colors.dart';
+import 'package:bug_away/Core/utils/strings.dart';
 import 'dart:io' show Platform;
 
 class ShowModelPickerImage extends StatefulWidget {

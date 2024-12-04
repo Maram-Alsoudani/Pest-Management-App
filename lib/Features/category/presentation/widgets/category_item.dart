@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:pesticides/Core/utils/colors.dart';
-import 'package:pesticides/Features/category/data/models/category_model.dart';
+import 'package:bug_away/Core/utils/colors.dart';
+import 'package:bug_away/Features/category/data/models/category_model.dart';
 import '../../../../Core/utils/images.dart';
 import '../../../../Core/utils/font_manager.dart';
 

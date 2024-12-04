@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
-import 'package:pesticides/Core/utils/colors.dart';
-import 'package:pesticides/Features/register/data/models/user_model_dto.dart';
-import 'package:pesticides/Features/site/presentation/manager/site_state.dart';
-import 'package:pesticides/Features/site/presentation/manager/site_view_model.dart';
+import 'package:bug_away/Core/utils/colors.dart';
+import 'package:bug_away/Features/register/data/models/user_model_dto.dart';
+import 'package:bug_away/Features/site/presentation/manager/site_state.dart';
+import 'package:bug_away/Features/site/presentation/manager/site_view_model.dart';
 
 import '../../../../Core/component/custom_dialog.dart';
 import '../../../../Core/component/lottie_loading_widget.dart';

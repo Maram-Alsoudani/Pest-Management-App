@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
-import 'package:pesticides/Features/reports/presentation/manager/get_report_of_site_states.dart';
-import 'package:pesticides/Features/reports/presentation/manager/report_of_site_view_model.dart';
+import 'package:bug_away/Features/reports/presentation/manager/get_report_of_site_states.dart';
+import 'package:bug_away/Features/reports/presentation/manager/report_of_site_view_model.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
 import '../../../../Core/component/lottie_loading_widget.dart';

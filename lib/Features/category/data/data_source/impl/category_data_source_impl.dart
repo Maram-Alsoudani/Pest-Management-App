@@ -5,9 +5,9 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:dartz/dartz.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:injectable/injectable.dart';
-import 'package:pesticides/Core/utils/SharedPrefsLocal.dart';
-import 'package:pesticides/Core/utils/firebase_utils.dart';
-import 'package:pesticides/Features/register/domain/entities/user_model_entity.dart';
+import 'package:bug_away/Core/utils/SharedPrefsLocal.dart';
+import 'package:bug_away/Core/utils/firebase_utils.dart';
+import 'package:bug_away/Features/register/domain/entities/user_model_entity.dart';
 
 import '../../../../../Core/errors/failures.dart';
 import '../../../../../core/utils/strings.dart';

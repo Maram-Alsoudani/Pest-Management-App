@@ -1,6 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:injectable/injectable.dart';
-import 'package:pesticides/Core/errors/failures.dart';
+import 'package:bug_away/Core/errors/failures.dart';
 
 import '../../domain/entities/site_entity.dart';
 import '../../domain/repositories/get_sites_of_user_repo.dart';

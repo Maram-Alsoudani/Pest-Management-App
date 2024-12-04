@@ -1,11 +1,12 @@
 import 'package:dartz/dartz.dart';
-import 'package:pesticides/Core/errors/failures.dart';
+import 'package:bug_away/Core/errors/failures.dart';
 
 import '../entities/materail_enitiy.dart';
 
-abstract class InventoryRepo{
+abstract class InventoryRepo {
   Future<Either<Failure, void>> addedMaterail(MaterailEntity materail);
   Future<Either<Failure, List<MaterailEntity>>> fetchMaterialsList();
-  Future<Either<Failure, void>> deleteMaterail( String key);
-  Future<Either<Failure, void>> updateMaterail(String id,String name, int quantity);
+  Future<Either<Failure, void>> deleteMaterail(String key);
+  Future<Either<Failure, void>> updateMaterail(
+      String id, String name, int quantity);
 }

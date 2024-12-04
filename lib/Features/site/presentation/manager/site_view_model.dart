@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
-import 'package:pesticides/Features/register/domain/entities/user_model_entity.dart';
-import 'package:pesticides/Features/site/presentation/manager/site_state.dart';
+import 'package:bug_away/Features/register/domain/entities/user_model_entity.dart';
+import 'package:bug_away/Features/site/presentation/manager/site_state.dart';
 
 import '../../../../Core/utils/SharedPrefsLocal.dart';
 import '../../../../Core/utils/strings.dart';
@@ -55,8 +55,11 @@ class SiteViewModel extends Cubit<SiteState> {
   //todo  ================= Add site to fire base =================
   void addSite() async {
     emit(AddSiteLoadingState());
-    var either = await addSiteUserCase.invoke(siteNameController.text,
-        siteLocationController.text, selectedValue!.id ?? "",selectedValue!.userName??"");
+    var either = await addSiteUserCase.invoke(
+        siteNameController.text,
+        siteLocationController.text,
+        selectedValue!.id ?? "",
+        selectedValue!.userName ?? "");
 
     either.fold((l) {
       emit(AddSiteErrorState(failure: l));

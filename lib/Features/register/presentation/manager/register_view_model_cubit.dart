@@ -4,10 +4,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:injectable/injectable.dart';
-import 'package:pesticides/Core/utils/SharedPrefsLocal.dart';
-import 'package:pesticides/Core/utils/strings.dart';
-import 'package:pesticides/Features/register/data/models/user_model_dto.dart';
-import 'package:pesticides/Features/register/domain/use_cases/register_use_case.dart';
+import 'package:bug_away/Core/utils/SharedPrefsLocal.dart';
+import 'package:bug_away/Core/utils/strings.dart';
+import 'package:bug_away/Features/register/data/models/user_model_dto.dart';
+import 'package:bug_away/Features/register/domain/use_cases/register_use_case.dart';
 
 import '../../../../Core/errors/failures.dart';
 
@@ -20,9 +20,6 @@ class RegisterViewModelCubit extends Cubit<RegisterViewModelState> {
       : super(RegisterViewModelInitial());
   static RegisterViewModelCubit get(context) =>
       BlocProvider.of<RegisterViewModelCubit>(context);
-
-
-
 
   //===============Variables Handle=======================
   List<String> list = ["admin", "user"];

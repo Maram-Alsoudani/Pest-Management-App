@@ -1,4 +1,4 @@
-import 'package:pesticides/Core/utils/images.dart';
+import 'package:bug_away/Core/utils/images.dart';
 
 class CategoryModel {
   String image;

@@ -4,17 +4,17 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:dartz/dartz.dart';
 import 'package:injectable/injectable.dart';
-import 'package:pesticides/Config/routes/routes_manger.dart';
-import 'package:pesticides/Core/errors/failures.dart';
-import 'package:pesticides/Core/utils/SharedPrefsLocal.dart';
-import 'package:pesticides/Core/utils/fcm_helper.dart';
-import 'package:pesticides/Core/utils/firebase_utils.dart';
-import 'package:pesticides/Core/utils/notification_model.dart';
-import 'package:pesticides/Core/utils/strings.dart';
-import 'package:pesticides/Features/chat/data/data_sources/chat_data_source.dart';
-import 'package:pesticides/Features/chat/data/models/message_dto.dart';
-import 'package:pesticides/Features/chat/domain/entities/message_entity.dart';
-import 'package:pesticides/Features/register/data/models/user_model_dto.dart';
+import 'package:bug_away/Config/routes/routes_manger.dart';
+import 'package:bug_away/Core/errors/failures.dart';
+import 'package:bug_away/Core/utils/SharedPrefsLocal.dart';
+import 'package:bug_away/Core/utils/fcm_helper.dart';
+import 'package:bug_away/Core/utils/firebase_utils.dart';
+import 'package:bug_away/Core/utils/notification_model.dart';
+import 'package:bug_away/Core/utils/strings.dart';
+import 'package:bug_away/Features/chat/data/data_sources/chat_data_source.dart';
+import 'package:bug_away/Features/chat/data/models/message_dto.dart';
+import 'package:bug_away/Features/chat/domain/entities/message_entity.dart';
+import 'package:bug_away/Features/register/data/models/user_model_dto.dart';
 
 @Injectable(as: ChatDataSource)
 class ChatDataSourceImpl implements ChatDataSource {

@@ -2,9 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:pesticides/Core/utils/colors.dart';
-import 'package:pesticides/Core/utils/strings.dart';
-import 'package:pesticides/Features/inventory/domain/entities/materail_enitiy.dart';
+import 'package:bug_away/Core/utils/colors.dart';
+import 'package:bug_away/Core/utils/strings.dart';
+import 'package:bug_away/Features/inventory/domain/entities/materail_enitiy.dart';
 
 class MaterailItem extends StatelessWidget {
   const MaterailItem({

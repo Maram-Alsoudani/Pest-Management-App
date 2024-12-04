@@ -1,18 +1,13 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:pesticides/Core/utils/colors.dart';
+import 'package:bug_away/Core/utils/colors.dart';
 
 class LabelText extends StatelessWidget {
   final String label;
   double? fontSize;
   Color? color;
-   LabelText({
-    Key? key,
-    required this.label,
-    this.fontSize,
-     this.color
-  }) : super(key: key);
+  LabelText({Key? key, required this.label, this.fontSize, this.color})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -20,9 +15,9 @@ class LabelText extends StatelessWidget {
       label,
       overflow: TextOverflow.ellipsis,
       style: Theme.of(context).textTheme.titleSmall!.copyWith(
-        color:color?? ColorManager.blackColor,
-        fontSize: fontSize??20.sp,
-      ),
+            color: color ?? ColorManager.blackColor,
+            fontSize: fontSize ?? 20.sp,
+          ),
     );
   }
 }

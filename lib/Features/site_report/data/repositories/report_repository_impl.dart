@@ -1,7 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:injectable/injectable.dart';
-import 'package:pesticides/Core/errors/failures.dart';
-import 'package:pesticides/Features/site_report/data/models/report_dto.dart';
+import 'package:bug_away/Core/errors/failures.dart';
+import 'package:bug_away/Features/site_report/data/models/report_dto.dart';
 import '../../domain/entities/report_entity.dart';
 import '../../domain/repositories/report_repository.dart';
 import '../data_sources/report_data_source.dart';

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
-import 'package:pesticides/Core/utils/images.dart';
+import 'package:bug_away/Core/utils/images.dart';
 
 class LottieSendingWidget extends StatelessWidget {
   final double width;

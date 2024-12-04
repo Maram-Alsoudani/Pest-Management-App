@@ -1,4 +1,4 @@
-import 'package:pesticides/Features/site_report/domain/entities/report_entity.dart';
+import 'package:bug_away/Features/site_report/domain/entities/report_entity.dart';
 
 abstract class GetReportOfSiteState {}
 

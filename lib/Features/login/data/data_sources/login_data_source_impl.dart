@@ -5,12 +5,12 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:dartz/dartz.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:injectable/injectable.dart';
-import 'package:pesticides/Core/errors/failures.dart';
-import 'package:pesticides/Core/utils/FCM.dart';
-import 'package:pesticides/Core/utils/firebase_utils.dart';
-import 'package:pesticides/Core/utils/strings.dart';
-import 'package:pesticides/Features/login/data/data_sources/login_data_source.dart';
-import 'package:pesticides/Features/register/data/models/user_model_dto.dart';
+import 'package:bug_away/Core/errors/failures.dart';
+import 'package:bug_away/Core/utils/FCM.dart';
+import 'package:bug_away/Core/utils/firebase_utils.dart';
+import 'package:bug_away/Core/utils/strings.dart';
+import 'package:bug_away/Features/login/data/data_sources/login_data_source.dart';
+import 'package:bug_away/Features/register/data/models/user_model_dto.dart';
 
 import '../../../../Core/utils/SharedPrefsLocal.dart';
 

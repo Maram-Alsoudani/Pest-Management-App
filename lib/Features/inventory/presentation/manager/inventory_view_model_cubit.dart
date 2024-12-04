@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 import 'package:meta/meta.dart';
-import 'package:pesticides/Core/errors/failures.dart';
-import 'package:pesticides/Core/utils/SharedPrefsLocal.dart';
-import 'package:pesticides/Core/utils/strings.dart';
-import 'package:pesticides/Features/register/domain/entities/user_model_entity.dart';
+import 'package:bug_away/Core/errors/failures.dart';
+import 'package:bug_away/Core/utils/SharedPrefsLocal.dart';
+import 'package:bug_away/Core/utils/strings.dart';
+import 'package:bug_away/Features/register/domain/entities/user_model_entity.dart';
 
 import '../../domain/entities/materail_enitiy.dart';
 import '../../domain/use_cases/added_matrails_use_case.dart';
@@ -146,7 +146,7 @@ class InventoryViewModelCubit extends Cubit<InventoryViewModelState> {
     );
   }
 
-  void deleteMaterails(String key,int index) async {
+  void deleteMaterails(String key, int index) async {
     isLoading = true;
     emit(InventoryDeleteMaterailLoading());
     var data = await deleteMaterailUseCase.invoke(key);
@@ -159,11 +159,9 @@ class InventoryViewModelCubit extends Cubit<InventoryViewModelState> {
         isLoading = false;
         filteredItems.removeAt(index);
         emit(InventoryDeleteMaterailSuccess());
-        if(filteredItems.isEmpty){
+        if (filteredItems.isEmpty) {
           emit(InventoryNoSearchResultMaterail());
-
         }
-
       },
     );
   }

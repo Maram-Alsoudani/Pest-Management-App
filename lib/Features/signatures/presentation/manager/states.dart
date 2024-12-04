@@ -1,4 +1,4 @@
-import 'package:pesticides/Features/signatures/domain/entities/signature_entity.dart';
+import 'package:bug_away/Features/signatures/domain/entities/signature_entity.dart';
 
 abstract class SignaturesState {
   const SignaturesState();

@@ -1,7 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:pesticides/Features/signatures/presentation/manager/states.dart';
+import 'package:bug_away/Features/signatures/presentation/manager/states.dart';
 
 import '../../domain/entities/signature_entity.dart';
 

@@ -64,7 +64,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '103324410405',
     projectId: 'chat-app-3654c',
     storageBucket: 'chat-app-3654c.appspot.com',
-    iosBundleId: 'com.example.pesticides',
+    iosBundleId: 'com.example.bug_away',
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
@@ -73,7 +73,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '103324410405',
     projectId: 'chat-app-3654c',
     storageBucket: 'chat-app-3654c.appspot.com',
-    iosBundleId: 'com.example.pesticides',
+    iosBundleId: 'com.example.bug_away',
   );
 
   static const FirebaseOptions windows = FirebaseOptions(

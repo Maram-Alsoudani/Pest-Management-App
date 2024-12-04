@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:pesticides/Core/component/button_custom.dart';
-import 'package:pesticides/Core/utils/colors.dart';
-import 'package:pesticides/Core/utils/strings.dart';
-import 'package:pesticides/Features/category/profile/presentation/manager/profile_cubit.dart';
-import 'package:pesticides/Features/inventory/presentation/manager/inventory_view_model_cubit.dart';
+import 'package:bug_away/Core/component/button_custom.dart';
+import 'package:bug_away/Core/utils/colors.dart';
+import 'package:bug_away/Core/utils/strings.dart';
+import 'package:bug_away/Features/category/profile/presentation/manager/profile_cubit.dart';
+import 'package:bug_away/Features/inventory/presentation/manager/inventory_view_model_cubit.dart';
 
 import '../../../../Core/component/text_feild_custom.dart';
 

@@ -1,26 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:pesticides/Core/utils/colors.dart';
-import 'package:pesticides/Features/chat/domain/entities/message_entity.dart';
-import 'package:pesticides/Features/chat/presentation/widgets/message_widget.dart';
+import 'package:bug_away/Core/utils/colors.dart';
+import 'package:bug_away/Features/chat/domain/entities/message_entity.dart';
+import 'package:bug_away/Features/chat/presentation/widgets/message_widget.dart';
 import 'package:provider/provider.dart';
 
 class MessageWidget extends StatelessWidget {
   MessageEntity message;
   String userId;
   final String dateTime;
-  MessageWidget({super.key, required this.message, required this.userId, required this.dateTime});
+  MessageWidget(
+      {super.key,
+      required this.message,
+      required this.userId,
+      required this.dateTime});
 
   @override
   Widget build(BuildContext context) {
     return userId == message.senderId
         ? SentMessage(
             message: message,
-      dateTime: dateTime,
+            dateTime: dateTime,
           )
         : ReciveMessage(
             message: message,
-      dateTime: dateTime,
+            dateTime: dateTime,
           );
   }
 }

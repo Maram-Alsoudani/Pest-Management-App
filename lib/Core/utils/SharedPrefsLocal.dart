@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'package:pesticides/Features/register/data/models/user_model_dto.dart';
+import 'package:bug_away/Features/register/data/models/user_model_dto.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SharedPrefsLocal {

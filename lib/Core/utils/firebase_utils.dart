@@ -4,16 +4,16 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
-import 'package:pesticides/Core/utils/notification_model.dart';
-import 'package:pesticides/Features/chat/data/models/message_dto.dart';
-import 'package:pesticides/Features/reports/domain/entities/site_entity.dart';
-import 'package:pesticides/Features/user_request_account/data/models/user_request_account_model_dto.dart';
-import 'package:pesticides/Features/site_report/data/models/report_dto.dart';
 
+import '../../Features/chat/data/models/message_dto.dart';
 import '../../Features/inventory/data/models/materail_model_dto.dart';
 import '../../Features/register/data/models/user_model_dto.dart';
 import '../../Features/reports/data/models/site_dto.dart';
+import '../../Features/reports/domain/entities/site_entity.dart';
+import '../../Features/site_report/data/models/report_dto.dart';
+import '../../Features/user_request_account/data/models/user_request_account_model_dto.dart';
 import '../errors/failures.dart';
+import 'notification_model.dart';
 
 class FirebaseUtils {
   static CollectionReference<UserAndAdminModelDto> getUserCollection(

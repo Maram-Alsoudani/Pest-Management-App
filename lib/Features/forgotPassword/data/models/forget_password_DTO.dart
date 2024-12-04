@@ -1,4 +1,4 @@
-import 'package:pesticides/Features/forgotPassword/domain/entities/forget_password_entity.dart';
+import 'package:bug_away/Features/forgotPassword/domain/entities/forget_password_entity.dart';
 
 class ForgetPasswordDto extends ForgetPasswordEntity {
   ForgetPasswordDto({super.email});

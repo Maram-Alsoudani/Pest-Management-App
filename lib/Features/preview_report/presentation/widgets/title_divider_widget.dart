@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:pesticides/Core/utils/colors.dart';
+import 'package:bug_away/Core/utils/colors.dart';
 
 class SectionTitleWithDivider extends StatelessWidget {
   final String title;

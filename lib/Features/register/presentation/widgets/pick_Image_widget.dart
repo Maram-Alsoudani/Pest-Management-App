@@ -3,10 +3,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:pesticides/Core/utils/colors.dart';
+import 'package:bug_away/Core/utils/colors.dart';
 import '../../../../Core/component/image_profile.dart';
 import '../../../../Core/component/show_model_picker_image.dart';
-
 
 class PickImageWidgetRegister extends StatefulWidget {
   final IconData icon;
@@ -23,7 +22,8 @@ class PickImageWidgetRegister extends StatefulWidget {
   });
 
   @override
-  State<PickImageWidgetRegister> createState() => _PickImageWidgetRegisterState();
+  State<PickImageWidgetRegister> createState() =>
+      _PickImageWidgetRegisterState();
 }
 
 class _PickImageWidgetRegisterState extends State<PickImageWidgetRegister> {
@@ -57,21 +57,21 @@ class _PickImageWidgetRegisterState extends State<PickImageWidgetRegister> {
               ),
             )
           else if (widget.imageUrl != null && widget.imageUrl!.isNotEmpty)
-              GestureDetector(
-                onTap: () {
-                  viewImage(widget.imageUrl!);
-                },
-                child: ClipOval(
-                  child: Image.network(
-                    widget.imageUrl!,
-                    width: 145.w,
-                    height: 145.h,
-                    fit: BoxFit.cover,
-                  ),
+            GestureDetector(
+              onTap: () {
+                viewImage(widget.imageUrl!);
+              },
+              child: ClipOval(
+                child: Image.network(
+                  widget.imageUrl!,
+                  width: 145.w,
+                  height: 145.h,
+                  fit: BoxFit.cover,
                 ),
-              )
-            else
-              ImageProfile(radius: 71.r),
+              ),
+            )
+          else
+            ImageProfile(radius: 71.r),
           Positioned(
             right: -8.5,
             bottom: -8.5,
@@ -106,7 +106,6 @@ class _PickImageWidgetRegisterState extends State<PickImageWidgetRegister> {
       showModalBottomSheet(
         context: context,
         builder: (BuildContext context) {
-
           return ShowModelPickerImage(
             uploadImage2Screen: widget.onImagePicked,
           );

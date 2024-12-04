@@ -1,5 +1,5 @@
-import 'package:pesticides/Core/errors/failures.dart';
-import 'package:pesticides/Features/forgotPassword/domain/entities/forget_password_entity.dart';
+import 'package:bug_away/Core/errors/failures.dart';
+import 'package:bug_away/Features/forgotPassword/domain/entities/forget_password_entity.dart';
 
 abstract class ForgetPasswordState {}
 

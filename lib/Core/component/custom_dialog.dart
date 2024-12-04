@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'dart:io' show Platform;
 
-import 'package:pesticides/core/utils/colors.dart';
+import 'package:bug_away/core/utils/colors.dart';
 
 class DialogUtils {
   static void hideLoadingDialog(BuildContext context) {

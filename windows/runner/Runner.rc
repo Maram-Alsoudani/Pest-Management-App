@@ -90,12 +90,12 @@ BEGIN
         BLOCK "040904e4"
         BEGIN
             VALUE "CompanyName", "com.example" "\0"
-            VALUE "FileDescription", "pesticides" "\0"
+            VALUE "FileDescription", "bug_away" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
-            VALUE "InternalName", "pesticides" "\0"
+            VALUE "InternalName", "bug_away" "\0"
             VALUE "LegalCopyright", "Copyright (C) 2024 com.example. All rights reserved." "\0"
-            VALUE "OriginalFilename", "pesticides.exe" "\0"
-            VALUE "ProductName", "pesticides" "\0"
+            VALUE "OriginalFilename", "bug_away.exe" "\0"
+            VALUE "ProductName", "bug_away" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
         END
     END

@@ -3,7 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:pesticides/Core/utils/colors.dart';
+import 'package:bug_away/Core/utils/colors.dart';
 import 'package:cached_network_image/cached_network_image.dart'; // Import the package
 import '../../../../../Core/component/image_profile.dart';
 import '../../../../../Core/component/show_model_picker_image.dart';

@@ -4,12 +4,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 import 'package:intl/intl.dart';
 import 'package:meta/meta.dart';
-import 'package:pesticides/Core/errors/failures.dart';
-import 'package:pesticides/Features/account_request_admin/domain/use_cases/decline_requests_user_case%20copy.dart';
-import 'package:pesticides/Features/account_request_admin/domain/use_cases/accept_requests_user_case.dart';
-import 'package:pesticides/Features/account_request_admin/domain/use_cases/delete_requests_user_case%20copy%202.dart';
-import 'package:pesticides/Features/account_request_admin/domain/use_cases/get_requests_user_case.dart';
-import 'package:pesticides/Features/user_request_account/domain/entities/user_request_account_model_entity.dart';
+import 'package:bug_away/Core/errors/failures.dart';
+import 'package:bug_away/Features/account_request_admin/domain/use_cases/decline_requests_user_case%20copy.dart';
+import 'package:bug_away/Features/account_request_admin/domain/use_cases/accept_requests_user_case.dart';
+import 'package:bug_away/Features/account_request_admin/domain/use_cases/delete_requests_user_case%20copy%202.dart';
+import 'package:bug_away/Features/account_request_admin/domain/use_cases/get_requests_user_case.dart';
+import 'package:bug_away/Features/user_request_account/domain/entities/user_request_account_model_entity.dart';
 
 part 'requests_screen_viewmodel_state.dart';
 

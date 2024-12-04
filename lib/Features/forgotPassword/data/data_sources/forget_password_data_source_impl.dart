@@ -2,8 +2,8 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:dartz/dartz.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:injectable/injectable.dart';
-import 'package:pesticides/Core/errors/failures.dart';
-import 'package:pesticides/Core/utils/strings.dart';
+import 'package:bug_away/Core/errors/failures.dart';
+import 'package:bug_away/Core/utils/strings.dart';
 import 'forget_password_data_source.dart';
 
 @Injectable(as: ForgetPasswordDataSource)

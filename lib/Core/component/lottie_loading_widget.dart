@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lottie/lottie.dart';
-import 'package:pesticides/Core/utils/images.dart';
+
+import '../utils/images.dart';
 
 class LottieLoadingWidget extends StatelessWidget {
   final double width;

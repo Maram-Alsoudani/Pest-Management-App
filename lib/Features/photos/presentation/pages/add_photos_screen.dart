@@ -3,11 +3,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:pesticides/Core/utils/strings.dart';
-import 'package:pesticides/Core/utils/colors.dart';
-import 'package:pesticides/Core/component/show_model_picker_image.dart';
+import 'package:bug_away/Core/utils/strings.dart';
+import 'package:bug_away/Core/utils/colors.dart';
+import 'package:bug_away/Core/component/show_model_picker_image.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:pesticides/Features/site_report/presentation/manager/report_view_model.dart';
+import 'package:bug_away/Features/site_report/presentation/manager/report_view_model.dart';
 
 class AddPhotosScreen extends StatefulWidget {
   @override

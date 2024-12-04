@@ -1,6 +1,5 @@
-
 import 'package:flutter/material.dart';
-import 'package:pesticides/Core/utils/colors.dart';
+import 'package:bug_away/Core/utils/colors.dart';
 
 class ListTileCustom extends StatelessWidget {
   final Widget child;
@@ -9,8 +8,8 @@ class ListTileCustom extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return  ListTile(
-      title:child,
+    return ListTile(
+      title: child,
       onTap: () {
         onTap();
       },

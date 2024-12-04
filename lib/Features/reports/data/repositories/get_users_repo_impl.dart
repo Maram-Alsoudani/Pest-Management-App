@@ -1,8 +1,8 @@
 import 'package:dartz/dartz.dart';
 import 'package:injectable/injectable.dart';
-import 'package:pesticides/Core/errors/failures.dart';
-import 'package:pesticides/Features/register/domain/entities/user_model_entity.dart';
-import 'package:pesticides/Features/reports/data/data_sources/get_users_data_source.dart';
+import 'package:bug_away/Core/errors/failures.dart';
+import 'package:bug_away/Features/register/domain/entities/user_model_entity.dart';
+import 'package:bug_away/Features/reports/data/data_sources/get_users_data_source.dart';
 
 import '../../domain/repositories/get_users_repo.dart';
 

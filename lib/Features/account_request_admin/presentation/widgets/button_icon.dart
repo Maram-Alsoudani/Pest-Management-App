@@ -1,7 +1,6 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:pesticides/Core/utils/colors.dart';
+import 'package:bug_away/Core/utils/colors.dart';
 
 class ButtonAndIcon extends StatelessWidget {
   final IconData icon;
@@ -40,7 +39,9 @@ class ButtonAndIcon extends StatelessWidget {
                     fontWeight: FontWeight.bold,
                   ),
             ),
-            SizedBox(width: 10.w,),
+            SizedBox(
+              width: 10.w,
+            ),
             Icon(
               icon,
               size: 20.sp,

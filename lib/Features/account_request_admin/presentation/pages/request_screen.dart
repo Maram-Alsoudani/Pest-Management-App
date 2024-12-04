@@ -4,16 +4,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
-import 'package:pesticides/Core/component/custom_dialog.dart';
-import 'package:pesticides/Core/component/lottie_loading_widget.dart';
-import 'package:pesticides/Core/utils/colors.dart';
-import 'package:pesticides/Core/utils/images.dart';
-import 'package:pesticides/Core/utils/strings.dart';
-import 'package:pesticides/Features/account_request_admin/presentation/manager/requests_screen_viewmodel_cubit.dart';
-import 'package:pesticides/Features/account_request_admin/presentation/widgets/button_icon.dart';
-import 'package:pesticides/Features/account_request_admin/presentation/widgets/label_widget.dart';
+import 'package:bug_away/Core/component/custom_dialog.dart';
+import 'package:bug_away/Core/component/lottie_loading_widget.dart';
+import 'package:bug_away/Core/utils/colors.dart';
+import 'package:bug_away/Core/utils/images.dart';
+import 'package:bug_away/Core/utils/strings.dart';
+import 'package:bug_away/Features/account_request_admin/presentation/manager/requests_screen_viewmodel_cubit.dart';
+import 'package:bug_away/Features/account_request_admin/presentation/widgets/button_icon.dart';
+import 'package:bug_away/Features/account_request_admin/presentation/widgets/label_widget.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:pesticides/Features/user_request_account/domain/entities/user_request_account_model_entity.dart';
+import 'package:bug_away/Features/user_request_account/domain/entities/user_request_account_model_entity.dart';
 
 class RequestScreen extends StatelessWidget {
   const RequestScreen({super.key});
@@ -51,8 +51,8 @@ class RequestScreen extends StatelessWidget {
           title: StringManager.success,
           message: "Declined Successfully",
           posActionTitle: StringManager.ok,
-        );}
-        else if (state is DeleteRequestsScreenViewmodelSuccess) {
+        );
+      } else if (state is DeleteRequestsScreenViewmodelSuccess) {
         DialogUtils.showAlertDialog(
           context: context,
           title: StringManager.success,
@@ -123,8 +123,8 @@ class RequestScreen extends StatelessWidget {
                                         children: [
                                           SlidableAction(
                                             onPressed: (context) {
-
-                                              viewModel.deleteRequest(request.id??"");
+                                              viewModel.deleteRequest(
+                                                  request.id ?? "");
                                             },
                                             backgroundColor:
                                                 ColorManager.primaryColor,
@@ -132,8 +132,6 @@ class RequestScreen extends StatelessWidget {
                                                 ColorManager.whiteColor,
                                             icon: Icons.delete,
                                             label: StringManager.delete,
-
-
                                           ),
                                         ],
                                       ),

@@ -1,4 +1,4 @@
-name: pesticides
+name: bug_away
 description: "A new Flutter project."
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
@@ -70,6 +70,7 @@ dependencies:
   cached_network_image: ^3.4.1
   flutter_cache_manager: ^3.4.1
   printing: ^5.13.4
+  flutter_launcher_icons: ^0.14.1
 
 
 
@@ -88,6 +89,14 @@ dev_dependencies:
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 
+flutter_launcher_icons:
+  image_path_android: "assets/images/android-app-icon.png"
+  image_path_ios: "assets/images/ios-app-icon.png"
+  android: true # can specify file name here e.g. "ic_launcher"
+  ios: true # can specify file name here e.g. "My-Launcher-Icon"
+  adaptive_icon_background: "assets/images/android-app-icon-background.png" # only available for Android 8.0 devices and above
+  adaptive_icon_foreground: "assets/images/android-app-icon-foreground.png" # only available for Android 8.0 devices and above
+  
 # The following section is specific to Flutter packages.
 flutter:
 
@@ -95,6 +104,7 @@ flutter:
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
+
 
   # To add assets to your application, add an assets section, like this:
   assets:

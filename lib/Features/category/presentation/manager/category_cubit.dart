@@ -3,8 +3,8 @@ import 'package:flutter/animation.dart';
 import 'package:flutter/material.dart';
 import 'package:injectable/injectable.dart';
 import 'package:meta/meta.dart';
-import 'package:pesticides/Core/errors/failures.dart';
-import 'package:pesticides/Features/register/domain/entities/user_model_entity.dart';
+import 'package:bug_away/Core/errors/failures.dart';
+import 'package:bug_away/Features/register/domain/entities/user_model_entity.dart';
 
 import '../../domin/use_case/read_user_or_admin_from_fireStore_use_case.dart';
 

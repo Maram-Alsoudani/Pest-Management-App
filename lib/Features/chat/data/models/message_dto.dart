@@ -1,8 +1,7 @@
-import 'package:pesticides/Features/chat/domain/entities/message_entity.dart';
+import 'package:bug_away/Features/chat/domain/entities/message_entity.dart';
 
-class MessageDto extends MessageEntity{
+class MessageDto extends MessageEntity {
   static const String messageCollection = "message";
-
 
   MessageDto({
     super.id = "",
@@ -14,16 +13,17 @@ class MessageDto extends MessageEntity{
 
   MessageDto.fromJson(Map<String, dynamic> json)
       : this(
-    id: json["id"] as String,
-    content: json["content"] as String,
-    senderId: json["senderId"] as String,
-    senderName: json["senderName"] as String,
-    dateTime: DateTime.fromMillisecondsSinceEpoch(json["dateTime"]) as DateTime ,
-  );
+          id: json["id"] as String,
+          content: json["content"] as String,
+          senderId: json["senderId"] as String,
+          senderName: json["senderName"] as String,
+          dateTime:
+              DateTime.fromMillisecondsSinceEpoch(json["dateTime"]) as DateTime,
+        );
 
   Map<String, dynamic> toJson() {
     return {
-      "id":id,
+      "id": id,
       "content": content,
       "senderId": senderId,
       "senderName": senderName,

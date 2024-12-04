@@ -1,17 +1,17 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
 import 'package:injectable/injectable.dart';
-import 'package:pesticides/Core/errors/failures.dart';
-import 'package:pesticides/Features/chat/data/models/message_dto.dart';
-import 'package:pesticides/Features/chat/domain/entities/message_entity.dart';
-import 'package:pesticides/Features/chat/domain/repositories/chat_repo.dart';
+import 'package:bug_away/Core/errors/failures.dart';
+import 'package:bug_away/Features/chat/data/models/message_dto.dart';
+import 'package:bug_away/Features/chat/domain/entities/message_entity.dart';
+import 'package:bug_away/Features/chat/domain/repositories/chat_repo.dart';
+
 @injectable
-class SendMessageUseCase{
+class SendMessageUseCase {
   ChatRepo chatRepo;
   SendMessageUseCase({required this.chatRepo});
 
-
-  Future<Either<Failure,void>> invoke(MessageDto message)async{
+  Future<Either<Failure, void>> invoke(MessageDto message) async {
     return chatRepo.sendMessage(message);
   }
 }

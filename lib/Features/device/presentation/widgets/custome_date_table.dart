@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:pesticides/Core/utils/colors.dart';
+import 'package:bug_away/Core/utils/colors.dart';
 import '../../data/models/testing_data_table.dart';
 
 class CustomeDateTable extends StatelessWidget {
@@ -9,14 +9,13 @@ class CustomeDateTable extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
-
       child: DataTable(
-
         columns: createColumns(),
         rows: createRow(),
       ),
     );
   }
+
   List<DataColumn> createColumns() {
     return [
       DataColumn(label: Text('DeviceID')),
@@ -28,11 +27,25 @@ class CustomeDateTable extends StatelessWidget {
   List<DataRow> createRow() {
     return data.map((e) {
       return DataRow(
-
         cells: [
-          DataCell(Text(e.id.toString(),style: TextStyle(color: ColorManager.whiteColor),),),
-          DataCell(Text(e.date.toString(),style: TextStyle(color: ColorManager.whiteColor),),),
-          DataCell(Text(e.time.toString(),style: TextStyle(color: ColorManager.whiteColor),),),
+          DataCell(
+            Text(
+              e.id.toString(),
+              style: TextStyle(color: ColorManager.whiteColor),
+            ),
+          ),
+          DataCell(
+            Text(
+              e.date.toString(),
+              style: TextStyle(color: ColorManager.whiteColor),
+            ),
+          ),
+          DataCell(
+            Text(
+              e.time.toString(),
+              style: TextStyle(color: ColorManager.whiteColor),
+            ),
+          ),
         ],
       );
     }).toList();

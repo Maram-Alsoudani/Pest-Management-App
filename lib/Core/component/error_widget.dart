@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:pesticides/Core/utils/colors.dart';
-import 'package:pesticides/Core/utils/strings.dart';
+import 'package:bug_away/Core/utils/colors.dart';
+import 'package:bug_away/Core/utils/strings.dart';
 
 class CustomErrorWidget extends StatelessWidget {
   final String errorMessage;

@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:pesticides/Config/theme/theming.dart';
-import 'package:pesticides/Core/utils/colors.dart';
-import 'package:pesticides/Core/utils/firebase_utils.dart';
-import 'package:pesticides/Core/utils/strings.dart';
-import 'package:pesticides/Features/register/domain/entities/user_model_entity.dart';
-import 'package:pesticides/Features/site/presentation/manager/site_state.dart';
-import 'package:pesticides/Features/site/presentation/manager/site_view_model.dart';
+import 'package:bug_away/Config/theme/theming.dart';
+import 'package:bug_away/Core/utils/colors.dart';
+import 'package:bug_away/Core/utils/firebase_utils.dart';
+import 'package:bug_away/Core/utils/strings.dart';
+import 'package:bug_away/Features/register/domain/entities/user_model_entity.dart';
+import 'package:bug_away/Features/site/presentation/manager/site_state.dart';
+import 'package:bug_away/Features/site/presentation/manager/site_view_model.dart';
 
 import '../../../register/data/models/user_model_dto.dart';
 

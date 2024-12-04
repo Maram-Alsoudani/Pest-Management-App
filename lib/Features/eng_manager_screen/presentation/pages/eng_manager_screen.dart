@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:pesticides/Config/routes/routes_manger.dart';
-import 'package:pesticides/Core/utils/SharedPrefsLocal.dart';
-import 'package:pesticides/Core/utils/strings.dart';
+import 'package:bug_away/Config/routes/routes_manger.dart';
+import 'package:bug_away/Core/utils/SharedPrefsLocal.dart';
+import 'package:bug_away/Core/utils/strings.dart';
 import '../../../../Core/component/button_custom.dart';
 import '../../../../Core/utils/images.dart';
 import '../widget/custom_button.dart';

@@ -4,11 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
-import 'package:pesticides/Config/routes/routes_manger.dart';
-import 'package:pesticides/Core/component/custom_dialog.dart';
-import 'package:pesticides/Core/utils/SharedPrefsLocal.dart';
-import 'package:pesticides/Features/category/data/models/category_model.dart';
-import 'package:pesticides/Features/category/presentation/manager/category_cubit.dart';
+import 'package:bug_away/Config/routes/routes_manger.dart';
+import 'package:bug_away/Core/component/custom_dialog.dart';
+import 'package:bug_away/Core/utils/SharedPrefsLocal.dart';
+import 'package:bug_away/Features/category/data/models/category_model.dart';
+import 'package:bug_away/Features/category/presentation/manager/category_cubit.dart';
 
 import '../../../../Core/component/image_profile.dart';
 import '../../../../Core/component/lottie_loading_widget.dart';

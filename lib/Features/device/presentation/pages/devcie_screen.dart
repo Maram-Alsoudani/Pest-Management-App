@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:pesticides/Config/routes/routes_manger.dart';
-import 'package:pesticides/Core/component/button_custom.dart';
-import 'package:pesticides/Core/utils/colors.dart';
-import 'package:pesticides/Core/utils/strings.dart';
+import 'package:bug_away/Config/routes/routes_manger.dart';
+import 'package:bug_away/Core/component/button_custom.dart';
+import 'package:bug_away/Core/utils/colors.dart';
+import 'package:bug_away/Core/utils/strings.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:pesticides/Features/site_report/presentation/manager/report_view_model.dart';
+import 'package:bug_away/Features/site_report/presentation/manager/report_view_model.dart';
 import '../widgets/custome_date_table.dart';
 
 class DeviceScreen extends StatefulWidget {

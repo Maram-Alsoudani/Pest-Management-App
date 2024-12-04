@@ -4,15 +4,15 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
-import 'package:pesticides/Core/component/custom_dialog.dart';
-import 'package:pesticides/Core/component/lottie_loading_widget.dart';
-import 'package:pesticides/Core/component/text_feild_custom.dart';
-import 'package:pesticides/Core/utils/colors.dart';
-import 'package:pesticides/Core/utils/strings.dart';
-import 'package:pesticides/Features/inventory/presentation/manager/inventory_view_model_cubit.dart';
-import 'package:pesticides/Features/inventory/presentation/widgets/dialog_added_materail.dart';
-import 'package:pesticides/Features/inventory/presentation/widgets/materail_item.dart';
-import 'package:pesticides/Features/register/data/models/user_model_dto.dart';
+import 'package:bug_away/Core/component/custom_dialog.dart';
+import 'package:bug_away/Core/component/lottie_loading_widget.dart';
+import 'package:bug_away/Core/component/text_feild_custom.dart';
+import 'package:bug_away/Core/utils/colors.dart';
+import 'package:bug_away/Core/utils/strings.dart';
+import 'package:bug_away/Features/inventory/presentation/manager/inventory_view_model_cubit.dart';
+import 'package:bug_away/Features/inventory/presentation/widgets/dialog_added_materail.dart';
+import 'package:bug_away/Features/inventory/presentation/widgets/materail_item.dart';
+import 'package:bug_away/Features/register/data/models/user_model_dto.dart';
 
 class InventoryScreen extends StatefulWidget {
   @override

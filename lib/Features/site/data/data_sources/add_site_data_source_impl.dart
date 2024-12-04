@@ -4,15 +4,15 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:dartz/dartz.dart';
 import 'package:injectable/injectable.dart';
-import 'package:pesticides/Config/routes/routes_manger.dart';
-import 'package:pesticides/Core/errors/failures.dart';
-import 'package:pesticides/Core/utils/SharedPrefsLocal.dart';
-import 'package:pesticides/Core/utils/fcm_helper.dart';
-import 'package:pesticides/Core/utils/firebase_utils.dart';
-import 'package:pesticides/Core/utils/notification_model.dart';
-import 'package:pesticides/Features/register/domain/entities/user_model_entity.dart';
-import 'package:pesticides/Features/reports/domain/entities/site_entity.dart';
-import 'package:pesticides/Features/site/data/data_sources/add_site_data_source.dart';
+import 'package:bug_away/Config/routes/routes_manger.dart';
+import 'package:bug_away/Core/errors/failures.dart';
+import 'package:bug_away/Core/utils/SharedPrefsLocal.dart';
+import 'package:bug_away/Core/utils/fcm_helper.dart';
+import 'package:bug_away/Core/utils/firebase_utils.dart';
+import 'package:bug_away/Core/utils/notification_model.dart';
+import 'package:bug_away/Features/register/domain/entities/user_model_entity.dart';
+import 'package:bug_away/Features/reports/domain/entities/site_entity.dart';
+import 'package:bug_away/Features/site/data/data_sources/add_site_data_source.dart';
 
 import '../../../../Core/utils/strings.dart';
 import '../../../register/data/models/user_model_dto.dart';
@@ -20,11 +20,11 @@ import '../../../reports/data/models/site_dto.dart';
 
 @Injectable(as: AddSiteDataSource)
 class AddSiteDataSourceImpl implements AddSiteDataSource {
-
-
-  Future<void> handleNotification(UserAndAdminModelDto adminData, userAddForHimSite) async {
+  Future<void> handleNotification(
+      UserAndAdminModelDto adminData, userAddForHimSite) async {
     String title = "Sites Added Action";
-    String body = "Admin (${adminData.userName ?? ""}) is Added New Site To ($userAddForHimSite)";
+    String body =
+        "Admin (${adminData.userName ?? ""}) is Added New Site To ($userAddForHimSite)";
 
     List<UserAndAdminModelDto> adminList =
         await FirebaseUtils.getAdminOrUserTokenFromFireStore(
@@ -69,12 +69,9 @@ class AddSiteDataSourceImpl implements AddSiteDataSource {
     }
   }
 
-
-
-
   @override
-  Future<Either<Failure, void>> addSite(
-      String siteName, String siteLocation, String uId,String userNameSite) async {
+  Future<Either<Failure, void>> addSite(String siteName, String siteLocation,
+      String uId, String userNameSite) async {
     final List<ConnectivityResult> connectivityResult =
         await (Connectivity().checkConnectivity());
 
@@ -86,10 +83,10 @@ class AddSiteDataSourceImpl implements AddSiteDataSource {
         var response =
             await FirebaseUtils.addSiteToUsersFireStore(site: site, uId: uId);
 
-         if(Platform.isAndroid){
-           var data=  SharedPrefsLocal.getData(key: StringManager.keyUserAdmin);
-           await handleNotification(data!,userNameSite);
-         }
+        if (Platform.isAndroid) {
+          var data = SharedPrefsLocal.getData(key: StringManager.keyUserAdmin);
+          await handleNotification(data!, userNameSite);
+        }
         return Right(null);
       } on FirebaseException catch (e) {
         return Left(Failure(errorMessage: e.toString()));

@@ -1,12 +1,10 @@
-import 'package:pesticides/Features/user_request_account/domain/entities/user_request_account_model_entity.dart';
+import 'package:bug_away/Features/user_request_account/domain/entities/user_request_account_model_entity.dart';
 
 class UserRequestAccountDto extends UserRequestAccountEntity {
   static const String requests = "requests";
 
-
-
   UserRequestAccountDto({
-     super.id,
+    super.id,
     required super.image,
     required super.type,
     required super.userName,
@@ -19,17 +17,17 @@ class UserRequestAccountDto extends UserRequestAccountEntity {
 
   UserRequestAccountDto.fromFireStore(Map<String, dynamic> data)
       : this(
-    id: data["id"] as String,
-    image: data["image"] as String,
-    type: data["type"] as String,
-    userName: data["userName"] as String,
-    phone: data["phone"] as String,
-    email: data["email"] as String,
-    password: data["password"] as String,
-    status: data["status"] as String?,
-
-    dateTime:DateTime.fromMillisecondsSinceEpoch(data["dateTime"] ) as DateTime,
-  );
+          id: data["id"] as String,
+          image: data["image"] as String,
+          type: data["type"] as String,
+          userName: data["userName"] as String,
+          phone: data["phone"] as String,
+          email: data["email"] as String,
+          password: data["password"] as String,
+          status: data["status"] as String?,
+          dateTime:
+              DateTime.fromMillisecondsSinceEpoch(data["dateTime"]) as DateTime,
+        );
 
   Map<String, dynamic> toFireStore() {
     return {
@@ -45,4 +43,3 @@ class UserRequestAccountDto extends UserRequestAccountEntity {
     };
   }
 }
-

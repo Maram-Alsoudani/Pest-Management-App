@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:pesticides/Core/utils/strings.dart';
+import 'package:bug_away/Core/utils/strings.dart';
 
 import '../../../../Core/utils/colors.dart';
 

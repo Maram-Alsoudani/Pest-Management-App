@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:pesticides/Core/utils/colors.dart';
-import 'package:pesticides/Core/utils/images.dart';
-import 'package:pesticides/Core/utils/strings.dart';
-import 'package:pesticides/Features/chat/presentation/manager/chat_view_model_cubit.dart';
-import 'package:pesticides/Features/chat/presentation/widgets/message_feild.dart';
-import 'package:pesticides/Features/chat/presentation/widgets/message_widget.dart';
-import 'package:pesticides/Features/chat/presentation/widgets/seach_button.dart';
+import 'package:bug_away/Core/utils/colors.dart';
+import 'package:bug_away/Core/utils/images.dart';
+import 'package:bug_away/Core/utils/strings.dart';
+import 'package:bug_away/Features/chat/presentation/manager/chat_view_model_cubit.dart';
+import 'package:bug_away/Features/chat/presentation/widgets/message_feild.dart';
+import 'package:bug_away/Features/chat/presentation/widgets/message_widget.dart';
+import 'package:bug_away/Features/chat/presentation/widgets/seach_button.dart';
 
 class ChatScreen extends StatelessWidget {
   const ChatScreen({super.key});
@@ -87,16 +87,13 @@ class ChatScreen extends StatelessWidget {
                         } else if (state is ChatViewModelGetMessage ||
                             state is ChatViewModelAddMessage ||
                             state is ChatViewModelButtonState) {
-                           ;
+                          ;
 
                           if (bloc.messages.isEmpty) {
                             return const Center(
                               child: Text("No messages yet."),
                             );
                           }
-
-
-
 
                           return ListView.builder(
                             controller: bloc.scrollController,

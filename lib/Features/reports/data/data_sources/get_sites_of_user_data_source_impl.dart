@@ -2,10 +2,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:dartz/dartz.dart';
 import 'package:injectable/injectable.dart';
-import 'package:pesticides/Core/utils/strings.dart';
-import 'package:pesticides/Features/reports/data/data_sources/get_sites_of_user_data_source.dart';
-import 'package:pesticides/Features/reports/data/models/site_dto.dart';
-import 'package:pesticides/Features/reports/domain/entities/site_entity.dart';
+import 'package:bug_away/Core/utils/strings.dart';
+import 'package:bug_away/Features/reports/data/data_sources/get_sites_of_user_data_source.dart';
+import 'package:bug_away/Features/reports/data/models/site_dto.dart';
+import 'package:bug_away/Features/reports/domain/entities/site_entity.dart';
 
 import '../../../../Core/errors/failures.dart';
 

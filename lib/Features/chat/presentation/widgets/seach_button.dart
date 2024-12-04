@@ -1,9 +1,8 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:pesticides/Core/utils/colors.dart';
-import 'package:pesticides/Core/utils/strings.dart';
-import 'package:pesticides/Features/chat/presentation/manager/chat_view_model_cubit.dart';
+import 'package:bug_away/Core/utils/colors.dart';
+import 'package:bug_away/Core/utils/strings.dart';
+import 'package:bug_away/Features/chat/presentation/manager/chat_view_model_cubit.dart';
 
 class SearchButton extends StatelessWidget {
   const SearchButton({
@@ -24,21 +23,17 @@ class SearchButton extends StatelessWidget {
       onPressed: bloc.messageController.isEmpty
           ? null
           : () {
-        bloc.sendMessage();
-      },
+              bloc.sendMessage();
+            },
       child: Row(
-        mainAxisAlignment:
-        MainAxisAlignment.spaceAround,
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           Text(
             StringManager.sendMessage,
-            style: Theme.of(context)
-                .textTheme
-                .titleSmall!
-                .copyWith(
-              fontSize: 12.sp,
-              fontWeight: FontWeight.bold,
-            ),
+            style: Theme.of(context).textTheme.titleSmall!.copyWith(
+                  fontSize: 12.sp,
+                  fontWeight: FontWeight.bold,
+                ),
           ),
           const SizedBox(width: 5),
           Icon(

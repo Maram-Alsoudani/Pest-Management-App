@@ -1,8 +1,7 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:pesticides/Core/utils/strings.dart';
-import 'package:pesticides/Features/chat/presentation/manager/chat_view_model_cubit.dart';
+import 'package:bug_away/Core/utils/strings.dart';
+import 'package:bug_away/Features/chat/presentation/manager/chat_view_model_cubit.dart';
 
 class MessageTextFeild extends StatelessWidget {
   const MessageTextFeild({

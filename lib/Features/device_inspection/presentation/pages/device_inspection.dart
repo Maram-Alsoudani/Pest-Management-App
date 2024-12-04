@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:pesticides/Core/utils/colors.dart';
-import 'package:pesticides/Core/utils/strings.dart';
-import 'package:pesticides/Features/device_inspection/presentation/widgets/custom_text.dart';
+import 'package:bug_away/Core/utils/colors.dart';
+import 'package:bug_away/Core/utils/strings.dart';
+import 'package:bug_away/Features/device_inspection/presentation/widgets/custom_text.dart';
 import '../../../../Core/component/drop_down_menu_widget.dart';
 import '../widgets/add_material.dart';
 
@@ -74,13 +74,11 @@ class _DeviceInspectionState extends State<DeviceInspection> {
               height: 10.h,
             ),
             DropDownMenuWidget(
-              list:conditions ,
-              selectedValue:selectedItem ,
-              onChange: (String? value){
-                selectedItem =value;
-                setState(() {
-
-                });
+              list: conditions,
+              selectedValue: selectedItem,
+              onChange: (String? value) {
+                selectedItem = value;
+                setState(() {});
               },
             ),
             Divider(
@@ -89,18 +87,14 @@ class _DeviceInspectionState extends State<DeviceInspection> {
             CustomText(
               title: StringManager.deviceInspectionBaitCondition,
             ),
-
             DropDownMenuWidget(
-              list:conditions ,
-              selectedValue:selectedItem ,
-              onChange: (String? value){
-                selectedItem =value;
-                setState(() {
-
-                });
+              list: conditions,
+              selectedValue: selectedItem,
+              onChange: (String? value) {
+                selectedItem = value;
+                setState(() {});
               },
             ),
-
             SizedBox(
               height: 10.h,
             ),
@@ -139,8 +133,14 @@ class _DeviceInspectionState extends State<DeviceInspection> {
             Divider(
               color: ColorManager.whiteColor,
             ),
-            AddMaterial(title: StringManager.deviceInspectionAddMaterial,chooseList: materialsList,),
-            AddMaterial(title: StringManager.deviceInspectionAddPest,chooseList: pestList,),
+            AddMaterial(
+              title: StringManager.deviceInspectionAddMaterial,
+              chooseList: materialsList,
+            ),
+            AddMaterial(
+              title: StringManager.deviceInspectionAddPest,
+              chooseList: pestList,
+            ),
           ],
         ),
       ),

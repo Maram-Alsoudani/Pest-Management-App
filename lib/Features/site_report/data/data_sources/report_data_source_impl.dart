@@ -1,8 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
 import 'package:injectable/injectable.dart';
-import 'package:pesticides/Core/errors/failures.dart';
-import 'package:pesticides/Features/site_report/data/models/report_dto.dart';
+import 'package:bug_away/Core/errors/failures.dart';
+import 'package:bug_away/Features/site_report/data/models/report_dto.dart';
 import 'report_data_source.dart';
 
 @Injectable(as: ReportDataSource)

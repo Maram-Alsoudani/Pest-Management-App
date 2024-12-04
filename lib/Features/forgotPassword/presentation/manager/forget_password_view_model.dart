@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
-import 'package:pesticides/Features/forgotPassword/presentation/manager/forget_password_state.dart';
+import 'package:bug_away/Features/forgotPassword/presentation/manager/forget_password_state.dart';
 
 import '../../domain/use_cases/forget_password_user_case.dart';
 
@@ -10,7 +10,7 @@ class ForgetPasswordViewModel extends Cubit<ForgetPasswordState> {
   //todo========================*( ForgetPassword )*=================
   var forgetPasswordFormKey = GlobalKey<FormState>();
   var emailController = TextEditingController();
-  bool isLoading=false;
+  bool isLoading = false;
   static ForgetPasswordViewModel get(context) =>
       BlocProvider.of<ForgetPasswordViewModel>(context);
 
@@ -19,14 +19,14 @@ class ForgetPasswordViewModel extends Cubit<ForgetPasswordState> {
       : super(ForgetPasswordInitialState());
   //todo hold data - handel logic
   void forgetPassword() async {
-    isLoading=true;
+    isLoading = true;
     emit(ForgetPasswordLoadingState());
     var either = await forgetPasswordUseCase.invoke(emailController.text);
     either.fold((l) {
-      isLoading=false;
+      isLoading = false;
       emit(ForgetPasswordErrorState(failure: l));
     }, (r) {
-      isLoading=false;
+      isLoading = false;
       emit(ForgetPasswordSuccessState());
     });
   }

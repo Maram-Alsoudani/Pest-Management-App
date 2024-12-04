@@ -4,8 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:injectable/injectable.dart';
-import 'package:pesticides/Features/user_request_account/domain/use_cases/user_request_account_use_case.dart';
-
+import 'package:bug_away/Features/user_request_account/domain/use_cases/user_request_account_use_case.dart';
 
 import '../../../../Core/errors/failures.dart';
 
@@ -19,19 +18,21 @@ class UserRequestAccountCubit extends Cubit<UserRequestAccountState> {
   static UserRequestAccountCubit get(context) =>
       BlocProvider.of<UserRequestAccountCubit>(context);
 
-
-
-
   //===============Variables Handle=======================
   List<String> list = ["admin", "user"];
   String? selectedValue;
   bool isLoaded = false;
   var fromKey = GlobalKey<FormState>();
-  TextEditingController userNameController = TextEditingController(text: "pops");
-  TextEditingController phoneController = TextEditingController(text: "01212442793");
-  TextEditingController emailController = TextEditingController(text: "pops@gmail.com");
-  TextEditingController passwordController = TextEditingController(text: "Mm#123456");
-  TextEditingController confirmPasswordController = TextEditingController(text: "Mm#123456");
+  TextEditingController userNameController =
+      TextEditingController(text: "pops");
+  TextEditingController phoneController =
+      TextEditingController(text: "01212442793");
+  TextEditingController emailController =
+      TextEditingController(text: "pops@gmail.com");
+  TextEditingController passwordController =
+      TextEditingController(text: "Mm#123456");
+  TextEditingController confirmPasswordController =
+      TextEditingController(text: "Mm#123456");
 
   //===============Image Profile Handle===================
   final ImagePicker picker = ImagePicker();

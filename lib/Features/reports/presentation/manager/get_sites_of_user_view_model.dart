@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
-import 'package:pesticides/Features/reports/domain/use_cases/get_sites_of_user_use_case.dart';
+import 'package:bug_away/Features/reports/domain/use_cases/get_sites_of_user_use_case.dart';
 
 import '../../domain/entities/site_entity.dart';
 import 'get_sites_states.dart';
@@ -75,6 +75,4 @@ class GetSitesOfUsersViewModel extends Cubit<GetSitesState> {
       }
     }
   }
-
-
 }

@@ -2,9 +2,9 @@ import 'dart:typed_data';
 import 'package:flutter/services.dart'; // Import the services package
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
-import 'package:pesticides/Core/utils/color_extension.dart';
-import 'package:pesticides/Core/utils/colors.dart';
-import 'package:pesticides/Core/utils/strings.dart';
+import 'package:bug_away/Core/utils/color_extension.dart';
+import 'package:bug_away/Core/utils/colors.dart';
+import 'package:bug_away/Core/utils/strings.dart';
 
 class PdfUtils {
   static Future<Uint8List> generatePdfReport({

@@ -1,4 +1,4 @@
-import 'package:pesticides/Core/errors/failures.dart';
+import 'package:bug_away/Core/errors/failures.dart';
 
 abstract class SiteState {}
 
@@ -60,6 +60,8 @@ class DeleteSiteErrorState extends SiteState {
 }
 
 class DeleteSiteSuccessState extends SiteState {}
+
 //todo =============================
 class SearchSiteSuccessState extends SiteState {}
+
 class NoResultSearchSiteSuccessState extends SiteState {}

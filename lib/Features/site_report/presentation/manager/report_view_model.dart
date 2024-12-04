@@ -2,7 +2,7 @@ import 'dart:io';
 import 'dart:typed_data';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
-import 'package:pesticides/Features/site_report/presentation/manager/report_state.dart';
+import 'package:bug_away/Features/site_report/presentation/manager/report_state.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:printing/printing.dart';
@@ -15,7 +15,7 @@ import '../../../register/data/models/user_model_dto.dart';
 import '../../domain/entities/report_entity.dart';
 import '../../domain/use_cases/create_report_use_case.dart';
 import '../../domain/use_cases/fetch_reports_use_case.dart';
-import 'package:pesticides/Config/routes/routes_manger.dart';
+import 'package:bug_away/Config/routes/routes_manger.dart';
 
 @injectable
 class ReportViewModel extends Cubit<ReportState> {

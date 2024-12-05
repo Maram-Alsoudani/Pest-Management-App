@@ -129,4 +129,5 @@ class StringManager {
   static const String change = "Change";
   static const String selected = "Selected";
   static const String noSignaturesAddedYet = "No signatures added yet";
+  static const String category = "Category";
 }

@@ -1,5 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart'; // For orientation lock
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:bug_away/Config/routes/routes_manger.dart';
@@ -26,85 +27,73 @@ import 'firebase_options.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  // Initialize Firebase
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+
+  // Initialize Firebase Cloud Messaging
   await FCM.fcmInit();
   var token = await FCM.getToken();
-  print(token);
+  print('FCM Token: $token');
 
+  // Lock the app in portrait mode
+  await SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ]);
+
+  // Set up BLoC observer for debugging
   Bloc.observer = MyBlocObserver();
 
+  // Initialize Shared Preferences
   await SharedPrefsLocal.init();
   var route = autoLogin();
+
+  // Dependency Injection setup
   configureDependencies();
 
-  // Set up the global error handler
+  // Global error handling
   FlutterError.onError = (FlutterErrorDetails details) {
     FlutterError.presentError(details);
-
     runApp(ErrorWidgetApp(details));
   };
 
-  // Set up the custom error widget for the app
+  // Custom error widget
   ErrorWidget.builder = (FlutterErrorDetails details) {
     return CustomErrorWidget(errorMessage: details.exceptionAsString());
   };
 
+  // Run the app with multi BLoC providers
   runApp(MultiBlocProvider(
-      providers: [
-        BlocProvider(
-          create: (context) => getIt<LoginScreenViewModel>(),
-        ),
-        BlocProvider(
-          create: (context) => getIt<RegisterViewModelCubit>(),
-        ),
-        BlocProvider(
-          create: (context) => getIt<ForgetPasswordViewModel>(),
-        ),
-        BlocProvider(
-          create: (context) => getIt<CategoryCubit>(),
-        ),
-        BlocProvider(
-          create: (context) => getIt<ProfileCubit>(),
-        ),
-        BlocProvider(
-          create: (context) => getIt<SiteViewModel>(),
-        ),
-        BlocProvider(
-          create: (context) => getIt<InventoryViewModelCubit>(),
-        ),
-        BlocProvider(
-          create: (context) => getIt<ReportViewModel>(),
-        ),
-        BlocProvider(
-          create: (context) => getIt<ChatViewModelCubit>(),
-        ),
-        BlocProvider(
-          create: (context) => getIt<UserRequestAccountCubit>(),
-        ),
-        BlocProvider(
-          create: (context) => getIt<RequestsScreenViewmodelCubit>(),
-        ),
-      ],
-      child: MyApp(
-        route: route,
-      )));
+    providers: [
+      BlocProvider(create: (context) => getIt<LoginScreenViewModel>()),
+      BlocProvider(create: (context) => getIt<RegisterViewModelCubit>()),
+      BlocProvider(create: (context) => getIt<ForgetPasswordViewModel>()),
+      BlocProvider(create: (context) => getIt<CategoryCubit>()),
+      BlocProvider(create: (context) => getIt<ProfileCubit>()),
+      BlocProvider(create: (context) => getIt<SiteViewModel>()),
+      BlocProvider(create: (context) => getIt<InventoryViewModelCubit>()),
+      BlocProvider(create: (context) => getIt<ReportViewModel>()),
+      BlocProvider(create: (context) => getIt<ChatViewModelCubit>()),
+      BlocProvider(create: (context) => getIt<UserRequestAccountCubit>()),
+      BlocProvider(create: (context) => getIt<RequestsScreenViewmodelCubit>()),
+    ],
+    child: MyApp(route: route),
+  ));
 }
 
 String autoLogin() {
   var item = SharedPrefsLocal.getData(key: StringManager.keyUserAdmin);
-  String route;
-  if (item != null) {
-    route = RoutesManger.routeNameCategoryScreen;
-  } else {
-    route = RoutesManger.routeNameEngOwnerScreen;
-  }
-  return route;
+  return item != null
+      ? RoutesManger.routeNameCategoryScreen
+      : RoutesManger.routeNameEngOwnerScreen;
 }
 
 class MyApp extends StatelessWidget {
   final String route;
+
   const MyApp({super.key, required this.route});
 
   @override

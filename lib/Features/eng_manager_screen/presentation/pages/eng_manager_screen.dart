@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:bug_away/Config/routes/routes_manger.dart';
-import 'package:bug_away/Core/utils/SharedPrefsLocal.dart';
 import 'package:bug_away/Core/utils/strings.dart';
 import '../../../../Core/component/button_custom.dart';
 import '../../../../Core/utils/images.dart';
@@ -17,28 +16,63 @@ class _EngManagerScreenState extends State<EngManagerScreen>
   double _opacity = 0.0;
   late AnimationController _animationController;
   late Animation<Offset> _slideAnimation;
+  late Image _backgroundImage;
+  late Image _catBackground3;
+  late Image _engIcon;
+  late Image _ownerIcon;
 
   @override
   void initState() {
     super.initState();
 
+    _backgroundImage = Image.asset(ImageManager.background);
+    _catBackground3 = Image.asset(ImageManager.catBackground3);
+    _engIcon = Image.asset(ImageManager.engIcon);
+    _ownerIcon = Image.asset(ImageManager.ownerIcon);
+
     _animationController =
-        AnimationController(vsync: this, duration: Duration(seconds: 1));
+        AnimationController(vsync: this, duration: const Duration(seconds: 1));
 
     _slideAnimation =
-        Tween<Offset>(begin: Offset(-1.w, 0), end: Offset(0, 0)).animate(
+        Tween<Offset>(begin: Offset(-1.w, 0), end: const Offset(0, 0)).animate(
       CurvedAnimation(
         parent: _animationController,
         curve: Curves.easeInOut,
       ),
     );
 
-    Future.delayed(Duration(milliseconds: 300), () {
+    Future.delayed(const Duration(milliseconds: 300), () {
       setState(() {
         _opacity = 1.0;
       });
       _animationController.forward();
     });
+
+    // Preload the images
+    _preloadImages();
+  }
+
+  void _preloadImages() {
+    _backgroundImage.image.resolve(const ImageConfiguration()).addListener(
+      ImageStreamListener((_, __) {
+        setState(() {});
+      }),
+    );
+    _catBackground3.image.resolve(const ImageConfiguration()).addListener(
+      ImageStreamListener((_, __) {
+        setState(() {});
+      }),
+    );
+    _engIcon.image.resolve(const ImageConfiguration()).addListener(
+      ImageStreamListener((_, __) {
+        setState(() {});
+      }),
+    );
+    _ownerIcon.image.resolve(const ImageConfiguration()).addListener(
+      ImageStreamListener((_, __) {
+        setState(() {});
+      }),
+    );
   }
 
   @override
@@ -56,9 +90,9 @@ class _EngManagerScreenState extends State<EngManagerScreen>
           Container(
             width: double.infinity,
             height: double.infinity,
-            decoration: const BoxDecoration(
+            decoration: BoxDecoration(
               image: DecorationImage(
-                image: AssetImage(ImageManager.background),
+                image: _backgroundImage.image,
                 fit: BoxFit.cover,
               ),
             ),
@@ -73,7 +107,7 @@ class _EngManagerScreenState extends State<EngManagerScreen>
                   SizedBox(height: 50.h),
                   AnimatedOpacity(
                     opacity: _opacity,
-                    duration: Duration(seconds: 2),
+                    duration: const Duration(seconds: 2),
                     curve: Curves.easeIn,
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 26.0),

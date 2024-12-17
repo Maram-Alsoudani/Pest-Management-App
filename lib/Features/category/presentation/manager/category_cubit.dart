@@ -1,8 +1,6 @@
 import 'package:bloc/bloc.dart';
-import 'package:flutter/animation.dart';
 import 'package:flutter/material.dart';
 import 'package:injectable/injectable.dart';
-import 'package:meta/meta.dart';
 import 'package:bug_away/Core/errors/failures.dart';
 import 'package:bug_away/Features/register/domain/entities/user_model_entity.dart';
 
@@ -39,14 +37,17 @@ class CategoryCubit extends Cubit<CategoryState> {
                 phone: r.phone,
                 email: r.phone)));
         WidgetsBinding.instance.addPostFrameCallback((_) {
-          animationController.forward();
+          if (animationController != null &&
+              !animationController!.isAnimating) {
+            animationController!.forward();
+          }
         });
       },
     );
   }
 
   //===============Animation Handle=======================
-  late AnimationController animationController;
+  AnimationController? animationController;
   late Animation<Offset> slideAnimation;
 
   void doAnimation(SingleTickerProviderStateMixin single) {
@@ -57,9 +58,15 @@ class CategoryCubit extends Cubit<CategoryState> {
         Tween<Offset>(begin: const Offset(-1, 0), end: const Offset(0, 0))
             .animate(
       CurvedAnimation(
-        parent: animationController,
+        parent: animationController!,
         curve: Curves.easeInOut,
       ),
     );
+  }
+
+  @override
+  Future<void> close() {
+    animationController?.dispose();
+    return super.close();
   }
 }

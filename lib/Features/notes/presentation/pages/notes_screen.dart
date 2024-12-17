@@ -6,7 +6,7 @@ import 'package:bug_away/Core/utils/strings.dart';
 import 'package:bug_away/Features/site_report/presentation/manager/report_view_model.dart';
 
 class NotesScreen extends StatefulWidget {
-  const NotesScreen({Key? key}) : super(key: key);
+  const NotesScreen({super.key});
 
   @override
   State<NotesScreen> createState() => _NotesScreenState();

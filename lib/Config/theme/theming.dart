@@ -6,17 +6,17 @@ import 'package:bug_away/Core/utils/colors.dart';
 class MyTheme {
   static final ThemeData theme = ThemeData(
     scaffoldBackgroundColor: ColorManager.backgroundColor,
-    appBarTheme: AppBarTheme(
+    appBarTheme: const AppBarTheme(
       foregroundColor: ColorManager.whiteColor,
       backgroundColor: ColorManager.backgroundColor,
     ),
-    iconTheme: IconThemeData(
+    iconTheme: const IconThemeData(
       color: ColorManager.whiteColor,
     ),
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
-        backgroundColor: Color(0xFFA11B1B),
-        padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+        backgroundColor: const Color(0xFFA11B1B),
+        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
       ),
     ),
     textTheme: TextTheme(

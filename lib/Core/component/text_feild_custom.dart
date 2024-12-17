@@ -17,7 +17,8 @@ class CustomTextFormField extends StatefulWidget {
   final Color? errorBorderColor;
   final Function(String)? onChanged;
 
-  CustomTextFormField({
+  const CustomTextFormField({
+    super.key,
     required this.hint,
     required this.validator,
     required this.controller,
@@ -57,7 +58,7 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
         validator: widget.validator,
         obscureText: _isSecured,
         cursorColor: ColorManager.blueColor,
-        style: TextStyle(color: ColorManager.whiteColor),
+        style: const TextStyle(color: ColorManager.whiteColor),
         onChanged: widget.onChanged,
         decoration: InputDecoration(
           hintText: widget.hint,

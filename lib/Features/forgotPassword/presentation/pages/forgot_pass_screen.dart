@@ -100,7 +100,7 @@ class _ForgotPassScreenState extends State<ForgotPassScreen>
                                         color: ColorManager.whiteColor,
                                         fontSize: 30),
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 height: 15,
                               ),
                               Text(StringManager.enterEmailForResetPass,

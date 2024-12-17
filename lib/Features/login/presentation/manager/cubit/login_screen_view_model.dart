@@ -28,11 +28,11 @@ class LoginScreenViewModel extends Cubit<LoginStates> {
   late Animation<double> shakeAnimation;
   // initialize animations
   void initializeAnimations(SingleTickerProviderStateMixin single) {
-    animationController =
-        AnimationController(vsync: single, duration: Duration(seconds: 1));
+    animationController = AnimationController(
+        vsync: single, duration: const Duration(seconds: 1));
 
     slideAnimation =
-        Tween<Offset>(begin: Offset(-1.w, 0), end: Offset(0, 0)).animate(
+        Tween<Offset>(begin: Offset(-1.w, 0), end: const Offset(0, 0)).animate(
       CurvedAnimation(
         parent: animationController,
         curve: Curves.easeInOut,

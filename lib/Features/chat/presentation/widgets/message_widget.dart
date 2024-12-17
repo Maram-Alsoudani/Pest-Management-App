@@ -33,7 +33,7 @@ class SentMessage extends StatelessWidget {
   MessageEntity message;
   final String dateTime;
 
-  SentMessage({required this.message, required this.dateTime});
+  SentMessage({super.key, required this.message, required this.dateTime});
 
   @override
   Widget build(BuildContext context) {
@@ -72,7 +72,7 @@ class ReciveMessage extends StatelessWidget {
   MessageEntity message;
   final String dateTime;
 
-  ReciveMessage({required this.message, required this.dateTime});
+  ReciveMessage({super.key, required this.message, required this.dateTime});
 
   @override
   Widget build(BuildContext context) {

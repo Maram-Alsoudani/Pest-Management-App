@@ -7,6 +7,8 @@ import '../../../../Core/utils/images.dart';
 import '../widget/custom_button.dart';
 
 class EngManagerScreen extends StatefulWidget {
+  const EngManagerScreen({super.key});
+
   @override
   State<EngManagerScreen> createState() => _EngManagerScreenState();
 }

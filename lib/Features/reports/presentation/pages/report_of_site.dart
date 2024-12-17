@@ -66,7 +66,7 @@ class _ReportOfSiteState extends State<ReportOfSite>
           ),
           actions: [
             IconButton(
-              icon: Icon(Icons.download),
+              icon: const Icon(Icons.download),
               onPressed: () async {
                 if (viewModel.state is GetReportOfSiteSuccessState) {
                   final report =

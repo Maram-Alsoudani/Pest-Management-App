@@ -121,7 +121,7 @@ class UserRequestAccountDataSourceImpl implements UserRequestAccountDataSource {
         return Left(Failure(errorMessage: StringManager.emailAlreadyInUse));
       }
 
-      return Right(null);
+      return const Right(null);
     } on FirebaseAuthException catch (e) {
       if (e.code == 'invalid-credential') {
         return Left(Failure(errorMessage: StringManager.badFormat));

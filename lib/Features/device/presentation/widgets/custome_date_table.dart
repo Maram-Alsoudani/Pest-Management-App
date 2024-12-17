@@ -6,6 +6,8 @@ class CustomeDateTable extends StatelessWidget {
   //todo get the date and make a copy of it so we can edit it later , sorting , modification and so on...
   List<DeviceId> data = List.from(deviceId);
 
+  CustomeDateTable({super.key});
+
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -18,9 +20,9 @@ class CustomeDateTable extends StatelessWidget {
 
   List<DataColumn> createColumns() {
     return [
-      DataColumn(label: Text('DeviceID')),
-      DataColumn(label: Text('Date')),
-      DataColumn(label: Text('Time')),
+      const DataColumn(label: Text('DeviceID')),
+      const DataColumn(label: Text('Date')),
+      const DataColumn(label: Text('Time')),
     ];
   }
 
@@ -31,19 +33,19 @@ class CustomeDateTable extends StatelessWidget {
           DataCell(
             Text(
               e.id.toString(),
-              style: TextStyle(color: ColorManager.whiteColor),
+              style: const TextStyle(color: ColorManager.whiteColor),
             ),
           ),
           DataCell(
             Text(
               e.date.toString(),
-              style: TextStyle(color: ColorManager.whiteColor),
+              style: const TextStyle(color: ColorManager.whiteColor),
             ),
           ),
           DataCell(
             Text(
               e.time.toString(),
-              style: TextStyle(color: ColorManager.whiteColor),
+              style: const TextStyle(color: ColorManager.whiteColor),
             ),
           ),
         ],

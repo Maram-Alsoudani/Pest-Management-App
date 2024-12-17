@@ -1,9 +1,7 @@
 import 'package:bloc/bloc.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:injectable/injectable.dart';
 import 'package:intl/intl.dart';
-import 'package:meta/meta.dart';
 import 'package:bug_away/Core/errors/failures.dart';
 import 'package:bug_away/Core/utils/SharedPrefsLocal.dart';
 import 'package:bug_away/Core/utils/strings.dart';
@@ -11,7 +9,6 @@ import 'package:bug_away/Features/chat/data/models/message_dto.dart';
 import 'package:bug_away/Features/chat/domain/entities/message_entity.dart';
 import 'package:bug_away/Features/chat/domain/use_cases/get_message_use_case.dart';
 import 'package:bug_away/Features/chat/domain/use_cases/send_message_use_case.dart';
-import 'package:bug_away/Features/chat/presentation/widgets/message_widget.dart';
 import 'package:bug_away/Features/register/domain/entities/user_model_entity.dart';
 
 part 'chat_view_model_state.dart';

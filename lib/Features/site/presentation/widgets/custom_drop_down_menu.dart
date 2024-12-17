@@ -12,6 +12,8 @@ import 'package:bug_away/Features/site/presentation/manager/site_view_model.dart
 import '../../../register/data/models/user_model_dto.dart';
 
 class UserDropdown extends StatefulWidget {
+  const UserDropdown({super.key});
+
   @override
   _UserDropdownState createState() => _UserDropdownState();
 }
@@ -25,35 +27,35 @@ class _UserDropdownState extends State<UserDropdown> {
         decoration: InputDecoration(
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(8.r),
-            borderSide: BorderSide(
+            borderSide: const BorderSide(
               width: 1,
               color: ColorManager.whiteColor,
             ),
           ),
           disabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(8.r),
-            borderSide: BorderSide(
+            borderSide: const BorderSide(
               width: 1,
               color: ColorManager.greyShade6,
             ),
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(8.r),
-            borderSide: BorderSide(
+            borderSide: const BorderSide(
               width: 1,
               color: ColorManager.whiteColor,
             ),
           ),
           errorBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(8.r),
-            borderSide: BorderSide(
+            borderSide: const BorderSide(
               width: 1,
               color: ColorManager.primaryColor,
             ),
           ),
           focusedErrorBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(8.r),
-            borderSide: BorderSide(
+            borderSide: const BorderSide(
               width: 1,
               color: ColorManager.primaryColor,
             ),
@@ -65,9 +67,9 @@ class _UserDropdownState extends State<UserDropdown> {
           }
           return null;
         },
-        style: TextStyle(color: ColorManager.whiteColor),
+        style: const TextStyle(color: ColorManager.whiteColor),
         dropdownColor: ColorManager.backgroundColor,
-        hint: Text(
+        hint: const Text(
           StringManager.selectUser,
           style: TextStyle(color: ColorManager.whiteColor),
         ),

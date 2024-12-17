@@ -1,3 +1,4 @@
+import 'package:bug_away/Core/utils/images.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -41,7 +42,7 @@ class _AllUsersState extends State<AllUsers>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(StringManager.reportsSubmittedBy),
+        title: const Text(StringManager.reportsSubmittedBy),
       ),
       body: BlocBuilder<AllUsersScreenViewModel, GetAllUsersState>(
         bloc: allUsersViewModel,
@@ -76,17 +77,17 @@ class _AllUsersState extends State<AllUsers>
                         return Center(
                           child: Text(
                             state.errorMessage,
-                            style: TextStyle(color: Colors.white),
+                            style: const TextStyle(color: Colors.white),
                           ),
                         );
                       } else if (state is NoSearchResultsState) {
                         return Center(
                           child: Text(
-                            StringManager.noSitesFound,
+                            StringManager.noReportFound,
                             style: Theme.of(context)
                                 .textTheme
                                 .bodyMedium!
-                                .copyWith(color: ColorManager.greyShade4),
+                                .copyWith(color: ColorManager.whiteColor),
                           ),
                         );
                       } else {
@@ -109,9 +110,9 @@ class _AllUsersState extends State<AllUsers>
                                             .allUsers[index].id);
                                   },
                                   child: UserWidget(
-                                    imageUrl: user.image ??
-                                        "assets/images/avatar.png",
-                                    userName: user.userName ?? "Unknown User",
+                                    imageUrl: user.image ?? ImageManager.avatar,
+                                    userName: user.userName ??
+                                        StringManager.unknownUserName,
                                     email: user.email ?? "",
                                   ),
                                 );
@@ -120,7 +121,6 @@ class _AllUsersState extends State<AllUsers>
                           ),
                         );
                       }
-                      return Container();
                     },
                   ),
                 ),

@@ -39,8 +39,8 @@ class ChatDataSourceImpl implements ChatDataSource {
 
   Future<void> handleNotification(
       UserAndAdminModelDto adminData, String bodyMessage) async {
-    String title = "${adminData.userName ?? ""}";
-    String body = "$bodyMessage";
+    String title = adminData.userName ?? "";
+    String body = bodyMessage;
 
     List<UserAndAdminModelDto> adminList =
         await FirebaseUtils.getAdminOrUserTokenFromFireStore(
@@ -97,7 +97,7 @@ class ChatDataSourceImpl implements ChatDataSource {
           await handleNotification(data!, message.content);
         }
 
-        return Right(null);
+        return const Right(null);
       } else {
         return Left(Failure(errorMessage: StringManager.networkError));
       }

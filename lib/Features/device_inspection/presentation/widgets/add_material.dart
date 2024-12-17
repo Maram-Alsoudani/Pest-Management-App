@@ -7,7 +7,7 @@ import 'custom_text.dart';
 class AddMaterial extends StatefulWidget {
   List<String> chooseList;
   String title;
-  AddMaterial({required this.chooseList, required this.title});
+  AddMaterial({super.key, required this.chooseList, required this.title});
 
   @override
   State<AddMaterial> createState() => _AddMaterialState();
@@ -26,9 +26,9 @@ class _AddMaterialState extends State<AddMaterial> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              CustomText(title:widget.title),
+              CustomText(title: widget.title),
               PopupMenuButton<String>(
-                icon: Icon(Icons.add), // Replace with any icon you prefer
+                icon: const Icon(Icons.add), // Replace with any icon you prefer
                 onSelected: (value) {
                   setState(() {
                     showMaterialsList.add(value);
@@ -71,7 +71,7 @@ class _AddMaterialState extends State<AddMaterial> {
                   itemBuilder: (context, index) {
                     return ListTile(
                       trailing: IconButton(
-                        icon: Icon(
+                        icon: const Icon(
                           Icons.delete,
                           color: ColorManager.redColor,
                         ),

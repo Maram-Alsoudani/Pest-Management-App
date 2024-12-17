@@ -4,7 +4,7 @@ import 'package:bug_away/Core/utils/colors.dart';
 class RecommendationsCustome extends StatefulWidget {
   final String text;
 
-  RecommendationsCustome({required this.text});
+  const RecommendationsCustome({super.key, required this.text});
 
   @override
   State<RecommendationsCustome> createState() => _RecommendationsCustomeState();

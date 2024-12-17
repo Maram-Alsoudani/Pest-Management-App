@@ -1,5 +1,4 @@
 import 'package:dartz/dartz.dart';
-import 'package:bug_away/Features/register/domain/entities/user_model_entity.dart';
 
 import '../../../../Core/errors/failures.dart';
 

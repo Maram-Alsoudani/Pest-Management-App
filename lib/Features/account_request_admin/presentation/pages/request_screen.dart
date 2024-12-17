@@ -282,7 +282,7 @@ class RequestScreen extends StatelessWidget {
                                                         color: ColorManager
                                                             .dialogGreenColor,
                                                       ),
-                                                      Icon(Icons.done),
+                                                      const Icon(Icons.done),
                                                     ],
                                                   )
                                                 else if (request.status ==

@@ -10,6 +10,8 @@ import '../../../../../Core/utils/colors.dart';
 import '../../../../../Core/utils/strings.dart';
 
 class EditProfileDialog extends StatelessWidget {
+  const EditProfileDialog({super.key});
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder(

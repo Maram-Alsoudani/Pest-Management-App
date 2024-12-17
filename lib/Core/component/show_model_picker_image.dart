@@ -8,7 +8,7 @@ import 'dart:io' show Platform;
 
 class ShowModelPickerImage extends StatefulWidget {
   final Function uploadImage2Screen;
-  ShowModelPickerImage({super.key, required this.uploadImage2Screen});
+  const ShowModelPickerImage({super.key, required this.uploadImage2Screen});
 
   @override
   State<ShowModelPickerImage> createState() => _ShowModelPickerImageState();

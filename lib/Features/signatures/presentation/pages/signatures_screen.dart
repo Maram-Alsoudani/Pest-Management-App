@@ -10,7 +10,7 @@ import 'package:bug_away/Features/site_report/presentation/manager/report_view_m
 import 'signature_pad.dart';
 
 class SignaturesScreen extends StatefulWidget {
-  SignaturesScreen({super.key});
+  const SignaturesScreen({super.key});
 
   @override
   State<SignaturesScreen> createState() => _SignaturesScreenState();
@@ -103,13 +103,14 @@ class _SignaturesScreenState extends State<SignaturesScreen> {
             : StringManager.signatures),
         actions: isMultiSelectMode
             ? [
-                IconButton(icon: Icon(Icons.select_all), onPressed: selectAll),
                 IconButton(
-                  icon: Icon(Icons.delete),
+                    icon: const Icon(Icons.select_all), onPressed: selectAll),
+                IconButton(
+                  icon: const Icon(Icons.delete),
                   onPressed: deleteSelected,
                 ),
                 IconButton(
-                  icon: Icon(Icons.close),
+                  icon: const Icon(Icons.close),
                   onPressed: clearAllSelected,
                 ),
               ]
@@ -125,7 +126,7 @@ class _SignaturesScreenState extends State<SignaturesScreen> {
               ],
       ),
       body: signaturesList.isEmpty
-          ? Center(
+          ? const Center(
               child: Text(
                 StringManager.noSignaturesAddedYet,
                 style: TextStyle(color: Colors.white),
@@ -134,7 +135,7 @@ class _SignaturesScreenState extends State<SignaturesScreen> {
             )
           : GridView.builder(
               itemCount: signaturesList.length,
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,
                 crossAxisSpacing: 5,
                 mainAxisSpacing: 5,
@@ -166,14 +167,14 @@ class _SignaturesScreenState extends State<SignaturesScreen> {
               },
             ),
       floatingActionButton: FloatingActionButton(
+        backgroundColor: ColorManager.primaryColor,
+        shape: const CircleBorder(),
+        onPressed: addNewSignature,
         child: Icon(
           Icons.add,
           color: ColorManager.whiteColor,
           size: 30,
         ),
-        backgroundColor: ColorManager.primaryColor,
-        shape: CircleBorder(),
-        onPressed: addNewSignature,
       ),
     );
   }

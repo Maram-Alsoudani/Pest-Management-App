@@ -13,7 +13,7 @@ class PickImageWidgetRegister extends StatefulWidget {
   final File? imagePath;
   final Function(ImageSource) onImagePicked;
 
-  PickImageWidgetRegister({
+  const PickImageWidgetRegister({
     super.key,
     required this.icon,
     this.imageUrl,

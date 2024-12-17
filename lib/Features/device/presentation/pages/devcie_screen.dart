@@ -10,6 +10,8 @@ import 'package:bug_away/Features/site_report/presentation/manager/report_view_m
 import '../widgets/custome_date_table.dart';
 
 class DeviceScreen extends StatefulWidget {
+  const DeviceScreen({super.key});
+
   @override
   State<DeviceScreen> createState() => _DeviceScreenState();
 }
@@ -26,17 +28,17 @@ class _DeviceScreenState extends State<DeviceScreen>
     super.initState();
 
     _animationController =
-        AnimationController(vsync: this, duration: Duration(seconds: 1));
+        AnimationController(vsync: this, duration: const Duration(seconds: 1));
 
     _slideAnimation =
-        Tween<Offset>(begin: Offset(-1.w, 0), end: Offset(0, 0)).animate(
+        Tween<Offset>(begin: Offset(-1.w, 0), end: const Offset(0, 0)).animate(
       CurvedAnimation(
         parent: _animationController,
         curve: Curves.easeInOut,
       ),
     );
 
-    Future.delayed(Duration(milliseconds: 300), () {
+    Future.delayed(const Duration(milliseconds: 300), () {
       setState(() {
         _opacity = 1.0;
       });
@@ -56,7 +58,7 @@ class _DeviceScreenState extends State<DeviceScreen>
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(StringManager.device),
+        title: const Text(StringManager.device),
         actions: [
           IconButton(
             icon: const Icon(Icons.save, color: ColorManager.whiteColor),
@@ -79,7 +81,7 @@ class _DeviceScreenState extends State<DeviceScreen>
             SizedBox(height: 20.h),
             AnimatedOpacity(
               opacity: _opacity,
-              duration: Duration(seconds: 2),
+              duration: const Duration(seconds: 2),
               curve: Curves.easeIn,
               child: Text(
                 StringManager.deviceLastScan,
@@ -89,7 +91,7 @@ class _DeviceScreenState extends State<DeviceScreen>
                     .copyWith(fontSize: 25.sp, fontWeight: FontWeight.bold),
               ),
             ),
-            Divider(color: ColorManager.primaryColor),
+            const Divider(color: ColorManager.primaryColor),
             // Data Table
             Expanded(
               child: SlideTransition(

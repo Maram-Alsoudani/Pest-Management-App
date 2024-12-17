@@ -3,7 +3,6 @@ import 'package:injectable/injectable.dart';
 import 'package:bug_away/Features/register/domain/repositories/register_repo.dart';
 
 import '../../../../Core/errors/failures.dart';
-import '../entities/user_model_entity.dart';
 
 @injectable
 class RegisterUseCase {

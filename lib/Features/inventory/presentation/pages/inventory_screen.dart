@@ -6,7 +6,7 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:bug_away/Core/component/custom_dialog.dart';
 import 'package:bug_away/Core/component/lottie_loading_widget.dart';
-import 'package:bug_away/Core/component/text_feild_custom.dart';
+import 'package:bug_away/Core/component/search_field_widget.dart';
 import 'package:bug_away/Core/utils/colors.dart';
 import 'package:bug_away/Core/utils/strings.dart';
 import 'package:bug_away/Features/inventory/presentation/manager/inventory_view_model_cubit.dart';
@@ -15,6 +15,8 @@ import 'package:bug_away/Features/inventory/presentation/widgets/materail_item.d
 import 'package:bug_away/Features/register/data/models/user_model_dto.dart';
 
 class InventoryScreen extends StatefulWidget {
+  const InventoryScreen({super.key});
+
   @override
   _InventoryScreenState createState() => _InventoryScreenState();
 }
@@ -38,60 +40,47 @@ class _InventoryScreenState extends State<InventoryScreen>
     return BlocConsumer<InventoryViewModelCubit, InventoryViewModelState>(
       listener: (context, state) {
         if (state is InventoryAddedMaterailSuccess) {
-          // Safe to show dialog
-          if (mounted) {
-            DialogUtils.showAlertDialog(
-              context: context,
-              title: StringManager.success,
-              message: StringManager.addedSuccessfully,
-              posActionTitle: StringManager.ok,
-            );
-          }
+          DialogUtils.showAlertDialog(
+            context: context,
+            title: StringManager.success,
+            message: StringManager.addMaterial,
+            posActionTitle: StringManager.ok,
+          );
         } else if (state is InventoryAddedMaterailError) {
-          if (mounted) {
-            DialogUtils.showAlertDialog(
-              context: context,
-              title: StringManager.failed,
-              message: state.error.errorMessage,
-              posActionTitle: StringManager.ok,
-            );
-          }
+          DialogUtils.showAlertDialog(
+            context: context,
+            title: StringManager.error,
+            message: state.error.errorMessage,
+            posActionTitle: StringManager.ok,
+          );
         } else if (state is InventoryGetMaterailError) {
-          if (mounted) {
-            DialogUtils.showAlertDialog(
-              context: context,
-              title: StringManager.failed,
-              message: state.error.errorMessage,
-              posActionTitle: StringManager.ok,
-            );
-          }
+          DialogUtils.showAlertDialog(
+            context: context,
+            title: StringManager.error,
+            message: state.error.errorMessage,
+            posActionTitle: StringManager.ok,
+          );
         } else if (state is InventoryUpdateMaterailError) {
-          if (mounted) {
-            DialogUtils.showAlertDialog(
-              context: context,
-              title: StringManager.failed,
-              message: state.error.errorMessage,
-              posActionTitle: StringManager.ok,
-            );
-          }
+          DialogUtils.showAlertDialog(
+            context: context,
+            title: StringManager.error,
+            message: state.error.errorMessage,
+            posActionTitle: StringManager.ok,
+          );
         } else if (state is InventoryUpdateMaterailSuccess) {
-          if (mounted) {
-            DialogUtils.showAlertDialog(
-              context: context,
-              title: StringManager.success,
-              message: StringManager.updateSuccessfully,
-              posActionTitle: StringManager.ok,
-            );
-          }
+          DialogUtils.showAlertDialog(
+            context: context,
+            title: StringManager.success,
+            message: StringManager.materialUpdated,
+            posActionTitle: StringManager.ok,
+          );
         } else if (state is InventoryDeleteMaterailSuccess) {
-          if (mounted) {
-            DialogUtils.showAlertDialog(
-              context: context,
-              title: StringManager.success,
-              message: StringManager.deletedSuccessfully,
-              posActionTitle: StringManager.ok,
-            );
-          }
+          DialogUtils.showAlertDialog(
+            context: context,
+            title: StringManager.success,
+            message: StringManager.materialDeleted,
+            posActionTitle: StringManager.ok,
+          );
         }
       },
       builder: (context, state) {
@@ -102,135 +91,97 @@ class _InventoryScreenState extends State<InventoryScreen>
           progressIndicator: const Center(child: LottieLoadingWidget()),
           child: Scaffold(
             appBar: AppBar(
-              surfaceTintColor: Colors.transparent,
-              title: Text(
-                StringManager.inventory,
-                style: Theme.of(context)
-                    .textTheme
-                    .titleSmall!
-                    .copyWith(fontSize: 25.sp),
-              ),
-            ),
-            floatingActionButton: bloc.user.type == UserAndAdminModelDto.admin
-                ? AnimatedOpacity(
-                    duration: const Duration(seconds: 2),
-                    opacity: bloc.opacity,
-                    curve: Curves.easeIn,
-                    child: FloatingActionButton(
-                      shape: const CircleBorder(),
-                      backgroundColor: ColorManager.primaryColor,
-                      onPressed: () {
-                        InventoryViewModelCubit.get(context)
-                            .nameController
-                            .clear();
-                        InventoryViewModelCubit.get(context)
-                            .quantityController
-                            .clear();
-                        showDialog(
-                          context: context,
-                          builder: (context) {
-                            return AddedOrEditMaterailDialog(
-                              buttonName: StringManager.save,
-                              title: StringManager.addMaterial,
-                              onTap: () {
-                                InventoryViewModelCubit.get(context)
-                                    .addedMaterails();
+              title: const Text(StringManager.inventory),
+              actions: [
+                if (bloc.user.type == 'admin')
+                  IconButton(
+                    icon: const Icon(Icons.add),
+                    onPressed: () {
+                      showDialog(
+                        context: context,
+                        builder: (context) {
+                          return AddedOrEditMaterailDialog(
+                            buttonName: StringManager.add,
+                            title: StringManager.addMaterial,
+                            onTap: () {
+                              if (bloc.formKey.currentState!.validate()) {
+                                bloc.addedMaterails();
                                 Navigator.pop(context);
-                                bloc.getMaterails();
-                              },
-                            );
-                          },
-                        );
-                      },
-                      child: const Icon(
-                        Icons.add,
-                        color: ColorManager.whiteColor,
-                      ),
-                    ),
-                  )
-                : null,
+                              }
+                            },
+                          );
+                        },
+                      );
+                    },
+                  ),
+              ],
+            ),
             body: Padding(
-              padding: EdgeInsets.all(10.0.r),
+              padding: const EdgeInsets.all(8.0),
               child: Column(
                 children: [
-                  AnimatedOpacity(
-                    duration: const Duration(seconds: 2),
-                    opacity: bloc.opacity,
-                    curve: Curves.easeIn,
-                    child: CustomTextFormField(
-                      hint: StringManager.searchHint,
-                      controller: bloc.searchController,
-                      validator: (value) {
-                        return null;
-                      },
-                      borderRadius: BorderRadius.circular(28.0.r),
-                    ),
+                  SearchFieldWidget(
+                    controller: bloc.searchController,
+                    onChanged: (value) => bloc.searchMethod(),
                   ),
-                  SizedBox(height: 6.0.h),
-                  state is InventoryNoSearchResultMaterail
-                      ? Expanded(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                StringManager.noResultsFound,
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .titleSmall!
-                                    .copyWith(fontSize: 20.sp),
-                              ),
-                            ],
-                          ),
-                        )
-                      : Expanded(
-                          child: SlideTransition(
-                            position: bloc.slideAnimation,
-                            child: ListView.builder(
-                              itemCount: bloc.filteredItems.length,
-                              itemBuilder: (context, index) {
-                                final item = bloc.filteredItems[index];
-                                final isUnavailable = (item.quantity is int &&
-                                        item.quantity == 0) ||
-                                    (item.quantity is String &&
-                                        int.parse(item.quantity as String) ==
-                                            0);
-                                return MaterailItem(
-                                  isUnavailable: isUnavailable,
-                                  item: item,
-                                  onEdit: () {
-                                    bloc.nameController.text = item.name ?? "";
-                                    bloc.quantityController.text =
-                                        item.quantity.toString();
-                                    showDialog(
-                                      context: context,
-                                      builder: (context) {
-                                        return AddedOrEditMaterailDialog(
-                                          title: StringManager.edit,
-                                          buttonName: StringManager.save,
-                                          onTap: () {
-                                            InventoryViewModelCubit.get(context)
-                                                .updateMaterails(item.id);
-                                            InventoryViewModelCubit.get(context)
-                                                .nameController
-                                                .clear();
-                                            InventoryViewModelCubit.get(context)
-                                                .quantityController
-                                                .clear();
-                                            Navigator.pop(context);
-                                            bloc.getMaterails();
+                  Expanded(
+                    child: bloc.filteredItems.isEmpty
+                        ? Center(
+                            child: Text(
+                              StringManager.noMaterialsFound,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyMedium!
+                                  .copyWith(color: ColorManager.whiteColor),
+                            ),
+                          )
+                        : ListView.builder(
+                            itemCount: bloc.filteredItems.length,
+                            itemBuilder: (context, index) {
+                              final item = bloc.filteredItems[index];
+                              return MaterailItem(
+                                isUnavailable: item.quantity == 0,
+                                item: item,
+                                onEdit: bloc.user.type == 'admin'
+                                    ? () {
+                                        showDialog(
+                                          context: context,
+                                          builder: (context) {
+                                            return AddedOrEditMaterailDialog(
+                                              buttonName: StringManager.update,
+                                              title: StringManager.editMaterial,
+                                              onTap: () {
+                                                if (bloc.formKey.currentState!
+                                                    .validate()) {
+                                                  bloc.updateMaterails(item.id);
+                                                  Navigator.pop(context);
+                                                }
+                                              },
+                                            );
                                           },
                                         );
-                                      },
-                                    );
-                                  },
-                                  onDelete: () {
-                                    bloc.deleteMaterails(item.id, index);
-                                  },
-                                );
-                              },
-                            ),
+                                      }
+                                    : null,
+                                onDelete: bloc.user.type == 'admin'
+                                    ? () {
+                                        DialogUtils.showAlertDialog(
+                                          context: context,
+                                          title: StringManager.delete,
+                                          message: StringManager
+                                              .deleteMaterialMessage,
+                                          posActionTitle: StringManager.ok,
+                                          negActionTitle: StringManager.cancel,
+                                          posAction: () {
+                                            bloc.deleteMaterails(
+                                                item.id, index);
+                                          },
+                                        );
+                                      }
+                                    : null,
+                              );
+                            },
                           ),
-                        )
+                  ),
                 ],
               ),
             ),

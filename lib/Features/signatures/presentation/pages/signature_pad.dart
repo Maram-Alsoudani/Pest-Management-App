@@ -4,7 +4,7 @@ import 'package:signature/signature.dart';
 import '../../../../../Core/utils/colors.dart';
 
 class SignaturePad extends StatefulWidget {
-  SignaturePad({super.key});
+  const SignaturePad({super.key});
 
   @override
   State<SignaturePad> createState() => _SignaturePadState();
@@ -55,7 +55,7 @@ class _SignaturePadState extends State<SignaturePad> {
                   signatureController.clear();
                   setState(() {});
                 },
-                icon: Icon(
+                icon: const Icon(
                   Icons.clear,
                   color: ColorManager.primaryColor,
                   size: 35,
@@ -70,7 +70,7 @@ class _SignaturePadState extends State<SignaturePad> {
                     }
                   }
                 },
-                icon: Icon(
+                icon: const Icon(
                   Icons.check,
                   color: ColorManager.primaryColor,
                   size: 35,

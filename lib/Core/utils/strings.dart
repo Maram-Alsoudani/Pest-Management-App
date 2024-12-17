@@ -65,6 +65,13 @@ class StringManager {
   static const String save = "Save";
   static const String searchHint = "Search";
   static const String searchMaterial = "Search Material";
+  static const String materialDeleted = "Material Deleted Successfully";
+  static const String materialUpdated = "Material Updated Successfully";
+  static const String noMaterialsFound = "No Materials Found";
+  static const String deleteMaterialMessage =
+      "Are you sure you want to delete?";
+  static const String editMaterial = "Edit Material";
+  static const String update = "Update";
   static const String send = "Send";
   static const String signatures = "Signatures";
   static const String sites = "Sites";
@@ -86,8 +93,8 @@ class StringManager {
   static const String somethingWentWrong = "Something went wrong";
   static const String view = "View";
   static const String noUsersFound = "No Users Found";
-  static const String noSitesFound = 'No sites found.';
-  static const String noMaterialFound = 'No material found';
+  static const String noSitesFound = 'No Sites Found';
+  static const String noMaterialFound = 'No Material Found';
   static const String updateSuccessfully = "Updated Successfully";
   static const String deletedSuccessfully = "Deleted Successfully";
   static const String addedSuccessfully = "Added Successfully";
@@ -130,4 +137,7 @@ class StringManager {
   static const String selected = "Selected";
   static const String noSignaturesAddedYet = "No signatures added yet";
   static const String category = "Category";
+  static const String messages = "Messages";
+  static const String welcomeMessage = "Welcome,";
+  static const String unknownUserName = "Unknown User";
 }

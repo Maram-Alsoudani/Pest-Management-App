@@ -27,7 +27,8 @@ class ReportOfSiteViewModel extends Cubit<GetReportOfSiteState> {
         vsync: single, duration: const Duration(seconds: 1));
 
     slideAnimation =
-        Tween<Offset>(begin: Offset(-1, 0), end: const Offset(0, 0)).animate(
+        Tween<Offset>(begin: const Offset(-1, 0), end: const Offset(0, 0))
+            .animate(
       CurvedAnimation(
         parent: animationController,
         curve: Curves.easeInOut,

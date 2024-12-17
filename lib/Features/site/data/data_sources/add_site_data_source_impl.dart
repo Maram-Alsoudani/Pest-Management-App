@@ -87,7 +87,7 @@ class AddSiteDataSourceImpl implements AddSiteDataSource {
           var data = SharedPrefsLocal.getData(key: StringManager.keyUserAdmin);
           await handleNotification(data!, userNameSite);
         }
-        return Right(null);
+        return const Right(null);
       } on FirebaseException catch (e) {
         return Left(Failure(errorMessage: e.toString()));
       } catch (e) {

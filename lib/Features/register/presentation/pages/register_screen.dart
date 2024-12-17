@@ -21,7 +21,7 @@ import '../manager/register_view_model_cubit.dart';
 import '../widgets/pick_Image_widget.dart';
 
 class RegisterScreen extends StatefulWidget {
-  RegisterScreen({super.key});
+  const RegisterScreen({super.key});
 
   @override
   State<RegisterScreen> createState() => _RegisterScreenState();

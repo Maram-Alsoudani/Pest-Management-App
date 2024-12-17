@@ -17,8 +17,8 @@ class MaterailItem extends StatelessWidget {
 
   final bool isUnavailable;
   final MaterailEntity item;
-  final VoidCallback onEdit;
-  final VoidCallback onDelete;
+  final VoidCallback? onEdit;
+  final VoidCallback? onDelete;
 
   @override
   Widget build(BuildContext context) {
@@ -35,45 +35,40 @@ class MaterailItem extends StatelessWidget {
           ),
           child: Slidable(
             key: ValueKey(item.id),
-            startActionPane: ActionPane(
-                extentRatio: .20,
-                motion: const BehindMotion(),
-                children: [
-                  SlidableAction(
-                    onPressed: (context) => onEdit(),
-                    backgroundColor: ColorManager.greyShade4,
-                    foregroundColor: ColorManager.whiteColor,
-                    icon: Icons.edit,
-                  ),
-                ]),
-            endActionPane: ActionPane(
-              extentRatio: .20,
-              motion: const BehindMotion(),
-              children: [
-                SlidableAction(
-                  onPressed: (context) => onDelete(),
-                  backgroundColor: ColorManager.primaryColor,
-                  foregroundColor: ColorManager.whiteColor,
-                  icon: Icons.delete,
-                ),
-              ],
-            ),
+            startActionPane: onEdit != null
+                ? ActionPane(
+                    extentRatio: .20,
+                    motion: const BehindMotion(),
+                    children: [
+                      SlidableAction(
+                        onPressed: (context) => onEdit?.call(),
+                        icon: Icons.edit,
+                        backgroundColor: ColorManager.primaryColor,
+                      ),
+                    ],
+                  )
+                : null,
+            endActionPane: onDelete != null
+                ? ActionPane(
+                    extentRatio: .20,
+                    motion: const BehindMotion(),
+                    children: [
+                      SlidableAction(
+                        onPressed: (context) => onDelete?.call(),
+                        icon: Icons.delete,
+                        backgroundColor: ColorManager.redColor,
+                      ),
+                    ],
+                  )
+                : null,
             child: ListTile(
-              leading: Icon(
-                isUnavailable
-                    ? CupertinoIcons.nosign
-                    : CupertinoIcons.drop_triangle,
+              leading: const Icon(
+                Icons.inventory,
                 color: ColorManager.primaryColor,
               ),
               title: Text(
-                item.name ?? "",
-                style: TextStyle(
-                  fontSize: 20.sp,
-                  color: isUnavailable ? ColorManager.greyShade3 : Colors.black,
-                  decoration: isUnavailable
-                      ? TextDecoration.lineThrough
-                      : TextDecoration.none,
-                ),
+                item.name ?? '',
+                style: Theme.of(context).textTheme.titleSmall,
               ),
               trailing: Text('Quantity: ${item.quantity.toString()}'),
             ),

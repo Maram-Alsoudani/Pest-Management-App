@@ -10,6 +10,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:bug_away/Features/site_report/presentation/manager/report_view_model.dart';
 
 class AddPhotosScreen extends StatefulWidget {
+  const AddPhotosScreen({super.key});
+
   @override
   _AddPhotosScreenState createState() => _AddPhotosScreenState();
 }
@@ -134,13 +136,14 @@ class _AddPhotosScreenState extends State<AddPhotosScreen> {
         ),
         actions: isMultiSelectMode
             ? [
-                IconButton(icon: Icon(Icons.select_all), onPressed: selectAll),
                 IconButton(
-                  icon: Icon(Icons.delete),
+                    icon: const Icon(Icons.select_all), onPressed: selectAll),
+                IconButton(
+                  icon: const Icon(Icons.delete),
                   onPressed: deleteSelected,
                 ),
                 IconButton(
-                  icon: Icon(Icons.close),
+                  icon: const Icon(Icons.close),
                   onPressed: clearAllSelected,
                 ),
               ]

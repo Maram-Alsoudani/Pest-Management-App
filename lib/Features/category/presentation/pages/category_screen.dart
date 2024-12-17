@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -9,6 +10,7 @@ import 'package:bug_away/Core/component/custom_dialog.dart';
 import 'package:bug_away/Core/utils/SharedPrefsLocal.dart';
 import 'package:bug_away/Features/category/data/models/category_model.dart';
 import 'package:bug_away/Features/category/presentation/manager/category_cubit.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 
 import '../../../../Core/component/image_profile.dart';
 import '../../../../Core/component/lottie_loading_widget.dart';
@@ -16,7 +18,9 @@ import '../../../../Core/utils/colors.dart';
 import '../../../../Core/utils/font_manager.dart';
 import '../../../../Core/utils/images.dart';
 import '../../../../Core/utils/strings.dart';
+import '../../profile/presentation/manager/profile_cubit.dart';
 import '../widgets/category_item.dart';
+import '../widgets/drawer_widget.dart';
 
 class CategoryScreen extends StatefulWidget {
   const CategoryScreen({super.key});
@@ -34,8 +38,13 @@ class _CategoryScreenState extends State<CategoryScreen>
     super.initState();
     bloc = BlocProvider.of<CategoryCubit>(context);
     bloc.getUserData();
-
     bloc.doAnimation(this);
+  }
+
+  @override
+  void dispose() {
+    bloc.animationController?.dispose();
+    super.dispose();
   }
 
   @override
@@ -79,131 +88,105 @@ class _CategoryScreenState extends State<CategoryScreen>
               ),
               SafeArea(
                 child: Scaffold(
+                  drawer: state is CategorySuccessState
+                      ? DrawerWidget(
+                          userName:
+                              state.userAndAdminModelEntity.userName ?? "",
+                          userImage: state.userAndAdminModelEntity.image,
+                          userType: state.userAndAdminModelEntity.type ?? "",
+                        )
+                      : null,
+                  appBar: AppBar(
+                    backgroundColor: Colors.transparent,
+                    elevation: 0,
+                    iconTheme: IconThemeData(color: Colors.white),
+                    actions: [
+                      IconButton(
+                        icon: Icon(Icons.logout),
+                        onPressed: () {
+                          DialogUtils.showAlertDialog(
+                            context: context,
+                            title: StringManager.logout,
+                            message: StringManager.logoutMessage,
+                            posActionTitle: StringManager.ok,
+                            negActionTitle: StringManager.cancel,
+                            posAction: () async {
+                              await ProfileCubit.get(context).removeFcmUser();
+                              SharedPrefsLocal.prefs.clear();
+                              FirebaseAuth.instance.signOut();
+                              Navigator.pushNamedAndRemoveUntil(
+                                context,
+                                RoutesManger.routeNameEngOwnerScreen,
+                                (route) => false,
+                              );
+                            },
+                          );
+                        },
+                      ),
+                    ],
+                  ),
                   backgroundColor: Colors.transparent,
                   body: Padding(
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 25, horizontal: 10),
-                      child: state is CategorySuccessState
-                          ? Column(
-                              children: [
-                                SlideTransition(
-                                  position: bloc.slideAnimation,
-                                  child: Row(
-                                    children: [
-                                      state.userAndAdminModelEntity.image !=
-                                                  null &&
-                                              state.userAndAdminModelEntity
-                                                  .image!.isNotEmpty
-                                          ? ClipRRect(
-                                              borderRadius:
-                                                  BorderRadius.circular(50.r),
-                                              child: CachedNetworkImage(
-                                                width: 100.w,
-                                                height: 100.h,
-                                                fit: BoxFit.fill,
-                                                imageUrl: state
-                                                    .userAndAdminModelEntity
-                                                    .image!,
-                                                progressIndicatorBuilder:
-                                                    (context, url,
-                                                            downloadProgress) =>
-                                                        CircularProgressIndicator(
-                                                            color: ColorManager
-                                                                .primaryColor,
-                                                            value:
-                                                                downloadProgress
-                                                                    .progress),
-                                                errorWidget: (context, url,
-                                                        error) =>
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 25, horizontal: 10),
+                    child: state is CategorySuccessState
+                        ? Column(
+                            children: [
+                              Column(
+                                children: [
+                                  state.userAndAdminModelEntity.image != null &&
+                                          state.userAndAdminModelEntity.image!
+                                              .isNotEmpty
+                                      ? ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(50.r),
+                                          child: CachedNetworkImage(
+                                            width: 100.w,
+                                            height: 100.h,
+                                            fit: BoxFit.fill,
+                                            imageUrl: state
+                                                .userAndAdminModelEntity.image!,
+                                            progressIndicatorBuilder: (context,
+                                                    url, downloadProgress) =>
+                                                CircularProgressIndicator(
+                                                    color: ColorManager
+                                                        .primaryColor,
+                                                    value: downloadProgress
+                                                        .progress),
+                                            errorWidget:
+                                                (context, url, error) =>
                                                     ImageProfile(radius: 40.r),
-                                              ),
-                                            )
-                                          : ImageProfile(
-                                              radius: 40
-                                                  .r), // Replace with your fallback widget
-
-                                      SizedBox(width: 20.w),
-                                      Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            state.userAndAdminModelEntity
-                                                    .userName ??
-                                                "",
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .titleSmall!
-                                                .copyWith(
-                                                    fontSize: FontSize.s24.sp),
                                           ),
-                                          Text(
-                                            state.userAndAdminModelEntity
-                                                    .type ??
-                                                "",
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .titleSmall,
-                                          ),
-                                        ],
-                                      ),
-                                      const Spacer(),
-                                      if (state.userAndAdminModelEntity.type ==
-                                          "admin")
-                                        IconButton(
-                                            onPressed: () {
-                                              Navigator.pushNamed(
-                                                  context,
-                                                  RoutesManger
-                                                      .routeNameRequiest);
-                                            },
-                                            icon: Icon(
-                                              Icons.attribution,
-                                              size: 28.sp,
-                                            ))
-                                      else
-                                        const SizedBox(),
-                                      IconButton(
-                                          onPressed: () {
-                                            Navigator.pushNamed(context,
-                                                RoutesManger.routeNameChat);
-                                          },
-                                          icon: const Icon(Icons.message)),
-
-                                      IconButton(
-                                          onPressed: () {
-                                            Navigator.pushReplacementNamed(
-                                              context,
-                                              RoutesManger.routeNameProfile,
-                                            );
-                                          },
-                                          icon: Icon(
-                                            Icons.account_circle,
-                                            size: 28.sp,
-                                          ))
-                                    ],
+                                        )
+                                      : ImageProfile(radius: 40.r),
+                                  SizedBox(height: 20.h),
+                                  Text(
+                                    state.userAndAdminModelEntity.userName ??
+                                        "",
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .titleSmall!
+                                        .copyWith(fontSize: FontSize.s24.sp),
                                   ),
-                                ),
-                                SizedBox(height: 40.h),
-                                Expanded(
-                                  child: ListView.builder(
-                                    itemCount: CategoryModel.images.length,
-                                    itemBuilder: (context, index) {
-                                      return ScaleTransition(
-                                        scale:
-                                            Tween<double>(begin: 0.0, end: 1.0)
-                                                .animate(
-                                          CurvedAnimation(
-                                            parent: bloc.animationController,
-                                            curve: Interval(
-                                              index /
-                                                  CategoryModel.images
-                                                      .length, // Start based on index
-                                              1.0,
-                                              curve: Curves.easeInOut,
-                                            ),
-                                          ),
-                                        ),
+                                  Text(
+                                    state.userAndAdminModelEntity.type ?? "",
+                                    style:
+                                        Theme.of(context).textTheme.titleSmall,
+                                  ),
+                                ],
+                              ),
+                              SizedBox(height: 40.h),
+                              Expanded(
+                                child: StaggeredGrid.count(
+                                  crossAxisCount: 2,
+                                  mainAxisSpacing: 10,
+                                  crossAxisSpacing: 10,
+                                  children: List.generate(
+                                    CategoryModel.images.length,
+                                    (index) {
+                                      return StaggeredGridTile.count(
+                                        crossAxisCellCount: index == 2 ? 2 : 1,
+                                        mainAxisCellCount: 1,
                                         child: InkWell(
                                           onTap: () {
                                             if (index == 0) {
@@ -240,15 +223,19 @@ class _CategoryScreenState extends State<CategoryScreen>
                                           child: CategoryItem(
                                             categoryModel:
                                                 CategoryModel.images[index],
+                                            isLarge: index ==
+                                                2, // Make the third item large
                                           ),
                                         ),
                                       );
                                     },
                                   ),
                                 ),
-                              ],
-                            )
-                          : const SizedBox()),
+                              ),
+                            ],
+                          )
+                        : const SizedBox(),
+                  ),
                 ),
               ),
             ],

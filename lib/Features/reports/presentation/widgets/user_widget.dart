@@ -10,7 +10,7 @@ class UserWidget extends StatelessWidget {
   final String imageUrl;
   final String email;
 
-  UserWidget(
+  const UserWidget(
       {super.key,
       required this.imageUrl,
       required this.userName,
@@ -23,7 +23,7 @@ class UserWidget extends StatelessWidget {
       margin: EdgeInsets.only(
         bottom: 20.sp,
       ),
-      padding: EdgeInsets.all(10),
+      padding: const EdgeInsets.all(10),
       decoration: BoxDecoration(
         color: ColorManager.whiteColor,
         borderRadius: BorderRadius.circular(20),
@@ -42,7 +42,7 @@ class UserWidget extends StatelessWidget {
                   ? CachedNetworkImage(
                       imageUrl: imageUrl,
                       placeholder: (context, url) =>
-                          CircularProgressIndicator(),
+                          const CircularProgressIndicator(),
                       errorWidget: (context, url, error) =>
                           Image.asset("assets/images/avatar.png"),
                       width: double.infinity,

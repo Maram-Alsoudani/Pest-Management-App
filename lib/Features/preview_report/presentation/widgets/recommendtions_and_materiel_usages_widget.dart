@@ -71,7 +71,5 @@ class MaterialUsagesAndRecommendtions extends StatelessWidget {
         ],
       ),
     );
-    ;
-    ;
   }
 }

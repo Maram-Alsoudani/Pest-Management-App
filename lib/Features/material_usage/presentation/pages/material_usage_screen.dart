@@ -12,6 +12,8 @@ import '../../../../../Core/component/custom_dialog.dart';
 import 'search_material_screen.dart';
 
 class MaterialUsageScreen extends StatefulWidget {
+  const MaterialUsageScreen({super.key});
+
   @override
   _MaterialUsageScreenState createState() => _MaterialUsageScreenState();
 }
@@ -20,7 +22,7 @@ class _MaterialUsageScreenState extends State<MaterialUsageScreen>
     with SingleTickerProviderStateMixin {
   Map<String, int> materials = {};
   Map<String, int> availableQuantities = {};
-  double _opacity = 0.0;
+  final double _opacity = 0.0;
   late AnimationController _animationController;
   late Animation<Offset> _slideAnimation;
 

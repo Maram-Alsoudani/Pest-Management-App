@@ -17,8 +17,7 @@ class MessageDto extends MessageEntity {
           content: json["content"] as String,
           senderId: json["senderId"] as String,
           senderName: json["senderName"] as String,
-          dateTime:
-              DateTime.fromMillisecondsSinceEpoch(json["dateTime"]) as DateTime,
+          dateTime: DateTime.fromMillisecondsSinceEpoch(json["dateTime"]),
         );
 
   Map<String, dynamic> toJson() {

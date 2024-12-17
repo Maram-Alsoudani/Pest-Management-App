@@ -156,7 +156,7 @@ class InventoryDataSourceImpl implements InventoryDataSource {
             MaterailModelDto(id: id, name: name, quantity: quantity);
         var editFunc = await editMaterail(materails);
 
-        return Right(null);
+        return const Right(null);
       } else {
         return Left(Failure(errorMessage: StringManager.networkError));
       }

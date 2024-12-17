@@ -9,6 +9,8 @@ import 'package:bug_away/Core/utils/strings.dart';
 import 'package:bug_away/Features/site_report/presentation/manager/report_view_model.dart';
 
 class RecommendationsScreen extends StatefulWidget {
+  const RecommendationsScreen({super.key});
+
   @override
   _RecommendationsScreenState createState() => _RecommendationsScreenState();
 }
@@ -137,9 +139,9 @@ class _RecommendationsScreenState extends State<RecommendationsScreen>
                             ),
                             child: ListTile(
                               leading: selectedRecommendations[index]
-                                  ? Icon(Icons.thumb_up_alt,
+                                  ? const Icon(Icons.thumb_up_alt,
                                       color: ColorManager.primaryColor)
-                                  : Icon(Icons.chevron_right_rounded),
+                                  : const Icon(Icons.chevron_right_rounded),
                               title: Text(
                                 recommendations[index],
                                 style: TextStyle(

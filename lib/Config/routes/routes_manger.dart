@@ -18,16 +18,12 @@ import '../../Features/material_usage/presentation/pages/material_usage_screen.d
 import '../../Features/notes/presentation/pages/notes_screen.dart';
 import '../../Features/photos/presentation/pages/add_photos_screen.dart';
 import '../../Features/recommendations/presentation/pages/recommendations_screen.dart';
-import '../../Features/signatures/presentation/pages/signatures_screen.dart';
 import '../../Features/device/presentation/pages/devcie_screen.dart';
 import '../../Features/eng_manager_screen/presentation/pages/eng_manager_screen.dart';
 import '../../Features/inventory/presentation/pages/inventory_screen.dart';
 import '../../Features/login/presentation/pages/login_screen.dart';
-import '../../Features/inventory/presentation/pages/inventory_screen.dart';
 import '../../Features/site/presentation/pages/sites_screen.dart';
-import '../../Features/notes/presentation/pages/notes_screen.dart';
 import '../../Features/reports/presentation/pages/all_users.dart';
-import '../../Features/site/presentation/pages/sites_screen.dart';
 
 class RoutesManger {
   static Map<String, Widget Function(BuildContext)> route = {

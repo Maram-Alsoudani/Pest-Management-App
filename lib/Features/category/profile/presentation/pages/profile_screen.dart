@@ -25,7 +25,7 @@ import 'package:bug_away/Features/category/presentation/manager/category_cubit.d
 import '../../../../register/data/models/user_model_dto.dart';
 
 class ProfileScreen extends StatefulWidget {
-  ProfileScreen({super.key});
+  const ProfileScreen({super.key});
 
   @override
   State<ProfileScreen> createState() => _ProfileScreenState();
@@ -135,7 +135,7 @@ class _ProfileScreenState extends State<ProfileScreen>
                               SlideTransition(
                                 position:
                                     ProfileCubit.get(context).slideAnimation,
-                                child: Container(
+                                child: SizedBox(
                                   height:
                                       MediaQuery.of(context).size.height * 0.6,
                                   child: ListView(
@@ -207,7 +207,7 @@ class _ProfileScreenState extends State<ProfileScreen>
                                                     }
                                                   }),
                                             )
-                                          : SizedBox(
+                                          : const SizedBox(
                                               height: 10,
                                             )
                                     ],
@@ -249,12 +249,14 @@ class _ProfileScreenState extends State<ProfileScreen>
                               posActionTitle: StringManager.yes,
                               negActionTitle: StringManager.no,
                               posAction: () async {
+                                await ProfileCubit.get(context).removeFcmUser();
+                                SharedPrefsLocal.prefs.clear();
+                                FirebaseAuth.instance.signOut();
                                 Navigator.pushNamedAndRemoveUntil(
                                   context,
                                   RoutesManger.routeNameEngOwnerScreen,
                                   (route) => false,
                                 );
-                                await ProfileCubit.get(context).removeFcmUser();
                               },
                             );
                           },

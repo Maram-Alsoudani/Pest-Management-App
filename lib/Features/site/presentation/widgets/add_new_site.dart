@@ -33,7 +33,7 @@ class _AddNewSiteState extends State<AddNewSite>
   Widget build(BuildContext context) {
     return AlertDialog(
       backgroundColor: ColorManager.backgroundColor,
-      title: Text(
+      title: const Text(
         StringManager.addSite,
         style: TextStyle(color: ColorManager.whiteColor),
       ),

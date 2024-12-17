@@ -6,7 +6,7 @@ import 'package:bug_away/Core/utils/strings.dart';
 import 'package:bug_away/Features/site_report/presentation/manager/report_view_model.dart';
 
 class ConditionsScreen extends StatefulWidget {
-  const ConditionsScreen({Key? key}) : super(key: key);
+  const ConditionsScreen({super.key});
 
   @override
   State<ConditionsScreen> createState() => _ConditionsScreenState();

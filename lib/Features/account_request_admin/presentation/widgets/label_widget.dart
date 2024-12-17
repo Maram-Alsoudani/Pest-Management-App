@@ -6,8 +6,7 @@ class LabelText extends StatelessWidget {
   final String label;
   double? fontSize;
   Color? color;
-  LabelText({Key? key, required this.label, this.fontSize, this.color})
-      : super(key: key);
+  LabelText({super.key, required this.label, this.fontSize, this.color});
 
   @override
   Widget build(BuildContext context) {

@@ -7,6 +7,8 @@ import '../../../../Core/component/drop_down_menu_widget.dart';
 import '../widgets/add_material.dart';
 
 class DeviceInspection extends StatefulWidget {
+  const DeviceInspection({super.key});
+
   @override
   State<DeviceInspection> createState() => _DeviceInspectionState();
 }
@@ -56,7 +58,7 @@ class _DeviceInspectionState extends State<DeviceInspection> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 CustomText(
-                  title: '${StringManager.deviceInspectionID} : ${args}',
+                  title: '${StringManager.deviceInspectionID} : $args',
                 ),
                 Text(
                   StringManager.deviceInspectionLastScanned,
@@ -64,7 +66,7 @@ class _DeviceInspectionState extends State<DeviceInspection> {
                 ),
               ],
             ),
-            Divider(
+            const Divider(
               color: ColorManager.whiteColor,
             ),
             CustomText(
@@ -81,7 +83,7 @@ class _DeviceInspectionState extends State<DeviceInspection> {
                 setState(() {});
               },
             ),
-            Divider(
+            const Divider(
               color: ColorManager.whiteColor,
             ),
             CustomText(
@@ -98,7 +100,7 @@ class _DeviceInspectionState extends State<DeviceInspection> {
             SizedBox(
               height: 10.h,
             ),
-            Divider(
+            const Divider(
               color: ColorManager.whiteColor,
             ),
             CustomText(
@@ -111,7 +113,7 @@ class _DeviceInspectionState extends State<DeviceInspection> {
               'Nothing here yet',
               style: Theme.of(context).textTheme.titleSmall,
             ),
-            Divider(
+            const Divider(
               color: ColorManager.whiteColor,
             ),
             Row(
@@ -130,7 +132,7 @@ class _DeviceInspectionState extends State<DeviceInspection> {
                 ),
               ],
             ),
-            Divider(
+            const Divider(
               color: ColorManager.whiteColor,
             ),
             AddMaterial(

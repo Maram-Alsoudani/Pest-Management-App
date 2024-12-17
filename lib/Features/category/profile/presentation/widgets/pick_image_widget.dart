@@ -14,7 +14,7 @@ class PickImageWidget extends StatefulWidget {
   final File? imagePath;
   final Function(ImageSource) onImagePicked;
 
-  PickImageWidget({
+  const PickImageWidget({
     super.key,
     required this.icon,
     this.imageUrl,
@@ -67,7 +67,7 @@ class _PickImageWidgetState extends State<PickImageWidget> {
                   width: 145.w,
                   height: 145.h,
                   fit: BoxFit.cover,
-                  placeholder: (context, url) => Center(
+                  placeholder: (context, url) => const Center(
                       child:
                           CircularProgressIndicator()), // Placeholder while loading
                   errorWidget: (context, url, error) =>
@@ -135,7 +135,7 @@ class _PickImageWidgetState extends State<PickImageWidget> {
                     child: CachedNetworkImage(
                       imageUrl: imagePath,
                       errorWidget: (context, url, error) {
-                        return Center(
+                        return const Center(
                             child: Icon(Icons.error)); // Fallback error icon
                       },
                     ),
@@ -145,7 +145,7 @@ class _PickImageWidgetState extends State<PickImageWidget> {
                     child: Image.file(
                       File(imagePath),
                       errorBuilder: (context, error, stackTrace) {
-                        return Center(
+                        return const Center(
                             child: Icon(Icons.error)); // Fallback error icon
                       },
                     ),

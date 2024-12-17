@@ -87,8 +87,6 @@ class ChatScreen extends StatelessWidget {
                         } else if (state is ChatViewModelGetMessage ||
                             state is ChatViewModelAddMessage ||
                             state is ChatViewModelButtonState) {
-                          ;
-
                           if (bloc.messages.isEmpty) {
                             return const Center(
                               child: Text("No messages yet."),
@@ -108,7 +106,7 @@ class ChatScreen extends StatelessWidget {
                           );
                         }
 
-                        return SizedBox();
+                        return const SizedBox();
                       },
                     ),
                   ),

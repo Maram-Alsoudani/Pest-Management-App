@@ -10,7 +10,8 @@ class CustomButton extends StatelessWidget {
   final String boxImage;
   final String routeName;
 
-  CustomButton({
+  const CustomButton({
+    super.key,
     required this.name,
     this.backgroundImage,
     required this.boxImage,

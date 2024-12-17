@@ -92,7 +92,7 @@ class RegisterDataSourceImpl implements RegisterDataSource {
         await handleNotification(data!, userName);
       }
 
-      return Right(null);
+      return const Right(null);
     } on FirebaseAuthException catch (e) {
       if (e.code == 'invalid-credential') {
         return Left(Failure(errorMessage: StringManager.badFormat));

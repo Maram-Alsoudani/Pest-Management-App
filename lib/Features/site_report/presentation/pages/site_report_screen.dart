@@ -17,7 +17,7 @@ import '../manager/report_state.dart';
 import '../widgets/lottie_send_loading.dart';
 
 class SiteReportScreen extends StatefulWidget {
-  const SiteReportScreen({Key? key}) : super(key: key);
+  const SiteReportScreen({super.key});
 
   @override
   State<SiteReportScreen> createState() => _SiteReportScreenState();

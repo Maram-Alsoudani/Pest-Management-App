@@ -88,7 +88,7 @@ class _LoginScreenState extends State<LoginScreen>
                   Container(
                     width: double.infinity,
                     height: double.infinity,
-                    decoration: BoxDecoration(
+                    decoration: const BoxDecoration(
                       image: DecorationImage(
                         image: AssetImage(ImageManager.background),
                         fit: BoxFit.cover,
@@ -111,7 +111,7 @@ class _LoginScreenState extends State<LoginScreen>
                                   SizedBox(height: 40.h),
                                   AnimatedOpacity(
                                     opacity: viewModel.opacity,
-                                    duration: Duration(seconds: 2),
+                                    duration: const Duration(seconds: 2),
                                     curve: Curves.easeIn,
                                     child: Padding(
                                       padding: const EdgeInsets.symmetric(
@@ -126,7 +126,7 @@ class _LoginScreenState extends State<LoginScreen>
                                   ),
                                   SizedBox(height: 10.h),
                                   AnimatedOpacity(
-                                    duration: Duration(seconds: 2),
+                                    duration: const Duration(seconds: 2),
                                     opacity: viewModel.opacity,
                                     curve: Curves.easeIn,
                                     child: Padding(
@@ -204,7 +204,7 @@ class _LoginScreenState extends State<LoginScreen>
                                     ),
                                   ),
                                   AnimatedOpacity(
-                                    duration: Duration(seconds: 2),
+                                    duration: const Duration(seconds: 2),
                                     opacity: viewModel.opacity,
                                     curve: Curves.easeIn,
                                     child: Center(
@@ -241,7 +241,7 @@ class _LoginScreenState extends State<LoginScreen>
                                   ),
                                   SizedBox(height: 50.h),
                                   AnimatedOpacity(
-                                    duration: Duration(seconds: 2),
+                                    duration: const Duration(seconds: 2),
                                     opacity: viewModel.opacity,
                                     curve: Curves.easeIn,
                                     child: Center(

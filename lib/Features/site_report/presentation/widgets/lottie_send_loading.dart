@@ -7,10 +7,10 @@ class LottieSendingWidget extends StatelessWidget {
   final double height;
 
   const LottieSendingWidget({
-    Key? key,
+    super.key,
     this.width = 200.0,
     this.height = 200.0,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

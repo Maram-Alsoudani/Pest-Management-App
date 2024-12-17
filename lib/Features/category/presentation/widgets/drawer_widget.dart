@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:bug_away/Config/routes/routes_manger.dart';
@@ -11,6 +12,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:bug_away/Core/utils/SharedPrefsLocal.dart';
 
 import '../../profile/presentation/manager/profile_cubit.dart';
+import '../../../../Core/component/custom_dialog.dart'; // Import the custom dialog
 
 class DrawerWidget extends StatelessWidget {
   final String userName;
@@ -61,28 +63,29 @@ class DrawerWidget extends StatelessWidget {
                         )
                       : ImageProfile(radius: 40.r),
                   SizedBox(width: 10.w),
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        userName,
-                        style: Theme.of(context).textTheme.titleSmall!.copyWith(
-                              fontSize: FontSize.s24.sp,
-                              color: Colors.white,
-                            ),
-                      ),
-                      SizedBox(height: 5.h),
-                      Center(
-                        child: Text(
+                  Flexible(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Text(
+                          userName,
+                          style:
+                              Theme.of(context).textTheme.titleSmall!.copyWith(
+                                    fontSize: FontSize.s24.sp,
+                                    color: Colors.white,
+                                  ),
+                        ),
+                        SizedBox(height: 5.h),
+                        Text(
                           userType,
                           style:
                               Theme.of(context).textTheme.titleSmall!.copyWith(
                                     color: Colors.white,
                                   ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ],
               ),
@@ -126,27 +129,28 @@ class DrawerWidget extends StatelessWidget {
                                 context, RoutesManger.routeNameChat);
                           },
                         ),
-                        ListTile(
-                          leading: const Icon(Icons.admin_panel_settings,
-                              color: ColorManager.whiteColor),
-                          title: const Text(
-                            StringManager.accountRequests,
-                            style: TextStyle(
-                              color: ColorManager.whiteColor,
-                              fontFamily: FontConstants.fontFamily,
-                              fontWeight: FontWeightManager.regular,
+                        if (userType == 'admin')
+                          ListTile(
+                            leading: const Icon(Icons.admin_panel_settings,
+                                color: ColorManager.whiteColor),
+                            title: const Text(
+                              StringManager.accountRequests,
+                              style: TextStyle(
+                                color: ColorManager.whiteColor,
+                                fontFamily: FontConstants.fontFamily,
+                                fontWeight: FontWeightManager.regular,
+                              ),
                             ),
+                            onTap: () {
+                              Navigator.pushNamed(
+                                  context, RoutesManger.routeNameRequiest);
+                            },
                           ),
-                          onTap: () {
-                            Navigator.pushNamed(
-                                context, RoutesManger.routeNameRequiest);
-                          },
-                        ),
                       ],
                     ),
                   ),
                   ListTile(
-                    leading: const Icon(Icons.logout,
+                    leading: const Icon(CupertinoIcons.square_arrow_right,
                         color: ColorManager.whiteColor),
                     title: const Text(
                       StringManager.logout,
@@ -156,13 +160,24 @@ class DrawerWidget extends StatelessWidget {
                         fontWeight: FontWeightManager.regular,
                       ),
                     ),
-                    onTap: () async {
-                      Navigator.pushNamedAndRemoveUntil(
-                        context,
-                        RoutesManger.routeNameEngOwnerScreen,
-                        (route) => false,
+                    onTap: () {
+                      DialogUtils.showAlertDialog(
+                        context: context,
+                        title: StringManager.logout,
+                        message: StringManager.logoutMessage,
+                        posActionTitle: StringManager.ok,
+                        negActionTitle: StringManager.cancel,
+                        posAction: () async {
+                          await ProfileCubit.get(context).removeFcmUser();
+                          SharedPrefsLocal.prefs.clear();
+                          FirebaseAuth.instance.signOut();
+                          Navigator.pushNamedAndRemoveUntil(
+                            context,
+                            RoutesManger.routeNameLogin,
+                            (route) => false,
+                          );
+                        },
                       );
-                      await ProfileCubit.get(context).removeFcmUser();
                     },
                   ),
                 ],

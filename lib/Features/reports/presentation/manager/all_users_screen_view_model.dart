@@ -78,9 +78,4 @@ class AllUsersScreenViewModel extends Cubit<GetAllUsersState> {
       }
     }
   }
-
-  @override
-  Future<void> close() {
-    return super.close();
-  }
 }

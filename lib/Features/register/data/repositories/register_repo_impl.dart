@@ -4,8 +4,6 @@ import 'package:injectable/injectable.dart';
 import 'package:bug_away/Core/errors/failures.dart';
 import 'package:bug_away/Features/register/data/data_source/data/register_data_source.dart';
 
-import 'package:bug_away/Features/register/domain/entities/user_model_entity.dart';
-
 import '../../domain/repositories/register_repo.dart';
 
 @Injectable(as: RegisterRepo)

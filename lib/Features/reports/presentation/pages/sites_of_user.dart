@@ -3,18 +3,18 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:bug_away/Config/routes/routes_manger.dart';
+import 'package:bug_away/Core/component/search_field_widget.dart';
 import 'package:bug_away/Core/utils/strings.dart';
 import 'package:bug_away/Features/reports/presentation/widgets/site_widget.dart';
 import 'package:bug_away/di/di.dart';
 
 import '../../../../Core/component/lottie_loading_widget.dart';
-import '../../../../Core/component/text_feild_custom.dart';
 import '../../../../Core/utils/colors.dart';
 import '../manager/get_sites_of_user_view_model.dart';
 import '../manager/get_sites_states.dart';
 
 class SitesOFUser extends StatefulWidget {
-  SitesOFUser({super.key});
+  const SitesOFUser({super.key});
 
   @override
   State<SitesOFUser> createState() => _SitesOFUserState();
@@ -49,7 +49,7 @@ class _SitesOFUserState extends State<SitesOFUser>
       progressIndicator: const Center(child: LottieLoadingWidget()),
       child: Scaffold(
         appBar: AppBar(
-          title: Text(StringManager.sites),
+          title: const Text(StringManager.sites),
         ),
         body: BlocBuilder<GetSitesOfUsersViewModel, GetSitesState>(
           bloc: viewModel,
@@ -60,16 +60,9 @@ class _SitesOFUserState extends State<SitesOFUser>
                   duration: const Duration(seconds: 2),
                   opacity: viewModel.opacity,
                   curve: Curves.easeIn,
-                  child: Padding(
-                    padding: const EdgeInsets.only(bottom: 8.0),
-                    child: CustomTextFormField(
-                      hint: StringManager.searchHint,
-                      controller: searchController,
-                      validator: (value) {
-                        return null;
-                      },
-                      borderRadius: BorderRadius.circular(26.0.r),
-                    ),
+                  child: SearchFieldWidget(
+                    controller: searchController,
+                    onChanged: (value) => viewModel.searchSites(value),
                   ),
                 ),
                 Expanded(
@@ -79,17 +72,17 @@ class _SitesOFUserState extends State<SitesOFUser>
                         return Center(
                           child: Text(
                             state.errorMessage,
-                            style: TextStyle(color: Colors.white),
+                            style: const TextStyle(color: Colors.white),
                           ),
                         );
                       } else if (state is NoSearchResultsState) {
                         return Center(
                           child: Text(
-                            StringManager.noSitesFound,
+                            StringManager.noReportFound,
                             style: Theme.of(context)
                                 .textTheme
                                 .bodyMedium!
-                                .copyWith(color: ColorManager.greyShade4),
+                                .copyWith(color: ColorManager.whiteColor),
                           ),
                         );
                       } else {

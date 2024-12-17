@@ -14,7 +14,7 @@ class SiteInfoItem extends StatelessWidget {
   SiteEntity site;
   final Function()? onDelete;
 
-  SiteInfoItem({required this.site, required this.onDelete});
+  SiteInfoItem({super.key, required this.site, required this.onDelete});
 
   @override
   Widget build(BuildContext context) {
@@ -41,7 +41,7 @@ class SiteInfoItem extends StatelessWidget {
                 ],
               ),
               child: Container(
-                decoration: BoxDecoration(color: ColorManager.greyShade1),
+                decoration: const BoxDecoration(color: ColorManager.greyShade1),
                 child: ListTile(
                   leading: const Icon(Icons.location_on),
                   title: Text(

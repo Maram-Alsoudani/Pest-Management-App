@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:bug_away/Core/utils/colors.dart';
 
 class ListTileCustom extends StatelessWidget {
   final Widget child;

@@ -9,6 +9,8 @@ import 'package:bug_away/Features/inventory/data/models/materail_model_dto.dart'
 import '../../../../../Core/component/text_feild_custom.dart';
 
 class SearchMaterialUsageScreen extends StatefulWidget {
+  const SearchMaterialUsageScreen({super.key});
+
   @override
   _SearchMaterialScreenState createState() => _SearchMaterialScreenState();
 }
@@ -30,17 +32,17 @@ class _SearchMaterialScreenState extends State<SearchMaterialUsageScreen>
     fetchMaterials();
     searchController.addListener(filterList);
     _animationController =
-        AnimationController(vsync: this, duration: Duration(seconds: 1));
+        AnimationController(vsync: this, duration: const Duration(seconds: 1));
 
     _slideAnimation =
-        Tween<Offset>(begin: Offset(-1.w, 0), end: Offset(0, 0)).animate(
+        Tween<Offset>(begin: Offset(-1.w, 0), end: const Offset(0, 0)).animate(
       CurvedAnimation(
         parent: _animationController,
         curve: Curves.easeInOut,
       ),
     );
 
-    Future.delayed(Duration(milliseconds: 300), () {
+    Future.delayed(const Duration(milliseconds: 300), () {
       setState(() {
         _opacity = 1.0;
       });

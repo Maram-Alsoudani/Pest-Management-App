@@ -19,7 +19,7 @@ import '../../../../Core/utils/SharedPrefsLocal.dart';
 import '../../../register/data/models/user_model_dto.dart';
 
 class PreviewReportScreen extends StatefulWidget {
-  PreviewReportScreen({super.key});
+  const PreviewReportScreen({super.key});
 
   @override
   State<PreviewReportScreen> createState() => _PreviewReportScreenState();
@@ -159,7 +159,7 @@ class _PreviewReportScreenState extends State<PreviewReportScreen>
                   .copyWith(fontSize: 25.sp)),
           actions: [
             IconButton(
-              icon: Icon(Icons.download),
+              icon: const Icon(Icons.download),
               onPressed: () async {
                 final args = ModalRoute.of(context)?.settings.arguments
                     as Map<String, dynamic>?;

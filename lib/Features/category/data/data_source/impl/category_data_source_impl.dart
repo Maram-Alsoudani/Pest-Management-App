@@ -59,7 +59,7 @@ class CategoryDataSourceImpl implements CategoryDataSource {
           "phone": user.phone,
           "email": user.email,
         });
-        return Right(null);
+        return const Right(null);
       } else {
         return Left(Failure(errorMessage: StringManager.networkError));
       }
@@ -113,7 +113,7 @@ class CategoryDataSourceImpl implements CategoryDataSource {
           "image": imageUrl,
         });
 
-        return Right(null);
+        return const Right(null);
       } else {
         return Left(Failure(errorMessage: StringManager.networkError));
       }
@@ -125,7 +125,7 @@ class CategoryDataSourceImpl implements CategoryDataSource {
   @override
   Future<Either<Failure, void>> removeFcm() async {
     if (!Platform.isAndroid) {
-      return Right(null);
+      return const Right(null);
     }
 
     try {
@@ -140,7 +140,7 @@ class CategoryDataSourceImpl implements CategoryDataSource {
           "fcmToken": FieldValue.arrayRemove([user!.fcmToken![0]]),
         });
 
-        return Right(null);
+        return const Right(null);
       } else {
         return Left(Failure(errorMessage: StringManager.networkError));
       }

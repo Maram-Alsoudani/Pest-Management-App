@@ -25,7 +25,7 @@ import '../manager/user_request_account_view_model_cubit.dart';
 import '../widgets/pick_Image_widget.dart';
 
 class UserRequestAccount extends StatefulWidget {
-  UserRequestAccount({super.key});
+  const UserRequestAccount({super.key});
 
   @override
   State<UserRequestAccount> createState() => _UserRequestAccountState();

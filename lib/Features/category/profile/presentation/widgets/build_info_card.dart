@@ -8,7 +8,7 @@ class BuildInfoCard extends StatelessWidget {
   String title;
   String value;
 
-  BuildInfoCard({required this.title, required this.value});
+  BuildInfoCard({super.key, required this.title, required this.value});
 
   @override
   Widget build(BuildContext context) {

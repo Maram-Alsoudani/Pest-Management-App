@@ -5,16 +5,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:injectable/injectable.dart';
 import 'package:bug_away/Core/utils/SharedPrefsLocal.dart';
-import 'package:bug_away/Core/utils/firebase_utils.dart';
 import 'package:bug_away/Core/utils/strings.dart';
 import 'package:bug_away/Features/category/domin/use_case/edit_image.dart';
 import 'package:bug_away/Features/category/domin/use_case/edit_user_data_use_case.dart';
 import 'package:bug_away/Features/category/domin/use_case/read_user_or_admin_from_fireStore_use_case.dart';
 import 'package:bug_away/Features/category/domin/use_case/removeFcm.dart';
 import 'package:bug_away/Features/register/data/models/user_model_dto.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:bug_away/Features/register/domain/entities/user_model_entity.dart';
-import '../../../../register/presentation/manager/register_view_model_cubit.dart';
 import 'profile_state.dart';
 
 @injectable

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
+import 'package:bug_away/Core/component/search_field_widget.dart';
 import 'package:bug_away/Core/utils/colors.dart';
 import 'package:bug_away/Features/register/data/models/user_model_dto.dart';
 import 'package:bug_away/Features/site/presentation/manager/site_state.dart';
@@ -14,7 +15,7 @@ import '../widgets/add_new_site.dart';
 import '../widgets/site_info_item.dart';
 
 class SitesScreen extends StatefulWidget {
-  SitesScreen({super.key});
+  const SitesScreen({super.key});
 
   @override
   State<SitesScreen> createState() => _SitesScreenState();
@@ -35,7 +36,6 @@ class _SitesScreenState extends State<SitesScreen>
     super.initState();
   }
 
-  @override
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<SiteViewModel, SiteState>(
@@ -107,9 +107,9 @@ class _SitesScreenState extends State<SitesScreen>
                 actions: [
                   Padding(
                     padding: EdgeInsets.all(15.r),
-                    child: Icon(
+                    child: const Icon(
                       Icons.maps_home_work_rounded,
-                      color: ColorManager.primaryColor,
+                      color: ColorManager.whiteColor,
                     ),
                   ),
                 ],
@@ -123,30 +123,20 @@ class _SitesScreenState extends State<SitesScreen>
                       duration: const Duration(seconds: 2),
                       opacity: bloc.opacity,
                       curve: Curves.easeIn,
-                      child: TextField(
+                      child: SearchFieldWidget(
                         controller: bloc.searchController,
                         onChanged: (query) => bloc.filterSites(query),
-                        style: const TextStyle(color: ColorManager.whiteColor),
-                        decoration: InputDecoration(
-                          hintText: StringManager.searchHint,
-                          hintStyle:
-                              const TextStyle(color: ColorManager.whiteColor),
-                          prefixIcon: const Icon(Icons.search),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(26.r),
-                          ),
-                        ),
                       ),
                     ),
                     state is NoResultSearchSiteSuccessState
                         ? Expanded(
                             child: Center(
                               child: Text(
-                                StringManager.noUsersFound,
+                                StringManager.noSitesFound,
                                 style: Theme.of(context)
                                     .textTheme
                                     .bodyMedium!
-                                    .copyWith(color: ColorManager.greyShade4),
+                                    .copyWith(color: ColorManager.whiteColor),
                               ),
                             ),
                           )
@@ -154,34 +144,59 @@ class _SitesScreenState extends State<SitesScreen>
                             ? Flexible(
                                 child: SlideTransition(
                                   position: bloc.slideAnimation,
-                                  child: ListView.builder(
-                                    itemCount: SiteViewModel.get(context)
-                                        .searchedSites
-                                        .length,
-                                    itemBuilder: (context, index) {
-                                      return SiteInfoItem(
-                                        site: bloc.searchedSites[index],
-                                        onDelete: () {
-                                          bloc.deleteSite(bloc.sites[index]);
-                                          bloc.fetchSite();
-                                        },
-                                      );
-                                    },
-                                  ),
+                                  child: bloc.searchedSites.isEmpty
+                                      ? Center(
+                                          child: Text(
+                                            StringManager.noSitesFound,
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .bodyMedium!
+                                                .copyWith(
+                                                    color: ColorManager
+                                                        .whiteColor),
+                                          ),
+                                        )
+                                      : ListView.builder(
+                                          itemCount: SiteViewModel.get(context)
+                                              .searchedSites
+                                              .length,
+                                          itemBuilder: (context, index) {
+                                            return SiteInfoItem(
+                                              site: bloc.searchedSites[index],
+                                              onDelete: () {
+                                                bloc.deleteSite(
+                                                    bloc.sites[index]);
+                                                bloc.fetchSite();
+                                              },
+                                            );
+                                          },
+                                        ),
                                 ),
                               )
                             : Flexible(
-                                child: ListView.builder(
-                                  itemCount: SiteViewModel.get(context)
-                                      .userSites
-                                      .length,
-                                  itemBuilder: (context, index) {
-                                    return SiteInfoItem(
-                                      site: bloc.userSites[index],
-                                      onDelete: () {},
-                                    );
-                                  },
-                                ),
+                                child: bloc.userSites.isEmpty
+                                    ? Center(
+                                        child: Text(
+                                          StringManager.noSitesFound,
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .bodyMedium!
+                                              .copyWith(
+                                                  color:
+                                                      ColorManager.whiteColor),
+                                        ),
+                                      )
+                                    : ListView.builder(
+                                        itemCount: SiteViewModel.get(context)
+                                            .userSites
+                                            .length,
+                                        itemBuilder: (context, index) {
+                                          return SiteInfoItem(
+                                            site: bloc.userSites[index],
+                                            onDelete: () {},
+                                          );
+                                        },
+                                      ),
                               ),
                   ],
                 ),

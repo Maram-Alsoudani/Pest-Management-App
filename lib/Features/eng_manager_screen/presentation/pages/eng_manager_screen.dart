@@ -127,8 +127,8 @@ class _EngManagerScreenState extends State<EngManagerScreen>
                     children: [
                       SlideTransition(
                         position: _slideAnimation,
-                        child: CustomButton(
-                          name: StringManager.eng,
+                        child: const CustomButton(
+                          name: StringManager.engineer,
                           backgroundImage: ImageManager.catBackground3,
                           boxImage: ImageManager.engIcon,
                           routeName: RoutesManger.routeNameLogin,
@@ -137,7 +137,7 @@ class _EngManagerScreenState extends State<EngManagerScreen>
                       ),
                       SlideTransition(
                         position: _slideAnimation,
-                        child: CustomButton(
+                        child: const CustomButton(
                           name: StringManager.manager,
                           backgroundImage: ImageManager.catBackground3,
                           boxImage: ImageManager.ownerIcon,

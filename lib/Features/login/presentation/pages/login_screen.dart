@@ -8,7 +8,6 @@ import 'package:bug_away/Core/component/button_custom.dart';
 import 'package:bug_away/Core/component/lottie_loading_widget.dart';
 import 'package:bug_away/Core/component/text_feild_custom.dart';
 import 'package:bug_away/Core/component/validators.dart';
-import 'package:bug_away/Core/utils/fcm_helper.dart';
 import 'package:bug_away/Features/login/presentation/manager/cubit/login_screen_view_model.dart';
 import 'package:bug_away/Features/login/presentation/manager/states/login_states.dart';
 import '../../../../Core/component/custom_dialog.dart';
@@ -55,7 +54,7 @@ class _LoginScreenState extends State<LoginScreen>
             DialogUtils.showAlertDialog(
                 context: context,
                 title: StringManager.success,
-                message: StringManager.loginSuccessfully,
+                message: StringManager.loginSuccess,
                 posActionTitle: StringManager.ok,
                 posAction: () {
                   viewModel.dialogShown = false;
@@ -146,7 +145,7 @@ class _LoginScreenState extends State<LoginScreen>
                                                   ? StringManager.selectUser
                                                   : (type == "admin"
                                                       ? "${StringManager.login} as a ${StringManager.manager}"
-                                                      : "${StringManager.login} as an ${StringManager.eng}"),
+                                                      : "${StringManager.login} as an ${StringManager.engineer}"),
                                               style: Theme.of(context)
                                                   .textTheme
                                                   .titleSmall!

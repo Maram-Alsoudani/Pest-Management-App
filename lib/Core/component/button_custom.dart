@@ -7,6 +7,7 @@ class ButtonCustom extends StatelessWidget {
   final Function onTap;
   final TextStyle? textStyle;
   final bool enable;
+  final IconData? icon;
 
   const ButtonCustom({
     super.key,
@@ -14,6 +15,7 @@ class ButtonCustom extends StatelessWidget {
     required this.onTap,
     this.textStyle,
     this.enable = true,
+    this.icon,
   });
 
   @override
@@ -35,9 +37,18 @@ class ButtonCustom extends StatelessWidget {
             : () {
                 onTap();
               },
-        child: Text(
-          buttonName,
-          style: textStyle ?? Theme.of(context).textTheme.titleSmall,
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              buttonName,
+              style: textStyle ?? Theme.of(context).textTheme.titleSmall,
+            ),
+            if (icon != null) ...[
+              const SizedBox(width: 8),
+              Icon(icon),
+            ],
+          ],
         ),
       ),
     );

@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:bug_away/Features/chat/presentation/widgets/users_name_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:injectable/injectable.dart';
 import 'package:intl/intl.dart';
@@ -26,6 +27,9 @@ class ChatViewModelCubit extends Cubit<ChatViewModelState> {
   TextEditingController clearMessageController = TextEditingController();
   final ScrollController scrollController = ScrollController();
   List<MessageEntity> messages = [];
+  Map<String, Color> userColorsMap = {};
+  Map<String, String> userTypesMap = {};
+
   void getMessage() async {
     var fold = await getMessageUseCase.invoke();
     fold.fold((l) {
@@ -49,6 +53,8 @@ class ChatViewModelCubit extends Cubit<ChatViewModelState> {
   }
 
   void sendMessage() async {
+    if (messageController.trim().isEmpty) return;
+
     MessageDto message = MessageDto(
         content: messageController,
         senderId: user.id ?? "",
@@ -66,17 +72,14 @@ class ChatViewModelCubit extends Cubit<ChatViewModelState> {
 
   late UserAndAdminModelEntity user;
   UserAndAdminModelEntity? getUser() {
-    var user = SharedPrefsLocal.getData(key: StringManager.keyUserAdmin);
+    var user = SharedPrefsLocal.getData(key: StringManager.userAdmin);
     return user;
   }
 
   String dateTime = "";
   String formatDateTime(DateTime date) {
-    DateTime datetime = DateTime.parse(date.toString());
-    DateFormat formatter = DateFormat("yyyy-MM-dd HH:mm");
-    String formatted = formatter.format(datetime);
-
-    return formatted;
+    DateFormat formatter = DateFormat("HH:mm");
+    return formatter.format(date);
   }
 
   void scrollToBottom() {
@@ -89,5 +92,31 @@ class ChatViewModelCubit extends Cubit<ChatViewModelState> {
         );
       }
     });
+  }
+
+  Color getUserColor(String userId) {
+    if (!userColorsMap.containsKey(userId)) {
+      userColorsMap[userId] =
+          userColors[userColorsMap.length % userColors.length];
+    }
+    return userColorsMap[userId]!;
+  }
+
+  String getUserType(String userId) {
+    if (!userTypesMap.containsKey(userId)) {
+      // Assuming you have a method to get user type from userId
+      userTypesMap[userId] = getUserTypeFromUserId(userId);
+    }
+    return userTypesMap[userId]!;
+  }
+
+  String getUserTypeFromUserId(String userId) {
+    // Implement this method to get user type from userId
+    // For example, you can fetch it from a database or an API
+    return "User"; // Placeholder implementation
+  }
+
+  bool isAdmin(String userId) {
+    return getUserType(userId) == "Admin";
   }
 }

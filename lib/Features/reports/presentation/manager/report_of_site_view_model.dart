@@ -5,9 +5,7 @@ import 'package:http/http.dart' as http;
 import 'package:bug_away/Features/reports/domain/use_cases/get_report_of_site.dart';
 import 'package:bug_away/Features/reports/presentation/manager/get_report_of_site_states.dart';
 import 'package:printing/printing.dart';
-import '../../../../Core/utils/SharedPrefsLocal.dart';
 import '../../../../Core/utils/pdf_utils.dart';
-import '../../../register/data/models/user_model_dto.dart';
 import '../../../site_report/domain/entities/report_entity.dart';
 
 @injectable

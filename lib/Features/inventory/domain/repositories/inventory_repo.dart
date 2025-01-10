@@ -8,5 +8,7 @@ abstract class InventoryRepo {
   Future<Either<Failure, List<MaterailEntity>>> fetchMaterialsList();
   Future<Either<Failure, void>> deleteMaterail(String key);
   Future<Either<Failure, void>> updateMaterail(
-      String id, String name, int quantity);
+      String id, String name, int quantity, String unit);
+  Future<Either<Failure, void>> incrementQuantity(String id, int quantity);
+  Future<Either<Failure, void>> decrementQuantity(String id, int quantity);
 }

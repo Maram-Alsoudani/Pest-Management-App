@@ -58,10 +58,10 @@ class _DeviceInspectionState extends State<DeviceInspection> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 CustomText(
-                  title: '${StringManager.deviceInspectionID} : $args',
+                  title: '${StringManager.inspectionID} : $args',
                 ),
                 Text(
-                  StringManager.deviceInspectionLastScanned,
+                  StringManager.deviceLastScan,
                   style: Theme.of(context).textTheme.titleSmall,
                 ),
               ],
@@ -70,7 +70,7 @@ class _DeviceInspectionState extends State<DeviceInspection> {
               color: ColorManager.whiteColor,
             ),
             CustomText(
-              title: StringManager.deviceInspectionDeviceCondition,
+              title: StringManager.inspectionDeviceCondition,
             ),
             SizedBox(
               height: 10.h,
@@ -87,7 +87,7 @@ class _DeviceInspectionState extends State<DeviceInspection> {
               color: ColorManager.whiteColor,
             ),
             CustomText(
-              title: StringManager.deviceInspectionBaitCondition,
+              title: StringManager.inspectionDeviceCondition,
             ),
             DropDownMenuWidget(
               list: conditions,
@@ -119,7 +119,7 @@ class _DeviceInspectionState extends State<DeviceInspection> {
             Row(
               children: [
                 CustomText(
-                  title: StringManager.deviceInspectionRemoved,
+                  title: StringManager.inspectionRemoved,
                 ),
                 Checkbox(
                   activeColor: ColorManager.primaryColor,
@@ -136,11 +136,11 @@ class _DeviceInspectionState extends State<DeviceInspection> {
               color: ColorManager.whiteColor,
             ),
             AddMaterial(
-              title: StringManager.deviceInspectionAddMaterial,
+              title: StringManager.inspectionAddMaterial,
               chooseList: materialsList,
             ),
             AddMaterial(
-              title: StringManager.deviceInspectionAddPest,
+              title: StringManager.inspectionAddPest,
               chooseList: pestList,
             ),
           ],

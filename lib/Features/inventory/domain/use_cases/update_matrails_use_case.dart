@@ -9,7 +9,8 @@ class UpdateMaterialUseCase {
 
   UpdateMaterialUseCase({required this.inventoryRepo});
 
-  Future<Either<Failure, void>> invoke(String id, String name, int quantity) {
-    return inventoryRepo.updateMaterail(id, name, quantity);
+  Future<Either<Failure, void>> invoke(
+      String id, String name, int quantity, String unit) {
+    return inventoryRepo.updateMaterail(id, name, quantity, unit);
   }
 }

@@ -45,133 +45,138 @@ class SiteViewModel extends Cubit<SiteState> {
       required this.deleteSitesUseCase})
       : super(SiteInitialState());
 
-  //todo ============== get user from shared pref ==========
-
+  // Get user from shared preferences
   UserAndAdminModelEntity? getUser() {
-    var user = SharedPrefsLocal.getData(key: StringManager.keyUserAdmin);
-    return user;
+    return SharedPrefsLocal.getData(key: StringManager.userAdmin);
   }
 
-  //todo  ================= Add site to fire base =================
+  // Add site to Firebase
   void addSite() async {
     emit(AddSiteLoadingState());
-    var either = await addSiteUserCase.invoke(
-        siteNameController.text,
-        siteLocationController.text,
-        selectedValue!.id ?? "",
-        selectedValue!.userName ?? "");
-
-    either.fold((l) {
-      emit(AddSiteErrorState(failure: l));
-    }, (response) {
-      emit(AddSiteSuccessState());
-    });
+    final result = await addSiteUserCase.invoke(
+      siteNameController.text,
+      siteLocationController.text,
+      selectedValue!.id ?? "",
+      selectedValue!.userName ?? "",
+    );
+    result.fold(
+      (failure) => emit(AddSiteErrorState(failure: failure)),
+      (_) => emit(AddSiteSuccessState()),
+    );
   }
 
-  //todo =========== get user from fire base ===================
-
+  // Fetch users from Firebase
   Future<void> fetchUsers() async {
     isLoading = true;
     emit(UsersSiteLoadingState());
-    var data = await fetchUsersDataUseCase.invoke();
-    data.fold((l) {
-      isLoading = false;
-      emit(UsersSiteErrorState(failure: l));
-    }, (r) {
-      isLoading = false;
-      users = r;
-      emit(UsersSiteSuccessState());
-    });
+    final result = await fetchUsersDataUseCase.invoke();
+    result.fold(
+      (failure) {
+        isLoading = false;
+        emit(UsersSiteErrorState(failure: failure));
+      },
+      (users) {
+        this.users = users;
+        isLoading = false;
+        emit(UsersSiteSuccessState());
+      },
+    );
   }
 
-//todo ============= Get Sites from firebase =================
-
+  // Fetch sites from Firebase
   Future<void> fetchSite() async {
     isLoading = true;
     emit(SiteLoadingState());
-    var data = await fetchSiteDataUseCase.invoke();
-    data.fold((l) {
-      isLoading = false;
-      emit(SiteErrorState(failure: l));
-    }, (r) {
-      if (r.isNotEmpty) {
-        sites = r;
+    final result = await fetchSiteDataUseCase.invoke();
+    result.fold(
+      (failure) {
+        isLoading = false;
+        emit(SiteErrorState(failure: failure));
+      },
+      (sites) {
+        this.sites = sites;
         searchedSites = sites;
         isLoading = false;
         emit(SiteSuccessState());
-      } else {
-        isLoading = false;
-        emit(NoResultSearchSiteSuccessState());
-      }
-    });
+      },
+    );
   }
 
-  //todo ================= clear =============
+  // Clear data
   void clearDate() {
     siteNameController.clear();
     siteLocationController.clear();
     selectedValue = null;
   }
 
-  //todo ================= get user sites =============
-
+  // Fetch user sites from Firebase
   Future<void> fetchUserSites() async {
     isLoading = true;
     emit(GetUserSiteLoadingState());
-    var data = await fetchUsersSitesUseCase.invoke(user.id!);
-    data.fold((l) {
-      isLoading = false;
-      emit(GetUserSiteErrorState(failure: l));
-    }, (r) {
-      userSites = r;
-      isLoading = false;
-      emit(GetUserSiteSuccessState());
-    });
+    final result = await fetchUsersSitesUseCase.invoke(user.id!);
+    result.fold(
+      (failure) {
+        isLoading = false;
+        emit(GetUserSiteErrorState(failure: failure));
+      },
+      (sites) {
+        userSites = sites;
+        isLoading = false;
+        emit(GetUserSiteSuccessState());
+      },
+    );
   }
 
-//todo ========================= Delete Sites ============
-
+  // Delete site from Firebase
   Future<void> deleteSite(SiteEntity site) async {
     isLoading = true;
     emit(DeleteSiteLoadingState());
-    var data = await deleteSitesUseCase.invoke(site);
-    data.fold((l) {
-      isLoading = false;
-      emit(DeleteSiteErrorState(failure: l));
-    }, (r) {
-      isLoading = false;
-      emit(DeleteSiteSuccessState());
-    });
+    final result = await deleteSitesUseCase.invoke(site);
+    result.fold(
+      (failure) {
+        isLoading = false;
+        emit(DeleteSiteErrorState(failure: failure));
+      },
+      (_) {
+        isLoading = false;
+        emit(DeleteSiteSuccessState());
+      },
+    );
   }
 
-  //todo ============= Animations =========================
-
+  // Animations
   late AnimationController animationController;
   late Animation<Offset> slideAnimation;
   double opacity = 0.0;
 
-  void doAnimation(SingleTickerProviderStateMixin single) {
+  void doAnimation(TickerProvider ticker) {
     animationController = AnimationController(
-        vsync: single, duration: const Duration(seconds: 1));
-
-    slideAnimation =
-        Tween<Offset>(begin: const Offset(-1, 0), end: const Offset(0, 0))
-            .animate(
-      CurvedAnimation(
-        parent: animationController,
-        curve: Curves.easeInOut,
-      ),
+      vsync: ticker,
+      duration: const Duration(seconds: 1),
     );
 
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      opacity = 1.0;
-      emit(AnimationsSiteSuccessState());
+    slideAnimation = Tween<Offset>(
+      begin: const Offset(-1, 0),
+      end: Offset.zero,
+    ).animate(CurvedAnimation(
+      parent: animationController,
+      curve: Curves.easeInOut,
+    ));
 
+    Future.delayed(const Duration(milliseconds: 300), () {
+      opacity = 1.0;
       animationController.forward();
+      emit(AnimationsSiteSuccessState());
     });
   }
 
-  //todo ======== Search ====================
+  @override
+  Future<void> close() {
+    animationController.dispose();
+    return super.close();
+  }
+
+  // Search
   void filterSites(String query) {
     if (query.isEmpty) {
       searchedSites = sites;

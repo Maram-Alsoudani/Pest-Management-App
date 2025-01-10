@@ -27,8 +27,7 @@ class EditProfileDialog extends StatelessWidget {
                 .copyWith(fontSize: 24.sp),
           ),
           content: Form(
-            key: ProfileCubit.get(context)
-                .dialogFormKey, // Assign the dialog-specific form key here
+            key: ProfileCubit.get(context).dialogFormKey,
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [

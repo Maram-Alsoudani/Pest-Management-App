@@ -1,3 +1,5 @@
+import 'package:bug_away/Core/component/empty_pages.dart';
+import 'package:bug_away/Core/component/search_field_widget.dart';
 import 'package:bug_away/Core/utils/images.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -8,7 +10,6 @@ import 'package:bug_away/Features/reports/presentation/widgets/user_widget.dart'
 import 'package:bug_away/di/di.dart';
 
 import '../../../../Core/component/lottie_loading_widget.dart';
-import '../../../../Core/component/text_feild_custom.dart';
 import '../../../../Core/utils/colors.dart';
 import '../../../../Core/utils/strings.dart';
 import '../manager/all_users_screen_view_model.dart';
@@ -27,6 +28,14 @@ class _AllUsersState extends State<AllUsers>
   TextEditingController searchController = TextEditingController();
 
   @override
+  void dispose() {
+    if (mounted) {
+      searchController.dispose();
+    }
+    super.dispose();
+  }
+
+  @override
   void initState() {
     super.initState();
     allUsersViewModel.initializeAnimation(this);
@@ -42,6 +51,9 @@ class _AllUsersState extends State<AllUsers>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        surfaceTintColor: Colors.transparent,
+        elevation: 0,
         title: const Text(StringManager.reportsSubmittedBy),
       ),
       body: BlocBuilder<AllUsersScreenViewModel, GetAllUsersState>(
@@ -58,66 +70,53 @@ class _AllUsersState extends State<AllUsers>
                   duration: const Duration(seconds: 2),
                   opacity: allUsersViewModel.opacity,
                   curve: Curves.easeIn,
-                  child: Padding(
-                    padding: const EdgeInsets.only(bottom: 8.0),
-                    child: CustomTextFormField(
-                      hint: StringManager.searchHint,
-                      controller: searchController,
-                      validator: (value) {
-                        return null;
-                      },
-                      borderRadius: BorderRadius.circular(26.0.r),
-                    ),
+                  child: SearchFieldWidget(
+                    controller: searchController,
+                    onChanged: (value) {
+                      allUsersViewModel.searchUsers(value);
+                    },
                   ),
                 ),
                 Expanded(
                   child: Builder(
                     builder: (context) {
                       if (state is GetAllUsersErrorState) {
-                        return Center(
-                          child: Text(
-                            state.errorMessage,
-                            style: const TextStyle(color: Colors.white),
+                        return const Center(
+                          child: EmptyStateWidget(
+                            lottiePath: ImageManager.emptySearchLottie,
+                            message: StringManager.noUsersFound,
                           ),
                         );
                       } else if (state is NoSearchResultsState) {
-                        return Center(
-                          child: Text(
-                            StringManager.noReportFound,
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyMedium!
-                                .copyWith(color: ColorManager.whiteColor),
+                        return const Center(
+                          child: EmptyStateWidget(
+                            lottiePath: ImageManager.emptySearchLottie,
+                            message: StringManager.noUsersFound,
                           ),
                         );
                       } else {
                         return SlideTransition(
                           position: allUsersViewModel.slideAnimation,
-                          child: Padding(
-                            padding: EdgeInsets.all(15.sp),
-                            child: ListView.builder(
-                              itemCount: allUsersViewModel.allUsers.length,
-                              itemBuilder: (context, index) {
-                                final user = allUsersViewModel.allUsers[index];
+                          child: ListView.builder(
+                            itemCount: allUsersViewModel.allUsers.length,
+                            itemBuilder: (context, index) {
+                              final user = allUsersViewModel.allUsers[index];
 
-                                return InkWell(
-                                  onTap: () {
-                                    Navigator.pushNamed(
-                                        context,
-                                        RoutesManger
-                                            .routeNameSitesOfUserForAdmin,
-                                        arguments: allUsersViewModel
-                                            .allUsers[index].id);
-                                  },
-                                  child: UserWidget(
-                                    imageUrl: user.image ?? ImageManager.avatar,
-                                    userName: user.userName ??
-                                        StringManager.unknownUserName,
-                                    email: user.email ?? "",
-                                  ),
-                                );
-                              },
-                            ),
+                              return InkWell(
+                                onTap: () {
+                                  Navigator.pushNamed(context,
+                                      RoutesManger.routeNameSitesOfUserForAdmin,
+                                      arguments:
+                                          allUsersViewModel.allUsers[index].id);
+                                },
+                                child: UserWidget(
+                                  imageUrl: user.image ?? ImageManager.avatar,
+                                  userName: user.userName ??
+                                      StringManager.unknownUser,
+                                  email: user.email ?? "",
+                                ),
+                              );
+                            },
                           ),
                         );
                       }

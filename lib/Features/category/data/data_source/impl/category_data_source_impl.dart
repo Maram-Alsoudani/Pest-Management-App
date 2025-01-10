@@ -23,7 +23,7 @@ class CategoryDataSourceImpl implements CategoryDataSource {
       var connectivityResult = await Connectivity().checkConnectivity();
       if (connectivityResult.contains(ConnectivityResult.wifi) ||
           connectivityResult.contains(ConnectivityResult.mobile)) {
-        var user = SharedPrefsLocal.getData(key: StringManager.keyUserAdmin);
+        var user = SharedPrefsLocal.getData(key: StringManager.userAdmin);
         if (user != null) {
           var dataUser = await FirebaseUtils.getUserCollection(user.type ?? "")
               .doc(user.id)
@@ -48,8 +48,7 @@ class CategoryDataSourceImpl implements CategoryDataSource {
       var connectivityResult = await Connectivity().checkConnectivity();
       if (connectivityResult.contains(ConnectivityResult.wifi) ||
           connectivityResult.contains(ConnectivityResult.mobile)) {
-        var userLocal =
-            SharedPrefsLocal.getData(key: StringManager.keyUserAdmin);
+        var userLocal = SharedPrefsLocal.getData(key: StringManager.userAdmin);
 
         var dataUser = await FirebaseUtils.getUserCollection(user.type ?? "")
             .doc(userLocal!.id)
@@ -75,7 +74,7 @@ class CategoryDataSourceImpl implements CategoryDataSource {
       var connectivityResult = await Connectivity().checkConnectivity();
       if (connectivityResult.contains(ConnectivityResult.wifi) ||
           connectivityResult.contains(ConnectivityResult.mobile)) {
-        var user = SharedPrefsLocal.getData(key: StringManager.keyUserAdmin);
+        var user = SharedPrefsLocal.getData(key: StringManager.userAdmin);
         var dataUserCollection =
             await FirebaseUtils.getUserCollection(user?.type ?? "")
                 .doc(user!.id)
@@ -98,8 +97,7 @@ class CategoryDataSourceImpl implements CategoryDataSource {
 
         // Proceed to upload the new image
         String imageUrl = "";
-        var userLocal =
-            SharedPrefsLocal.getData(key: StringManager.keyUserAdmin);
+        var userLocal = SharedPrefsLocal.getData(key: StringManager.userAdmin);
         final result =
             await FirebaseUtils.addImageToFirebaseStorage(File(image!));
         result.fold(
@@ -132,7 +130,7 @@ class CategoryDataSourceImpl implements CategoryDataSource {
       var connectivityResult = await Connectivity().checkConnectivity();
       if (connectivityResult.contains(ConnectivityResult.wifi) ||
           connectivityResult.contains(ConnectivityResult.mobile)) {
-        var user = SharedPrefsLocal.getData(key: StringManager.keyUserAdmin);
+        var user = SharedPrefsLocal.getData(key: StringManager.userAdmin);
 
         await FirebaseUtils.getUserCollection(user?.type ?? "")
             .doc(user?.id ?? "")

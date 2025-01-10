@@ -13,7 +13,6 @@ import 'package:bug_away/Core/utils/notification_model.dart';
 import 'package:bug_away/Core/utils/strings.dart';
 import 'package:bug_away/Features/chat/data/data_sources/chat_data_source.dart';
 import 'package:bug_away/Features/chat/data/models/message_dto.dart';
-import 'package:bug_away/Features/chat/domain/entities/message_entity.dart';
 import 'package:bug_away/Features/register/data/models/user_model_dto.dart';
 
 @Injectable(as: ChatDataSource)
@@ -33,7 +32,7 @@ class ChatDataSourceImpl implements ChatDataSource {
         return Left(Failure(errorMessage: StringManager.networkError));
       }
     } catch (e) {
-      return Left(Failure(errorMessage: StringManager.somethingWentWrong));
+      return Left(Failure(errorMessage: StringManager.errorOccurred));
     }
   }
 
@@ -93,7 +92,7 @@ class ChatDataSourceImpl implements ChatDataSource {
           connectivityResult.contains(ConnectivityResult.mobile)) {
         var result = await FirebaseUtils.insertMessage(message);
         if (Platform.isAndroid) {
-          var data = SharedPrefsLocal.getData(key: StringManager.keyUserAdmin);
+          var data = SharedPrefsLocal.getData(key: StringManager.userAdmin);
           await handleNotification(data!, message.content);
         }
 
@@ -102,7 +101,7 @@ class ChatDataSourceImpl implements ChatDataSource {
         return Left(Failure(errorMessage: StringManager.networkError));
       }
     } catch (e) {
-      return Left(Failure(errorMessage: StringManager.somethingWentWrong));
+      return Left(Failure(errorMessage: StringManager.errorOccurred));
     }
   }
 }

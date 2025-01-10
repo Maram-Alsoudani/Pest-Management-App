@@ -24,6 +24,7 @@ class ReportViewModel extends Cubit<ReportState> {
   String _conditions = '';
   List<String> _recommendations = [];
   Map<String, int> _materials = {};
+  Map<String, int> _availableQuantities = {};
   List<String> _devices = [];
   List<String> _photos = [];
   List<String> _signatures = [];
@@ -36,8 +37,7 @@ class ReportViewModel extends Cubit<ReportState> {
     emit(ReportLoading());
 
     // Get the current user's information
-    userName =
-        SharedPrefsLocal.getData(key: StringManager.keyUserAdmin)?.userName;
+    userName = SharedPrefsLocal.getData(key: StringManager.userAdmin)?.userName;
 
     // Upload photos and signatures to Firebase Storage
     final photoUrls = await Future.wait(_photos.map((path) async {
@@ -78,7 +78,6 @@ class ReportViewModel extends Cubit<ReportState> {
             await FirebaseUtils.updateMaterialQuantityByName(
                 entry.key, -entry.value);
           } catch (e) {
-            print("Error updating material quantity for name ${entry.key}: $e");
             DialogUtils.showAlertDialog(
               context: context,
               title: StringManager.error,
@@ -94,7 +93,7 @@ class ReportViewModel extends Cubit<ReportState> {
         DialogUtils.showAlertDialog(
           context: context,
           title: StringManager.success,
-          message: StringManager.reportSubmittedSuccessfully,
+          message: StringManager.reportSubmitSuccess,
           posActionTitle: StringManager.ok,
           posAction: () {
             Navigator.popUntil(context,
@@ -177,6 +176,12 @@ class ReportViewModel extends Cubit<ReportState> {
 
   Map<String, int> get materials => _materials;
 
+  void updateAvailableQuantities(Map<String, int> availableQuantities) {
+    _availableQuantities = availableQuantities;
+  }
+
+  Map<String, int> get availableQuantities => _availableQuantities;
+
   void updateDevices(List<String> devices) {
     _devices = devices;
   }
@@ -200,6 +205,7 @@ class ReportViewModel extends Cubit<ReportState> {
     _conditions = '';
     _recommendations = [];
     _materials = {};
+    _availableQuantities = {};
     _devices = [];
     _photos = [];
     _signatures = [];

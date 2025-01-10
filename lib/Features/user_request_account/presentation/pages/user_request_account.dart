@@ -1,22 +1,17 @@
 import 'dart:io';
 
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
-import 'package:bug_away/Config/routes/routes_manger.dart';
 import 'package:bug_away/Core/component/button_custom.dart';
 import 'package:bug_away/Core/component/custom_dialog.dart';
 import 'package:bug_away/Core/component/lottie_loading_widget.dart';
 import 'package:bug_away/Core/utils/colors.dart';
-import 'package:bug_away/Core/utils/fcm_helper.dart';
 import 'package:bug_away/Core/utils/images.dart';
 import 'package:bug_away/Core/utils/strings.dart';
 import 'package:bug_away/Core/component/show_model_picker_image.dart';
-import 'package:bug_away/Features/user_request_account/data/data_source/user_request_account_data_source_impl.dart';
 
 import '../../../../Core/component/drop_down_menu_widget.dart';
 import '../../../../Core/component/text_feild_custom.dart';
@@ -51,7 +46,7 @@ class _UserRequestAccountState extends State<UserRequestAccount>
           DialogUtils.showAlertDialog(
             context: context,
             title: StringManager.success,
-            message: StringManager.sentRequestSuccessfully,
+            message: StringManager.requestSuccess,
             posActionTitle: StringManager.ok,
           );
         } else if (state is UserRequestAccountViewModelError) {

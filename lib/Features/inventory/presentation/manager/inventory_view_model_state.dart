@@ -20,6 +20,7 @@ class InventoryGetMaterailError extends InventoryViewModelState {
 }
 
 class InventorySearchMaterail extends InventoryViewModelState {}
+
 class InventoryNoSearchResultMaterail extends InventoryViewModelState {}
 
 class InventoryAddedMaterailLoading extends InventoryViewModelState {}
@@ -31,6 +32,7 @@ class InventoryAddedMaterailError extends InventoryViewModelState {
 
   InventoryAddedMaterailError({required this.error});
 }
+
 class InventoryUpdateMaterailLoading extends InventoryViewModelState {}
 
 class InventoryUpdateMaterailSuccess extends InventoryViewModelState {}
@@ -44,7 +46,6 @@ class InventoryUpdateMaterailError extends InventoryViewModelState {
 class InventoryDeleteMaterailLoading extends InventoryViewModelState {}
 
 class InventoryDeleteMaterailSuccess extends InventoryViewModelState {}
-class InventoryAnimationMaterailSuccess extends InventoryViewModelState {}
 
 class InventoryDeleteMaterailError extends InventoryViewModelState {
   final Failure error;

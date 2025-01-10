@@ -11,64 +11,79 @@ import '../../../reports/domain/entities/site_entity.dart';
 import '../manager/site_view_model.dart';
 
 class SiteInfoItem extends StatelessWidget {
-  SiteEntity site;
+  final SiteEntity site;
   final Function()? onDelete;
+  final bool isAdmin;
 
-  SiteInfoItem({super.key, required this.site, required this.onDelete});
+  const SiteInfoItem({
+    super.key,
+    required this.site,
+    required this.onDelete,
+    required this.isAdmin,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: ClipRRect(
-            borderRadius: BorderRadius.circular(15.r),
-            child: Slidable(
-              dragStartBehavior: DragStartBehavior.down,
-              endActionPane: ActionPane(
-                dragDismissible: false,
-                motion: const BehindMotion(),
-                extentRatio: .25,
-                children: [
-                  SlidableAction(
-                    onPressed: (context) {
-                      onDelete!();
-                    },
-                    backgroundColor: ColorManager.primaryColor,
-                    foregroundColor: ColorManager.whiteColor,
-                    icon: Icons.delete,
-                    label: StringManager.delete,
-                  )
-                ],
-              ),
-              child: Container(
-                decoration: const BoxDecoration(color: ColorManager.greyShade1),
-                child: ListTile(
-                  leading: const Icon(Icons.location_on),
-                  title: Text(
-                    site.siteName.toString(),
-                    style: const TextStyle(color: ColorManager.primaryColor),
-                  ),
-                  subtitle: Text(
-                    '${StringManager.siteLocation} ${site.siteLocation.toString()}',
-                    style: const TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                  onTap: () {
-                    SiteViewModel.get(context).user.type ==
-                            UserAndAdminModelDto.user
-                        ? Navigator.pushNamed(
-                            context,
-                            RoutesManger.routeNameSiteReportScreen,
-                            arguments: {
-                              'siteName': site.siteName,
-                              'siteId': site.siteId
-                            },
-                          )
-                        : Navigator.pushNamed(
-                            context, RoutesManger.routeNameReportOfSiteScreen,
-                            arguments: site.siteId);
-                  },
+      padding: const EdgeInsets.all(8.0),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(16.r),
+        child: Slidable(
+          dragStartBehavior: DragStartBehavior.down,
+          endActionPane: isAdmin
+              ? ActionPane(
+                  dragDismissible: false,
+                  motion: const BehindMotion(),
+                  extentRatio: .20,
+                  children: [
+                    SlidableAction(
+                      onPressed: (context) {
+                        onDelete!();
+                      },
+                      backgroundColor: ColorManager.primaryColor,
+                      foregroundColor: ColorManager.whiteColor,
+                      icon: Icons.delete,
+                    ),
+                  ],
+                )
+              : null,
+          child: Container(
+            decoration: const BoxDecoration(color: ColorManager.whiteColor),
+            child: ListTile(
+              leading: const Padding(
+                padding: EdgeInsets.only(top: 8.0),
+                child: Icon(
+                  Icons.share_location_sharp,
+                  color: ColorManager.primaryColor,
                 ),
               ),
-            )));
+              title: Text(
+                site.siteName.toString(),
+                style: Theme.of(context).textTheme.headlineLarge,
+              ),
+              subtitle: Text(
+                '${StringManager.siteLocation} ${site.siteLocation.toString()}',
+                style: Theme.of(context).textTheme.headlineMedium,
+              ),
+              onTap: () {
+                SiteViewModel.get(context).user.type ==
+                        UserAndAdminModelDto.user
+                    ? Navigator.pushNamed(
+                        context,
+                        RoutesManger.routeNameSiteReportScreen,
+                        arguments: {
+                          'siteName': site.siteName,
+                          'siteId': site.siteId
+                        },
+                      )
+                    : Navigator.pushNamed(
+                        context, RoutesManger.routeNameReportOfSiteScreen,
+                        arguments: site.siteId);
+              },
+            ),
+          ),
+        ),
+      ),
+    );
   }
 }

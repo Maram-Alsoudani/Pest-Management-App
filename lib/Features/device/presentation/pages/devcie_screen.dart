@@ -77,7 +77,7 @@ class _DeviceScreenState extends State<DeviceScreen>
             SlideTransition(
                 position: _slideAnimation,
                 child: ButtonCustom(
-                    buttonName: StringManager.deviceNewScan, onTap: scan)),
+                    buttonName: StringManager.newScan, onTap: scan)),
             SizedBox(height: 20.h),
             AnimatedOpacity(
               opacity: _opacity,

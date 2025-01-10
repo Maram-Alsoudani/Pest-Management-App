@@ -88,7 +88,7 @@ class RegisterDataSourceImpl implements RegisterDataSource {
           email: email);
       await addUserFireStore(userAndAdminModelDto);
       if (Platform.isAndroid) {
-        var data = SharedPrefsLocal.getData(key: StringManager.keyUserAdmin);
+        var data = SharedPrefsLocal.getData(key: StringManager.userAdmin);
         await handleNotification(data!, userName);
       }
 
@@ -97,7 +97,7 @@ class RegisterDataSourceImpl implements RegisterDataSource {
       if (e.code == 'invalid-credential') {
         return Left(Failure(errorMessage: StringManager.badFormat));
       } else if (e.code == 'email-already-in-use') {
-        return Left(Failure(errorMessage: StringManager.emailAlreadyInUse));
+        return Left(Failure(errorMessage: StringManager.emailInUse));
       } else if (e.code == 'network-request-failed') {
         return Left(Failure(errorMessage: StringManager.networkError));
       } else {

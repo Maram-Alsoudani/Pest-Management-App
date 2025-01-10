@@ -36,10 +36,6 @@ class _ShowModelPickerImageState extends State<ShowModelPickerImage> {
     final Color iconColor =
         isDarkMode ? ColorManager.whiteColor : ColorManager.blackColor;
 
-    final Color backgroundColor = isDarkMode
-        ? ColorManager.blackColor.withOpacity(0.8)
-        : ColorManager.whiteColor.withOpacity(0.8);
-
     if (Platform.isIOS || Platform.isMacOS) {
       return CupertinoTheme(
         data: CupertinoThemeData(
@@ -60,7 +56,7 @@ class _ShowModelPickerImageState extends State<ShowModelPickerImage> {
             CupertinoActionSheetAction(
               onPressed: () => _pickImage(ImageSource.gallery),
               child: Text(
-                StringManager.chooseFromGallery,
+                StringManager.chooseGallery,
                 style: textStyle.copyWith(color: ColorManager.dialogBlueColor),
               ),
             ),
@@ -107,8 +103,8 @@ class _ShowModelPickerImageState extends State<ShowModelPickerImage> {
             ),
             Divider(
               color: isDarkMode
-                  ? ColorManager.whiteColor.withOpacity(0.2)
-                  : ColorManager.blackColor.withOpacity(0.2),
+                  ? ColorManager.whiteColor.withAlpha((0.2 * 255).toInt())
+                  : ColorManager.blackColor.withAlpha((0.2 * 255).toInt()),
               thickness: 0.6,
             ),
             InkWell(
@@ -124,7 +120,7 @@ class _ShowModelPickerImageState extends State<ShowModelPickerImage> {
                     width: 11.w,
                   ),
                   Text(
-                    StringManager.chooseFromGallery,
+                    StringManager.chooseGallery,
                     style: textStyle,
                   ),
                 ],
@@ -132,8 +128,8 @@ class _ShowModelPickerImageState extends State<ShowModelPickerImage> {
             ),
             Divider(
               color: isDarkMode
-                  ? ColorManager.whiteColor.withOpacity(0.2)
-                  : ColorManager.blackColor.withOpacity(0.2),
+                  ? ColorManager.whiteColor.withAlpha((0.2 * 255).toInt())
+                  : ColorManager.blackColor.withAlpha((0.2 * 255).toInt()),
               thickness: 0.6,
             ),
             InkWell(

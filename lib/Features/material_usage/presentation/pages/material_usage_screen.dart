@@ -1,13 +1,13 @@
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/gestures.dart';
+import 'package:bug_away/Features/inventory/data/models/materail_model_dto.dart';
+import 'package:bug_away/Features/material_usage/presentation/widgets/usage_material_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:bug_away/Core/component/button_custom.dart';
 import 'package:bug_away/Core/utils/strings.dart';
 import 'package:bug_away/Core/utils/colors.dart';
 import 'package:bug_away/Features/site_report/presentation/manager/report_view_model.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../../../../../Core/component/custom_dialog.dart';
 import 'search_material_screen.dart';
 
@@ -22,14 +22,15 @@ class _MaterialUsageScreenState extends State<MaterialUsageScreen>
     with SingleTickerProviderStateMixin {
   Map<String, int> materials = {};
   Map<String, int> availableQuantities = {};
-  final double _opacity = 0.0;
+  Map<String, String> materialUnits = {}; // Add this map to store units
   late AnimationController _animationController;
   late Animation<Offset> _slideAnimation;
 
-  void addItem(String item, int quantity, int availableQuantity) {
+  void addItem(String item, int quantity, int availableQuantity, String unit) {
     setState(() {
       materials[item] = quantity;
       availableQuantities[item] = availableQuantity;
+      materialUnits[item] = unit; // Store unit
     });
   }
 
@@ -37,6 +38,7 @@ class _MaterialUsageScreenState extends State<MaterialUsageScreen>
     setState(() {
       materials.remove(item);
       availableQuantities.remove(item);
+      materialUnits.remove(item); // Remove unit
     });
   }
 
@@ -44,9 +46,10 @@ class _MaterialUsageScreenState extends State<MaterialUsageScreen>
     setState(() {
       final currentQuantity = materials[materialName] ?? 0;
       final newQuantity = currentQuantity + change;
-      if (newQuantity > 0) {
+      if (newQuantity >= 0 &&
+          newQuantity <= availableQuantities[materialName]!) {
         materials[materialName] = newQuantity;
-      } else {
+      } else if (newQuantity <= 0) {
         showDeleteConfirmationDialog(materialName);
       }
     });
@@ -87,10 +90,7 @@ class _MaterialUsageScreenState extends State<MaterialUsageScreen>
     // Initialize materials based on the saved state
     final reportViewModel = context.read<ReportViewModel>();
     materials = Map.from(reportViewModel.materials);
-    // Initialize available quantities based on the saved state
-    // Assuming available quantities are also stored in the reportViewModel
-    // If not, you need to fetch them from the appropriate source
-    // availableQuantities = Map.from(reportViewModel.availableQuantities);
+    availableQuantities = Map.from(reportViewModel.availableQuantities);
   }
 
   @override
@@ -113,9 +113,11 @@ class _MaterialUsageScreenState extends State<MaterialUsageScreen>
         ),
         actions: [
           IconButton(
-            icon: const Icon(Icons.save, color: ColorManager.whiteColor),
+            icon: const FaIcon(FontAwesomeIcons.solidFloppyDisk,
+                color: ColorManager.whiteColor),
             onPressed: () {
               reportViewModel.updateMaterials(materials);
+              reportViewModel.updateAvailableQuantities(availableQuantities);
               Navigator.pop(context);
             },
           ),
@@ -135,92 +137,22 @@ class _MaterialUsageScreenState extends State<MaterialUsageScreen>
                     final quantity = materials[material]!;
                     final availableQuantity =
                         availableQuantities[material] ?? 0;
+                    final unit = materialUnits[material] ?? 'Unit'; // Get unit
                     return Padding(
                       padding: EdgeInsets.symmetric(vertical: 8.0.r),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(16.0.r),
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: ColorManager.whiteColor,
-                            borderRadius: BorderRadius.circular(16.0.r),
-                          ),
-                          child: Slidable(
-                            dragStartBehavior: DragStartBehavior.down,
-                            key: ValueKey(material),
-                            endActionPane: ActionPane(
-                              dragDismissible: false,
-                              motion: const BehindMotion(),
-                              extentRatio: 0.20,
-                              children: [
-                                SlidableAction(
-                                  onPressed: (context) {
-                                    showDeleteConfirmationDialog(material);
-                                  },
-                                  backgroundColor: ColorManager.primaryColor,
-                                  foregroundColor: ColorManager.whiteColor,
-                                  icon: Icons.delete,
-                                ),
-                              ],
-                            ),
-                            child: ListTile(
-                              leading: const Icon(Icons.inventory,
-                                  color: ColorManager.primaryColor),
-                              title: Text(
-                                material,
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .titleSmall!
-                                    .copyWith(color: ColorManager.primaryColor),
-                              ),
-                              subtitle: Text(
-                                'Quantity: $quantity',
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .titleSmall!
-                                    .copyWith(color: Colors.grey),
-                              ),
-                              trailing: Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Visibility(
-                                    visible: quantity > 0,
-                                    maintainSize: true,
-                                    maintainAnimation: true,
-                                    maintainState: true,
-                                    child: IconButton(
-                                      icon: const Icon(Icons.remove_circle,
-                                          color: ColorManager.primaryColor),
-                                      onPressed: () {
-                                        updateQuantity(material, -1);
-                                      },
-                                    ),
-                                  ),
-                                  Text(
-                                    '$quantity',
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .titleSmall!
-                                        .copyWith(
-                                            color: ColorManager.blackColor),
-                                  ),
-                                  Visibility(
-                                    visible: quantity < availableQuantity,
-                                    maintainSize: true,
-                                    maintainAnimation: true,
-                                    maintainState: true,
-                                    child: IconButton(
-                                      icon: const Icon(Icons.add_circle,
-                                          color: ColorManager.primaryColor),
-                                      onPressed: () {
-                                        updateQuantity(material, 1);
-                                      },
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
+                      child: MaterialUsageItem(
+                        isUnavailable: availableQuantity == 0,
+                        item: MaterailModelDto(
+                          name: material,
+                          quantity: quantity,
+                          unit: unit, // Use unit
                         ),
+                        availableQuantity: availableQuantity,
+                        selectedQuantity: quantity,
+                        unit: unit, // Pass unit
+                        onIncrement: () => updateQuantity(material, 1),
+                        onDecrement: () => updateQuantity(material, -1),
+                        onDelete: () => showDeleteConfirmationDialog(material),
                       ),
                     );
                   },
@@ -242,16 +174,21 @@ class _MaterialUsageScreenState extends State<MaterialUsageScreen>
                       final result = await Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => SearchMaterialUsageScreen(),
+                          builder: (context) =>
+                              const SearchMaterialUsageScreen(),
                         ),
                       );
                       if (result != null) {
-                        final data = result as Map<String, Map<String, int>>;
-                        final newMaterials = data['selectedQuantities']!;
+                        final data = result as Map<String, dynamic>;
+                        final newMaterials =
+                            data['selectedQuantities'] as Map<String, int>;
                         final newAvailableQuantities =
-                            data['availableQuantities']!;
+                            data['availableQuantities'] as Map<String, int>;
+                        final newMaterialUnits =
+                            data['materialUnits'] as Map<String, String>;
                         newMaterials.forEach((key, value) {
-                          addItem(key, value, newAvailableQuantities[key]!);
+                          addItem(key, value, newAvailableQuantities[key]!,
+                              newMaterialUnits[key]!);
                         });
                       }
                     },

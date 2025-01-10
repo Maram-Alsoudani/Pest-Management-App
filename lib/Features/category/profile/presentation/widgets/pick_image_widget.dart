@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:bug_away/Core/utils/colors.dart';
 import 'package:cached_network_image/cached_network_image.dart'; // Import the package
@@ -136,7 +137,8 @@ class _PickImageWidgetState extends State<PickImageWidget> {
                       imageUrl: imagePath,
                       errorWidget: (context, url, error) {
                         return const Center(
-                            child: Icon(Icons.error)); // Fallback error icon
+                            child:
+                                FaIcon(FontAwesomeIcons.triangleExclamation));
                       },
                     ),
                   )
@@ -146,7 +148,8 @@ class _PickImageWidgetState extends State<PickImageWidget> {
                       File(imagePath),
                       errorBuilder: (context, error, stackTrace) {
                         return const Center(
-                            child: Icon(Icons.error)); // Fallback error icon
+                            child:
+                                FaIcon(FontAwesomeIcons.triangleExclamation));
                       },
                     ),
                   ),

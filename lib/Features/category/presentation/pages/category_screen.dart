@@ -1,9 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:bug_away/Config/routes/routes_manger.dart';
 import 'package:bug_away/Core/component/custom_dialog.dart';
@@ -99,10 +99,20 @@ class _CategoryScreenState extends State<CategoryScreen>
                   appBar: AppBar(
                     backgroundColor: Colors.transparent,
                     elevation: 0,
-                    iconTheme: IconThemeData(color: Colors.white),
+                    iconTheme: const IconThemeData(color: Colors.white),
+                    leading: Builder(
+                      builder: (context) => IconButton(
+                        icon: const FaIcon(FontAwesomeIcons.barsStaggered),
+                        onPressed: () {
+                          Scaffold.of(context).openDrawer();
+                        },
+                      ),
+                    ),
                     actions: [
                       IconButton(
-                        icon: Icon(Icons.logout),
+                        icon: const FaIcon(
+                          FontAwesomeIcons.signOut,
+                        ),
                         onPressed: () {
                           DialogUtils.showAlertDialog(
                             context: context,
@@ -116,7 +126,7 @@ class _CategoryScreenState extends State<CategoryScreen>
                               FirebaseAuth.instance.signOut();
                               Navigator.pushNamedAndRemoveUntil(
                                 context,
-                                RoutesManger.routeNameEngOwnerScreen,
+                                RoutesManger.routeNameLogin,
                                 (route) => false,
                               );
                             },
@@ -169,7 +179,9 @@ class _CategoryScreenState extends State<CategoryScreen>
                                         .copyWith(fontSize: FontSize.s24.sp),
                                   ),
                                   Text(
-                                    state.userAndAdminModelEntity.type ?? "",
+                                    getDisplayUserType(
+                                        state.userAndAdminModelEntity.type ??
+                                            ""),
                                     style:
                                         Theme.of(context).textTheme.titleSmall,
                                   ),
@@ -197,7 +209,7 @@ class _CategoryScreenState extends State<CategoryScreen>
                                               var currentUser =
                                                   SharedPrefsLocal.getData(
                                                       key: StringManager
-                                                          .keyUserAdmin);
+                                                          .userAdmin);
                                               if (currentUser!.type ==
                                                   'admin') {
                                                 Navigator.pushNamed(
@@ -243,5 +255,16 @@ class _CategoryScreenState extends State<CategoryScreen>
         );
       },
     );
+  }
+}
+
+String getDisplayUserType(String userType) {
+  switch (userType.toLowerCase()) {
+    case 'admin':
+      return 'Admin';
+    case 'user':
+      return 'Engineer';
+    default:
+      return userType;
   }
 }

@@ -31,41 +31,82 @@ class _AddNewSiteState extends State<AddNewSite>
 
   @override
   Widget build(BuildContext context) {
-    return AlertDialog(
-      backgroundColor: ColorManager.backgroundColor,
-      title: const Text(
-        StringManager.addSite,
-        style: TextStyle(color: ColorManager.whiteColor),
+    return Dialog(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(20.r),
       ),
-      content: Form(
-        key: SiteViewModel.get(context).fromKey,
+      backgroundColor: ColorManager.backgroundColor,
+      child: Container(
+        width: 340.w,
+        padding: EdgeInsets.all(16.w),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            CustomTextFormField(
-                hint: StringManager.siteName,
-                validator: (val) => AppValidators.validateSite(val),
-                controller: SiteViewModel.get(context).siteNameController),
-            CustomTextFormField(
-                hint: StringManager.siteLocation,
-                validator: (val) => AppValidators.validateSite(val),
-                controller: SiteViewModel.get(context).siteLocationController),
-            SizedBox(width: 232.w, child: UserDropdown()),
-            ButtonCustom(
-              onTap: () async {
-                if (SiteViewModel.get(context)
-                        .fromKey
-                        .currentState!
-                        .validate() &&
-                    SiteViewModel.get(context).selectedValue != null) {
-                  SiteViewModel.get(context).addSite();
-                  SiteViewModel.get(context).clearDate();
-                  Navigator.pop(context);
-                  SiteViewModel.get(context).fetchSite();
-                }
-              },
-              buttonName: StringManager.addSite,
-            )
+            Center(
+              child: Text(
+                StringManager.addSite,
+                style: Theme.of(context)
+                    .textTheme
+                    .titleSmall!
+                    .copyWith(fontSize: 24.sp),
+              ),
+            ),
+            SizedBox(height: 8.h),
+            Form(
+              key: SiteViewModel.get(context).fromKey,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  CustomTextFormField(
+                    hint: StringManager.siteName,
+                    validator: (val) => AppValidators.validateSite(val),
+                    controller: SiteViewModel.get(context).siteNameController,
+                  ),
+                  SizedBox(height: 8.h),
+                  CustomTextFormField(
+                    hint: StringManager.siteLocation,
+                    validator: (val) => AppValidators.validateSite(val),
+                    controller:
+                        SiteViewModel.get(context).siteLocationController,
+                  ),
+                  const UserDropdown(),
+                  SizedBox(height: 8.h),
+                ],
+              ),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                TextButton(
+                  onPressed: () {
+                    SiteViewModel.get(context).clearDate();
+                    Navigator.pop(context);
+                  },
+                  child: Text(
+                    StringManager.cancel,
+                    style: Theme.of(context)
+                        .textTheme
+                        .titleSmall!
+                        .copyWith(color: ColorManager.dialogRedColor),
+                  ),
+                ),
+                ButtonCustom(
+                  buttonName: StringManager.addSite,
+                  onTap: () async {
+                    if (SiteViewModel.get(context)
+                            .fromKey
+                            .currentState!
+                            .validate() &&
+                        SiteViewModel.get(context).selectedValue != null) {
+                      SiteViewModel.get(context).addSite();
+                      SiteViewModel.get(context).clearDate();
+                      Navigator.pop(context);
+                      SiteViewModel.get(context).fetchSite();
+                    }
+                  },
+                ),
+              ],
+            ),
           ],
         ),
       ),

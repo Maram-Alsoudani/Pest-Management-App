@@ -1,3 +1,5 @@
+import 'package:bug_away/Core/component/empty_pages.dart';
+import 'package:bug_away/Core/utils/images.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -49,6 +51,9 @@ class _SitesOFUserState extends State<SitesOFUser>
       progressIndicator: const Center(child: LottieLoadingWidget()),
       child: Scaffold(
         appBar: AppBar(
+          backgroundColor: Colors.transparent,
+          surfaceTintColor: Colors.transparent,
+          elevation: 0,
           title: const Text(StringManager.sites),
         ),
         body: BlocBuilder<GetSitesOfUsersViewModel, GetSitesState>(
@@ -69,44 +74,39 @@ class _SitesOFUserState extends State<SitesOFUser>
                   child: Builder(
                     builder: (context) {
                       if (state is GetSitesErrorState) {
-                        return Center(
-                          child: Text(
-                            state.errorMessage,
-                            style: const TextStyle(color: Colors.white),
+                        return const Center(
+                          child: EmptyStateWidget(
+                            lottiePath: ImageManager.emptySearchLottie,
+                            message: StringManager.noSitesFound,
                           ),
                         );
                       } else if (state is NoSearchResultsState) {
-                        return Center(
-                          child: Text(
-                            StringManager.noReportFound,
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyMedium!
-                                .copyWith(color: ColorManager.whiteColor),
+                        return const Center(
+                          child: EmptyStateWidget(
+                            lottiePath: ImageManager.emptySearchLottie,
+                            message: StringManager.noSitesFound,
                           ),
                         );
                       } else {
                         return SlideTransition(
                           position: viewModel.slideAnimation,
                           child: Padding(
-                            padding: EdgeInsets.all(15.sp),
+                            padding: EdgeInsets.all(4.sp),
                             child: ListView.builder(
                               itemCount: viewModel.allSites.length,
                               itemBuilder: (context, index) {
                                 final site = viewModel.allSites[index];
 
-                                return InkWell(
-                                  onTap: () {
+                                return SiteWidget(
+                                  siteName: site.siteName ?? '',
+                                  siteLocation: site.siteLocation ?? '',
+                                  onClicked: () {
                                     Navigator.pushNamed(
-                                        context,
-                                        RoutesManger
-                                            .routeNameReportOfSiteScreen,
-                                        arguments: site.siteId);
+                                      context,
+                                      RoutesManger.routeNameReportOfSiteScreen,
+                                      arguments: site.siteId,
+                                    );
                                   },
-                                  child: SiteWidget(
-                                    siteName: site.siteName ?? "",
-                                    siteLocation: site.siteLocation ?? "",
-                                  ),
                                 );
                               },
                             ),

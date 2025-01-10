@@ -7,7 +7,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:injectable/injectable.dart';
 import 'package:bug_away/Config/routes/routes_manger.dart';
 import 'package:bug_away/Core/errors/failures.dart';
-import 'package:bug_away/Core/utils/SharedPrefsLocal.dart';
 import 'package:bug_away/Core/utils/fcm_helper.dart';
 import 'package:bug_away/Core/utils/firebase_utils.dart';
 import 'package:bug_away/Core/utils/notification_model.dart';
@@ -118,7 +117,7 @@ class UserRequestAccountDataSourceImpl implements UserRequestAccountDataSource {
               notificationModel, UserAndAdminModelDto.admin, admin.id!);
         }
       } else {
-        return Left(Failure(errorMessage: StringManager.emailAlreadyInUse));
+        return Left(Failure(errorMessage: StringManager.emailInUse));
       }
 
       return const Right(null);
@@ -126,7 +125,7 @@ class UserRequestAccountDataSourceImpl implements UserRequestAccountDataSource {
       if (e.code == 'invalid-credential') {
         return Left(Failure(errorMessage: StringManager.badFormat));
       } else if (e.code == 'email-already-in-use') {
-        return Left(Failure(errorMessage: StringManager.emailAlreadyInUse));
+        return Left(Failure(errorMessage: StringManager.emailInUse));
       } else if (e.code == 'network-request-failed') {
         return Left(Failure(errorMessage: StringManager.networkError));
       } else {

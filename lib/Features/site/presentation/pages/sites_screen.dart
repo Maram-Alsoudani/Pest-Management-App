@@ -1,10 +1,9 @@
+import 'package:bug_away/Core/utils/images.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:bug_away/Core/component/search_field_widget.dart';
 import 'package:bug_away/Core/utils/colors.dart';
-import 'package:bug_away/Features/register/data/models/user_model_dto.dart';
 import 'package:bug_away/Features/site/presentation/manager/site_state.dart';
 import 'package:bug_away/Features/site/presentation/manager/site_view_model.dart';
 
@@ -13,6 +12,7 @@ import '../../../../Core/component/lottie_loading_widget.dart';
 import '../../../../Core/utils/strings.dart';
 import '../widgets/add_new_site.dart';
 import '../widgets/site_info_item.dart';
+import '../../../../Core/component/empty_pages.dart';
 
 class SitesScreen extends StatefulWidget {
   const SitesScreen({super.key});
@@ -24,6 +24,7 @@ class SitesScreen extends StatefulWidget {
 class _SitesScreenState extends State<SitesScreen>
     with SingleTickerProviderStateMixin {
   late SiteViewModel bloc;
+  bool showEmptyState = false;
 
   @override
   void initState() {
@@ -33,7 +34,20 @@ class _SitesScreenState extends State<SitesScreen>
     bloc.fetchUsers();
     bloc.fetchUserSites();
     bloc.doAnimation(this);
+
+    Future.delayed(const Duration(seconds: 3), () {
+      setState(() {
+        showEmptyState = true;
+      });
+    });
+
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    bloc.animationController.dispose();
+    super.dispose();
   }
 
   @override
@@ -68,7 +82,7 @@ class _SitesScreenState extends State<SitesScreen>
           DialogUtils.showAlertDialog(
             context: context,
             title: StringManager.success,
-            message: StringManager.siteAddSuccessfully,
+            message: StringManager.siteAddSuccess,
             posActionTitle: StringManager.ok,
           );
         }
@@ -76,7 +90,7 @@ class _SitesScreenState extends State<SitesScreen>
           DialogUtils.showAlertDialog(
             context: context,
             title: StringManager.success,
-            message: StringManager.siteDeleteSuccessfully,
+            message: StringManager.siteDeleteSuccess,
             posActionTitle: StringManager.ok,
           );
         }
@@ -90,143 +104,82 @@ class _SitesScreenState extends State<SitesScreen>
         }
       },
       builder: (context, state) {
-        return ModalProgressHUD(
-          opacity: 0.4,
-          color: ColorManager.greyShade3,
-          inAsyncCall: bloc.isLoading,
-          progressIndicator: const Center(child: LottieLoadingWidget()),
-          child: SafeArea(
-            child: Scaffold(
-              appBar: AppBar(
-                title: Text(
-                  StringManager.sites,
-                  style: Theme.of(context).textTheme.titleSmall!.copyWith(
-                        fontSize: 25.sp,
-                      ),
+        return Scaffold(
+          appBar: AppBar(
+            backgroundColor: Colors.transparent,
+            surfaceTintColor: Colors.transparent,
+            elevation: 0,
+            title: const Text(StringManager.sites),
+          ),
+          body: ModalProgressHUD(
+            opacity: 0.4,
+            color: ColorManager.greyShade3,
+            inAsyncCall: bloc.isLoading,
+            progressIndicator: const Center(child: LottieLoadingWidget()),
+            child: Column(
+              children: [
+                SearchFieldWidget(
+                  controller: bloc.searchController,
+                  onChanged: (value) => bloc.filterSites(value),
                 ),
-                actions: [
-                  Padding(
-                    padding: EdgeInsets.all(15.r),
-                    child: const Icon(
-                      Icons.maps_home_work_rounded,
-                      color: ColorManager.whiteColor,
-                    ),
-                  ),
-                ],
-              ),
-              body: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    AnimatedOpacity(
-                      duration: const Duration(seconds: 2),
-                      opacity: bloc.opacity,
-                      curve: Curves.easeIn,
-                      child: SearchFieldWidget(
-                        controller: bloc.searchController,
-                        onChanged: (query) => bloc.filterSites(query),
-                      ),
-                    ),
-                    state is NoResultSearchSiteSuccessState
-                        ? Expanded(
-                            child: Center(
-                              child: Text(
-                                StringManager.noSitesFound,
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .bodyMedium!
-                                    .copyWith(color: ColorManager.whiteColor),
-                              ),
-                            ),
-                          )
-                        : bloc.user.type == UserAndAdminModelDto.admin
-                            ? Flexible(
-                                child: SlideTransition(
-                                  position: bloc.slideAnimation,
-                                  child: bloc.searchedSites.isEmpty
-                                      ? Center(
-                                          child: Text(
-                                            StringManager.noSitesFound,
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .bodyMedium!
-                                                .copyWith(
-                                                    color: ColorManager
-                                                        .whiteColor),
-                                          ),
-                                        )
-                                      : ListView.builder(
-                                          itemCount: SiteViewModel.get(context)
-                                              .searchedSites
-                                              .length,
-                                          itemBuilder: (context, index) {
-                                            return SiteInfoItem(
-                                              site: bloc.searchedSites[index],
-                                              onDelete: () {
-                                                bloc.deleteSite(
-                                                    bloc.sites[index]);
-                                                bloc.fetchSite();
-                                              },
-                                            );
-                                          },
-                                        ),
-                                ),
-                              )
-                            : Flexible(
-                                child: bloc.userSites.isEmpty
-                                    ? Center(
-                                        child: Text(
-                                          StringManager.noSitesFound,
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .bodyMedium!
-                                              .copyWith(
-                                                  color:
-                                                      ColorManager.whiteColor),
-                                        ),
-                                      )
-                                    : ListView.builder(
-                                        itemCount: SiteViewModel.get(context)
-                                            .userSites
-                                            .length,
-                                        itemBuilder: (context, index) {
-                                          return SiteInfoItem(
-                                            site: bloc.userSites[index],
-                                            onDelete: () {},
-                                          );
-                                        },
-                                      ),
-                              ),
-                  ],
-                ),
-              ),
-              floatingActionButtonLocation:
-                  FloatingActionButtonLocation.endFloat,
-              floatingActionButton: bloc.user.type == UserAndAdminModelDto.admin
-                  ? AnimatedOpacity(
-                      duration: const Duration(seconds: 2),
-                      opacity: bloc.opacity,
-                      curve: Curves.easeIn,
-                      child: FloatingActionButton(
-                        backgroundColor: ColorManager.primaryColor,
-                        onPressed: () {
-                          showDialog(
-                            context: context,
-                            builder: (context) {
-                              return const AddNewSite();
-                            },
-                          );
-                        },
-                        child: const Icon(
-                          Icons.add,
-                          color: ColorManager.whiteColor,
+                Expanded(
+                  child: Stack(
+                    children: [
+                      if (!bloc.isLoading &&
+                          bloc.searchedSites.isEmpty &&
+                          showEmptyState)
+                        const EmptyStateWidget(
+                          lottiePath: ImageManager.emptySearchLottie,
+                          message: StringManager.noSitesFound,
+                        )
+                      else
+                        ListView.builder(
+                          itemCount: bloc.searchedSites.length,
+                          itemBuilder: (context, index) {
+                            final site = bloc.searchedSites[index];
+                            return SiteInfoItem(
+                              site: site,
+                              isAdmin: bloc.user.type == 'admin',
+                              onDelete: () {
+                                DialogUtils.showAlertDialog(
+                                  context: context,
+                                  title: StringManager.confirmDelete,
+                                  message: StringManager.confirmDeleteMessage,
+                                  posActionTitle: StringManager.yes,
+                                  posAction: () {
+                                    bloc.deleteSite(site);
+                                    Navigator.pop(context);
+                                  },
+                                  negActionTitle: StringManager.no,
+                                );
+                              },
+                            );
+                          },
                         ),
-                      ),
-                    )
-                  : null,
+                    ],
+                  ),
+                ),
+              ],
             ),
           ),
+          floatingActionButton: bloc.user.type == 'admin'
+              ? FloatingActionButton(
+                  backgroundColor: ColorManager.primaryColor,
+                  shape: const CircleBorder(),
+                  onPressed: () {
+                    showDialog(
+                      context: context,
+                      builder: (context) {
+                        return const AddNewSite();
+                      },
+                    );
+                  },
+                  child: const Icon(
+                    Icons.add,
+                    color: ColorManager.whiteColor,
+                  ),
+                )
+              : null,
         );
       },
     );

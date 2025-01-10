@@ -6,6 +6,7 @@ class MaterailModelDto extends MaterailEntity {
   MaterailModelDto({
     required super.name,
     required super.quantity,
+    required super.unit,
     super.id = "",
   });
 
@@ -13,6 +14,7 @@ class MaterailModelDto extends MaterailEntity {
       : this(
           name: data["name"] as String,
           quantity: data["quantity"] as int,
+          unit: data["unit"] as String,
           id: data["id"] as String,
         );
 
@@ -20,6 +22,7 @@ class MaterailModelDto extends MaterailEntity {
     return {
       "name": name,
       "quantity": quantity,
+      "unit": unit,
       "id": id,
     };
   }

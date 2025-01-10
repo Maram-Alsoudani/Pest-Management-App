@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import '../../../../Core/utils/colors.dart';
-import '../../../../Core/utils/strings.dart';
 import 'custom_text.dart';
 
 class AddMaterial extends StatefulWidget {

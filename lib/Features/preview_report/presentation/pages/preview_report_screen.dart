@@ -1,4 +1,3 @@
-import 'dart:typed_data';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -169,7 +168,7 @@ class _PreviewReportScreenState extends State<PreviewReportScreen>
 
                 // Get the current user's information
                 var createdBy =
-                    SharedPrefsLocal.getData(key: StringManager.keyUserAdmin)
+                    SharedPrefsLocal.getData(key: StringManager.userAdmin)
                         ?.userName;
 
                 final report = ReportEntity(

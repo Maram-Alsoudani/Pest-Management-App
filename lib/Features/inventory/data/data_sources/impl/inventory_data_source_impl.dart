@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:dartz/dartz.dart';
@@ -11,11 +10,9 @@ import 'package:bug_away/Core/utils/fcm_helper.dart';
 import 'package:bug_away/Core/utils/firebase_utils.dart';
 import 'package:bug_away/Core/utils/notification_model.dart';
 import 'package:bug_away/Core/utils/strings.dart';
-import 'package:bug_away/Features/inventory/data/data_sources/impl/inventory_data_source_impl.dart';
 import 'package:bug_away/Features/inventory/data/data_sources/inventory_data_source.dart';
 import 'package:bug_away/Features/inventory/data/models/materail_model_dto.dart';
 import 'package:bug_away/Features/register/data/models/user_model_dto.dart';
-import 'package:bug_away/Features/user_request_account/domain/entities/user_request_account_model_entity.dart';
 
 import '../../../domain/entities/materail_enitiy.dart';
 
@@ -33,6 +30,7 @@ class InventoryDataSourceImpl implements InventoryDataSource {
     return taskCollection.doc(materails.id).update({
       'name': materails.name,
       'quantity': materails.quantity,
+      'unit': materails.unit
     });
   }
 
@@ -93,11 +91,13 @@ class InventoryDataSourceImpl implements InventoryDataSource {
       var connectivityResult = await Connectivity().checkConnectivity();
       if (connectivityResult.contains(ConnectivityResult.wifi) ||
           connectivityResult.contains(ConnectivityResult.mobile)) {
-        MaterailModelDto materails =
-            MaterailModelDto(name: materail.name, quantity: materail.quantity);
+        MaterailModelDto materails = MaterailModelDto(
+            name: materail.name,
+            quantity: materail.quantity,
+            unit: materail.unit);
         await addMaterailsFireStore(materails);
         if (Platform.isAndroid) {
-          var admin = SharedPrefsLocal.getData(key: StringManager.keyUserAdmin);
+          var admin = SharedPrefsLocal.getData(key: StringManager.userAdmin);
           await handleNotification(admin!);
         }
         return const Right(null);
@@ -146,16 +146,50 @@ class InventoryDataSourceImpl implements InventoryDataSource {
 
   @override
   Future<Either<Failure, void>> updateMaterail(
-      String id, String name, int quantity) async {
+      String id, String name, int quantity, String unit) async {
     try {
       var connectivityResult = await Connectivity().checkConnectivity();
       if (connectivityResult.contains(ConnectivityResult.wifi) ||
           connectivityResult.contains(ConnectivityResult.mobile)) {
-        print("osman=====================================$id");
-        MaterailModelDto materails =
-            MaterailModelDto(id: id, name: name, quantity: quantity);
-        var editFunc = await editMaterail(materails);
+        MaterailModelDto materails = MaterailModelDto(
+            id: id, name: name, quantity: quantity, unit: unit);
+        await editMaterail(materails);
+        return const Right(null);
+      } else {
+        return Left(Failure(errorMessage: StringManager.networkError));
+      }
+    } catch (e) {
+      return Left(Failure(errorMessage: StringManager.somethingWentWrong));
+    }
+  }
 
+  @override
+  Future<Either<Failure, void>> incrementQuantity(
+      String id, int quantity) async {
+    try {
+      var connectivityResult = await Connectivity().checkConnectivity();
+      if (connectivityResult.contains(ConnectivityResult.wifi) ||
+          connectivityResult.contains(ConnectivityResult.mobile)) {
+        var taskCollection = FirebaseUtils.getMaterailCollection();
+        await taskCollection.doc(id).update({'quantity': quantity});
+        return const Right(null);
+      } else {
+        return Left(Failure(errorMessage: StringManager.networkError));
+      }
+    } catch (e) {
+      return Left(Failure(errorMessage: StringManager.somethingWentWrong));
+    }
+  }
+
+  @override
+  Future<Either<Failure, void>> decrementQuantity(
+      String id, int quantity) async {
+    try {
+      var connectivityResult = await Connectivity().checkConnectivity();
+      if (connectivityResult.contains(ConnectivityResult.wifi) ||
+          connectivityResult.contains(ConnectivityResult.mobile)) {
+        var taskCollection = FirebaseUtils.getMaterailCollection();
+        await taskCollection.doc(id).update({'quantity': quantity});
         return const Right(null);
       } else {
         return Left(Failure(errorMessage: StringManager.networkError));

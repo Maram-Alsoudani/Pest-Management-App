@@ -125,7 +125,6 @@ class FirebaseUtils {
 
     // Step 2: For each user, get sites from their subcollection
     for (var userDoc in usersSnapshot.docs) {
-      var userId = userDoc.id;
       var siteCollection = userDoc.reference
           .collection(SiteEntity.collectionName)
           .withConverter<SiteDto>(

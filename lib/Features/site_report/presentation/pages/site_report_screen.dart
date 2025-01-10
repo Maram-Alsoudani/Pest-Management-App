@@ -1,20 +1,18 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:bug_away/Config/routes/routes_manger.dart';
-import 'package:bug_away/Core/component/site_report_item_container.dart';
 import 'package:bug_away/Core/utils/colors.dart';
 import 'package:bug_away/Core/utils/strings.dart';
 import 'package:bug_away/Core/utils/SharedPrefsLocal.dart';
-import 'package:bug_away/Features/site_report/data/models/report_dto.dart';
 import 'package:bug_away/Features/site_report/presentation/manager/report_view_model.dart';
-import 'package:bug_away/Core/utils/firebase_utils.dart';
 import 'package:bug_away/Core/component/custom_dialog.dart';
+import 'package:bug_away/Core/component/button_custom.dart';
 
 import '../../domain/entities/report_entity.dart';
 import '../manager/report_state.dart';
 import '../widgets/lottie_send_loading.dart';
+import '../widgets/site_report_item.dart';
 
 class SiteReportScreen extends StatefulWidget {
   const SiteReportScreen({super.key});
@@ -26,27 +24,40 @@ class SiteReportScreen extends StatefulWidget {
 class _SiteReportScreenState extends State<SiteReportScreen>
     with SingleTickerProviderStateMixin {
   List<Map<String, dynamic>> sections = [
-    {"title": StringManager.notes, "screen": RoutesManger.routeNameNotesScreen},
+    {
+      "title": StringManager.notes,
+      "screen": RoutesManger.routeNameNotesScreen,
+      "icon": CupertinoIcons.pencil_circle_fill
+    },
     {
       "title": StringManager.recommendations,
-      "screen": RoutesManger.routeNameRecommendations
+      "screen": RoutesManger.routeNameRecommendations,
+      "icon": CupertinoIcons.checkmark_seal_fill
     },
     {
       "title": StringManager.conditions,
-      "screen": RoutesManger.routeNameConditionsScreen
+      "screen": RoutesManger.routeNameConditionsScreen,
+      "icon": CupertinoIcons.info_circle_fill
     },
     {
       "title": StringManager.materialUsages,
-      "screen": RoutesManger.routeNameMaterialUsageScreen
+      "screen": RoutesManger.routeNameMaterialUsageScreen,
+      "icon": CupertinoIcons.cube_box_fill
     },
     {
       "title": StringManager.photos,
-      "screen": RoutesManger.routeNameAddPhotosScreen
+      "screen": RoutesManger.routeNameAddPhotosScreen,
+      "icon": CupertinoIcons.photo_fill
     },
-    {"title": StringManager.devices, "screen": RoutesManger.routeNameDevice},
+    {
+      "title": StringManager.devices,
+      "screen": RoutesManger.routeNameDevice,
+      "icon": CupertinoIcons.today_fill
+    },
     {
       "title": StringManager.signatures,
-      "screen": RoutesManger.routeNameSignature
+      "screen": RoutesManger.routeNameSignature,
+      "icon": CupertinoIcons.signature
     },
   ];
 
@@ -83,10 +94,9 @@ class _SiteReportScreenState extends State<SiteReportScreen>
     });
 
     // Get the current user ID
-    userId = SharedPrefsLocal.getData(key: StringManager.keyUserAdmin)?.id;
+    userId = SharedPrefsLocal.getData(key: StringManager.userAdmin)?.id;
     // Get the current user name
-    userName =
-        SharedPrefsLocal.getData(key: StringManager.keyUserAdmin)?.userName;
+    userName = SharedPrefsLocal.getData(key: StringManager.userAdmin)?.userName;
   }
 
   @override
@@ -134,9 +144,9 @@ class _SiteReportScreenState extends State<SiteReportScreen>
     if (userId == null || userId!.isEmpty) {
       DialogUtils.showAlertDialog(
         context: context,
-        title: 'Error',
-        message: 'User ID is missing.',
-        posActionTitle: 'OK',
+        title: StringManager.error,
+        message: StringManager.userIdMissing,
+        posActionTitle: StringManager.ok,
       );
       return;
     }
@@ -171,14 +181,16 @@ class _SiteReportScreenState extends State<SiteReportScreen>
     await reportViewModel.createReport(report, context);
 
     // Clear the form after successful submission
-    reportViewModel.close();
+    reportViewModel.clearForm();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.transparent,
         surfaceTintColor: Colors.transparent,
+        elevation: 0,
         title: Text(siteName ?? StringManager.siteReports),
         actions: [
           Padding(
@@ -202,9 +214,9 @@ class _SiteReportScreenState extends State<SiteReportScreen>
           if (state is ReportCreated) {
             DialogUtils.showAlertDialog(
               context: context,
-              title: 'Success',
-              message: StringManager.reportSubmittedSuccessfully,
-              posActionTitle: 'OK',
+              title: StringManager.success,
+              message: StringManager.reportSubmitSuccess,
+              posActionTitle: StringManager.ok,
               posAction: () {
                 Navigator.pushNamed(
                     context, RoutesManger.routeNameCategoryScreen);
@@ -213,9 +225,9 @@ class _SiteReportScreenState extends State<SiteReportScreen>
           } else if (state is ReportError) {
             DialogUtils.showAlertDialog(
               context: context,
-              title: 'Error',
+              title: StringManager.error,
               message: state.message,
-              posActionTitle: 'OK',
+              posActionTitle: StringManager.ok,
             );
           }
         },
@@ -235,6 +247,7 @@ class _SiteReportScreenState extends State<SiteReportScreen>
                             onClicked: () => navigateToSection(
                                 sections[index]['screen'],
                                 sections[index]['title']),
+                            icon: sections[index]['icon'],
                           ),
                         );
                       },
@@ -244,25 +257,11 @@ class _SiteReportScreenState extends State<SiteReportScreen>
                     padding: const EdgeInsets.symmetric(
                         horizontal: 16.0, vertical: 36.0),
                     child: Center(
-                      child: ElevatedButton(
-                        onPressed: submitReport,
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: ColorManager.primaryColor,
-                          foregroundColor: ColorManager.whiteColor,
-                          padding: EdgeInsets.symmetric(
-                              horizontal: 30.w, vertical: 15.h),
-                        ),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Text(
-                              StringManager.submit,
-                              style: Theme.of(context).textTheme.titleSmall,
-                            ),
-                            const SizedBox(width: 8),
-                            const Icon(CupertinoIcons.paperplane_fill),
-                          ],
-                        ),
+                      child: ButtonCustom(
+                        buttonName: StringManager.submit,
+                        onTap: submitReport,
+                        textStyle: Theme.of(context).textTheme.titleSmall,
+                        icon: CupertinoIcons.paperplane_fill,
                       ),
                     ),
                   ),
@@ -270,7 +269,7 @@ class _SiteReportScreenState extends State<SiteReportScreen>
               ),
               if (state is ReportLoading)
                 Container(
-                  color: Colors.black.withOpacity(0.5),
+                  color: ColorManager.overlayColor,
                   child: const Center(
                     child: LottieSendingWidget(),
                   ),

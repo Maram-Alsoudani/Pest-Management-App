@@ -102,8 +102,7 @@ class AccountRequestDataSourceImpl implements AccountRequestDataSource {
         user.status = "Accepted";
         await editRequest(user.status ?? "", user.id ?? "");
         var userFireStore = await addUserFireStore(userAndAdminModelDto);
-        var adminData =
-            SharedPrefsLocal.getData(key: StringManager.keyUserAdmin);
+        var adminData = SharedPrefsLocal.getData(key: StringManager.userAdmin);
 
         await sendEmail(
             user.email ?? "",
@@ -117,9 +116,10 @@ class AccountRequestDataSourceImpl implements AccountRequestDataSource {
       }
     } on FirebaseAuthException catch (e) {
       if (e.code == 'invalid-credential') {
-        return Left(Failure(errorMessage: StringManager.badFormat));
+        return Left(
+            Failure(errorMessage: StringManager.inspectionBaitCondition));
       } else if (e.code == 'email-already-in-use') {
-        return Left(Failure(errorMessage: StringManager.emailAlreadyInUse));
+        return Left(Failure(errorMessage: StringManager.emailInUse));
       } else if (e.code == 'network-request-failed') {
         return Left(Failure(errorMessage: StringManager.networkError));
       } else {
@@ -169,8 +169,7 @@ class AccountRequestDataSourceImpl implements AccountRequestDataSource {
           connectivityResult.contains(ConnectivityResult.mobile)) {
         user.status = "Rejected";
         await editRequest(user.status ?? "", user.id ?? "");
-        var adminData =
-            SharedPrefsLocal.getData(key: StringManager.keyUserAdmin);
+        var adminData = SharedPrefsLocal.getData(key: StringManager.userAdmin);
         await sendEmail(
             user.email ?? "",
             "Pest Control Company Rejected Your Account Request ",
@@ -186,7 +185,7 @@ class AccountRequestDataSourceImpl implements AccountRequestDataSource {
       if (e.code == 'invalid-credential') {
         return Left(Failure(errorMessage: StringManager.badFormat));
       } else if (e.code == 'email-already-in-use') {
-        return Left(Failure(errorMessage: StringManager.emailAlreadyInUse));
+        return Left(Failure(errorMessage: StringManager.emailInUse));
       } else if (e.code == 'network-request-failed') {
         return Left(Failure(errorMessage: StringManager.networkError));
       } else {
@@ -213,7 +212,7 @@ class AccountRequestDataSourceImpl implements AccountRequestDataSource {
       if (e.code == 'invalid-credential') {
         return Left(Failure(errorMessage: StringManager.badFormat));
       } else if (e.code == 'email-already-in-use') {
-        return Left(Failure(errorMessage: StringManager.emailAlreadyInUse));
+        return Left(Failure(errorMessage: StringManager.emailInUse));
       } else if (e.code == 'network-request-failed') {
         return Left(Failure(errorMessage: StringManager.networkError));
       } else {

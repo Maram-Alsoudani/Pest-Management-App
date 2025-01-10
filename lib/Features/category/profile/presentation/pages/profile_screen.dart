@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:bug_away/Config/routes/routes_manger.dart';
 import 'package:bug_away/Core/component/button_custom.dart';
@@ -65,14 +66,14 @@ class _ProfileScreenState extends State<ProfileScreen>
           DialogUtils.showAlertDialog(
             context: context,
             title: StringManager.success,
-            message: StringManager.savedSuccessfully,
+            message: StringManager.saveSuccess,
             posActionTitle: StringManager.ok,
           );
         } else if (state is ProfileUpdateSuccess) {
           DialogUtils.showAlertDialog(
             context: context,
             title: StringManager.success,
-            message: StringManager.savedSuccessfully,
+            message: StringManager.saveSuccess,
             posActionTitle: StringManager.ok,
           );
         }
@@ -150,6 +151,8 @@ class _ProfileScreenState extends State<ProfileScreen>
                                             .text,
                                       ),
                                       BuildInfoCard(
+                                        icon: const FaIcon(
+                                            FontAwesomeIcons.userLarge),
                                         title: StringManager.userName,
                                         value: ProfileCubit.get(context)
                                             .userNameController
@@ -157,11 +160,14 @@ class _ProfileScreenState extends State<ProfileScreen>
                                       ),
                                       BuildInfoCard(
                                         title: StringManager.phone,
+                                        icon: const FaIcon(
+                                            FontAwesomeIcons.phone),
                                         value: ProfileCubit.get(context)
                                             .phoneController
                                             .text,
                                       ),
                                       BuildInfoCard(
+                                        icon: const FaIcon(FontAwesomeIcons.at),
                                         title: StringManager.email,
                                         value: ProfileCubit.get(context)
                                             .emailController
@@ -180,7 +186,7 @@ class _ProfileScreenState extends State<ProfileScreen>
                                                 showDialog(
                                                     context: context,
                                                     builder: (context) {
-                                                      return EditProfileDialog();
+                                                      return const EditProfileDialog();
                                                     });
                                               }
                                             }),
@@ -237,7 +243,7 @@ class _ProfileScreenState extends State<ProfileScreen>
                             );
                             ProfileCubit.get(context).clearData();
                           },
-                          icon: const Icon(CupertinoIcons.back,
+                          icon: const FaIcon(FontAwesomeIcons.chevronLeft,
                               color: ColorManager.whiteColor),
                         ),
                         IconButton(
@@ -260,7 +266,8 @@ class _ProfileScreenState extends State<ProfileScreen>
                               },
                             );
                           },
-                          icon: const Icon(CupertinoIcons.square_arrow_right,
+                          icon: const FaIcon(
+                              FontAwesomeIcons.arrowRightFromBracket,
                               color: ColorManager.whiteColor),
                         ),
                       ],

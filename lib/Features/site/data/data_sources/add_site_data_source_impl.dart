@@ -84,7 +84,7 @@ class AddSiteDataSourceImpl implements AddSiteDataSource {
             await FirebaseUtils.addSiteToUsersFireStore(site: site, uId: uId);
 
         if (Platform.isAndroid) {
-          var data = SharedPrefsLocal.getData(key: StringManager.keyUserAdmin);
+          var data = SharedPrefsLocal.getData(key: StringManager.userAdmin);
           await handleNotification(data!, userNameSite);
         }
         return const Right(null);

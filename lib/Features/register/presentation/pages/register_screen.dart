@@ -47,7 +47,7 @@ class _RegisterScreenState extends State<RegisterScreen>
           DialogUtils.showAlertDialog(
               context: context,
               title: StringManager.success,
-              message: StringManager.registerSuccessfully,
+              message: StringManager.registerSuccess,
               posActionTitle: StringManager.ok,
               posAction: () {
                 Navigator.pushNamedAndRemoveUntil(context,

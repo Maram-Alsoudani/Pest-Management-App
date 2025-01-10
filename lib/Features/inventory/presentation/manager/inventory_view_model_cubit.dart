@@ -31,9 +31,11 @@ class InventoryViewModelCubit extends Cubit<InventoryViewModelState> {
       BlocProvider.of(context, listen: listen ?? false);
 
   bool isLoading = false;
+  bool isInitialLoad = true;
   TextEditingController nameController = TextEditingController();
   TextEditingController quantityController = TextEditingController();
   TextEditingController searchController = TextEditingController();
+  String? unit;
   final formKey = GlobalKey<FormState>();
   late AnimationController animationController;
   late Animation<Offset> slideAnimation;
@@ -41,8 +43,9 @@ class InventoryViewModelCubit extends Cubit<InventoryViewModelState> {
   List<MaterailEntity> materails = [];
   List<MaterailEntity> filteredItems = [];
   late UserAndAdminModelEntity user;
+
   UserAndAdminModelEntity? getUser() {
-    var user = SharedPrefsLocal.getData(key: StringManager.keyUserAdmin);
+    var user = SharedPrefsLocal.getData(key: StringManager.userAdmin);
     return user;
   }
 
@@ -51,20 +54,18 @@ class InventoryViewModelCubit extends Cubit<InventoryViewModelState> {
         vsync: single, duration: const Duration(seconds: 1));
 
     slideAnimation =
-        Tween<Offset>(begin: const Offset(-2, 0), end: const Offset(0, 0))
-            .animate(
-      CurvedAnimation(
-        parent: animationController,
-        curve: Curves.easeInOut,
-      ),
-    );
+        Tween<Offset>(begin: const Offset(-1, 0), end: const Offset(0, 0))
+            .animate(CurvedAnimation(
+      parent: animationController,
+      curve: Curves.easeInOut,
+    ));
   }
 
   void searchMethod() {
     filteredItems = materails.where((item) {
-      var name = item.name;
-      return name is String &&
-          name.toLowerCase().contains(searchController.text.toLowerCase());
+      return item.name!
+          .toLowerCase()
+          .contains(searchController.text.toLowerCase());
     }).toList();
     if (filteredItems.isEmpty) {
       emit(InventoryNoSearchResultMaterail());
@@ -77,17 +78,20 @@ class InventoryViewModelCubit extends Cubit<InventoryViewModelState> {
     isLoading = true;
     emit(InventoryAddedMaterailLoading());
     MaterailEntity materail = MaterailEntity(
-        name: nameController.text,
-        quantity: int.parse(quantityController.text));
+      name: nameController.text,
+      quantity: int.parse(quantityController.text),
+      unit: unit,
+    );
     var data = await addedMaterailUseCase.invoke(materail);
     data.fold(
-      (f) {
+      (failure) {
         isLoading = false;
-        emit(InventoryAddedMaterailError(error: f));
+        emit(InventoryAddedMaterailError(error: failure));
       },
-      (r) {
+      (success) {
         isLoading = false;
         emit(InventoryAddedMaterailSuccess());
+        getMaterails();
       },
     );
   }
@@ -96,50 +100,43 @@ class InventoryViewModelCubit extends Cubit<InventoryViewModelState> {
     isLoading = true;
     emit(InventoryUpdateMaterailLoading());
     MaterailEntity materail = MaterailEntity(
-        id: id,
-        name: nameController.text,
-        quantity: int.parse(quantityController.text));
+      id: id,
+      name: nameController.text,
+      quantity: int.parse(quantityController.text),
+      unit: unit,
+    );
     var data = await updateMaterailUseCase.invoke(
-        materail.id, materail.name!, materail.quantity!);
+        materail.id, materail.name!, materail.quantity!, materail.unit!);
     data.fold(
-      (f) {
+      (failure) {
         isLoading = false;
-        emit(InventoryUpdateMaterailError(error: f));
+        emit(InventoryUpdateMaterailError(error: failure));
       },
-      (r) {
+      (success) {
         isLoading = false;
         emit(InventoryUpdateMaterailSuccess());
+        getMaterails();
       },
     );
   }
 
   void getMaterails() async {
     isLoading = true;
-    opacity = 0.0;
+    isInitialLoad = true;
     emit(InventoryGetMaterailLoading());
     var data = await getMaterailUseCase.fetchMaterialsList();
     data.fold(
-      (f) {
+      (failure) {
         isLoading = false;
-        emit(InventoryGetMaterailError(error: f));
+        isInitialLoad = false;
+        emit(InventoryGetMaterailError(error: failure));
       },
-      (r) {
-        if (r.isNotEmpty) {
-          materails = r;
-          filteredItems = materails;
-          isLoading = false;
-          emit(InventoryGetMaterailSuccess(data: r));
-          WidgetsBinding.instance.addPostFrameCallback((_) {
-            opacity = 1.0;
-            emit(InventoryAnimationMaterailSuccess());
-            animationController.forward();
-          });
-        } else {
-          opacity = 1.0;
-          emit(InventoryAnimationMaterailSuccess());
-          isLoading = false;
-          emit(InventoryNoSearchResultMaterail());
-        }
+      (materials) {
+        isLoading = false;
+        isInitialLoad = false;
+        materails = materials;
+        filteredItems = materials;
+        emit(InventoryGetMaterailSuccess(data: materials));
       },
     );
   }
@@ -149,18 +146,53 @@ class InventoryViewModelCubit extends Cubit<InventoryViewModelState> {
     emit(InventoryDeleteMaterailLoading());
     var data = await deleteMaterailUseCase.invoke(key);
     data.fold(
-      (f) {
+      (failure) {
         isLoading = false;
-        emit(InventoryDeleteMaterailError(error: f));
+        emit(InventoryDeleteMaterailError(error: failure));
       },
-      (r) {
+      (success) {
         isLoading = false;
-        filteredItems.removeAt(index);
         emit(InventoryDeleteMaterailSuccess());
-        if (filteredItems.isEmpty) {
-          emit(InventoryNoSearchResultMaterail());
-        }
+        getMaterails();
       },
     );
+  }
+
+  void incrementQuantity(MaterailEntity item) async {
+    item.quantity = (item.quantity ?? 0) + 1;
+    emit(InventoryUpdateMaterailSuccess()); // Optimistically update the UI
+    var data = await updateMaterailUseCase.invoke(
+        item.id, item.name!, item.quantity!, item.unit!);
+    data.fold(
+      (failure) {
+        emit(InventoryUpdateMaterailError(error: failure));
+      },
+      (success) {
+        emit(InventoryUpdateMaterailSuccess());
+      },
+    );
+  }
+
+  void decrementQuantity(MaterailEntity item) async {
+    if ((item.quantity ?? 0) > 0) {
+      item.quantity = (item.quantity ?? 0) - 1;
+      emit(InventoryUpdateMaterailSuccess()); // Optimistically update the UI
+      var data = await updateMaterailUseCase.invoke(
+          item.id, item.name!, item.quantity!, item.unit!);
+      data.fold(
+        (failure) {
+          emit(InventoryUpdateMaterailError(error: failure));
+        },
+        (success) {
+          emit(InventoryUpdateMaterailSuccess());
+        },
+      );
+    }
+  }
+
+  void clearFields() {
+    nameController.clear();
+    quantityController.clear();
+    unit = null;
   }
 }

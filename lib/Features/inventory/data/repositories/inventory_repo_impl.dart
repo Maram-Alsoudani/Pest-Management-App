@@ -42,8 +42,31 @@ class InventoryRepoImpl implements InventoryRepo {
 
   @override
   Future<Either<Failure, void>> updateMaterail(
-      String id, String name, int quantity) async {
-    var either = await inventoryDataSource.updateMaterail(id, name, quantity);
+      String id, String name, int quantity, String unit) async {
+    var either =
+        await inventoryDataSource.updateMaterail(id, name, quantity, unit);
+
+    return either.fold(
+      (l) => Left(l),
+      (r) => Right(r),
+    );
+  }
+
+  @override
+  Future<Either<Failure, void>> incrementQuantity(
+      String id, int quantity) async {
+    var either = await inventoryDataSource.incrementQuantity(id, quantity);
+
+    return either.fold(
+      (l) => Left(l),
+      (r) => Right(r),
+    );
+  }
+
+  @override
+  Future<Either<Failure, void>> decrementQuantity(
+      String id, int quantity) async {
+    var either = await inventoryDataSource.decrementQuantity(id, quantity);
 
     return either.fold(
       (l) => Left(l),

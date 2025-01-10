@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:bug_away/Config/routes/routes_manger.dart';
@@ -6,11 +5,11 @@ import 'package:bug_away/Core/utils/colors.dart';
 import 'package:bug_away/Core/utils/strings.dart';
 import 'package:bug_away/Core/utils/font_manager.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import '../../../../Core/component/image_profile.dart';
-import '../../../../Core/utils/images.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:bug_away/Core/utils/SharedPrefsLocal.dart';
-
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import '../../../../Core/component/image_profile.dart';
+import '../../../../Core/utils/images.dart';
 import '../../profile/presentation/manager/profile_cubit.dart';
 import '../../../../Core/component/custom_dialog.dart'; // Import the custom dialog
 
@@ -32,160 +31,170 @@ class DrawerWidget extends StatelessWidget {
       child: Container(
         decoration: const BoxDecoration(
           image: DecorationImage(
-            image: AssetImage(ImageManager.background),
+            image: AssetImage(
+              ImageManager.drawerBackground,
+            ),
             fit: BoxFit.cover,
           ),
         ),
         child: Column(
           children: [
-            DrawerHeader(
-              decoration: const BoxDecoration(
-                color: Colors.transparent,
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            _buildDrawerHeader(context),
+            const Divider(
+                color: ColorManager.greyShade4, endIndent: 40, indent: 40),
+            Expanded(
+              child: ListView(
+                padding: EdgeInsets.zero,
                 children: [
-                  userImage != null && userImage!.isNotEmpty
-                      ? ClipOval(
-                          child: CachedNetworkImage(
-                            width: 100.w,
-                            height: 100.h,
-                            fit: BoxFit.cover,
-                            imageUrl: userImage!,
-                            progressIndicatorBuilder:
-                                (context, url, downloadProgress) =>
-                                    CircularProgressIndicator(
-                                        color: ColorManager.primaryColor,
-                                        value: downloadProgress.progress),
-                            errorWidget: (context, url, error) =>
-                                ImageProfile(radius: 40.r),
-                          ),
-                        )
-                      : ImageProfile(radius: 40.r),
-                  SizedBox(width: 10.w),
-                  Flexible(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Text(
-                          userName,
-                          style:
-                              Theme.of(context).textTheme.titleSmall!.copyWith(
-                                    fontSize: FontSize.s24.sp,
-                                    color: Colors.white,
-                                  ),
-                        ),
-                        SizedBox(height: 5.h),
-                        Text(
-                          userType,
-                          style:
-                              Theme.of(context).textTheme.titleSmall!.copyWith(
-                                    color: Colors.white,
-                                  ),
-                        ),
-                      ],
-                    ),
+                  _buildListTile(
+                    context,
+                    icon: FontAwesomeIcons.solidCircleUser,
+                    title: StringManager.profile,
+                    routeName: RoutesManger.routeNameProfile,
                   ),
+                  _buildDivider(),
+                  _buildListTile(
+                    context,
+                    icon: FontAwesomeIcons.solidComments,
+                    title: StringManager.messages,
+                    routeName: RoutesManger.routeNameChat,
+                  ),
+                  _buildDivider(),
+                  if (userType.toLowerCase() == 'admin') ...[
+                    _buildListTile(
+                      context,
+                      icon: FontAwesomeIcons.solidAddressCard,
+                      title: StringManager.accountRequests,
+                      routeName: RoutesManger.routeNameRequiest,
+                    ),
+                    _buildDivider(),
+                  ],
                 ],
               ),
             ),
-            Expanded(
-              child: Column(
-                children: [
-                  Expanded(
-                    child: ListView(
-                      padding: EdgeInsets.zero,
-                      children: [
-                        ListTile(
-                          leading: const Icon(Icons.account_circle,
-                              color: ColorManager.whiteColor),
-                          title: const Text(
-                            StringManager.profile,
-                            style: TextStyle(
-                              color: ColorManager.whiteColor,
-                              fontFamily: FontConstants.fontFamily,
-                              fontWeight: FontWeightManager.regular,
-                            ),
-                          ),
-                          onTap: () {
-                            Navigator.pushNamed(
-                                context, RoutesManger.routeNameProfile);
-                          },
-                        ),
-                        ListTile(
-                          leading: const Icon(Icons.message,
-                              color: ColorManager.whiteColor),
-                          title: const Text(
-                            StringManager.messages,
-                            style: TextStyle(
-                              color: ColorManager.whiteColor,
-                              fontFamily: FontConstants.fontFamily,
-                              fontWeight: FontWeightManager.regular,
-                            ),
-                          ),
-                          onTap: () {
-                            Navigator.pushNamed(
-                                context, RoutesManger.routeNameChat);
-                          },
-                        ),
-                        if (userType == 'admin')
-                          ListTile(
-                            leading: const Icon(Icons.admin_panel_settings,
-                                color: ColorManager.whiteColor),
-                            title: const Text(
-                              StringManager.accountRequests,
-                              style: TextStyle(
-                                color: ColorManager.whiteColor,
-                                fontFamily: FontConstants.fontFamily,
-                                fontWeight: FontWeightManager.regular,
-                              ),
-                            ),
-                            onTap: () {
-                              Navigator.pushNamed(
-                                  context, RoutesManger.routeNameRequiest);
-                            },
-                          ),
-                      ],
-                    ),
-                  ),
-                  ListTile(
-                    leading: const Icon(CupertinoIcons.square_arrow_right,
-                        color: ColorManager.whiteColor),
-                    title: const Text(
-                      StringManager.logout,
-                      style: TextStyle(
-                        color: ColorManager.whiteColor,
-                        fontFamily: FontConstants.fontFamily,
-                        fontWeight: FontWeightManager.regular,
-                      ),
-                    ),
-                    onTap: () {
-                      DialogUtils.showAlertDialog(
-                        context: context,
-                        title: StringManager.logout,
-                        message: StringManager.logoutMessage,
-                        posActionTitle: StringManager.ok,
-                        negActionTitle: StringManager.cancel,
-                        posAction: () async {
-                          await ProfileCubit.get(context).removeFcmUser();
-                          SharedPrefsLocal.prefs.clear();
-                          FirebaseAuth.instance.signOut();
-                          Navigator.pushNamedAndRemoveUntil(
-                            context,
-                            RoutesManger.routeNameLogin,
-                            (route) => false,
-                          );
-                        },
-                      );
-                    },
-                  ),
-                ],
-              ),
+            _buildDivider(),
+            _buildListTile(
+              context,
+              icon: FontAwesomeIcons.arrowRightFromBracket,
+              title: StringManager.logout,
+              onTap: () => _showLogoutDialog(context),
             ),
           ],
         ),
       ),
     );
+  }
+
+  Widget _buildDrawerHeader(BuildContext context) {
+    return DrawerHeader(
+      decoration: const BoxDecoration(
+        color: Colors.transparent,
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          userImage != null && userImage!.isNotEmpty
+              ? ClipOval(
+                  child: CachedNetworkImage(
+                    width: 100.w,
+                    height: 100.h,
+                    fit: BoxFit.cover,
+                    imageUrl: userImage!,
+                    progressIndicatorBuilder:
+                        (context, url, downloadProgress) =>
+                            CircularProgressIndicator(
+                                value: downloadProgress.progress),
+                    errorWidget: (context, url, error) =>
+                        ImageProfile(radius: 40.r),
+                  ),
+                )
+              : ImageProfile(radius: 40.r),
+          SizedBox(width: 10.w),
+          Flexible(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Text(
+                  userName,
+                  style: Theme.of(context).textTheme.titleSmall!.copyWith(
+                        fontSize: 20.sp,
+                        color: ColorManager.whiteColor,
+                      ),
+                ),
+                SizedBox(height: 5.h),
+                Text(
+                  getDisplayUserType(userType),
+                  style: Theme.of(context).textTheme.titleSmall!.copyWith(
+                        fontSize: 16.sp,
+                        color: ColorManager.whiteColor,
+                      ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildListTile(BuildContext context,
+      {required IconData icon,
+      required String title,
+      String? routeName,
+      VoidCallback? onTap}) {
+    return ListTile(
+      leading: FaIcon(icon, color: ColorManager.whiteColor),
+      title: Text(
+        title,
+        style: const TextStyle(
+          color: ColorManager.whiteColor,
+          fontFamily: FontConstants.fontFamily,
+          fontWeight: FontWeightManager.regular,
+        ),
+      ),
+      onTap: onTap ??
+          () {
+            if (routeName != null) {
+              Navigator.pushNamed(context, routeName);
+            }
+          },
+    );
+  }
+
+  Widget _buildDivider() {
+    return const Divider(
+        color: ColorManager.greyShade4, endIndent: 40, indent: 40);
+  }
+
+  void _showLogoutDialog(BuildContext context) {
+    DialogUtils.showAlertDialog(
+      context: context,
+      title: StringManager.logout,
+      message: StringManager.logoutMessage,
+      posActionTitle: StringManager.ok,
+      negActionTitle: StringManager.cancel,
+      posAction: () async {
+        await ProfileCubit.get(context).removeFcmUser();
+        SharedPrefsLocal.prefs.clear();
+        FirebaseAuth.instance.signOut();
+        Navigator.pushNamedAndRemoveUntil(
+          context,
+          RoutesManger.routeNameLogin,
+          (route) => false,
+        );
+      },
+    );
+  }
+}
+
+String getDisplayUserType(String userType) {
+  switch (userType.toLowerCase()) {
+    case 'admin':
+      return 'Admin';
+    case 'user':
+      return 'Engineer';
+    default:
+      return userType;
   }
 }

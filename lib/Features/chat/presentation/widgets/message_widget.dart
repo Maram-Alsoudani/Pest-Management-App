@@ -1,19 +1,21 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:bug_away/Core/utils/colors.dart';
 import 'package:bug_away/Features/chat/domain/entities/message_entity.dart';
-import 'package:bug_away/Features/chat/presentation/widgets/message_widget.dart';
-import 'package:provider/provider.dart';
+import 'package:bug_away/Features/chat/presentation/manager/chat_view_model_cubit.dart';
 
 class MessageWidget extends StatelessWidget {
-  MessageEntity message;
-  String userId;
+  final MessageEntity message;
+  final String userId;
   final String dateTime;
-  MessageWidget(
-      {super.key,
-      required this.message,
-      required this.userId,
-      required this.dateTime});
+  final ChatViewModelCubit bloc;
+
+  const MessageWidget({
+    super.key,
+    required this.message,
+    required this.userId,
+    required this.dateTime,
+    required this.bloc,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -25,15 +27,16 @@ class MessageWidget extends StatelessWidget {
         : ReciveMessage(
             message: message,
             dateTime: dateTime,
+            userColor: bloc.getUserColor(message.senderId),
           );
   }
 }
 
 class SentMessage extends StatelessWidget {
-  MessageEntity message;
+  final MessageEntity message;
   final String dateTime;
 
-  SentMessage({super.key, required this.message, required this.dateTime});
+  const SentMessage({super.key, required this.message, required this.dateTime});
 
   @override
   Widget build(BuildContext context) {
@@ -42,26 +45,33 @@ class SentMessage extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
-          Text(
-            message.senderName,
-            style: const TextStyle(color: Colors.black),
-          ),
           Container(
-            padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 12),
+            padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 12),
             decoration: const BoxDecoration(
-                color: ColorManager.blackColor,
+                color: ColorManager.primaryColor,
                 borderRadius: BorderRadius.only(
-                  topRight: Radius.circular(12),
-                  topLeft: Radius.circular(12),
-                  bottomLeft: Radius.circular(12),
+                  topRight: Radius.circular(22),
+                  topLeft: Radius.circular(22),
+                  bottomLeft: Radius.circular(22),
                 )),
-            child: Text(message.content,
-                style: const TextStyle(color: Colors.white)),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Text(
+                  message.content,
+                  style: const TextStyle(color: ColorManager.whiteColor),
+                ),
+                const SizedBox(height: 5),
+                Text(
+                  dateTime,
+                  style: const TextStyle(
+                    color: ColorManager.subtitleGrey,
+                    fontSize: 12,
+                  ),
+                ),
+              ],
+            ),
           ),
-          Text(
-            dateTime,
-            style: const TextStyle(color: Colors.black),
-          )
         ],
       ),
     );
@@ -69,10 +79,16 @@ class SentMessage extends StatelessWidget {
 }
 
 class ReciveMessage extends StatelessWidget {
-  MessageEntity message;
+  final MessageEntity message;
   final String dateTime;
+  final Color userColor;
 
-  ReciveMessage({super.key, required this.message, required this.dateTime});
+  const ReciveMessage({
+    super.key,
+    required this.message,
+    required this.dateTime,
+    required this.userColor,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -81,25 +97,40 @@ class ReciveMessage extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            message.senderName,
-            style: const TextStyle(color: Colors.black),
-          ),
           Container(
-            padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 12),
-            decoration: BoxDecoration(
-                color: Colors.blueGrey.shade700,
-                borderRadius: const BorderRadius.only(
-                  topRight: Radius.circular(12),
-                  topLeft: Radius.circular(12),
-                  bottomRight: Radius.circular(12),
+            padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 12),
+            decoration: const BoxDecoration(
+                color: ColorManager.greyShade5,
+                borderRadius: BorderRadius.only(
+                  topRight: Radius.circular(22),
+                  topLeft: Radius.circular(22),
+                  bottomRight: Radius.circular(22),
                 )),
-            child: Text(message.content,
-                style: const TextStyle(color: Colors.white)),
-          ),
-          Text(
-            dateTime,
-            style: const TextStyle(color: Colors.black),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  message.senderName,
+                  style: TextStyle(
+                    color: userColor,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 5),
+                Text(
+                  message.content,
+                  style: const TextStyle(color: ColorManager.whiteColor),
+                ),
+                const SizedBox(height: 5),
+                Text(
+                  dateTime,
+                  style: const TextStyle(
+                    color: ColorManager.subtitleGrey,
+                    fontSize: 12,
+                  ),
+                ),
+              ],
+            ),
           ),
         ],
       ),

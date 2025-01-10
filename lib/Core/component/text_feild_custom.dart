@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../utils/colors.dart';
 
 class CustomTextFormField extends StatefulWidget {
@@ -15,7 +17,11 @@ class CustomTextFormField extends StatefulWidget {
   final Color? disabledBorderColor;
   final Color? focusedBorderColor;
   final Color? errorBorderColor;
+  final Color? hintTextColor;
   final Function(String)? onChanged;
+  final InputBorder? border;
+  final FocusNode? focusNode;
+  final List<TextInputFormatter>? inputFormatters;
 
   const CustomTextFormField({
     super.key,
@@ -31,7 +37,11 @@ class CustomTextFormField extends StatefulWidget {
     this.disabledBorderColor,
     this.focusedBorderColor,
     this.errorBorderColor,
+    this.hintTextColor,
     this.onChanged,
+    this.border,
+    this.focusNode,
+    this.inputFormatters,
   });
 
   @override
@@ -60,9 +70,13 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
         cursorColor: ColorManager.blueColor,
         style: const TextStyle(color: ColorManager.whiteColor),
         onChanged: widget.onChanged,
+        focusNode: widget.focusNode,
+        inputFormatters: widget.inputFormatters,
         decoration: InputDecoration(
           hintText: widget.hint,
-          hintStyle: Theme.of(context).textTheme.titleSmall,
+          hintStyle: Theme.of(context).textTheme.titleSmall!.copyWith(
+                color: widget.hintTextColor ?? ColorManager.greyShade3,
+              ),
           suffixIcon: widget.isSecured == true
               ? IconButton(
                   onPressed: () {
@@ -70,47 +84,54 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
                       _isSecured = !_isSecured;
                     });
                   },
-                  icon: Icon(
-                    _isSecured ? Icons.visibility_off : Icons.visibility,
+                  icon: FaIcon(
+                    _isSecured
+                        ? FontAwesomeIcons.solidEyeSlash
+                        : FontAwesomeIcons.solidEye,
                     color: ColorManager.greyShade1,
                   ),
                 )
               : widget.suffixIcon,
-          enabledBorder: OutlineInputBorder(
-            borderRadius: widget.borderRadius ?? BorderRadius.circular(8.r),
-            borderSide: BorderSide(
-              width: 1,
-              color: widget.enabledBorderColor ?? ColorManager.whiteColor,
-            ),
-          ),
-          disabledBorder: OutlineInputBorder(
-            borderRadius: widget.borderRadius ?? BorderRadius.circular(8.r),
-            borderSide: BorderSide(
-              width: 1,
-              color: widget.disabledBorderColor ?? ColorManager.greyShade6,
-            ),
-          ),
-          focusedBorder: OutlineInputBorder(
-            borderRadius: widget.borderRadius ?? BorderRadius.circular(8.r),
-            borderSide: BorderSide(
-              width: 1,
-              color: widget.focusedBorderColor ?? ColorManager.whiteColor,
-            ),
-          ),
-          errorBorder: OutlineInputBorder(
-            borderRadius: widget.borderRadius ?? BorderRadius.circular(8.r),
-            borderSide: BorderSide(
-              width: 1,
-              color: widget.errorBorderColor ?? ColorManager.primaryColor,
-            ),
-          ),
-          focusedErrorBorder: OutlineInputBorder(
-            borderRadius: widget.borderRadius ?? BorderRadius.circular(8.r),
-            borderSide: BorderSide(
-              width: 1,
-              color: widget.errorBorderColor ?? ColorManager.primaryColor,
-            ),
-          ),
+          enabledBorder: widget.border ??
+              OutlineInputBorder(
+                borderRadius: widget.borderRadius ?? BorderRadius.circular(8.r),
+                borderSide: BorderSide(
+                  width: 1,
+                  color: widget.enabledBorderColor ?? ColorManager.whiteColor,
+                ),
+              ),
+          disabledBorder: widget.border ??
+              OutlineInputBorder(
+                borderRadius: widget.borderRadius ?? BorderRadius.circular(8.r),
+                borderSide: BorderSide(
+                  width: 1,
+                  color: widget.disabledBorderColor ?? ColorManager.greyShade6,
+                ),
+              ),
+          focusedBorder: widget.border ??
+              OutlineInputBorder(
+                borderRadius: widget.borderRadius ?? BorderRadius.circular(8.r),
+                borderSide: BorderSide(
+                  width: 1,
+                  color: widget.focusedBorderColor ?? ColorManager.primaryColor,
+                ),
+              ),
+          errorBorder: widget.border ??
+              OutlineInputBorder(
+                borderRadius: widget.borderRadius ?? BorderRadius.circular(8.r),
+                borderSide: BorderSide(
+                  width: 1,
+                  color: widget.errorBorderColor ?? ColorManager.primaryColor,
+                ),
+              ),
+          focusedErrorBorder: widget.border ??
+              OutlineInputBorder(
+                borderRadius: widget.borderRadius ?? BorderRadius.circular(8.r),
+                borderSide: BorderSide(
+                  width: 1,
+                  color: widget.errorBorderColor ?? ColorManager.primaryColor,
+                ),
+              ),
         ),
       ),
     );

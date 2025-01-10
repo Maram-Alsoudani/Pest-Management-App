@@ -47,7 +47,7 @@ class _ForgotPassScreenState extends State<ForgotPassScreen>
           DialogUtils.showAlertDialog(
               context: context,
               title: StringManager.success,
-              message: StringManager.passwordResetSuccessfully,
+              message: StringManager.passwordResetSuccess,
               posActionTitle: StringManager.ok);
         }
       },
@@ -103,7 +103,7 @@ class _ForgotPassScreenState extends State<ForgotPassScreen>
                               const SizedBox(
                                 height: 15,
                               ),
-                              Text(StringManager.enterEmailForResetPass,
+                              Text(StringManager.resetPassEmail,
                                   style: Theme.of(context)
                                       .textTheme
                                       .titleMedium!
@@ -165,7 +165,7 @@ class _ForgotPassScreenState extends State<ForgotPassScreen>
                                 Navigator.pop(context);
                               },
                               child: Text(
-                                  "${StringManager.alreadyHaveAnAccount} ${StringManager.login} ",
+                                  "${StringManager.alreadyHaveAccount} ${StringManager.login} ",
                                   style: Theme.of(context)
                                       .textTheme
                                       .titleSmall!

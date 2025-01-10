@@ -85,7 +85,7 @@ void main() async {
 }
 
 String autoLogin() {
-  var item = SharedPrefsLocal.getData(key: StringManager.keyUserAdmin);
+  var item = SharedPrefsLocal.getData(key: StringManager.userAdmin);
   return item != null
       ? RoutesManger.routeNameCategoryScreen
       : RoutesManger.routeNameEngOwnerScreen;

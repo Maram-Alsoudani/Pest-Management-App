@@ -1,8 +1,10 @@
+import 'package:bug_away/Core/component/empty_pages.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:bug_away/Core/component/custom_dialog.dart';
 import 'package:bug_away/Core/component/lottie_loading_widget.dart';
@@ -42,21 +44,21 @@ class RequestScreen extends StatelessWidget {
         DialogUtils.showAlertDialog(
           context: context,
           title: StringManager.success,
-          message: "Accepted Successfully",
+          message: StringManager.acceptedSuccessfully,
           posActionTitle: StringManager.ok,
         );
       } else if (state is DeclineRequestsScreenViewmodelSuccess) {
         DialogUtils.showAlertDialog(
           context: context,
           title: StringManager.success,
-          message: "Declined Successfully",
+          message: StringManager.declinedSuccessfully,
           posActionTitle: StringManager.ok,
         );
       } else if (state is DeleteRequestsScreenViewmodelSuccess) {
         DialogUtils.showAlertDialog(
           context: context,
           title: StringManager.success,
-          message: StringManager.deletedSuccessfully,
+          message: StringManager.deleteSuccess,
           posActionTitle: StringManager.ok,
         );
       }
@@ -81,26 +83,23 @@ class RequestScreen extends StatelessWidget {
             SafeArea(
               child: Scaffold(
                 appBar: AppBar(
+                  elevation: 0,
+                  surfaceTintColor: Colors.transparent,
                   backgroundColor: Colors.transparent,
                   title: Text(
                     StringManager.accountRequests,
                     style: Theme.of(context)
                         .textTheme
-                        .titleSmall!
+                        .titleLarge!
                         .copyWith(fontSize: 20.sp),
                   ),
                 ),
                 backgroundColor: Colors.transparent,
                 body: viewModel.requests.isEmpty
-                    ? Center(
-                        child: Text(
-                          "No Request Found",
-                          style:
-                              Theme.of(context).textTheme.bodyMedium!.copyWith(
-                                    color: ColorManager.whiteColor,
-                                  ),
-                        ),
-                      )
+                    ? const Center(
+                        child: EmptyStateWidget(
+                            lottiePath: ImageManager.emptyRequestLottie,
+                            message: StringManager.noRequestFound))
                     : Column(
                         children: [
                           Expanded(
@@ -111,15 +110,15 @@ class RequestScreen extends StatelessWidget {
                                 final request = viewModel.requests[index];
 
                                 return Padding(
-                                  padding: EdgeInsets.all(15.r),
+                                  padding: EdgeInsets.all(12.r),
                                   child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(8.r),
+                                    borderRadius: BorderRadius.circular(22.r),
                                     child: Slidable(
                                       dragStartBehavior: DragStartBehavior.down,
                                       endActionPane: ActionPane(
                                         dragDismissible: false,
                                         motion: const BehindMotion(),
-                                        extentRatio: 0.27,
+                                        extentRatio: 0.22,
                                         children: [
                                           SlidableAction(
                                             onPressed: (context) {
@@ -130,18 +129,15 @@ class RequestScreen extends StatelessWidget {
                                                 ColorManager.primaryColor,
                                             foregroundColor:
                                                 ColorManager.whiteColor,
-                                            icon: Icons.delete,
+                                            icon: FontAwesomeIcons.trash,
                                             label: StringManager.delete,
                                           ),
                                         ],
                                       ),
                                       child: Container(
-                                        padding: EdgeInsets.all(
-                                            8.r), // Only padding, no margin
-                                        decoration: BoxDecoration(
-                                          color: ColorManager.whiteColor,
-                                          borderRadius:
-                                              BorderRadius.circular(8.r),
+                                        padding: EdgeInsets.all(16.r),
+                                        decoration: const BoxDecoration(
+                                          color: ColorManager.backgroundColor,
                                         ),
                                         child: Column(
                                           crossAxisAlignment:
@@ -170,8 +166,8 @@ class RequestScreen extends StatelessWidget {
                                                               Image.asset(
                                                                   ImageManager
                                                                       .avatar),
-                                                          width: 120.w,
-                                                          height: 120.h,
+                                                          width: 110.w,
+                                                          height: 110.h,
                                                           fit: BoxFit.cover,
                                                         ),
                                                       )
@@ -185,15 +181,16 @@ class RequestScreen extends StatelessWidget {
                                             ),
                                             LabelText(
                                                 label:
-                                                    "Name: ${request.userName} "),
+                                                    "${StringManager.name}: ${request.userName} "),
                                             LabelText(
                                                 label:
-                                                    "Email: ${request.email}"),
+                                                    "${StringManager.email}: ${request.email}"),
                                             LabelText(
                                                 label:
-                                                    "Phone: ${request.phone}"),
+                                                    "${StringManager.phone}: ${request.phone}"),
                                             LabelText(
-                                                label: "Type: ${request.type}"),
+                                                label:
+                                                    "${StringManager.role}: ${request.type}"),
                                             if (request.status == "Accepted" ||
                                                 request.status == "Rejected")
                                               const SizedBox()
@@ -227,9 +224,10 @@ class RequestScreen extends StatelessWidget {
                                                       viewModel
                                                           .declineRequest(user);
                                                     },
-                                                    icon: Icons
-                                                        .highlight_remove_rounded,
+                                                    icon: FontAwesomeIcons
+                                                        .userXmark,
                                                   ),
+                                                  SizedBox(width: 20.w),
                                                   ButtonAndIcon(
                                                     color: ColorManager
                                                         .dialogGreenColor,
@@ -254,7 +252,8 @@ class RequestScreen extends StatelessWidget {
                                                       viewModel
                                                           .acceptRequest(user);
                                                     },
-                                                    icon: Icons.done,
+                                                    icon: FontAwesomeIcons
+                                                        .userCheck,
                                                   ),
                                                 ],
                                               ),
@@ -265,9 +264,9 @@ class RequestScreen extends StatelessWidget {
                                               children: [
                                                 if (request.status == null)
                                                   LabelText(
-                                                    label:
-                                                        "Waiting for the operation",
-                                                    fontSize: 12,
+                                                    label: StringManager
+                                                        .waitingForOperation,
+                                                    fontSize: 12.sp,
                                                     color: ColorManager
                                                         .yellowColor,
                                                   )
@@ -276,27 +275,28 @@ class RequestScreen extends StatelessWidget {
                                                   Row(
                                                     children: [
                                                       LabelText(
-                                                        label:
-                                                            "Accepted Account Request",
-                                                        fontSize: 12,
+                                                        label: StringManager
+                                                            .acceptedAccountRequest,
+                                                        fontSize: 12.sp,
                                                         color: ColorManager
                                                             .dialogGreenColor,
                                                       ),
-                                                      const Icon(Icons.done),
                                                     ],
                                                   )
                                                 else if (request.status ==
                                                     "Rejected")
                                                   LabelText(
-                                                    label:
-                                                        "Rejected Account Request",
-                                                    fontSize: 12,
+                                                    label: StringManager
+                                                        .rejectedAccountRequest,
+                                                    fontSize: 12.sp,
                                                     color:
                                                         ColorManager.redColor,
                                                   ),
                                                 LabelText(
-                                                  label: viewModel.dateTime,
-                                                  fontSize: 12,
+                                                  label:
+                                                      viewModel.formatDateTime(
+                                                          request.dateTime),
+                                                  fontSize: 12.sp,
                                                 ),
                                               ],
                                             ),

@@ -60,7 +60,7 @@ class LoginDataSourceImpl implements LoginDataSource {
           var fcmToken = await FCM.getToken();
           if (fcmToken == null) {
             return Left(
-                Failure(errorMessage: StringManager.failedToRetrieveToken));
+                Failure(errorMessage: StringManager.tokenRetrieveFailed));
           }
 
           // get the current tokens
@@ -92,12 +92,11 @@ class LoginDataSourceImpl implements LoginDataSource {
                     (doc) => List<String>.from(doc.data()?['fcmToken'] ?? []));
           }
 
-          SharedPrefsLocal.saveData(
-              key: StringManager.keyUserAdmin, model: user);
+          SharedPrefsLocal.saveData(key: StringManager.userAdmin, model: user);
 
           return Right(user);
         } else {
-          return Left(Failure(errorMessage: StringManager.failedToLogin));
+          return Left(Failure(errorMessage: StringManager.loginFailed));
         }
       } on FirebaseAuthException catch (e) {
         if (e.code == StringManager.invalidCredential) {

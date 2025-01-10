@@ -31,7 +31,7 @@ class ProfileCubit extends Cubit<ProfileState> {
   UserAndAdminModelDto? user;
 
   UserAndAdminModelEntity? getUser() {
-    user = SharedPrefsLocal.getData(key: StringManager.keyUserAdmin);
+    user = SharedPrefsLocal.getData(key: StringManager.userAdmin);
     return user;
   }
 

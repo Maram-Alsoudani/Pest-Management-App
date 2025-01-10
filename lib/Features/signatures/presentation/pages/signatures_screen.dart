@@ -33,7 +33,7 @@ class _SignaturesScreenState extends State<SignaturesScreen> {
     clearAllSelected();
     final result = await Navigator.push(
       context,
-      PullFromButtonPageRoute(page: SignaturePad()),
+      PullFromButtonPageRoute(page: const SignaturePad()),
     );
     if (result != null && result is Uint8List) {
       final file = await saveSignature(result);
@@ -128,7 +128,7 @@ class _SignaturesScreenState extends State<SignaturesScreen> {
       body: signaturesList.isEmpty
           ? const Center(
               child: Text(
-                StringManager.noSignaturesAddedYet,
+                StringManager.noSignatures,
                 style: TextStyle(color: Colors.white),
                 textAlign: TextAlign.center,
               ),
@@ -170,7 +170,7 @@ class _SignaturesScreenState extends State<SignaturesScreen> {
         backgroundColor: ColorManager.primaryColor,
         shape: const CircleBorder(),
         onPressed: addNewSignature,
-        child: Icon(
+        child: const Icon(
           Icons.add,
           color: ColorManager.whiteColor,
           size: 30,

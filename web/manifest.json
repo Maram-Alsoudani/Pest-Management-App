@@ -1,6 +1,6 @@
 {
-    "name": "pesticides",
-    "short_name": "pesticides",
+    "name": "bug_away",
+    "short_name": "bug_away",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

@@ -1,0 +1,63 @@
+# Uncomment this line to define a global platform for your project
+platform :ios, '13.0'  # Explicitly set the platform version
+
+# CocoaPods analytics sends network stats synchronously affecting flutter build latency.
+ENV['COCOAPODS_DISABLE_STATS'] = 'true'
+
+project 'Runner', {
+  'Debug' => :debug,
+  'Profile' => :release,
+  'Release' => :release,
+}
+
+# Flutter Root Directory
+def flutter_root
+  generated_xcode_build_settings_path = File.expand_path(File.join('..', 'Flutter', 'Generated.xcconfig'), __FILE__)
+  unless File.exist?(generated_xcode_build_settings_path)
+    raise "#{generated_xcode_build_settings_path} must exist. If you're running pod install manually, make sure flutter pub get is executed first"
+  end
+
+  File.foreach(generated_xcode_build_settings_path) do |line|
+    matches = line.match(/FLUTTER_ROOT\=(.*)/)
+    return matches[1].strip if matches
+  end
+  raise "FLUTTER_ROOT not found in #{generated_xcode_build_settings_path}. Try deleting Generated.xcconfig, then run flutter pub get"
+end
+
+# Import Flutter pod helper
+require File.expand_path(File.join(flutter_root, 'packages', 'flutter_tools', 'bin', 'podhelper'))
+
+flutter_ios_podfile_setup
+
+# Target for the main app
+target 'Runner' do
+  use_frameworks!  # Enable frameworks
+  use_modular_headers!  # Enable modular headers
+
+  flutter_install_all_ios_pods File.dirname(File.realpath(__FILE__))
+
+  # Target for unit tests
+  target 'RunnerTests' do
+    inherit! :search_paths
+  end
+end
+
+# Extract the Xcode base version
+xcode_base_version = `xcodebuild -version | grep 'Xcode' | awk '{print $2}' | cut -d . -f 1`
+
+# Post-installation script for compatibility fixes
+post_install do |installer|
+  installer.pods_project.targets.each do |target|
+    flutter_additional_ios_build_settings(target)
+
+    target.build_configurations.each do |config|
+      # Set iOS deployment target to 12.0
+      config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] ||= '12.0'
+      
+      # For Xcode 15+ only, adjust TOOLCHAIN_DIR for signing issues
+      if Integer(xcode_base_version) >= 15
+        config.build_settings['TOOLCHAIN_DIR'] = config.build_settings['DT_TOOLCHAIN_DIR']
+      end
+    end
+  end
+end
